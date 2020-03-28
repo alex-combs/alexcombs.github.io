@@ -1,8 +1,16 @@
 name: "Alex Combs"
+output_dir: "."
 navbar:
-  title: "Web Work"
+  title: "Alex Combs"
   left:
     - text: "Home"
       href: index.html
     - text: "About"
       href: about.html
+right:
+    - icon: fa-envelope fa-lg
+      href: contact.html
+    - icon: fa-github fa-lg
+      href: http://github.com/alex-combs
+    - icon: fa-linkedin fa-lg
+      href: https://www.linkedin.com/in/alexecombs/
