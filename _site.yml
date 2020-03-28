@@ -7,7 +7,7 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
-right:
+  right:
     - icon: fa-github fa-lg
       href: https://github.com/alex-combs/web-work
     - icon: fa-linkedin fa-lg
