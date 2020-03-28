@@ -1,0 +1,8 @@
+name: "Alex Combs"
+navbar:
+  title: "Alex Combs"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
