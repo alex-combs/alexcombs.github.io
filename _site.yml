@@ -1,6 +1,6 @@
 name: "Alex Combs"
 navbar:
-  title: "Alex Combs"
+  title: "Web Work"
   left:
     - text: "Home"
       href: index.html
