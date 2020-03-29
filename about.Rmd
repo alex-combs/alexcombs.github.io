@@ -1,7 +1,5 @@
 ---
-title: "About Alex"
+title: "About"
 ---
 
-I am an Assistant Professor in the School of Public and International Affairs at the University of Georgia. My research concentrates on education finance and policy at state and local levels of government, especially in relation to issues of equity and urban-rural disparities. My current projects include the composition of state subsidies in higher education, school finance equalization, student migration, and property tax exemptions.
-
-New
+I am an Assistant Professor in the School of Public and International Affairs at the University of Georgia. My research concentrates on education finance and policy at state and local levels of government. 

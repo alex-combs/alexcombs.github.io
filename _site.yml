@@ -1,13 +1,25 @@
 name: "Alex Combs"
 output_dir: "."
+output:
+  html_document:
+    theme: spacelab
+    highlight: textmate
 navbar:
   title: "Alex Combs"
   left:
-    - text: "Home"
+    - text: "Research Projects"
       href: index.html
+    - text: "Papers"
+      href: papers.html
+    - text: "Teaching"
+      href: teaching.html
+    - text: "Data Projects"
+      href: dataproj.html
     - text: "About"
       href: about.html
   right:
+    - icon: fa-envelope fa-lg
+      href: Alex.Combs@uga.edu
     - icon: fa-github fa-lg
       href: https://github.com/alex-combs/web-work
     - icon: fa-linkedin fa-lg
