@@ -1,10 +1,25 @@
 ---
 title: "About"
 ---
+***
+<br><br>
 
-## Academic
+## Academic Bio
 
-I am an Assistant Professor in the School of Public and International Affairs at the University of Georgia. My research concentrates on education finance and policy at state and local levels of government. I enjoy teaching courses in quantitative methods, public budgeting and finance, program evaluation, and policy analysis. Any application of these subjects to education is a plus, but I find many policy topics interesting.
+I am an assistant professor in the School of Public and International Affairs at the University of Georgia. My research concentrates on education finance and policy at state and local levels of government. I enjoy teaching courses in quantitative methods, public budgeting and finance, program evaluation, and policy analysis. Any application of these subjects to education is a plus, but I find many policy topics interesting.
 
-## Contact Information
+## A Related Interest
 
+Exploring data and software to make analyses more efficient and insightful is a favorite pastime of mine. Along with teaching, this is easily my biggest obstacle to writing papers. I was raised on Stata but began the conversion to R shortly before arriving to UGA. I appreciate both programs, but R has opened up a whole new world that I regret not learning sooner. I am trying to catch up on lost time.
+
+## Working for a Fraternity
+
+I was a first-generation high school graduate about to complete my BA in Political Science from Eastern Kentucky University. I knew I wanted to go to graduate school but wanted to gain work experience first. I had no idea what to do.
+
+I joined Sigma Nu Fraternity as a sophomore after I realized my preconceived notions of Greek Life were misinformed. My experience in Sigma Nu was invaluable. It opened doors for leadership I never would have thought possible for myself and taught me skills I never would have learned in my courses. I have no doubt Sigma Nu helped my graduate college.
+
+I spent the next four years working for the National Headquarters of Sigma Nu Fraternity, Inc. My job was that of a Leadership Consultant. I drove around a region of the U.S. for seven months of the year to visit about 30 college and university campuses each semester. Within the parameters of the job, me and my coworkers were afforded the autonomy to set our travel schedule, our hours, and our budget, all the while conducting meetings with alumni, potential donors, campus administrators, and students. I doubt I could have found a more challenging or constructive job one year after college. I know there was no other job that could have exposed me to the breadth and depth of talented people I met along the way.  
+
+A fortuitiously timed vacancy presented the opportuntiy for my promotion to Associate Director of Leadership Development. For three years, I helped train and supervise the consultant team, develop department budgets and strategic plans, manage nationwide logistics for community service and philantropy, and develop educational curriculum for national conferences. It was given an incredibly rewarding set of responsibilities that taught me lessons I still serve me well today.
+
+I share this detail because when I tell people I worked for a fraternity it elicits polarized reactions. 

@@ -1,5 +1,7 @@
 ---
 title: "Research Projects"
 ---
+***
+<br><br>
 
-Just getting started.
+A lot of work goes into research that never makes it to a final version, such as descriptive and exploratory analyses, background info, and interesting tangents. This is a landing page for work produced along the way but unfit for inclusion elsewhere. My hope is that maintaining a public record of this work and explaining why it matters will spark new ideas and questions for future research.
