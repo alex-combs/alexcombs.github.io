@@ -8,15 +8,15 @@ navbar:
   title: "Alex Combs"
   left:
     - text: "Research Projects"
-      href: index.html
+      href: research.html
     - text: "Papers"
       href: papers.html
     - text: "Teaching"
       href: teaching.html
+    - text: "Conferences"
+      href: conferences.html
     - text: "Data Projects"
       href: dataproj.html
-    - text: "About"
-      href: about.html
   right:
     - icon: fa-envelope fa-lg
       href: contact.html

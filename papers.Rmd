@@ -2,33 +2,36 @@
 title: "Papers"
 ---
 ***
-<br><br>
+<br>
 
 ## Journal Publications
 
-- Combs, A.E., Foster, J., & Toma E.F. (2018). Local response to school finance equalization:  Wealth or place? Public Finance and Management, 18(3). [https://pfm.spaef.org/article/1856/Local-Responses-to-School-Finance-Equalization-Wealth-or-Place-](https://pfm.spaef.org/article/1856/Local-Responses-to-School-Finance-Equalization-Wealth-or-Place-)
+> Combs, A.E., Foster, J., & Toma E.F. (2018). Local response to school finance equalization:  Wealth or place? Public Finance and Management, 18(3). [https://pfm.spaef.org/article/1856/Local-Responses-to-School-Finance-Equalization-Wealth-or-Place-](https://pfm.spaef.org/article/1856/Local-Responses-to-School-Finance-Equalization-Wealth-or-Place-)
+
+<br>
 
 ## Working Papers
 
-- College budgetary response to state subsidy composition:  Diverging expenditure on instruction, student support, and amenities.
+> College budgetary response to state subsidy composition:  Diverging expenditure on instruction, student support, and amenities.
 
-- The effect of homestead exemptions for the elderly and disabled on school district revenue (with John Foster). *Under Review*
+> The effect of homestead exemptions for the elderly and disabled on school district revenue (with John Foster). *Under Review*
 
-- What if high schools were not punished? The effect of ESEA waivers on college enrollment.
-The impact of state oversight on property assessments and school district revenue (with Erin Troland and John Foster).
+> What if high schools were not punished? The effect of ESEA waivers on college enrollment.
 
-- Identification of an optimal composition of state subsidies for higher education.
+> The impact of state oversight on property assessments and school district revenue (with Erin Troland and John Foster).
 
-- A decomposition of the effect of distance on college degree completion and the role of policy.
+> Identification of an optimal composition of state subsidies for higher education.
 
-- What if schools were not punished? The effect of ESEA waivers on college enrollment in Kentucky.
+> A decomposition of the effect of distance on college degree completion and the role of policy.
+
+<br>
 
 ## Other
 
-### Dissertation
+#### Dissertation
 
-- Combs, Alex Eugene, "STATE SUBSIDY COMPOSITION IN HIGHER EDUCATION: POLICY AND IMPACTS" (2018). Theses and Dissertations--Public Policy and Administration. 29. [https://uknowledge.uky.edu/msppa_etds/29](https://uknowledge.uky.edu/msppa_etds/29)
+> Combs, Alex Eugene, "STATE SUBSIDY COMPOSITION IN HIGHER EDUCATION: POLICY AND IMPACTS" (2018). Theses and Dissertations--Public Policy and Administration. 29. [https://uknowledge.uky.edu/msppa_etds/29](https://uknowledge.uky.edu/msppa_etds/29)
 
-### MPA Thesis
-- Combs, Alex E., "Does Kentucky’s Merit-based Scholarship Program, KEES, Improve College Completion?" (2014). MPA/MPP Capstone Projects. 219. 
+#### MPA Thesis
+> Combs, Alex E., "Does Kentucky’s Merit-based Scholarship Program, KEES, Improve College Completion?" (2014). MPA/MPP Capstone Projects. 219. 
 [https://uknowledge.uky.edu/mpampp_etds/219](https://uknowledge.uky.edu/mpampp_etds/219)

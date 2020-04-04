@@ -2,13 +2,23 @@
 title: "About"
 ---
 ***
-<br><br>
+<br>
 
 ## Academic Bio
 
 I am an assistant professor in the School of Public and International Affairs at the University of Georgia. My research concentrates on education finance and policy at state and local levels of government. I enjoy teaching courses in quantitative methods, public budgeting and finance, program evaluation, and policy analysis. Any application of these subjects to education is a plus, but I find many policy topics interesting.
 
-## A Related Interest
+<br>
 
-Exploring data and software to make analyses more efficient and insightful is a favorite pastime of mine. Along with teaching, this is easily my biggest obstacle to writing papers. I was raised on Stata but began the conversion to R shortly before arriving to UGA. I appreciate both programs, but R has opened up a whole new world that I regret not learning sooner. I am trying to catch up on lost time.
+## Related Interest
+
+Exploring data and software to make analyses more efficient and insightful is a favorite pastime of mine. I was raised on Stata but began the conversion to R shortly before arriving to UGA. I appreciate both programs, but R has opened up a world of data science resources that I regret not learning about sooner. I am catching up on lost time.
+
+<br>
+
+## Previous Employment
+
+Prior to arriving at UGA, I served a one-year appointment as an instructor and research analyst with the Martin School of Public Policy and Administration at the University of Kentucky. I taught courses in strategic planning and program evaluation for the Martin School's MPA and MPP programs. I also worked with the [Kentucky Center for Statistics](https://kystats.ky.gov) on a project to explore relationships between opioid abuse and educational outcomes.
+
+Before starting graduate school, I worked for Sigma Nu Fraternity, Inc. as a consultant and assistant director. Given the polarized views on social fraternities and sororities, I see a variety of reactions when I mention this to others. Click here if you are curious about what this job entailed and meant for me, here are more.
 

@@ -1,0 +1,13 @@
+---
+title: "Research Projects"
+---
+> A lot of work goes into research that never makes it to a final version. This is a landing page for descriptive analyses and tangents produced during the research process. My hope is that maintaining a record of this work and explaining why it matters will spark ideas and questions for future research.
+
+***
+<br>
+
+## [Higher Ed Finance](page-edfinance.html)
+
+<br>
+
+## [Property Tax Exemptions](page-proptax.html)

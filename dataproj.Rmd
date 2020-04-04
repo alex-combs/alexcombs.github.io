@@ -1,5 +1,7 @@
 ---
 title: "Data Projects"
 ---
+> Exploring data and learning statistical software is a favorite hobby of mine. This page contains data science projects on random topics of interest.
+
 ***
-<br><br>
+<br>
