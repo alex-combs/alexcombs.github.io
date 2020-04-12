@@ -1,6 +1,51 @@
 ---
 title: "Teaching"
+output:
+  html_document:
+    toc: true
+    toc_float:  true
+    toc_depth: 2
 ---
 ***
+<br>
+
+## Courses Taught
+
+<br>
+
+### Public Finance
+
+> Public Financial Management. University of Georgia. Fall 2019. [Syllabus](PADP8430F19_Syllabus_and_Schedule.pdf)
+
+<br>
+
+### Statistics, Quantitative Methods, Data Applications
+
+> Data Applications in Public Administration. University of Georgia. Spring 2020. [Syllabus](PADP7120S20_Syllabus.pdf)
+
+> Data Applications in Public Administration. University of Georgia. Fall 2019. [Syllabus](PADP7120F19_Syllabus_and_Schedule.pdf)
+
+> Program Evaluation. University of Kentucky. Spring 2019. [Syllabus](PA622_S19_Syllabus.pdf)
+
+> Economic and Business Statistics. University of Kentucky. Spring 2017. [Syllabus](ECO391S17_Syllabus.pdf)
+
+<br>
+
+### Policy Analysis
+
+> Introduction to Policy Analysis. University of Georgia. Spring 2020. [Syllabus](PADP 3100 Spring 2020 Syllabus.pdf)
+
+<br>
+
+### Management
+
+> Strategic Planning & Organizational Change. University of Kentucky. Fall 2018. [Syllabus](PA 602 Strategic Planning Syllabus Fall 2018.pdf)
+
 <br><br>
+
+## Teaching Resources
+
+<br>
+
+### [Quantitative Methods](methods-resources.html)
 

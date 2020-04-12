@@ -9,7 +9,7 @@ navbar:
   left:
     - text: "Research Projects"
       href: research.html
-    - text: "Papers"
+    - text: "Writing"
       href: papers.html
     - text: "Teaching"
       href: teaching.html

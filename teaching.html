@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
 
 <meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
@@ -19,6 +20,9 @@
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
@@ -233,7 +237,6 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
-  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -250,6 +253,63 @@ $(document).ready(function () {
 
 
 
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
 
 </head>
 
@@ -257,6 +317,16 @@ $(document).ready(function () {
 
 
 <div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
 
 
 
@@ -277,7 +347,7 @@ $(document).ready(function () {
   <a href="research.html">Research Projects</a>
 </li>
 <li>
-  <a href="papers.html">Papers</a>
+  <a href="papers.html">Writing</a>
 </li>
 <li>
   <a href="teaching.html">Teaching</a>
@@ -323,10 +393,60 @@ $(document).ready(function () {
 
 
 <hr />
+<p><br></p>
+<div id="courses-taught" class="section level2">
+<h2>Courses Taught</h2>
+<p><br></p>
+<div id="public-finance" class="section level3">
+<h3>Public Finance</h3>
+<blockquote>
+<p>Public Financial Management. University of Georgia. Fall 2019. <a href="PADP8430F19_Syllabus_and_Schedule.pdf">Syllabus</a></p>
+</blockquote>
+<p><br></p>
+</div>
+<div id="statistics-quantitative-methods-data-applications" class="section level3">
+<h3>Statistics, Quantitative Methods, Data Applications</h3>
+<blockquote>
+<p>Data Applications in Public Administration. University of Georgia. Spring 2020. <a href="PADP7120S20_Syllabus.pdf">Syllabus</a></p>
+</blockquote>
+<blockquote>
+<p>Data Applications in Public Administration. University of Georgia. Fall 2019. <a href="PADP7120F19_Syllabus_and_Schedule.pdf">Syllabus</a></p>
+</blockquote>
+<blockquote>
+<p>Program Evaluation. University of Kentucky. Spring 2019. <a href="PA622_S19_Syllabus.pdf">Syllabus</a></p>
+</blockquote>
+<blockquote>
+<p>Economic and Business Statistics. University of Kentucky. Spring 2017. <a href="ECO391S17_Syllabus.pdf">Syllabus</a></p>
+</blockquote>
+<p><br></p>
+</div>
+<div id="policy-analysis" class="section level3">
+<h3>Policy Analysis</h3>
+<blockquote>
+<p>Introduction to Policy Analysis. University of Georgia. Spring 2020. <a href="PADP%203100%20Spring%202020%20Syllabus.pdf">Syllabus</a></p>
+</blockquote>
+<p><br></p>
+</div>
+<div id="management" class="section level3">
+<h3>Management</h3>
+<blockquote>
+<p>Strategic Planning &amp; Organizational Change. University of Kentucky. Fall 2018. <a href="PA%20602%20Strategic%20Planning%20Syllabus%20Fall%202018.pdf">Syllabus</a></p>
+</blockquote>
 <p><br><br></p>
+</div>
+</div>
+<div id="teaching-resources" class="section level2">
+<h2>Teaching Resources</h2>
+<p><br></p>
+<div id="quantitative-methods" class="section level3">
+<h3><a href="methods-resources.html">Quantitative Methods</a></h3>
+</div>
+</div>
 
 
 
+</div>
+</div>
 
 </div>
 
@@ -359,6 +479,32 @@ $(document).ready(function () {
 
 <!-- code folding -->
 
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
 
 <!-- dynamically load mathjax for compatibility with self-contained -->
 <script>
