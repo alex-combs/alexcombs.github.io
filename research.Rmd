@@ -6,8 +6,12 @@ title: "Research Projects"
 ***
 <br>
 
-## [Higher Ed Finance](page-edfinance.html)
+### [Higher Ed Finance](page-edfinance.html)
 
 <br>
 
-## [Property Tax Exemptions](page-proptax.html)
+### [Property Tax Exemptions](page-proptax.html)
+
+<br>
+
+### [School District Property Tax Levies](page-taxlevies.html)

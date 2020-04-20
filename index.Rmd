@@ -10,21 +10,22 @@
 .column-right{
   float: right;
   width: 60%;
-  text-align: justify;
+  text-align: left;
+  line-height: 1.5
 }
 </style>
 
 <div class="column-left">
-![](Combs.jpg)
+![](static-files/Combs.jpg)
 </div>
 
 <div class="column-right">
 
 <br>
 
-I am an assistant professor in the School of Public and International Affairs at the University of Georgia. I earned my Ph.D. from the Martin School of Public Policy and Administration at the University of Kentucky. My research concentrates on education finance and policy at state and local levels of government. Currently, I teach courses in public finance, quantitative methods, and policy analysis.
+I am an assistant professor in the School of Public and International Affairs at the University of Georgia. I earned my Ph.D. from the Martin School of Public Policy and Administration at the University of Kentucky. My research focuses on education finance and policy at state and local levels of government. Currently, I teach courses in public finance, quantitative methods, and policy analysis.
 
-<br>
+<br><br><br>
 
-#### [CV](CV_Combs.pdf)
+#### [Curriculum Vitae](CV_Combs.pdf)
 </div>

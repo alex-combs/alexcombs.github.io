@@ -1,0 +1,16 @@
+---
+title: "Course Slides"
+output:
+  html_document:
+    toc: true
+    toc_float:  true
+    toc_depth: 3
+---
+***
+<br>
+
+### PADP 7120 - Data Applications in Public Administration
+
+<br>
+
+[Introduction & Overview](content/teaching/slides/Intro_Slides.html)
