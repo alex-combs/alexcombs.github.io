@@ -7,7 +7,7 @@ output:
 navbar:
   title: "Alex Combs"
   left:
-    - text: "Research"
+    - text: "Projects"
       href: research.html
     - text: "Writing"
       href: papers.html
@@ -21,7 +21,7 @@ navbar:
           href: teaching-resources.html
     - text: "Speaking"
       href: conferences.html
-    - text: "Exploring"
+    - text: "Learning"
       href: dataproj.html
   right:
     - icon: fa-envelope fa-lg
