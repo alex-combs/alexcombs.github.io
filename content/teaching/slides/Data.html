@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-09-02" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## Data
+### Alex Combs
+### UGA/SPIA/PADP
+### September 2, 2020
+
+---
+
+# Outline
+
+- Identify types of variables &amp; data structures
+
+- Measurement validity
+
+- Measurement reliability
+
+- RLab2:  Import data &amp; export useful documents
+
+---
+# Essentials of data
+
+- Rectangular data is comprised of
+
+  1. Unit of analysis
+  2. Variables
+  
+- **Unit of analysis**:  the subject (person, place, or thing) generating the data
+
+- **Variable**:  a characteristic observed on unit of analysis
+
+---
+# Rectangular Data
+
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Variable_1 &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Variable_2 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit of Analysis &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Each row is an **observation**
+- Each column is a **variable**
+
+---
+class: inverse, middle, center
+
+# The unit of analysis uniquely identifies each row in a data set. Let's practice applying this.
+
+---
+# Unit of analysis
+
+- What is the unit of analysis?
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; GDP &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Population &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit of Analysis &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Unit of analysis
+
+- What is the unit of analysis?
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; GRE_Score &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Income &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit of Analysis &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Unit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Unit of analysis
+
+- What is the unit of analysis?
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Year &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Unemployment &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; Poverty &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2017 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2018 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2019 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Variables
+
+- Suppose we are asked to describe the homeless population in Athens-Clarke County
+
+- If the unit of analysis is `year`, what variables might we want to collect?
+
+- If the unit of analysis is `people`, what variables might we want to collect?
+
+---
+# Types of variables
+
+![](lectures_files/variables.png)
+
+---
+class: inverse, middle, center
+
+# A **qualitative** or **categorical** variable is a variable that is naturally expressed in words with no inherent numerical value
+
+---
+class: inverse, middle, center
+
+# A **quantitative** or **numerical** variable is a variable that has inherent numerical meaning
+
+---
+class: inverse, middle, center
+
+# Which of our variables for describing the homeless population are qualitative or quantitative?
+
+---
+# Types of qualitative variables
+.center[
+![:scale 40%](lectures_files/categorical.png) ]
+
+- **Nominal** variables take on values that differ by name only
+
+- **Ordinal** variables take on values that can be ranked relative to each other but the difference between rankings has no numerical value
+
+---
+class: inverse, middle, center
+
+# Which of our qualitative variables are nominal or ordinal?
+
+---
+# Types of quantitative variables
+.center[
+![:scale 40%](lectures_files/quantitative.png) ]
+
+- **Discrete** variables take on numeric values that are **countable**, usually integers (e.g. 0, 1, 2, ...)
+
+- **Continuous** variables take on potentially any value. For example, a percentage ranges between 0 and 100 but can take on infinite values between that range (e.g. 50, 50.4, 50.44, 50.444, ...) even though we round to a finite set of values.  
+
+---
+class: inverse, middle, center
+
+# Which of our quantitative variables are discrete or continuous?
+
+---
+background-image: url("lectures_files/racing.jpg")
+
+# Recap on variable types
+
+---
+# Variables and information
+
+- Variables measure a characteristic of the unit of analysis
+- Types of variables provide different amounts of information
+- Nominal &lt; Ordinal &lt; Discrete &lt; Continuous
+
+---
+# Types (scales) of continuous variables
+
+- **Interval** variables (or the interval scale) are continuous variables with no meaningful zero
+
+- **Ratio** variables (or the ratio scale) are continuous variables with a meaningful zero
+
+- **Index** variables are continuous variables constructed from multiple variables
+  - Can make a continuous variables out of categorical variables
+  - Simplify multidimensional measures into one measure
+  - Example:  [Global Multidimensional Poverty Index](http://hdr.undp.org/en/2018-MPI)
+---
+class: inverse, center, middle
+
+# Why should we care about variable types? Because types of variables inform what kind of visualization and statistical analysis to use. This will come up multiple times over the semester. For example, [look](https://coggle.it/diagram/Vxlydu1akQFeqo6-/t/inference).
+
+---
+# Other possible confusion
+
+- Qualitative data does NOT imply qualitative analysis
+
+--
+
+- An infinite range of values does not mean a variable is continuous, and a finite range does not mean a variable is discrete
+- It's not about range at all, it's about divisibility
+
+--
+
+- The count of homeless people vs. the proportion of homeless people
+
+---
+class:  inverse, center, middle
+
+# Let's now turn our attention to types of data sets
+
+---
+# Types of data set structures
+
+1. Cross-sectional 
+2. Pooled cross-sectional
+3. Time series
+4. Panel/longitudinal
+
+---
+# Cross-sectional
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.554 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3822.137 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72.390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 190010647 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9065.801 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- A snapshot in time
+- What is the unit of analysis?
+
+---
+# Pooled cross-sectional
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Algeria &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Africa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70.994 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 31287142 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5288.040 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Angola &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Africa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 41.003 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10866106 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2773.287 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Benin &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Africa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 54.406 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7026113 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1372.878 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.554 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3822.137 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Botswana &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Africa &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46.634 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1630347 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11003.605 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72.390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 190010647 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9065.801 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+- Multiple cross-sections combined
+- Different subjects observed in each cross-section
+
+---
+# Time Series
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1977 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 68.481 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 26983828 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10079.027 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1982 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 69.942 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 29341374 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8997.897 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1987 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 70.774 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 31620918 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9139.671 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1992 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 71.868 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33958947 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9308.419 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 73.275 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36203463 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10967.282 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 74.340 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38331121 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8797.641 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Unit of analysis?
+- One subject across time
+
+---
+# Panel or longitudinal data
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 73.275 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36203463 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10967.282 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 74.340 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38331121 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8797.641 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62.050 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7693188 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3326.143 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 63.883 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8445134 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3413.263 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.554 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3822.137 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Unit of analysis?
+- Same subjects observed across time 
+
+---
+# Recap on data set structures
+
+- Phenomena can be measured `between` or `within` units and/or `between` or `within` time periods
+
+&lt;br&gt;
+
+- Cross-sectional measures `between` units and `within` time
+
+--
+
+- Pooled cross-sectional measures `between` units and `within` time (sort of)
+
+--
+
+- Time series measures `within` unit and `between` time 
+
+--
+
+- Panel measures `between` units **AND** `between` time
+
+---
+class: inverse, center, middle
+
+# Just as variable types inform visualizations and analysis, so too do data set structures.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

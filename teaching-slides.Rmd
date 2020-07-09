@@ -12,3 +12,5 @@ output:
 <br>
 
 ### [Introduction & Overview](content/teaching/slides/Intro_Slides.html)
+
+### [Data Types & Structures](content/teaching/slides/Data.html)

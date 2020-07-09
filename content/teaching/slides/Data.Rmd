@@ -1,0 +1,284 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "Data"
+author: "Alex Combs"
+institute: "UGA/SPIA/PADP"
+date: "September 2, 2020"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+# Outline
+
+- Identify types of variables & data structures
+
+- Measurement validity
+
+- Measurement reliability
+
+- RLab2:  Import data & export useful documents
+
+---
+# Essentials of data
+
+- Rectangular data is comprised of
+
+  1. Unit of analysis
+  2. Variables
+  
+- **Unit of analysis**:  the subject (person, place, or thing) generating the data
+
+- **Variable**:  a characteristic observed on unit of analysis
+
+---
+# Rectangular Data
+
+```{r, include=FALSE}
+library(tidyverse)
+library(knitr)
+generic <- tibble(ID = c("Unit of Analysis", "Unit", "Unit"),
+                  Variable_1 = c("Datum", "Datum", "Datum"),
+                  Variable_2 = c("Datum", "Datum", "Datum"))
+```
+
+```{r, echo=FALSE}
+kable(generic, format = 'html')
+```
+
+- Each row is an **observation**
+- Each column is a **variable**
+
+---
+class: inverse, middle, center
+
+# The unit of analysis uniquely identifies each row in a data set. Let's practice applying this.
+
+---
+# Unit of analysis
+
+- What is the unit of analysis?
+
+```{r, echo=FALSE}
+generic <- tibble(ID = c("Unit of Analysis", "Unit", "Unit"),
+                  GDP = c("Datum", "Datum", "Datum"),
+                  Population = c("Datum", "Datum", "Datum"))
+kable(generic, format = 'html')
+```
+
+---
+# Unit of analysis
+
+- What is the unit of analysis?
+
+```{r, echo=FALSE}
+generic <- tibble(ID = c("Unit of Analysis", "Unit", "Unit"),
+                  GRE_Score = c("Datum", "Datum", "Datum"),
+                  Income = c("Datum", "Datum", "Datum"))
+kable(generic, format = 'html')
+```
+
+---
+# Unit of analysis
+
+- What is the unit of analysis?
+
+```{r, echo=FALSE}
+generic <- tibble(Year = c(2017, 2018, 2019),
+                  Unemployment = c("Datum", "Datum", "Datum"),
+                  Poverty = c("Datum", "Datum", "Datum"))
+kable(generic, format = 'html')
+```
+
+---
+# Variables
+
+- Suppose we are asked to describe the homeless population in Athens-Clarke County
+
+- If the unit of analysis is `year`, what variables might we want to collect?
+
+- If the unit of analysis is `people`, what variables might we want to collect?
+
+---
+# Types of variables
+
+![](lectures_files/variables.png)
+
+---
+class: inverse, middle, center
+
+# A **qualitative** or **categorical** variable is a variable that is naturally expressed in words with no inherent numerical value
+
+---
+class: inverse, middle, center
+
+# A **quantitative** or **numerical** variable is a variable that has inherent numerical meaning
+
+---
+class: inverse, middle, center
+
+# Which of our variables for describing the homeless population are qualitative or quantitative?
+
+---
+# Types of qualitative variables
+.center[
+![:scale 40%](lectures_files/categorical.png) ]
+
+- **Nominal** variables take on values that differ by name only
+
+- **Ordinal** variables take on values that can be ranked relative to each other but the difference between rankings has no numerical value
+
+---
+class: inverse, middle, center
+
+# Which of our qualitative variables are nominal or ordinal?
+
+---
+# Types of quantitative variables
+.center[
+![:scale 40%](lectures_files/quantitative.png) ]
+
+- **Discrete** variables take on numeric values that are **countable**, usually integers (e.g. 0, 1, 2, ...)
+
+- **Continuous** variables take on potentially any value. For example, a percentage ranges between 0 and 100 but can take on infinite values between that range (e.g. 50, 50.4, 50.44, 50.444, ...) even though we round to a finite set of values.  
+
+---
+class: inverse, middle, center
+
+# Which of our quantitative variables are discrete or continuous?
+
+---
+background-image: url("lectures_files/racing.jpg")
+
+# Recap on variable types
+
+---
+# Variables and information
+
+- Variables measure a characteristic of the unit of analysis
+- Types of variables provide different amounts of information
+- Nominal < Ordinal < Discrete < Continuous
+
+---
+# Types (scales) of continuous variables
+
+- **Interval** variables (or the interval scale) are continuous variables with no meaningful zero
+
+- **Ratio** variables (or the ratio scale) are continuous variables with a meaningful zero
+
+- **Index** variables are continuous variables constructed from multiple variables
+  - Can make a continuous variables out of categorical variables
+  - Simplify multidimensional measures into one measure
+  - Example:  [Global Multidimensional Poverty Index](http://hdr.undp.org/en/2018-MPI)
+---
+class: inverse, center, middle
+
+# Why should we care about variable types? Because types of variables inform what kind of visualization and statistical analysis to use. This will come up multiple times over the semester. For example, [look](https://coggle.it/diagram/Vxlydu1akQFeqo6-/t/inference).
+
+---
+# Other possible confusion
+
+- Qualitative data does NOT imply qualitative analysis
+
+--
+
+- An infinite range of values does not mean a variable is continuous, and a finite range does not mean a variable is discrete
+- It's not about range at all, it's about divisibility
+
+--
+
+- The count of homeless people vs. the proportion of homeless people
+
+---
+class:  inverse, center, middle
+
+# Let's now turn our attention to types of data sets
+
+---
+# Types of data set structures
+
+1. Cross-sectional 
+2. Pooled cross-sectional
+3. Time series
+4. Panel/longitudinal
+
+---
+# Cross-sectional
+
+```{r, echo=FALSE}
+library(gapminder)
+gapminder %>% 
+  filter(year == 2007 & continent == 'Americas') %>% 
+  head(n=3) %>% 
+  kable(format = 'html')
+```
+
+- A snapshot in time
+- What is the unit of analysis?
+
+---
+# Pooled cross-sectional
+
+```{r, echo=FALSE}
+gapminder %>% 
+  filter((year == 2007 & continent == 'Americas') | (year==2002 & continent=='Africa')) %>% 
+  head(n=7) %>% 
+  kable(format = 'html')
+```
+- Multiple cross-sections combined
+- Different subjects observed in each cross-section
+
+---
+# Time Series
+
+```{r, echo=FALSE}
+gapminder %>% 
+  filter(country == 'Argentina') %>% 
+  tail(n=7) %>% 
+  kable(format = 'html')
+```
+
+- Unit of analysis?
+- One subject across time
+
+---
+# Panel or longitudinal data
+
+```{r, echo=FALSE}
+gapminder %>% 
+  filter(continent == 'Americas', year >= 1997) %>% 
+  head(n=6) %>% 
+  kable(format = 'html')
+```
+
+- Unit of analysis?
+- Same subjects observed across time 
+
+---
+# Recap on data set structures
+
+- Phenomena can be measured `between` or `within` units and/or `between` or `within` time periods
+
+<br>
+
+- Cross-sectional measures `between` units and `within` time
+
+--
+
+- Pooled cross-sectional measures `between` units and `within` time (sort of)
+
+--
+
+- Time series measures `within` unit and `between` time 
+
+--
+
+- Panel measures `between` units **AND** `between` time
+
+---
+class: inverse, center, middle
+
+# Just as variable types inform visualizations and analysis, so too do data set structures.
