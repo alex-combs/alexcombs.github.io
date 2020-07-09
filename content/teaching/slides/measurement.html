@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-09-09" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## Measurement Validity &amp; Reliability
+### Alex Combs
+### UGA/SPIA/PADP
+### September 9, 2020
+
+---
+
+# Outline
+
+- Introduction to the building blocks of credible analysis
+
+- Measurement validity
+
+- Measurement reliability
+
+---
+# Credible analysis
+
+![](lectures_files/credible.png)
+
+---
+class: inverse, middle, center
+
+# All data is a measured representation of reality -- shadows on the wall of the cave.
+
+---
+# Measurement
+
+- **Measurement Validity**: Does the variable accurately represent what it claims to represent? Are the values accurate representations of the intended concept/phenomenon?
+
+--
+
+- **Measurement Reliability**: Does the way the variable is measured generate the same value given the same reality? Given two real and identical conditions, will my data contain identical values?
+
+---
+# Measurement
+.center[
+![](lectures_files/measure_targets.png)
+]
+
+- Match one of the below to one of the above
+  - W-2 gross earnings
+  - Self-reported income
+  - Count of homeless persons
+  - Federal poverty line
+
+---
+# Measurement
+
+![](lectures_files/measure_lines.png)
+
+---
+# Why does this matter?
+
+- Often leads to important and interesting questions about how data is collected and whether it is trustworthy.
+
+- If data have a weak or no relationship with the thing you are trying to study, you have no foundation upon which to continue your work.
+
+- Sometimes flawed data is the best we got, and understanding its flaws can help mitigate mistakes in interpretations and decisions.
+
+---
+background-image: url(lectures_files/covid_deathrate.jpg)
+
+# Recap
+
+---
+class: inverse, middle, center
+
+# Speaking of flawed data, we must also consider **missing** data
+
+---
+# Missingness
+
+- Two types
+  - Explicit
+  - Implicit
+  
+- Explicitly missing data are data that we can *see* are missing in the data; cells containing a value that denotes missing
+
+- Implicitly missing data are data that we would expect to be included based on data structure but are not; no obvious sign of missing
+
+---
+# Explicitly missing
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.554 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72.390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 190010647 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9065.801 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+- Conceptual/theoretical concerns
+  - Do not assume data are missing at random
+  - Ask yourself why data are missing and if missingness is influenced by a factor that is relevant to your work
+
+--
+- Technical concern
+  - When summarizing data, account for missing values
+  - Incorrect to say we have 3 countries with a mean life expectancy of 68.972
+
+---
+# Explicit examples
+
+- Missing income from a survey of SPIA MPA alumni
+- Missing financial aid data in a college student data set
+- Missing sales tax rates in state finance data
+
+---
+# Implicitly missing
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 73.275 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36203463 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10967.282 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 74.340 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38331121 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8797.641 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62.050 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7693188 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3326.143 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.554 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3822.137 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Typical in panel data where units seem to enter and exit the data
+- Same concerns apply
+
+---
+# Implicit examples
+
+- Drug trials
+- Panels of sub-state government jurisdictions
+- Time series of a smaller unit of time aggregated up to a larger unit of time (monthly data aggregated to annual)
+
+---
+# Recap
+
+- Missingness is also a measurement issue
+- Almost never missing at random; reason may or may not be critical to your work; you don't know if you don't think about it
+- We will learn what to do with missing data later
+
+---
+class: inverse, middle, center
+
+# Measurement vality concerns accuracy. Measurement reliability concerns precision. But another definition of precision concerns the exactness of our measurement, which most associate with accuracy.
+
+---
+background-image: url(lectures_files/ruler.jpg)
+
+# Precision
+
+---
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1952 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 28.801 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8425333 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 779.4453 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1957 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30.332 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9240934 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 820.8530 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 31.997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10267083 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 853.1007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1967 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 34.020 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11537966 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 836.1971 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1972 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36.088 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 13079460 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 739.9811 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1977 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38.438 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 14880372 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 786.1134 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Life expectancy is reported to the nearest thousandth decimal place.
+- This means *true* life expectancy is some value that would round to the the nearest thousandth.
+- What was the possible life expectancy in Afghanistan in 1952?
+
+---
+# Why does this matter
+
+- 14.38% of all statistics are lies
+
+--
+
+- Precision can be used to convince people that dubious facts are true
+
+--
+
+- Do not report numbers that are more precise than the underlying data
+- There may be legitimate reasons to round to fewer decimal places than underlying data, but understand you are decreasing precision
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

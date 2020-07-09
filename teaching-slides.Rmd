@@ -11,12 +11,18 @@ output:
 
 ## Data Applications in PA
 ***
-<br>
+
 
 ### [Introduction & Overview](content/teaching/slides/Intro_Slides.html)
 
 ### [Data Types & Structures](content/teaching/slides/Data.html)
 
+### [Measurement Validity & Reliability](content/teaching/slides/measurement.html)
+
+<br><br>
+
 ## R Labs
+***
+
 
 ### [Introduction to R](content/teaching/slides/rlab1_intro_to_r.html)

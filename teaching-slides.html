@@ -416,16 +416,20 @@ div.tocify {
 <div id="data-applications-in-pa" class="section level2">
 <h2>Data Applications in PA</h2>
 <hr />
-<p><br></p>
 <div id="introduction-overview" class="section level3">
 <h3><a href="content/teaching/slides/Intro_Slides.html">Introduction &amp; Overview</a></h3>
 </div>
 <div id="data-types-structures" class="section level3">
 <h3><a href="content/teaching/slides/Data.html">Data Types &amp; Structures</a></h3>
 </div>
+<div id="measurement-validity-reliability" class="section level3">
+<h3><a href="content/teaching/slides/measurement.html">Measurement Validity &amp; Reliability</a></h3>
+<p><br><br></p>
+</div>
 </div>
 <div id="r-labs" class="section level2">
 <h2>R Labs</h2>
+<hr />
 <div id="introduction-to-r" class="section level3">
 <h3><a href="content/teaching/slides/rlab1_intro_to_r.html">Introduction to R</a></h3>
 </div>
@@ -481,7 +485,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_');
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
