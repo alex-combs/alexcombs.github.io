@@ -1,10 +1,6 @@
 ---
 title: "Teaching"
-output:
-  html_document:
-    toc: true
-    toc_float:  true
-    toc_depth: 3
+output: html_document
 ---
 ***
 <br>
@@ -16,6 +12,8 @@ output:
 <br>
 
 ### Statistics, Quantitative Methods, Data Applications
+
+> Data Applications in Public Administration. University of Georgia. Spring 2020. [Syllabus](static-files/PADP7120F20_Syllabus.html)
 
 > Data Applications in Public Administration. University of Georgia. Spring 2020. [Syllabus](static-files/PADP7120S20_Syllabus.pdf)
 
@@ -34,6 +32,9 @@ output:
 <br>
 
 ### Management
+
+> Introduction to Nonprofit Administration. University of Georgia. Fall 2020.
+[Syllabus](static-files/PADP4640F20_Syllabus.html)
 
 > Strategic Planning & Organizational Change. University of Kentucky. Fall 2018. [Syllabus](static-files/PA 602 Strategic Planning Syllabus Fall 2018.pdf)
 
