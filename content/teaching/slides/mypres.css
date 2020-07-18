@@ -206,7 +206,7 @@ hr, .mline h1::after {
 
 .remark-inline-code {
   /* background: #F5F5F5; /* lighter */
-  background: #e7e8e2; /* darker */
+  background: #dbdbdb; /* darker */
   border-radius: 3px;
   padding: 4px;
 }
@@ -337,4 +337,8 @@ body {
 .remark-code, .remark-inline-code {
   font-family: 'Fira Code', 'Lucida Console', Monaco, monospace;
   font-size: 80%;
+}
+
+.hljs-github .hljs {
+    background: #dbdbdb;
 }

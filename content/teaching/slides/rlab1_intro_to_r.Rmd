@@ -22,7 +22,7 @@ By the end of this lab, you will have learned how to...
 - load R packages
 - start 3 common types of editing documents
 - write and format prose in an R notebook and run code
-- export your work to HTML, Word, and PDF
+- export your work to HTML
 
 ---
 class: inverse, middle, center
@@ -98,7 +98,7 @@ Execution halted
 - Any of the above start with editing one of several R documents
   - Script - bare bones to run code
   - RMarkdown - allows to make all sorts of things [video](https://rmarkdown.rstudio.com/lesson-1.html)
-  - Notebook - same as RMarkdown but interactive so we can run code and see results in real-time.
+  - Notebook - same as RMarkdown but interactive so we can run code and see results in real time.
   
 ---
 
@@ -121,7 +121,7 @@ Execution halted
 ---
 # Objects
 
-- Objects are anything you tell R to temporarily save during a session, which can also be permanently saved if you tell R to do so. The environment pane keeps a list of all objects. Think of objects as different sheets in an Excel file--each sheet can be anything you want. 
+- Objects are anything you tell R to temporarily save during a session, which can also be permanently saved if you tell R to do so. The environment pane keeps a list of your objects. 
 
 - You should already have an object `states1`
 
@@ -133,7 +133,9 @@ x <- ((5+5)/2)^2
 
 - The `<-` symbol is called the assignment operator. It tells R to save the result of the thing on the right side as the name on the left side.
 
-- The keyboard shortcut for the assignment is `Alt-` on PC or `Option-` on Mac. Speaking of keyboard shortcuts...
+- The keyboard shortcut for the assignment is `Alt-` on PC or `Option-` on Mac.
+
+- You can view all keyboard shortcuts via the Help menu
 
 ---
 # Why save an object?
@@ -180,7 +182,7 @@ xsquared
 ---
 # YAML header
 
-- The YAML header tell R how to format the output
+- The YAML header tells R how to format the output
 
 - Change the YAML to the following
 
@@ -188,56 +190,21 @@ xsquared
 ---
 title:  'Test'
 author: 'Your Name'
-output:
-  html_document: default
-  word_document: default
-  pdf_document:  default
+output: html_document
 ---
 ```
-
-- Knit the `test` notebook to Word
-
-- Knit the `test` notebook to PDF
-
-- Which do you like more?
-
----
-# Making the Word output look a little better
-
-- Download the file titled `rlabs_styledoc.docx` to your project folder
-
-- Change the YAML of your notebook
-
-```{r, eval=FALSE}
-title:  'Test'
-author: 'Your Name'
-output:
-  html_document: default
-  word_document: 
-    reference_docx: rlabs_styledoc.docx
-  pdf_document:  default
-```
-
-- Knit to Word again
-
----
-# So what?
-
-- Now you have the option to produce output in Word or PDF
-
-- Use one of these for every RLab
-
-- If you prefer Word, use the above YAML every time
 
 ---
 class: inverse, middle, center
 
-# Let's create our first RLab notebook and post on eLC
+# Let's create our first RLab notebook and upload to eLC
 
 ---
 # RLAB1 Notebook
 
 - Download the file `RLab1_Profile` on eLC and add to your `RLab1` project folder
+
+- Rename the file `FirstName_LastName_Profile`
 
 - Complete the instructions in the `RLab1_Profile` until you reach the competencies section
 
@@ -319,10 +286,6 @@ load("states1.RData")
 - Knit to HTML again. Does it work?
 
 ---
-# Posting to eLC
+# Upload to eLC
 
-- eLC's discussion boards does not play well with HTML, so you will need to post RLabs using Word or PDF
-
-- Knit your notebook to Word or PDF
-
-- Post the .docx or .pdf file to the RLab1 discussion forum
+- Upload your notebook (.Rmd file) and output (.html file) to the RLabs assignment dropbox on eLC

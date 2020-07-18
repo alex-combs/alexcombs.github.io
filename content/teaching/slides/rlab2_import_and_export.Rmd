@@ -1,0 +1,437 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "RLab 2: Importing & Exporting Data & Documents"
+author: "Alex Combs"
+institute: "UGA/SPIA/PADP"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- use data included in a R package
+- import data of different common formats
+- import data from a url
+- control what the reader of your document actually sees
+- export work to Word and PDF
+- export data to a few common formats
+
+---
+# Start a new project
+
+- Let's start a new project using a slightly different process than we learned last week
+- We will create a new project from an *existing* directory (aka folder on your computer)
+
+--
+
+- Using the file directory on your computer
+  - Go to the parent folder that contains your RLab1 folder
+  - Create a new folder named RLab2
+
+--
+
+- In RStudio
+  - Create new project
+  - Select Existing Directory
+  - Click Browse and select the RLab2 folder you just created
+  - Click Create Project
+  
+---
+# Start a R notebook
+
+- Use the dropdown menu in the upper-left of RStudio to start a notebook
+- Let's make some minimal changes to the YAML header
+  - Change the title to "RLab 2: Import & Export Data & Documents"
+  - Change the output to `html_document`
+
+--
+
+- Delete all of the content included in the template
+
+---
+# Loading RData file review
+
+- We learned how to load data files already formatted for R
+
+- Load the "states1.RData" file from the previous lab
+
+--
+
+```{r, eval=FALSE}
+load("states1.RData")
+```
+
+```{r, eval=FALSE}
+load("RLab1/states1.RData")
+```
+
+---
+# Using data included in a R package
+
+- R loads with some play data sets that are useful for learning. For example,
+
+```{r, eval=FALSE}
+mtcars
+```
+
+--
+
+- Many R packages include data
+- Try loading the following packages.
+
+```{r, eval=FALSE}
+library(gapminder)
+library(fivethirtyeight)
+```
+
+---
+# Using data included in a R package
+
+- You probably got an error that the packages are not installed. Why?
+
+--
+
+- Run the following code in your console. 
+
+```{r, eval=FALSE}
+install.packages("gapminder")
+install.packages("fivethirtyeight")
+# OR
+install.packages(c("gapminder", "fivethirtyeight"))
+```
+
+--
+- Remember why not to install in your notebook?
+
+- Rerun the code that loads these packages
+
+---
+# Using data included in a R package
+
+- Run the following code
+
+```{r, eval=FALSE}
+gapminder
+```
+
+- Delete the above code chunk; this dataset is too large for what we'll do in a few moments
+
+--
+
+- Add the following
+
+```{r, eval=FALSE}
+head(gapminder, n=4)
+```
+
+--
+
+```{r, eval=FALSE}
+babygap <- head(gapminder, n=4)
+(babygap <- head(gapminder, n=4))
+```
+
+--
+
+```{r, eval=FALSE}
+(hate_crimes <- hate_crimes)
+```
+
+---
+class: inverse, middle, center
+
+# Let's pause learning data imports and learn how to control what gets exported for our audience to read
+
+---
+# WYSIWYG
+
+- What you see is what you get
+- This is how software like Word and Excel work
+
+--
+
+- R is not WYSIWYG
+- You can control what you see in your notebook and what it exports for others to read
+
+---
+class: inverse, middle, center
+
+# For example, throughout this presentation I have been showing you code but no results. In fact, R didn't even execute the code I've been showing you.
+
+---
+# Common motivations for controlling what exports
+
+- Do but don't show or tell
+  - I need to load some packages but my audience doesn't need to see that
+  - I need to look at some data or results but I don't want to show my audience
+  
+- Show but don't tell
+  - I want to show my audience some results but not tell them the code used to produce it
+
+---
+# Common motivations for controlling what exports
+
+- Tell but don't show
+  - I want to tell my audience the code but I don't want to show the results
+  
+- Tell but don't do
+  - I want to tell my audience some code but I don't want run the code
+
+---
+# Do but don't show or tell
+
+- Knit your notebook to HTML
+
+--
+
+- Our document includes the entire mtcars data set. Rarely a good idea.
+
+- We still want to be able to look at and interact with the data in our notebook.
+
+```{r, eval=FALSE}
+{r, include=FALSE}
+```
+
+- Knit to HTML again, there should be no sign of the mtcars data
+
+--
+
+- We usually don't need to show the packages we loaded
+- Suppress the code and output for the code chunk that loaded the gapminder and fivethirtyeight packages
+
+---
+# Show but don't tell
+
+- We have the first four rows of the gapminder data set. A nice preview of data for our reader.
+
+- They don't need to see the code that produced it.
+
+```{r, eval=FALSE}
+{r, echo=FALSE}
+```
+
+- Knit to HTML again, notice the code is gone but the table remains
+
+---
+# Tell but don't show
+
+- We have code that demonstrates the difference between saving an object and wrapping it with parentheses. The latter automatically prints the object.
+
+- Suppose we wanted to run the code, explain the code to our audience, but didn't want to provide the table.
+
+```{r, eval=FALSE}
+{r, results='hide'}
+```
+
+- Knit to HTML
+
+---
+# Tell but don't do
+
+- We have the hate_crimes data set printed in our document. No good.
+
+- Suppose we simply wanted to provide this code for instruction but didn't want to run it.
+
+```{r, eval=FALSE}
+{r, eval=FALSE}
+```
+
+- Knit to HTML, notice the code remains but it wasn't run or else the data would have printed
+
+---
+# Output options recap
+
+![](labs_files/output_options.png)
+
+---
+class: inverse, center, middle
+
+# Back to data imports
+
+---
+# Importing common data files into R
+
+- Not all data comes formatted for R as a RData file
+
+- Two very common file types are
+  - Comma separated files (CSV)
+  - Excel files (XLS or XLSX)
+
+--
+  
+- Consider
+  - Do I want to create a RData file that I can load in my notebook, discarding the original file?
+  - Do I want to keep the original file and import into R using code in my notebook?
+  - Do the original data change frequently?
+  
+
+---
+# Creating a RData file to load
+
+- Download and save the file to your project folder
+- In the menu bar, go to File -> Import Dataset -> File type
+  - If CSV file, choose Text (readr)
+- Save this data set as a RData file
+
+```{r, eval=FALSE}
+save(name_of_data_set_in_environment, file = "filename.RData")
+```
+
+- We can load these data as needed like we've done before 
+
+```{r, eval=FALSE}
+load("filename.RData")
+```
+
+- Let's try this with a new file available on eLC called ncbirths
+
+---
+# Import from original file using code
+
+- Maybe I don't want to create a RData file every time
+
+- To import CSV, we need the following package
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+- To import Excel, we need the following package
+
+```{r, eval=FALSE}
+library(readxl)
+```
+
+---
+# Import original file using code
+
+- To import CSV, we use the following code
+
+```{r, eval=FALSE}
+name_for_new_object <- read_csv("filname.csv")
+```
+
+- Let's try this with ncbirths
+
+---
+# Import from original file using code
+
+- Common to find data that is not neatly organized
+
+- Importing with code can avoid modifying the original file. We want to make the import as automatic as possible.
+
+--
+
+- To see what kind of options we can use, let's check out the help file
+
+- Go to the Help tab in your Files pane and search for read_excel
+
+---
+# Import from original file using code
+
+- Let's try to import a file that is poorly formatted, ga_schdist_raw.xlsx
+
+- First, open it in Excel to see what we are dealing with
+
+--
+
+- We need to define a range of cells for R to read and tell R whether to read in variable names
+
+- The following code defines the range of cells; the first row is read as variable names by default
+
+```{r, eval=FALSE}
+read_excel("ga_schdist_raw.xlsx", range = "A7:I230")
+```
+
+---
+# Import from URL
+
+- What if the data I use changes? I don't want to have to download a new version every time.
+- What if the data I use is publicly available in a central location and is really large? I don't want to have to save it to my computer.
+
+--
+
+- Lots of data is saved to the web and accessible via a url. We can import directly from the url.
+
+- We need another package to import via url
+
+```{r, eval=FALSE}
+library(data.table)
+```
+
+- Which allows us to use the function:
+
+```{r, eval=FALSE}
+name_for_new_object <- fread('url')
+```
+
+---
+# Import from URL
+
+[Coronavirus case count](https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html)
+
+- New York Times made the data publicly available on GitHub
+
+[Data repository](https://github.com/nytimes/covid-19-data)
+
+- The url for the raw state-level data is [here](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv)
+
+- We can import this automatically like so:
+
+```{r, eval=FALSE}
+covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv')
+```
+
+- Add `eval=FALSE` to the above chunk so it doesn't run everytime you knit
+
+---
+# Knit to Word
+
+- If Word is on your computer, knitting to Word should just work
+
+- In the Knit dropdown menu, select 'Knit to Word'
+
+- Formatting will probably be an issue; change within the Word document
+
+---
+# Knit to PDF
+
+- In order to knit to PDF, your computer needs a copy of LaTeX
+
+- You can install a light version of LaTeX within RStudio using the following code
+
+```{r, eval=FALSE}
+install.packages('tinytex')
+tinytex::install_tinytex()
+# to uninstall TinyTeX, run tinytex::uninstall_tinytex()
+```
+
+- Try to Knit to PDF. If it works, there is nothing else you need to know or do.
+
+---
+# Export data to CSV
+
+- We may want to export an object to csv for non-R-users to open
+
+--
+
+- To export to csv:
+```{r, eval=FALSE}
+write_csv(name_of_object, file = 'name_for_new_file.csv')
+```
+
+--
+
+- Export the `babygap` object to a csv file
+
+---
+# Upload to eLC
+
+- Upload your notebook and output to the RLabs assignment dropbox on eLC.
