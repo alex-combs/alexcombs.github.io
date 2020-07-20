@@ -24,3 +24,5 @@ output: html_document
 ### [Introduction to R](content/teaching/slides/rlab1_intro_to_r.html)
 
 ### [Import & Export Data & Documents](content/teaching/slides/rlab2_import_and_export.html)
+
+### [Data Wrangling](content/teaching/slides/rlab3_data_wrangling.html)

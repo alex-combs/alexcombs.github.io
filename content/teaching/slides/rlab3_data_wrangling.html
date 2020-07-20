@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-09-09" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## RLab 3: Data Wrangling
+### Alex Combs
+### UGA | SPIA | PADP
+### September 9, 2020
+
+---
+
+# Why learn data wrangling
+
+- 80/20 rule
+  - About 80% of time on data analysis is spent preparing data for analysis (i.e. wrangling)
+  - Other 20% spend on actual analysis
+
+--
+
+- Teaching you analysis is not very useful if you can't realistically prepare data first
+
+--
+
+- Wrangling is a pain. Software like R can save you a lot of time.
+
+---
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- rename variables
+- change the type of variable
+- extract observations using `filter`
+- extract columns using `select`
+- create new variables or change existing variables using `mutate`
+- reorder rows using `arrange`
+- extract a few of the top or bottom rows using `head` and `tail`
+- combine functions in one chunk using the pipe operator `%&gt;%`
+- print nice looking tables using `kable`
+- report summary stats using `summarize` and `group_by`
+
+---
+# Start a new project
+
+- Using the file directory on your computer
+  - Go to the parent folder that contains your RLabs folders
+  - Create a new folder named RLab3
+
+--
+
+- In RStudio
+  - Create new project
+  - Select Existing Directory
+  - Click Browse and select the RLab3 folder you just created
+  - Click Create Project
+  
+---
+# Start a R notebook
+
+- Use the dropdown menu in the upper-left of RStudio to start a notebook
+- Let's make some minimal changes to the YAML header
+  - Change the title to "RLab 3: Data Wrangling"
+  - Change the output to `html_document`
+- Delete all of the content included in the template
+
+---
+# Wrangle with Tidyverse
+
+- Virtually all wrangling can/should be done with the tidyverse package written by Hadley Wickham
+
+- Load the tidyverse package. Hide the code and any output using one of the code chunk options we learned last week.
+
+
+
+---
+# Download &amp; load data
+
+- Download the `state_finance_16.RData` and `ga_schdist_raw.RData` files from eLC and add to your project folder
+
+- Load both datasets into R. Hide the code and output.
+
+
+
+
+```r
+load('state_finance_16.RData')
+load('ga_schdist_raw.RData')
+```
+
+- Click on the objects in your environment to view what mess these data are in
+
+---
+# Renaming variables
+
+- In general, we want variable names to be in snake_case_format and as short as possible
+- The names for `state_finance_16` aren't bad
+- I already wrangled these data some
+
+--
+
+
+```r
+state_finance_16 &lt;- read_csv("SGF_2016_00A1_with_ann.csv", 
+                             col_names = c("id1", "id2", "state", "year",
+                                           "finance_type_id", "finance_type",
+                                           "finance_source_id", "finance_source",
+                                           "amount_1000"), 
+                             col_types = "ccciccccn", 
+                             na = c("X"), 
+                             skip = 2)
+```
+
+---
+# Show reader original data
+
+- Insert a header 'Raw Data'
+
+- Show the reader the original data using `glimpse`
+
+
+```r
+glimpse(state_finance_16)
+```
+
+---
+# Renaming a few variables
+
+
+```r
+data_set &lt;- rename(data_set, 'new_var' = 'old_var', 
+                    'new_var' = 'old_var', ...)
+```
+
+--
+
+- Let's rename 'id2' to 'id' and 'id1' to 'id2' in `state_finance_16`
+
+
+```r
+state_finance_16 &lt;- rename(state_finance_16, 'id' = 'id2', 'id2' = 'id1')
+```
+
+---
+# Renaming many long variables
+
+- The names in the `ga_schdist_raw` data are super long
+- We could rename using the same function, copy and pasting the current names to the code
+- There is a quicker way
+
+---
+# Renaming many long variables
+
+- Start a code chunk
+- Run the following code
+
+
+```r
+names(ga_schdist_raw)
+```
+
+- The `names` functions returns a list of all variable names
+- We can save this list to a new object
+
+--
+
+- Add the following to the code chunk
+
+
+```r
+schdist_oldnames &lt;- names(ga_schdist_raw)
+```
+
+---
+# Renaming many long variables
+
+- Now we need to save a list of new variable names
+
+
+```r
+schdist_newnames &lt;- c("district", "state", "charter", "enroll", "lep", "sped", 
+    "frpl", "white", "expenditures")
+```
+
+- Tedious but you only have to do this once for multiple datasets with the same variables
+
+---
+# Renaming many long variables
+
+- Finally, we tell R to replace the old names with our new names
+
+
+```r
+ga_schdist_raw &lt;- rename_at(ga_schdist_raw, vars(schdist_oldnames), 
+                        ~ schdist_newnames)
+```
+
+- Don't worry about understanding all of the code. You can follow its logic for any dataset.
+
+- Show reader the new `state_finance_16` and `ga_schdist_raw` names using `glimpse`
+
+---
+# Converting variable types
+
+- We can overwrite how R stores variables within a dataset
+
+- General logic
+
+```r
+data_set$variable &lt;- as.newtype(data_set$variable)
+#where newtype is the type you want
+```
+
+- Basic variable type options:
+
+
+```r
+as.numeric()
+as.character()
+as.integer()
+as.factor()
+```
+
+---
+# Converting variable types
+
+- From glimpsing the data, we see that `state_finance_16$state` is stored as a character variable
+
+- That's OK, but suppose we want R to recognize it as a categorical, nominal variable
+
+- R stores categorical variables as **factors**
+
+
+```r
+state_finance_16$state &lt;- as.factor(state_finance_16$state)
+```
+
+- Use `glimpse` again to check if it worked
+
+---
+# Skill check
+
+- Several character variables in `ga_schdist_raw` need converted to numeric
+
+- In your notebook, convert numeric variables stored as character to numeric
+
+
+
+
+---
+# Filter
+
+![](labs_files/filter.png)
+
+- General logic
+
+
+```r
+filtered_data_set &lt;- filter(unflitered_data_set, criteria)
+```
+
+---
+# Filter
+
+- Insert a header 'Filter'
+
+- Run the following code in your console
+
+
+```r
+unique(state_finance_16$finance_type)
+```
+
+```
+## [1] "Revenue"                                   
+## [2] "Expenditure"                               
+## [3] "Debt Outstanding, Long Term and Short Term"
+## [4] "Cash and Secuirty Holdings"
+```
+
+- Suppose we want to keep the rows if: **`finance_type` *equals* 'Revenue' *or* 'Expenditure'**
+
+---
+# Filter
+
+
+```r
+stf_filtered &lt;- filter(state_finance_16, 
+                       finance_type == 'Revenue' | finance_type == 'Expenditure')
+```
+
+- Note our new dataset has 100 fewer observations
+
+- And checking the levels of the variable we see
+
+
+```r
+unique(stf_filtered$finance_type)
+```
+
+```
+## [1] "Revenue"     "Expenditure"
+```
+
+---
+# Conditional and logical operators
+
+- Conditionals
+  - "If equal to" `==`
+  - "If not equal to" `!=`
+  - "If greater than, less than, or equal to" `&gt;, &lt;, &gt;=, &lt;=`
+
+- Logicals
+  - "And" `&amp;`
+  - "Or" `|`
+
+---
+# Skill check
+
+- Use `unique` to examine the different levels for `state_finance_16$finance_source`
+
+- Use filter to keep only the rows with total revenue or total expenditure
+
+- Name the new object `stf_filtered`, which will overwrite the current object
+
+---
+# Select
+
+![](labs_files/select.png)
+
+- General logic
+
+
+```r
+new_dataset &lt;- select(old_dataset, var1, var2, var3, ...)
+# where var# are the names of the variables you want to keep
+```
+
+- Or to drop variables
+
+
+```r
+new_dataset &lt;- select(old_dataset, -var1, -var2, ...)
+```
+
+- Whichever requires the shorter list of names
+
+---
+# Select
+
+- Insert a header 'Select'
+
+- Several variables in `stf_filtered` are unnecessary
+
+- If we wanted to drop 'id2'
+
+
+```r
+stf_f_select &lt;- select(stf_filtered, -id2)
+```
+
+- In your notebook, create a new object `stf_f_select` that drops `id2`, `finance_type_id` and `finance_source_id`
+
+
+
+
+---
+# Mutate
+
+![](labs_files/mutate.png)
+
+- General logic
+
+
+```r
+new_dataset &lt;- mutate(old_dataset, newvar = whatever)
+```
+
+- If `newvar` is the name of an existing variable, `mutate` will change it according to your equation
+- Otherwise, `mutate` will add a new variable to the new or existing dataset
+
+---
+# Mutate
+
+- The `ga_schdist_raw` data has several absolute counts, such as `expenditures`
+
+- Not good if we want to compare; larger districts will probably have higher counts of anything
+
+- To compare variables across units of different size, we need to *normalize* the variables by size
+
+---
+# Mutate
+
+- Insert a header 'Mutate'
+
+- Let's add a new variable `exp_per_pupil`
+
+
+```r
+ga_schdist &lt;- mutate(ga_schdist_raw, exp_per_pupil = expenditures/enroll)
+```
+
+---
+# Skill check
+
+- Use `mutate` to add another new variable to `ga_schdist` that equals the number of students of color named `non_white`
+
+
+
+---
+# Mutate many variables
+
+- We want several variables in `ga_schdist` expressed as percentages
+
+- Could follow the same process
+
+
+```r
+ga_schdist &lt;- mutate(lep_pct = (lep/enroll)*100, 
+                     sped_pct = (sped/enroll)*100,
+                     and so on)
+```
+
+- Gets repetitive; there is a shortcut if we want to mutate many variables using the same function
+
+---
+# Mutating many variables
+
+- Add and execute the following code
+
+
+```r
+ga_schdist &lt;- mutate_at(ga_schdist, 
+                    vars(lep, sped, frpl, white, non_white),
+                    funs((./enroll)*100))
+```
+
+- We could rename these variables to include 'pct' or just assume it is clear
+
+---
+# Arrange
+
+![](labs_files/arrange.png)
+
+- General logic
+
+
+```r
+arrange(data_set, var)
+# Where var is the variable on which you want to arrange
+```
+
+- By default, `arrange` arranges in ascending order
+- You can `arrange` in descending order like so
+
+
+```r
+arrange(data_set, desc(var))
+```
+
+--
+
+- Usually doesn't make sense to create a new dataset with `arrange` but helpful for printing tables
+
+---
+# Arrange
+
+- Suppose I wanted to see GA school districts listed from lowest percentages of FRPL students to highest
+
+
+```r
+arrange(ga_schdist, frpl)
+```
+
+```
+## # A tibble: 223 x 11
+##    district state charter enroll    lep  sped  frpl white expenditures
+##    &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;
+##  1 STATE C… GEOR… 3-All …    870  2.07  17.1   0     56.6      4789000
+##  2 STATE C… GEOR… 3-All …    470 NA      8.51  0     69.6      3312000
+##  3 STATE C… GEOR… 3-All …    384 NA      4.17  1.82  41.7      3220000
+##  4 COMMISS… Geor… 1-All …    820  1.10   8.54 11.6   79.6      6169000
+##  5 CITY SC… Geor… 3-All …   4858  1.69   8.46 14.2   63.8     88714000
+##  6 FORSYTH… Geor… 3-All …  44286  5.32  12.2  16.5   65.7    540691000
+##  7 OCONEE … Geor… 3-All …   7271  2.82  11.1  20.5   79.7     76232000
+##  8 STATE C… Geor… 1-All …    927  1.83  10.0  21.6   66.8      8398000
+##  9 CHICKAM… Geor… 3-All …   1350  0.296  5.41 22.9   97.1     12611000
+## 10 BREMEN … Geor… 3-All …   2222  0.315  8.64 23.9   89.4     25602000
+## # … with 213 more rows, and 2 more variables: exp_per_pupil &lt;dbl&gt;,
+## #   non_white &lt;dbl&gt;
+```
+
+---
+# Head and Tail
+
+- Too many rows in the previous table
+- Use `head` and `tail` to extract the top or bottom rows of a dataset
+
+- General logic
+
+```r
+head(data_set, n = number_of_top_rows)
+tail(data_set, n = number_of_bottom_rows)
+```
+
+---
+# Head and tail
+
+- Insert header 'Head and Tail'
+
+- Five GA districts with lowest FRPL
+
+- Add the following code
+
+
+```r
+arrange(ga_schdist, frpl) %&gt;% 
+  head(n=5)
+```
+
+```
+## # A tibble: 5 x 11
+##   district state charter enroll   lep  sped  frpl white expenditures
+##   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;
+## 1 STATE C… GEOR… 3-All …    870  2.07 17.1   0     56.6      4789000
+## 2 STATE C… GEOR… 3-All …    470 NA     8.51  0     69.6      3312000
+## 3 STATE C… GEOR… 3-All …    384 NA     4.17  1.82  41.7      3220000
+## 4 COMMISS… Geor… 1-All …    820  1.10  8.54 11.6   79.6      6169000
+## 5 CITY SC… Geor… 3-All …   4858  1.69  8.46 14.2   63.8     88714000
+## # … with 2 more variables: exp_per_pupil &lt;dbl&gt;, non_white &lt;dbl&gt;
+```
+
+---
+# Head and tail
+
+- Five GA districts with highest FRPL
+
+- Add the following code
+
+
+```r
+arrange(ga_schdist, desc(frpl)) %&gt;% 
+  head(n=5)
+```
+
+```
+## # A tibble: 5 x 11
+##   district state charter enroll    lep  sped  frpl white expenditures
+##   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;
+## 1 VALDOST… Geor… 3-All …   7836  3.00  12.7   99.7 14.9      97410000
+## 2 BURKE C… Geor… 3-All …   4320  0.718 11.6   99.7 27.3      57772000
+## 3 DOUGHER… Geor… 2-All …  15194  1.69   9.04  99.5  6.71    172205000
+## 4 EVANS C… Geor… 3-All …   1857 10.6   11.0   99.5 37.8      19120000
+## 5 CLAYTON… Geor… 2-All …  54136  9.18  10.3   99.5  2.64    516208000
+## # … with 2 more variables: exp_per_pupil &lt;dbl&gt;, non_white &lt;dbl&gt;
+```
+
+- What is this `%&gt;%` symbol? 
+
+---
+# Pipe operator `%&gt;%` 
+
+- The pipe operator allows us to run multiple commands, sequentially feeding the result of one command to the next
+
+- Recall the separate steps to create `stf_f_select`
+
+```r
+stf_filtered &lt;- filter(state_finance_16, 
+                       finance_source == "Total Revenue" |
+                       finance_source == "Total Expenditure")
+
+stf_f_select &lt;- select(stf_filtered, 
+                       -finance_type_id, 
+                       -finance_source_id)
+```
+
+---
+# Pipe operator
+
+- Instead, we can get to the end result without creating a intermediate dataset
+
+
+```r
+stf_f_select &lt;- state_finance_16 %&gt;% 
+  filter(finance_source == "Total Revenue" |
+         finance_source == "Total Expenditure") %&gt;% 
+  select(-finance_type_id, 
+         -finance_source_id)
+```
+
+- Note that we don't specify the dataset inside `filter` or `select` like before because the data is fed into each command from the previous line
+
+---
+# Pipe operator
+
+- Suppose I want a table of the five districts with the highest FRPL that only shows the name of the district and FRPL
+
+
+```r
+ga_schdist %&gt;% 
+  select(district, frpl) %&gt;% 
+  arrange(desc(frpl)) %&gt;% 
+  head(n=5)
+```
+
+```
+## # A tibble: 5 x 2
+##   district          frpl
+##   &lt;chr&gt;            &lt;dbl&gt;
+## 1 VALDOSTA CITY     99.7
+## 2 BURKE COUNTY      99.7
+## 3 DOUGHERTY COUNTY  99.5
+## 4 EVANS COUNTY      99.5
+## 5 CLAYTON COUNTY    99.5
+```
+
+---
+# Skill Check
+
+- In your notebook, provide a table of the five school districts with the highest percentages of students in special education that only shows the name of the district and the percentage
+
+- Knit to html
+
+
+
+---
+# Printing tables
+
+- Our tables don't look very good
+
+- We can print nice tables using `kable`, which is part of the `knitr` package
+
+- Load `knitr`. Suppress the code and output.
+
+
+```r
+library(knitr)
+```
+
+---
+# Printing tables
+
+- Add the code chunk below to your notebook. It is identical to the code chunk you just made except for the last line.
+- Then knit to html
+
+
+```r
+ga_schdist %&gt;% 
+  select(district, sped) %&gt;% 
+  arrange(desc(sped)) %&gt;% 
+  head(n=5) %&gt;% 
+  kable()
+```
+
+
+
+|district                                        |      sped|
+|:-----------------------------------------------|---------:|
+|STATE SCHOOLS- ATLANTA AREA SCHOOL FOR THE DEAF | 100.00000|
+|STATE SCHOOLS- GEORGIA ACADEMY FOR THE BLIND    | 100.00000|
+|STATE SCHOOLS- GEORGIA SCHOOL FOR THE DEAF      | 100.00000|
+|DEPARTMENT OF HUMAN RESOURCES                   |  97.00000|
+|DEPARTMENT OF CORRECTIONS                       |  84.21053|
+
+---
+# Changing how all tables print
+
+- Can control how all tables are printed in the YAML header
+
+- Scroll up to your YAML header at the top of your notebook and change like so
+
+
+```r
+---
+title: "RLab 3: Data Wrangling"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: kable
+---
+```
+
+- Knit to html. You should notice all your tables look better.
+
+---
+# Changing how all tables print
+
+- html allows you to make table interactive
+
+- change your YAML to this instead
+
+
+```r
+---
+title: "RLab 3: Data Wrangling"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+- Knit to html. You should notice large tables can be scrolled through.
+
+---
+# Summarize
+
+![](labs_files/summarize.png)
+
+- General logic
+
+
+```r
+summarize(data_set, name = function(variable),
+          name = function(variable),...)
+```
+
+---
+# Summarize
+
+- Suppose I wanted to report average expenditures per pupil
+
+
+```r
+ga_schdist %&gt;% 
+  summarize(AvgExp = mean(exp_per_pupil, na.rm = TRUE),
+            AvgFRPL = mean(frpl, na.rm = TRUE)) %&gt;% 
+  kable()
+```
+
+
+
+|   AvgExp|  AvgFRPL|
+|--------:|--------:|
+| 10942.06| 70.33166|
+
+---
+# Group By
+
+![](labs_files/group_by.png)
+
+- General logic
+
+
+```r
+data_set %&gt;% 
+  group_by(grouping_variable) %&gt;% 
+  summarize(name = function(variable))
+```
+
+- Year and any nominal variable are common grouping variables
+---
+# Group By
+
+- Suppose I want to report average expenditures per pupil by whether a district has no charter schools, some charter schools, or all charter schools
+
+
+```r
+ga_schdist %&gt;% 
+  group_by(charter) %&gt;% 
+  summarize(AvgExp = mean(exp_per_pupil, na.rm = TRUE)) %&gt;% 
+  kable()
+```
+
+
+
+|charter                                             |    AvgExp|
+|:---------------------------------------------------|---------:|
+|†                                                   |       NaN|
+|1-All associated schools are charter schools        |  8615.186|
+|2-All associated schools are charter and noncharter | 11639.312|
+|3-All associated schools are noncharter             | 11032.422|
+
+---
+# Skill check
+
+- Insert header 'Summarize and Group By'
+
+- Provide a table that reports the average amounts in the `stf_f_select` data separately for each state. Execute the code to check if it works.
+
+
+
+---
+# Interpretation
+
+- What is the meaning of these averages?
+
+--
+
+- Meaningless because expenditures and revenues are in the same column
+
+- These data are **untidy**
+
+- We will learn how to tidy data next week
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"highlightlines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
