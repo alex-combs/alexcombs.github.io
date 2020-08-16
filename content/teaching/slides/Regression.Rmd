@@ -1,0 +1,501 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "Simple & Multiple Regression"
+author: "Alex Combs"
+institute: "UGA/SPIA/PADP"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+# Outline
+
+- Understand the basic mechanics of regression and their relevance to making decisions
+
+- Interpret regression coefficients
+
+- Understand what it means to control for other variables
+
+---
+# Basic idea
+
+```{r, include=FALSE}
+library(carData)
+library(openintro)
+library(tidyverse)
+library(moderndive)
+library(knitr)
+```
+
+
+.pull-left[
+```{r, echo=FALSE}
+ggplot(gpa, aes(x = studyweek, y = gpa)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = "Study hours per week",
+       y = "GPA") +
+  theme_classic() +
+  theme(text = element_text(size=20))
+```
+]
+
+.pull-right[
+- Regression gives us direction, strength, and magnitude of association
+- Draws the **best** line through a set of paired x-y data points
+- The slope of the line tells us the **average, predicted change in y given a change in x**
+]
+
+---
+# Basic idea
+
+- Regression is a statistical method to
+  - **Explain** the relationship between an outcome variable and one or more explanatory variables
+  - **Predict** the value of an outcome given a value(s) of one or more explanatory variables
+
+- Either way, regression is a way of modeling an outcome $y$ as a function of explanatory $x$
+
+---
+# Simple linear regression model
+
+.pull-left[
+.font120[$$y=\beta_0+\beta_1x+\epsilon$$]
+
+- $y$ referred to as outcome, response, dependent variable
+- $\beta_0$ (beta-naught) is the y-intercept constant
+- $\beta_1$ is the slope of the regression line; the marginal effect of $x$ on $y$
+- $x$ referred to as explanatory, independent variable
+- $\epsilon$ is referred to as the error term or random noise
+]
+.pull-right[
+- This is a **population** model. 
+- The $\beta$s are **population parameters** we wish to estimate.
+- $\epsilon$ is also a parameter that captures all the other factors that affect $y$ for which we cannot include in our model
+]
+
+---
+# Simple linear regression model
+
+.pull-left[
+.font120[$$\hat{y}=b_0+b_1x$$]
+
+- $\hat{y}$ is the **predicted** value of $y$ given a value of $x$
+- $b_0$ is the estimate of $\beta_0$; our prediction of $y$ if $x$ equaled 0
+- $b_1$ is the estimate of $\beta_1$; our predicted slope; our predicted marginal effect of $x$ on $y$
+- the $b$s are often referred to as **coefficients**
+]
+
+.pull-right[
+- This equestion represents our sample regression equation
+]
+
+---
+# Interpreting Regression Results
+
+.font120[$$\hat{y}=b_0+b_1x$$]
+
+On average, a one-[unit] change in $x$ [is associated with] a change of $b_1$ [units] in $y$.
+
+- Replace [unit] with the actual units of the $x$ variable (e.g. dollars, percentage point, count of people or things like houses)
+- Replace $x$ with what $x$ is
+- [is associate with] can be any combination of words that express the intended relationship (causes, results in)
+- Replace $b_1$ with the numerical estimate we get from the results
+- Replace [units] with the units of the $y$ variable
+- Replace $y$ with what $y$ is
+
+---
+# Example
+
+$$GPA=\beta_0+\beta_1STUDYHOURS+\epsilon$$
+
+```{r, echo=FALSE}
+gpa1 <- lm(gpa ~ studyweek, data = gpa)
+get_regression_table(gpa1) %>% 
+  kable(format = 'html')
+```
+
+$$\hat{GPA}=3.578+0.001 \times STUDYHOURS$$
+
+On average, a one-hour increase in study hours per week is associated with a 0.001 point increse in GPA.
+
+Results indicate each additional hour students study per week inceases GPA by 0.001 point, on average.
+
+If students studied 10 more hours each week, GPA is predicted to increase 0.01 point.
+
+---
+# Many ways to interpret
+
+- Regression results can be applied to countless scenarios
+- Any scenario boils down to providing either 
+  - a predicted *change* in $y$ given a *change* in $x$ or 
+  - a predited *value* of $y$ given a *value* of $x$
+
+- Any answer can be obtained by plugging the results into the equation, then plugging the scenario into the equation to solve
+
+---
+# Change vs. value
+
+$$GPA=\beta_0+\beta_1SleepHours+\epsilon$$
+```{r, echo=FALSE}
+gpa2 <- lm(gpa ~ sleepnight, data = gpa)
+get_regression_table(gpa2) %>% 
+  kable(format = 'html')
+```
+
+$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$
+
+- Now we can consider any hypothetical *change* in hours of sleep or specific *value* of hours of sleep and provide a predicted GPA.
+
+---
+# Change vs. value
+$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$
+
+.pull-left[
+What if students slept 3 more hours than they currently do?
+```{r}
+0.02*3
+```
+GPA is predicted to increase by 0.06 points
+]
+
+.pull-right[
+What is the predicted GPA of a student who sleeps 8 hours?
+```{r}
+3.46 + 0.02*8
+```
+]
+
+---
+# You practice
+
+$$GPA=\beta_0+\beta_1NightsOut+\epsilon$$
+
+```{r}
+gpa3 <- lm(gpa ~ out, data = gpa)
+get_regression_table(gpa3) %>% 
+  kable(format = 'html')
+```
+
+- What is the predicted GPA for a student who goes out 7 nights a week?
+- What is the predicted GPA for a student who goes out 4 nights a week?
+- What is the predicted change in GPA given a student decreases their nights out by 3?
+
+---
+class: inverse, center, middle
+
+# Given a table of regression results, you know the regression model that table implies, and you can answer infinite hypothetical scenarios. Complexity will build as we add to our toolbox, but this plug-and-chug process does not change.
+
+---
+class: inverse, middle, center
+
+# So how does one run regression in R? It's very easy.
+
+---
+# Running regression
+
+- What variables do I have to work with?
+
+```{r}
+glimpse(gpa)
+```
+
+---
+# Running regression
+
+```{r, eval=FALSE}
+gpa1 <- lm(gpa ~ studyweek, data = gpa)
+gpa2 <- lm(gpa ~ sleepnight, data = gpa)
+gpa3 <- lm(gpa ~ out, data = gpa)
+```
+
+```{r, eval=FALSE}
+library(moderndive)
+get_regression_table(gpa1)
+```
+```{r, echo=FALSE}
+get_regression_table(gpa1) %>% 
+  kable(format = 'html')
+```
+
+---
+# Running regression
+
+- The `get_regression_table` function requires the `moderndive` package
+- Alternatively, `summary` requires no package, but it's not as pretty
+
+```{r}
+summary(gpa1)
+```
+
+---
+# Recap of population and sample regressions
+
+.font120[$$y=\beta_0+\beta_1x+\epsilon$$]
+
+$$GPA=\beta_0+\beta_1SleepHours+\epsilon$$
+
+.font120[$$\hat{y}=b_0+b_1x$$]
+$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$
+
+---
+class: inverse, center, middle
+
+# What happened to that $\epsilon$?
+
+---
+# The residual
+
+.font140[$$e=y-\hat{y}$$]
+
+- The residual is the difference between the *observed* outcome and the *predicted* outcome from our regression model
+
+- The residual is the sample analog of the error/noise population parameter
+
+---
+# The residual
+
+```{r, echo=FALSE}
+ggplot(gpa, aes(x = studyweek, y = gpa)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = "Study hours per week",
+       y = "GPA") +
+  theme_classic() +
+  theme(text = element_text(size=20))
+```
+
+---
+# The residual
+
+```{r, eval=FALSE}
+get_regression_points(gpa1)
+```
+
+.left-column[
+- We can view the regression results for each observation
+- We see the observed data, the predicted outcome, and the difference between observed and predicted
+]
+
+.right-column[
+```{r, echo=FALSE}
+get_regression_points(gpa1) %>% 
+  head(n=8) %>% 
+  kable(format = 'html')
+```
+]
+
+---
+class: inverse, center, middle
+
+# Regression draws the best line through observed x-y pairs. What does best mean?
+
+---
+# Ordinary least squares (OLS)
+
+- Basic regression is also known as OLS
+
+- Regression uses math you don't need to worry about to determine the intercept and slope(s) of a line that **minimizes the sum of squared residuals**
+
+- No other line could achieve a smaller sum of squared residuals (SSR)
+
+---
+# OLS
+
+.pull-left[
+```{r, echo=FALSE}
+ggplot(gpa, aes(x = studyweek, y = gpa)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = "Study hours per week",
+       y = "GPA") +
+  theme_classic() +
+  theme(text = element_text(size=20))
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+get_regression_points(gpa1) %>% 
+  head(n=8) %>%
+  select(-studyweek) %>% 
+  kable(format = 'html')
+```
+]
+
+---
+# OLS
+
+```{r, echo=FALSE}
+gpa1_points <- get_regression_points(gpa1) %>% 
+  mutate(sq_resid = residual^2)
+
+head(gpa1_points, n=4) %>% 
+  kable(format = 'html')
+```
+
+```{r}
+sum(gpa1_points$sq_resid)
+```
+
+- No other line will achieve less than 6.07 SSR
+
+---
+class: inverse, middle, center
+
+# Ok, that's what best means, but how good is the best?
+
+---
+# Goodness-of-fit
+
+- Any outcome varies across observations (i.e. variance)
+
+- When we ask how good is our best regression line, one way to answer is the percent of total variance in the outcome accounted for with that line
+
+- This measure is called $R^2$ (r-squared)
+  - The percent of variation in $y$ explained by our regression
+
+---
+# Goodness of fit
+
+```{r, eval=FALSE}
+get_regression_summaries(gpa1)
+```
+
+```{r, echo=FALSE}
+get_regression_summaries(gpa1) %>%
+  select(r_squared, adj_r_squared, mse, rmse, sigma) %>% 
+  kable(format = 'html')
+```
+
+The regression using study hours exlains only 0.2% of total variation in GPA.
+
+---
+# Goodness of fit
+```{r, eval=FALSE}
+get_regression_summaries(gpa2)
+```
+```{r, echo=FALSE}
+get_regression_summaries(gpa2) %>%
+  select(r_squared, adj_r_squared, mse, rmse, sigma) %>% 
+  kable(format = 'html')
+```
+
+```{r, eval=FALSE}
+get_regression_summaries(gpa3)
+```
+```{r, echo=FALSE}
+get_regression_summaries(gpa3) %>%
+  select(r_squared, adj_r_squared, mse, rmse, sigma) %>% 
+  kable(format = 'html')
+```
+
+- What percent of variation in GPA is explained by models 2 and 3?
+
+--
+
+- Model 3 has the highest $R^2$, thus it is the best model
+
+---
+class: inverse, center, middle
+
+# Multiple regression simply adds more than one explanatory variable to the model
+
+---
+# Multiple regression
+
+**Population model**
+.font120[$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$]
+
+**Sample model**
+.font120[$$\hat{y}=b_0+b_1x_1+b_2x_2+\dots+b_kx_k$$]
+
+- Nothing fundamentally different; just more variables
+
+---
+# Controlling for other factors
+
+- Each of the three previous regressions controlled for one factor we might suspect affects GPA
+
+- With the model for study hours, there is any number of additional factors contained in the error term $\epsilon$
+
+- Generally, if we can, we should include those additional factors in the same regression model
+  - Especially if one of those factors affect study hours
+
+---
+# Controlling for other factors
+
+- Multiple regression provides the marginal effect of $x_k$ on $y$, while holding all other $x$s constant at their respective mean
+
+**Interpretation**
+
+On average, a one-[unit] increase in $x_k$ is associated with a $b_k$ [unit] change in $y$, **holding all else constant/equal.**
+
+---
+# Running multiple regression
+
+$$GPA=\beta_0+\beta_1Study+\beta_2Sleep+\beta_3Out+\epsilon$$
+
+```{r}
+gpa4 <- lm(gpa ~ studyweek + sleepnight + out, data = gpa)
+```
+```{r, eval=FALSE}
+get_regression_table(gpa4)
+```
+```{r, echo=FALSE}
+get_regression_table(gpa4) %>% 
+  kable(format = 'html')
+```
+
+---
+# Interpreting results
+
+```{r, echo=FALSE}
+get_regression_table(gpa4) %>% 
+  kable(format = 'html')
+```
+
+Controlling for study hours and sleep, what is the predicted change in GPA if nights out increases by 3?
+
+--
+
+```{r}
+0.044*3
+```
+
+---
+# Interpreting results
+
+```{r, echo=FALSE}
+get_regression_table(gpa4) %>% 
+  kable(format = 'html')
+```
+
+What is the predicted GPA for a student who studies 20 hours per week, sleeps 8 hours per day, and goes out 2 nights a week?
+
+--
+
+```{r}
+3.435 + 0.001*20 + 0.007*8 + 0.044*2
+```
+
+---
+# Goodness-of-fit
+
+```{r, eval=FALSE}
+get_regression_summaries(gpa4)
+```
+```{r, echo=FALSE}
+get_regression_summaries(gpa4) %>% 
+  select(r_squared, adj_r_squared, mse, rmse, sigma) %>%
+  kable(format = 'html')
+```
+
+- $R^2$ increases mechanically as you add more variables whether those variables improve the model or not
+
+- Adjusted $R^2$ accounts for this and penalizes for adding bad (i.e. statistically insignificant) variables
+
+- All of these examples do a very poor job at explaining GPA, at least in for this sample of students

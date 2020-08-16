@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-09-16" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## RLab 4: Tidying Data
+### Alex Combs
+### UGA | SPIA | PADP
+### September 16, 2020
+
+---
+
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Pivot a wide dataset to long
+- Pivot a long dataset to wide
+- Separate a variable into multiple variables
+- Unite multiple variables to one variable
+
+---
+# Start a new project
+
+- Using the file directory on your computer
+  - Go to the parent folder that contains your RLabs folders
+  - Create a new folder named RLab4
+
+--
+
+- In RStudio
+  - Create new project
+  - Select Existing Directory
+  - Click Browse and select the RLab4 folder you just created
+  - Click Create Project
+  
+---
+# Start a R notebook
+
+- Use the dropdown menu in the upper-left of RStudio to start a notebook
+
+- Change YAML
+
+
+```r
+---
+title: "RLab 4: Tidying Data"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+- Delete all of the content included in the template
+
+---
+# Packages
+
+- Load the `tidyverse` and `knitr` packages, suppressing the code and output
+
+--
+
+
+```r
+library(tidyverse)
+library(knitr)
+```
+
+
+
+---
+# Tidy data
+
+Tidy data satisfy three rules:
+
+- Each variable has its own column
+- Each observation (unit of analysis) has its own row
+- Each value (datum) has its own cell
+
+![](labs_files/tidy.png)
+
+---
+# Tidy data
+
+- Let's revisit the state finance data from RLab3
+
+- Insert a header "Untidy State Finance Data"
+
+- `load` the `stf_f_select.RData` file in your notebook, suppressing the code and and output
+
+--
+
+
+```r
+load('stf_f_select.RData')
+```
+
+
+
+---
+# Tidy Data
+
+- Let's show readers a sample of the data using `head`
+
+- Provide the first 6 rows, suppress the code
+
+--
+
+
+```r
+stf_f_select %&gt;% 
+  head()
+```
+
+
+|id |state   | year|finance_type |finance_source    | amount_1000|
+|:--|:-------|----:|:------------|:-----------------|-----------:|
+|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
+|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
+|02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
+|02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
+|04 |Arizona | 2016|Revenue      |Total Revenue     |    38232376|
+|04 |Arizona | 2016|Expenditure  |Total Expenditure |    42085094|
+
+---
+class: inverse, center, middle
+
+# Are these data tidy? Why or why not?
+
+---
+# Untidy Data
+
+
+|id |state   | year|finance_type |finance_source    | amount_1000|
+|:--|:-------|----:|:------------|:-----------------|-----------:|
+|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
+|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
+|02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
+|02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
+
+- What is the unit of analysis?
+
+--
+
+- There are two rows per observation (unit of analysis)
+
+--
+
+- Why?
+
+--
+
+- Because `finance_type` should be two variables, not one
+
+---
+# Long vs. Wide Data
+
+- Most tidying issues involve whether a dataset should be long or wide
+
+--
+
+- Is `stf_f_select` in long or wide format?
+
+
+|id |state   | year|finance_type |finance_source    | amount_1000|
+|:--|:-------|----:|:------------|:-----------------|-----------:|
+|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
+|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
+|02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
+|02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
+
+---
+# Long vs. Wide Data
+
+- Here is a different example that is very common.
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop1997 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop2002 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop2007 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; United States &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 272911760 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 287675526 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 301139947 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Are these data in long or wide format?
+
+--
+
+- Are these data tidy? Why or why not?
+
+---
+# Tidy State Finance Data
+
+- Our goal is to tidy `stf_f_select`
+
+- It is long when it should be wide
+
+--
+
+- To achieve this, we can use the `pivot_wider` function
+
+- General logic
+
+
+```r
+new_data &lt;- current_data %&gt;% 
+  pivot_wider(names_from = column-with-variable-names,
+              values_from = column-with-values)
+```
+
+---
+# Tidy State Finance Data
+
+
+|id |state   | year|finance_type |finance_source    | amount_1000|
+|:--|:-------|----:|:------------|:-----------------|-----------:|
+|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
+|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
+
+- Insert a header "Tidy State Finance Data"
+
+- Let's start a code chunk that creates a new dataset `stf_tidy`
+
+
+```r
+stf_tidy &lt;- stf_f_select %&gt;% 
+```
+
+- Next, add a line that drops `finance_source` since it is redundant
+
+--
+
+
+```r
+stf_tidy &lt;- stf_f_select %&gt;% 
+  select(-finance_source) %&gt;% 
+```
+
+---
+# Tidy State Finance Data
+
+
+|id |state   | year|finance_type |finance_source    | amount_1000|
+|:--|:-------|----:|:------------|:-----------------|-----------:|
+|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
+|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
+|02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
+|02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
+
+
+```r
+new_data &lt;- current_data %&gt;% 
+  pivot_wider(names_from = column-with-variable-names,
+              values_from = column-with-values)
+```
+
+- Which column contains the names of the new variables we want?
+- Which column contains the values for the new variables?
+- Add `pivot_wider` to your code chunk according to answers.
+
+---
+# Tidy State Finance Data
+
+
+```r
+stf_tidy &lt;- stf_f_select %&gt;% 
+  select(-finance_source) %&gt;% 
+  pivot_wider(names_from = finance_type,
+              values_from = amount_1000)
+```
+
+- Execute your code and examine the new dataset to see if/how it worked
+
+---
+# Tidy State Finance Data
+
+- Let's provide the reader with the first 6 rows of our new dataset, suppressing code and output
+
+
+```r
+stf_tidy %&gt;% 
+  head()
+```
+
+
+|id |state      | year|   Revenue| Expenditure|
+|:--|:----------|----:|---------:|-----------:|
+|01 |Alabama    | 2016|  30133184|    30211453|
+|02 |Alaska     | 2016|   8071732|    12436184|
+|04 |Arizona    | 2016|  38232376|    42085094|
+|05 |Arkansas   | 2016|  21439227|    22910901|
+|06 |California | 2016| 322332341|   326837836|
+|08 |Colorado   | 2016|  31399864|    34596327|
+
+---
+# Wide to Long
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop1997 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop2002 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop2007 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; United States &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 272911760 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 287675526 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 301139947 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- To tidy wide data to long format, we can use `pivot_longer`
+
+
+```r
+uspop_tidy &lt;- uspop %&gt;% 
+  pivot_longer(cols = pop1997:pop2007,
+               names_to = 'year',
+               names_prefix = 'pop',
+               values_to = 'population')
+```
+
+
+|country       |year | population|
+|:-------------|:----|----------:|
+|United States |1997 |  272911760|
+|United States |2002 |  287675526|
+|United States |2007 |  301139947|
+
+---
+# Untidy Enrollment Data
+
+- Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder
+
+- Let's open this file and take a look at the data
+
+---
+# Untidy Enrollment Data
+
+- Insert a header "Untidy Enrollment Data"
+
+- Import `ky_private_school_enrollment.csv`, suppressing code and output
+
+- Name the new dataset `ky_priv_enroll_wide`
+
+--
+
+
+```r
+ky_priv_enroll_wide &lt;- read_csv('ky_private_school_enrollment.csv')
+```
+
+
+
+---
+# Untidy Enrollment Data
+
+- Provide the reader the first 6 rows of these data, suppressing the code
+
+--
+
+
+```r
+head(ky_priv_enroll_wide)
+```
+
+
+|ncesid  |school_name                  |state    | county_fips|city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
+|:-------|:----------------------------|:--------|-----------:|:--------------------|----------:|----------:|----------:|----------:|----------:|----------:|
+|1613912 |LANDMARK CHRISTIAN ACADEMY   |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        153|        146|        170|        184|        156|        119|
+|1649825 |ST-FRANCIS HIGH SCHOOL       |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        130|        121|        125|         NA|         NA|         NA|
+|1649836 |ST JOHNS ACADEMY             |KENTUCKY |       21111|LOUISVILLE JEFFERSON |         NA|         16|         NA|         NA|         NA|         NA|
+|1930137 |THE DE PAUL SCHOOL           |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        243|        278|        258|        246|        235|        218|
+|1930159 |EMMA L MINNIS JUNIOR ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |         49|         30|         25|         24|         35|         22|
+|1930308 |ELIAHU ACADEMY               |KENTUCKY |       21111|LOUISVILLE JEFFERSON |         92|         87|         62|         71|         36|         NA|
+
+---
+# Untidy Enrollment Data
+
+- We need to take the enroll columns and name them to a new variable 'year' and send the values to a variable 'enrollment'
+
+- Recall how this was done for the `uspop` data
+
+
+```r
+uspop_tidy &lt;- uspop %&gt;% 
+  pivot_longer(cols = pop1997:pop2007,
+               names_to = 'year',
+               names_prefix = 'pop',
+               values_to = 'population')
+```
+
+- Create a new dataset called `ky_priv_enroll` that is in long format
+
+
+
+---
+class: inverse, center, middle
+
+# Are these data tidy? Why or why not?
+
+---
+# Separating variables
+
+![](labs_files/separate.png)
+
+---
+# Tidy Enrollment Data
+
+- We should `separate` city_county into city and county
+
+- Overwrite the `ky_priv_enroll` with `city_county` separated, suppressing code and output
+
+--
+
+
+```r
+ky_priv_enroll &lt;- ky_priv_enroll %&gt;% 
+  separate(city_county, c('city', 'county'))
+```
+
+--
+
+- Finally, provide the reader the first 6 rows of these tidy data, suppressing the code
+- Knit to HTML and check that the output looks correct
+
+---
+# Uniting variables
+
+![](labs_files/unite.png)
+
+---
+# Submit Lab
+
+- Upload your notebook and .html file to eLC
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"highlightlines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

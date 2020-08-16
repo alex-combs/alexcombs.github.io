@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-08-16" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## Data Description
+### Alex Combs
+### UGA/SPIA/PADP
+### 2020-08-16
+
+---
+
+# Outline
+
+- Distinguish between descriptive and inferential statistics
+
+- Identify population, sample, parameter, and statistic
+
+- Distributions and their description
+
+---
+# Two types of statistics
+
+.center[
+![](lectures_files/stats_types.png)
+]
+
+- **Descriptive statistics** has the goal of summarizing qualities of variables, typically describing aspects of their distributions or the relationship between two variables.
+
+- **Inferential statistics** has the goal of using the descriptive statistics of a sample to make conclusions about an unobserved population.
+
+---
+# Descriptive vs. inferential
+
+- Suppose we survey 100 PADP alumni 2 years after completing their MPA
+
+.pull-left[
+**Descriptive**
+
+- What is the average income of respondents?
+- What percentage of respondents are employed?
+- How many earn more than they did prior to starting MPA?
+
+]
+
+.pull-right[
+**Inferential**
+
+- What is the expected income for MPA grads 2 years after graduation?
+- Does getting an MPA increase the likelihood of being employed?
+- Does getting an MPA increase income?
+]
+
+---
+# Population vs. sample
+
+- **Population:** all members of a specified group pertaining to a research question
+- **Sample:** a subset of that population
+
+- In many cases, we cannot study an entire population because of logistics or cost
+- Instead we take a sample to make inferences about the population
+
+- We can describe a sample or a population
+- Inference is specifically using a sample to describe a population
+
+---
+# Parameter vs. statistic
+
+- **Parameter:** a measure pertaining to a population
+- **Statistic:** a measure pertaining to a sample
+
+- In inference, a statistic is often referred to as an **estimate** because it is being used to estimate a population parameter
+
+- The average income of our 100 survey respondents is a statistic
+- It could be used as an estimate of the average income of all MPA graduates
+- The average income of all MPA grads is a parameter
+
+---
+# Practice
+
+Suppose you are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than other states. You find this dubious. You take a sample of 100 college-educated women in Georgia and compute their average salary.
+
+- What is the unit of analysis in your dataset?
+- What is the the variable in your dataset?
+- What is the population and sample for this study?
+- What is the parameter and statistic/estimate for this study?
+
+---
+class: inverse, middle, center
+
+# Data description begins with the distribution of a variable. A distribution shows the (possible) values for a variable and how often they occur.
+
+---
+# Distribution
+
+- Sometimes we know the possible values and the frequency each value will occur
+  - Roll of a die
+  - Sex of newborn child
+
+- Many times we do not know the distribution
+  - Cancer
+  - Promotion
+
+- We can also be interested in **conditional distributions**
+  - Cancer given smoking
+  - Promotion given female
+
+---
+# Distribution
+
+
+
+.center[
+
+![](Description_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+---
+# Conditional distributions
+
+.center[
+
+![](Description_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Descriptive statistics reports key measures of distributions. These measures fall in one of three broad categories: center, spread, and association.
+
+---
+# Measures of center
+
+- Mean: the balancing point of the distribution
+- Median: the middle of the distribution (50th percentile)
+- Mode: the peak(s) of the distribution
+
+---
+# Mean (average)
+
+- Add values and divide by the count of values
+
+
+```r
+(2 + 4 + 6 + 8 + 10)/5
+```
+
+```
+## [1] 6
+```
+
+
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+
+```r
+mean(x$variable)
+```
+
+```
+## [1] 6
+```
+
+![](lectures_files/mean.png)
+]
+
+---
+# Median
+
+- Arrange values in order, find the middle value
+- If no middle value because even number of values, average the two middle values
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+
+```r
+median(x$variable)
+```
+
+```
+## [1] 6
+```
+
+![](lectures_files/median.png)
+]
+
+---
+# Mode
+
+- The value that occurs most frequently
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+
+- Variable has no mode. One more of any of the 5 values would make that value the mode.
+]
+
+---
+# Mean vs. median vs. mode
+
+- Measures of center are our way of communicating the *typical* value of a distribution.
+- Some measures are better representations of typcial than others depending on the situation.
+
+![](lectures_files/center.png)
+
+---
+# Mean vs. median vs. mode
+
+- Mean is sensitive to extreme values, median and mode are not
+- Median is better to use when a distribution is skewed
+- Mode is rarely used for continuous variables, usually used for the frequency of categorical variables
+
+--
+
+- Which measure of center is best for describing typical income?
+
+---
+class: inverse, center, middle
+
+# Let's consider a few deceptive uses of mean and median
+
+---
+# Deceptive description
+
+- **Politician A:** The economy is awful! Thirty states had falling incomes last year.
+
+- **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
+
+---
+# Deceptive description
+
+- Suppose PADP has only 5 classes with no student in more than 1 class
+
+- 4 classes have 5 students
+
+- 1 class has 100 students
+
+- Average class size is touted as being only 24. Put that on our website!
+
+---
+# Deceptive description
+
+- Average class size
+
+```r
+(100 + 5 + 5 + 5 + 5)/5
+```
+
+```
+## [1] 24
+```
+
+- Class size of average student; surveyed all 120 students about class size
+  - 100 would answer 100
+  - 20 would answer 5
+
+
+```r
+(100*100+20*5)/120
+```
+
+```
+## [1] 84.16667
+```
+
+---
+# Deceptive description
+
+- An expensive new drug increases the median life expectancy among patients by two weeks. 
+
+- Insurance won't cover such an expensive drug for such small gains in life expectancy.
+
+---
+# Mean vs. median vs. mode
+
+- If a distribution is normal, measures of center will be similar
+
+.pull-left[
+![](Description_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+mean(nc$weeks)
+```
+
+```
+## [1] 38.4675
+```
+
+```r
+median(nc$weeks)
+```
+
+```
+## [1] 39
+```
+
+```r
+mode(nc$weeks)
+```
+
+```
+## [1] 39
+```
+]
+
+---
+class: inverse, middle, center
+
+# Measures of center tell us one point within the distribution. They give us no sense of how much and how frequently values deviate above and below the center.
+
+---
+# Measures of spread
+
+- **Variance:** the average squared deviation from the mean
+
+- **Standard deviation:** the average deviation from the mean
+
+- **Interquartile range:** the difference between 75th and 25th percentiles
+
+- **Range:** the difference between the maximum and minimum values
+
+---
+# Variance
+
+- Subtract mean from each value, square the deviation, add up deviation, divide by count of values minus 1
+
+
+
+&lt;br&gt;
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; deviation &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; squared_dev &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+.pull-right[
+
+```r
+sum(xvar$squared_dev)
+```
+
+```
+## [1] 40
+```
+
+```r
+sum(xvar$squared_dev)/4
+```
+
+```
+## [1] 10
+```
+
+```r
+var(xvar$variable)
+```
+
+```
+## [1] 10
+```
+]
+
+---
+# Standard deviation (SD)
+
+- Variance is very important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
+- If our original variable were dollars, the variance says that on average variable deviates from the mean by 10 squared dollars
+- Standard deviation is the square root of variance, returns us to the original unit of the variable
+
+
+```r
+sqrt(10)
+```
+
+```
+## [1] 3.162278
+```
+
+```r
+sd(xvar$variable)
+```
+
+```
+## [1] 3.162278
+```
+
+- On average, variable deviates from its mean of 6 dollars by 3.2 dollars
+
+---
+# Interquartile range (IQR)
+
+- Divide the distribution into 4 equal parts 
+- The value of each divider line is called a quartile
+- IQR is the difference between 1st and 3rd quartiles
+
+
+```r
+quantile(x$variable, c(.25, .75))
+```
+
+```
+## 25% 75% 
+##   4   8
+```
+
+```r
+IQR(x$variable)
+```
+
+```
+## [1] 4
+```
+
+---
+# SD vs. IQR
+
+- SD and IQR are our way of describing the typical deviation of a distribution from its center
+- SD is based on the mean, so it is also sensitive to extreme values
+- IQR is based on percentiles like median, so it is not sensitive to extreme values
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 100 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+
+```r
+sd(xextreme$variable)
+```
+
+```
+## [1] 42.54409
+```
+
+```r
+IQR(xextreme$variable)
+```
+
+```
+## [1] 4
+```
+]
+
+---
+# SD vs. IQR
+
+.pull-left[
+![](Description_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+var(nc$weeks)
+```
+
+```
+## [1] 7.583423
+```
+
+```r
+sd(nc$weeks)
+```
+
+```
+## [1] 2.753802
+```
+
+```r
+IQR(nc$weeks)
+```
+
+```
+## [1] 2
+```
+]
+
+---
+# Range
+
+- Answer to what is the greatest extent this variable changes
+
+- Or what are the possible or plausible values of this variable
+
+- Or how different are the most different values
+
+--
+
+
+```r
+range(x$variable)
+```
+
+```
+## [1]  2 10
+```
+
+```r
+range(xextreme$variable)
+```
+
+```
+## [1]   2 100
+```
+
+---
+class: inverse, middle, center
+
+# When deciding between mean and median, standard deviation and IQR, consider whether extreme values are distractions or an important part of the story
+
+---
+# Measures of association
+
+- Instead of describing the distribution of one variable, now describing conditional probabilities
+
+- What does the distribution of one variable look like *given* a value within another variable's distribution
+
+- Requires at least two variables: an explanatory variable (x) and a response variable (y)
+
+---
+# Measures of association
+
+What is the association between the weight a mother gains during pregnancy and the weight of the child?
+
+.pull-left[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; gained &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; weight &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 38 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.63 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 34 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.00 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 76 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.44 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.69 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 52 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.94 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 28 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.44 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 75 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.56 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 5.81 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+.pull-right[
+![](Description_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+]
+
+---
+# Measures of association
+
+- The association between two or more variables can be described in terms of
+
+- **Direction:** when one variable increases, does the other variable increase or decrease
+
+- **Strength:** how much do the variables move together in tandem
+
+- **Magnitude:** when one variable increases or decreases, by how much does the other variable increase or decrease
+
+---
+# Measures of association
+
+- **Covariance:** measures direction of association between between two variables
+
+- **Correlation:** measures direction and strength of association between two variables
+
+- **Regression coefficient:** measures the direction and magnitude of association between an explanatory variable and an outcome variable
+
+- **Coefficient of determination ($R^2$):** measures the strength of association between a set of one or more explanatory variables and an outcome variable
+
+---
+# Covariance
+
+.pull-left[
+- If covariance is positive, then y tends to be above its mean when x is above its mean
+
+- If covariance is negative, then y tends to be below its mean when x is above its mean
+
+- If covariance is zero, no tendency
+]
+
+--
+
+.pull-right[
+![](Description_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+]
+
+---
+# Covariance
+
+
+```r
+cov(nc$gained, nc$weight)
+```
+
+```
+## [1] 3.364736
+```
+
+- This confirms the association between weight gained by mother and baby weight is positive
+
+- But covariance is like variance, it is a very important component to statistical formulae but not useful for description
+
+- Why describe only the direction when correlation can give us direction and strength
+
+---
+# Correlation
+
+- Ranges between -1 and 1
+
+- The closer to -1 or 1, the stronger the association, with 0 indicating no association
+
+- General rule of thumb:
+  - 0.8: very strong correlation
+  - 0.6: moderately strong
+  - 0.4: correlated
+  - 0.2: weakly correlated
+
+
+```r
+cor(nc$gained, nc$weight)
+```
+
+```
+## [1] 0.1660534
+```
+
+---
+# Weaknesses of correlation
+
+- Measures only linear association
+
+- Sensitive to extreme values
+
+- Is necessary but not sufficient to claim causation
+
+---
+# Spurious correlation
+
+
+Crime is strongly correlated with ice cream sales.
+
+
+--
+
+
+![](lectures_files/butter_divorce.png)
+
+
+---
+class: inverse, middle, center
+
+# Regression is simply an extension of correlation, it has the same weaknesses as correlation.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

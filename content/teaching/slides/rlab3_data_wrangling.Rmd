@@ -340,14 +340,14 @@ new_dataset <- select(old_dataset, -var1, -var2, ...)
 
 - If we wanted to drop 'id2'
 
-```{r}
+```{r, eval=FALSE}
 stf_f_select <- select(stf_filtered, -id2)
 ```
 
 - In your notebook, create a new object `stf_f_select` that drops `id2`, `finance_type_id` and `finance_source_id`
 
 ```{r, include=FALSE}
-stf_f_select <- select(stf_filtered, -finance_type_id, -finance_source_id)
+stf_f_select <- select(stf_filtered, -id2, -finance_type_id, -finance_source_id)
 ```
 
 
@@ -505,7 +505,8 @@ stf_filtered <- filter(state_finance_16,
                        finance_source == "Total Revenue" |
                        finance_source == "Total Expenditure")
 
-stf_f_select <- select(stf_filtered, 
+stf_f_select <- select(stf_filtered,
+                       -id2,
                        -finance_type_id, 
                        -finance_source_id)
 ```
@@ -519,7 +520,8 @@ stf_f_select <- select(stf_filtered,
 stf_f_select <- state_finance_16 %>% 
   filter(finance_source == "Total Revenue" |
          finance_source == "Total Expenditure") %>% 
-  select(-finance_type_id, 
+  select(-id2,
+         -finance_type_id, 
          -finance_source_id)
 ```
 
@@ -693,3 +695,14 @@ stf_f_select %>%
 - These data are **untidy**
 
 - We will learn how to tidy data next week
+
+---
+# Save data and submit lab
+
+- We need to save `stf_f_select` to use next week
+
+```{r}
+save(stf_f_select, file = 'stf_f_select.RData')
+```
+
+- Upload your notebook to eLC

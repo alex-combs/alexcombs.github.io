@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-08-16" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## Simple &amp; Multiple Regression
+### Alex Combs
+### UGA/SPIA/PADP
+### 2020-08-16
+
+---
+
+# Outline
+
+- Understand the basic mechanics of regression and their relevance to making decisions
+
+- Interpret regression coefficients
+
+- Understand what it means to control for other variables
+
+---
+# Basic idea
+
+
+
+
+.pull-left[
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Regression_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+- Regression gives us direction, strength, and magnitude of association
+- Draws the **best** line through a set of paired x-y data points
+- The slope of the line tells us the **average, predicted change in y given a change in x**
+]
+
+---
+# Basic idea
+
+- Regression is a statistical method to
+  - **Explain** the relationship between an outcome variable and one or more explanatory variables
+  - **Predict** the value of an outcome given a value(s) of one or more explanatory variables
+
+- Either way, regression is a way of modeling an outcome `\(y\)` as a function of explanatory `\(x\)`
+
+---
+# Simple linear regression model
+
+.pull-left[
+.font120[$$y=\beta_0+\beta_1x+\epsilon$$]
+
+- `\(y\)` referred to as outcome, response, dependent variable
+- `\(\beta_0\)` (beta-naught) is the y-intercept constant
+- `\(\beta_1\)` is the slope of the regression line; the marginal effect of `\(x\)` on `\(y\)`
+- `\(x\)` referred to as explanatory, independent variable
+- `\(\epsilon\)` is referred to as the error term or random noise
+]
+.pull-right[
+- This is a **population** model. 
+- The `\(\beta\)`s are **population parameters** we wish to estimate.
+- `\(\epsilon\)` is also a parameter that captures all the other factors that affect `\(y\)` for which we cannot include in our model
+]
+
+---
+# Simple linear regression model
+
+.pull-left[
+.font120[$$\hat{y}=b_0+b_1x$$]
+
+- `\(\hat{y}\)` is the **predicted** value of `\(y\)` given a value of `\(x\)`
+- `\(b_0\)` is the estimate of `\(\beta_0\)`; our prediction of `\(y\)` if `\(x\)` equaled 0
+- `\(b_1\)` is the estimate of `\(\beta_1\)`; our predicted slope; our predicted marginal effect of `\(x\)` on `\(y\)`
+- the `\(b\)`s are often referred to as **coefficients**
+]
+
+.pull-right[
+- This equestion represents our sample regression equation
+]
+
+---
+# Interpreting Regression Results
+
+.font120[$$\hat{y}=b_0+b_1x$$]
+
+On average, a one-[unit] change in `\(x\)` [is associated with] a change of `\(b_1\)` [units] in `\(y\)`.
+
+- Replace [unit] with the actual units of the `\(x\)` variable (e.g. dollars, percentage point, count of people or things like houses)
+- Replace `\(x\)` with what `\(x\)` is
+- [is associate with] can be any combination of words that express the intended relationship (causes, results in)
+- Replace `\(b_1\)` with the numerical estimate we get from the results
+- Replace [units] with the units of the `\(y\)` variable
+- Replace `\(y\)` with what `\(y\)` is
+
+---
+# Example
+
+`$$GPA=\beta_0+\beta_1STUDYHOURS+\epsilon$$`
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.578 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.085 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42.315 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.409 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.748 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.303 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.763 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+`$$\hat{GPA}=3.578+0.001 \times STUDYHOURS$$`
+
+On average, a one-hour increase in study hours per week is associated with a 0.001 point increse in GPA.
+
+Results indicate each additional hour students study per week inceases GPA by 0.001 point, on average.
+
+If students studied 10 more hours each week, GPA is predicted to increase 0.01 point.
+
+---
+# Many ways to interpret
+
+- Regression results can be applied to countless scenarios
+- Any scenario boils down to providing either 
+  - a predicted *change* in `\(y\)` given a *change* in `\(x\)` or 
+  - a predited *value* of `\(y\)` given a *value* of `\(x\)`
+
+- Any answer can be obtained by plugging the results into the equation, then plugging the scenario into the equation to solve
+
+---
+# Change vs. value
+
+`$$GPA=\beta_0+\beta_1SleepHours+\epsilon$$`
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.46 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.318 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.874 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.822 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.098 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sleepnight &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.02 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.045 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.445 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.658 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.070 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.109 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+`$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$`
+
+- Now we can consider any hypothetical *change* in hours of sleep or specific *value* of hours of sleep and provide a predicted GPA.
+
+---
+# Change vs. value
+`$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$`
+
+.pull-left[
+What if students slept 3 more hours than they currently do?
+
+```r
+0.02*3
+```
+
+```
+## [1] 0.06
+```
+GPA is predicted to increase by 0.06 points
+]
+
+.pull-right[
+What is the predicted GPA of a student who sleeps 8 hours?
+
+```r
+3.46 + 0.02*8
+```
+
+```
+## [1] 3.62
+```
+]
+
+---
+# You practice
+
+`$$GPA=\beta_0+\beta_1NightsOut+\epsilon$$`
+
+
+```r
+gpa3 &lt;- lm(gpa ~ out, data = gpa)
+get_regression_table(gpa3) %&gt;% 
+  kable(format = 'html')
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.504 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.106 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33.011 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.291 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.717 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.045 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.046 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.998 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.323 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.046 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.137 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- What is the predicted GPA for a student who goes out 7 nights a week?
+- What is the predicted GPA for a student who goes out 4 nights a week?
+- What is the predicted change in GPA given a student decreases their nights out by 3?
+
+---
+class: inverse, center, middle
+
+# Given a table of regression results, you know the regression model that table implies, and you can answer infinite hypothetical scenarios. Complexity will build as we add to our toolbox, but this plug-and-chug process does not change.
+
+---
+class: inverse, middle, center
+
+# So how does one run regression in R? It's very easy.
+
+---
+# Running regression
+
+- What variables do I have to work with?
+
+
+```r
+glimpse(gpa)
+```
+
+```
+## Rows: 55
+## Columns: 5
+## $ gpa        &lt;dbl&gt; 3.890, 3.900, 3.750, 3.600, 4.000, 3.150, 3.250, 3.925, 3.…
+## $ studyweek  &lt;int&gt; 50, 15, 15, 10, 25, 20, 15, 10, 12, 2, 10, 30, 30, 21, 10,…
+## $ sleepnight &lt;dbl&gt; 6.0, 6.0, 7.0, 6.0, 7.0, 7.0, 6.0, 8.0, 8.0, 8.0, 8.0, 6.0…
+## $ out        &lt;dbl&gt; 3.0, 1.0, 1.0, 4.0, 3.0, 3.0, 1.0, 3.0, 2.0, 4.0, 1.0, 2.0…
+## $ gender     &lt;fct&gt; female, female, female, male, female, male, female, female…
+```
+
+---
+# Running regression
+
+
+```r
+gpa1 &lt;- lm(gpa ~ studyweek, data = gpa)
+gpa2 &lt;- lm(gpa ~ sleepnight, data = gpa)
+gpa3 &lt;- lm(gpa ~ out, data = gpa)
+```
+
+
+```r
+library(moderndive)
+get_regression_table(gpa1)
+```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.578 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.085 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 42.315 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.409 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.748 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.303 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.763 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Running regression
+
+- The `get_regression_table` function requires the `moderndive` package
+- Alternatively, `summary` requires no package, but it's not as pretty
+
+
+```r
+summary(gpa1)
+```
+
+```
+## 
+## Call:
+## lm(formula = gpa ~ studyweek, data = gpa)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.71231 -0.18864  0.04784  0.22274  1.07573 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept) 3.578490   0.084568  42.315   &lt;2e-16 ***
+## studyweek   0.001127   0.003719   0.303    0.763    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.3385 on 53 degrees of freedom
+## Multiple R-squared:  0.001731,	Adjusted R-squared:  -0.0171 
+## F-statistic: 0.0919 on 1 and 53 DF,  p-value: 0.763
+```
+
+---
+# Recap of population and sample regressions
+
+.font120[$$y=\beta_0+\beta_1x+\epsilon$$]
+
+`$$GPA=\beta_0+\beta_1SleepHours+\epsilon$$`
+
+.font120[$$\hat{y}=b_0+b_1x$$]
+`$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$`
+
+---
+class: inverse, center, middle
+
+# What happened to that `\(\epsilon\)`?
+
+---
+# The residual
+
+.font140[$$e=y-\hat{y}$$]
+
+- The residual is the difference between the *observed* outcome and the *predicted* outcome from our regression model
+
+- The residual is the sample analog of the error/noise population parameter
+
+---
+# The residual
+
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Regression_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+# The residual
+
+
+```r
+get_regression_points(gpa1)
+```
+
+.left-column[
+- We can view the regression results for each observation
+- We see the observed data, the predicted outcome, and the difference between observed and predicted
+]
+
+.right-column[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gpa &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; studyweek &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gpa_hat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; residual &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.890 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.635 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.255 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.900 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.305 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.750 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.155 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.600 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.010 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 25 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.607 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.393 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.150 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.601 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.451 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.345 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.925 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.335 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+class: inverse, center, middle
+
+# Regression draws the best line through observed x-y pairs. What does best mean?
+
+---
+# Ordinary least squares (OLS)
+
+- Basic regression is also known as OLS
+
+- Regression uses math you don't need to worry about to determine the intercept and slope(s) of a line that **minimizes the sum of squared residuals**
+
+- No other line could achieve a smaller sum of squared residuals (SSR)
+
+---
+# OLS
+
+.pull-left[
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Regression_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gpa &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gpa_hat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; residual &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.890 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.635 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.255 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.900 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.305 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.750 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.155 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.600 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.010 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.607 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.393 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.150 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.601 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.451 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.250 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.345 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.925 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.335 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+]
+
+---
+# OLS
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gpa &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; studyweek &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gpa_hat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; residual &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sq_resid &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.89 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.635 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.255 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.065025 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.305 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.093025 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.75 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.155 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.024025 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.60 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.010 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000100 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+```r
+sum(gpa1_points$sq_resid)
+```
+
+```
+## [1] 6.071274
+```
+
+- No other line will achieve less than 6.07 SSR
+
+---
+class: inverse, middle, center
+
+# Ok, that's what best means, but how good is the best?
+
+---
+# Goodness-of-fit
+
+- Any outcome varies across observations (i.e. variance)
+
+- When we ask how good is our best regression line, one way to answer is the percent of total variance in the outcome accounted for with that line
+
+- This measure is called `\(R^2\)` (r-squared)
+  - The percent of variation in `\(y\)` explained by our regression
+
+---
+# Goodness of fit
+
+
+```r
+get_regression_summaries(gpa1)
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.017 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1104002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3322653 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.338 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+The regression using study hours exlains only 0.2% of total variation in GPA.
+
+---
+# Goodness of fit
+
+```r
+get_regression_summaries(gpa2)
+```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.015 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1101803 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3319343 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.338 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+
+```r
+get_regression_summaries(gpa3)
+```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.018 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1085521 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3294724 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.336 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- What percent of variation in GPA is explained by models 2 and 3?
+
+--
+
+- Model 3 has the highest `\(R^2\)`, thus it is the best model
+
+---
+class: inverse, center, middle
+
+# Multiple regression simply adds more than one explanatory variable to the model
+
+---
+# Multiple regression
+
+**Population model**
+.font120[$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$]
+
+**Sample model**
+.font120[$$\hat{y}=b_0+b_1x_1+b_2x_2+\dots+b_kx_k$$]
+
+- Nothing fundamentally different; just more variables
+
+---
+# Controlling for other factors
+
+- Each of the three previous regressions controlled for one factor we might suspect affects GPA
+
+- With the model for study hours, there is any number of additional factors contained in the error term `\(\epsilon\)`
+
+- Generally, if we can, we should include those additional factors in the same regression model
+  - Especially if one of those factors affect study hours
+
+---
+# Controlling for other factors
+
+- Multiple regression provides the marginal effect of `\(x_k\)` on `\(y\)`, while holding all other `\(x\)`s constant at their respective mean
+
+**Interpretation**
+
+On average, a one-[unit] increase in `\(x_k\)` is associated with a `\(b_k\)` [unit] change in `\(y\)`, **holding all else constant/equal.**
+
+---
+# Running multiple regression
+
+`$$GPA=\beta_0+\beta_1Study+\beta_2Sleep+\beta_3Out+\epsilon$$`
+
+
+```r
+gpa4 &lt;- lm(gpa ~ studyweek + sleepnight + out, data = gpa)
+```
+
+```r
+get_regression_table(gpa4)
+```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.435 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.348 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.882 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.737 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.133 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.713 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sleepnight &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.049 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.131 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.896 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.093 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.106 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.044 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.050 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.873 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.387 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.057 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.144 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Interpreting results
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.435 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.348 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.882 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.737 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.133 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.713 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sleepnight &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.049 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.131 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.896 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.093 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.106 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.044 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.050 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.873 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.387 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.057 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.144 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Controlling for study hours and sleep, what is the predicted change in GPA if nights out increases by 3?
+
+--
+
+
+```r
+0.044*3
+```
+
+```
+## [1] 0.132
+```
+
+---
+# Interpreting results
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.435 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.348 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.882 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.737 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.133 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.369 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.713 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sleepnight &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.049 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.131 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.896 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.093 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.106 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.044 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.050 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.873 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.387 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.057 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.144 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+What is the predicted GPA for a student who studies 20 hours per week, sleeps 8 hours per day, and goes out 2 nights a week?
+
+--
+
+
+```r
+3.435 + 0.001*20 + 0.007*8 + 0.044*2
+```
+
+```
+## [1] 3.599
+```
+
+---
+# Goodness-of-fit
+
+
+```r
+get_regression_summaries(gpa4)
+```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; mse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.021 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.036 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.1082517 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.3290162 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.342 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- `\(R^2\)` increases mechanically as you add more variables whether those variables improve the model or not
+
+- Adjusted `\(R^2\)` accounts for this and penalizes for adding bad (i.e. statistically insignificant) variables
+
+- All of these examples do a very poor job at explaining GPA, at least in for this sample of students
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

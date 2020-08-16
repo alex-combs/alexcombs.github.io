@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-08-16" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## Regression with Categorical Variables
+### Alex Combs
+### UGA/SPIA/PADP
+### 2020-08-16
+
+---
+
+# Outline
+
+
+
+- Add categorical variables as explanatory variables
+
+- Interact numerical and categorical variables
+
+- Use a categorical variable as an outcome variable
+
+---
+# Adding to our toolbox
+
+- So far, we have covered simple and multiple regression using quantitative or numerical variables
+
+.font120[$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$]
+
+- Any of the explanatory variables could be categorical
+
+- The outcome couls be categorical
+
+---
+# Example
+
+- Suppose HR wants to examine if male professors are paid differently than female professors
+
+
+```r
+glimpse(Salaries)
+```
+
+```
+## Rows: 397
+## Columns: 6
+## $ rank          &lt;fct&gt; Prof, Prof, AsstProf, Prof, Prof, AssocProf, Prof, Prof…
+## $ discipline    &lt;fct&gt; B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, A, A…
+## $ yrs.since.phd &lt;int&gt; 19, 20, 4, 45, 40, 6, 30, 45, 21, 18, 12, 7, 1, 2, 20, …
+## $ yrs.service   &lt;int&gt; 18, 16, 3, 39, 41, 6, 23, 45, 20, 18, 8, 2, 1, 0, 18, 3…
+## $ sex           &lt;fct&gt; Male, Male, Male, Male, Male, Male, Male, Male, Male, F…
+## $ salary        &lt;int&gt; 139750, 173200, 79750, 115000, 141500, 97000, 175000, 1…
+```
+
+- discipline coded as "A" for theoretical and "B" for applied
+
+- What do we want to include and what directions to we expect?
+
+---
+# Example
+
+.center[
+&lt;img src="Regression-with-Categories_files/figure-html/unnamed-chunk-3-1.png" width="65%" /&gt;
+]
+
+---
+# Example
+
+.center[
+![](Regression-with-Categories_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+
+---
+# Example
+`$$Salary=\beta_0+\beta_1YrsEmployed+\beta_2Sex + \epsilon$$`
+
+```r
+sal_mod &lt;- lm(salary ~ yrs.service + sex, data = Salaries)
+```
+
+```r
+get_regression_table(sal_mod)
+```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 92356.947 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4740.188 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19.484 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 83037.722 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 101676.171 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; yrs.service &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 747.612 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 111.396 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.711 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 528.607 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 966.617 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sexMale &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9071.800 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4861.644 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.866 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.063 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -486.208 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 18629.808 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- For each year of employment, salary increases $748, on average.
+- Male professors earn an average of $9,072 more than female professors.
+
+---
+# Interpreting categorical results
+
+`$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$`
+
+- What is the predicted change in salary for a male professor three years later?
+
+```r
+748*3
+```
+
+```
+## [1] 2244
+```
+- For a female professor?
+
+```r
+748*3
+```
+
+```
+## [1] 2244
+```
+
+---
+# Interpreting categorical results
+
+`$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$`
+
+- What is the predicted salary for a male professor employed 20 years?
+
+```r
+92357+748*20+9072*1
+```
+
+```
+## [1] 116389
+```
+- For a female professor employed 20 years?
+
+```r
+92357+748*20+9072*0
+```
+
+```
+## [1] 107317
+```
+
+---
+# Example
+.center[
+![](Regression-with-Categories_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+]
+
+---
+class: inverse, middle, center
+
+# Why force the slopes to be parallel? Why not allow the effect of years employed differ between male and female professors?
+
+---
+# Example
+.center[
+
+```
+## `geom_smooth()` using formula 'y ~ x'
+```
+
+![](Regression-with-Categories_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+]
+
+---
+# Interaction
+
+- An interaction allows the effect of one variable to differ depending on the value of another variable
+
+`$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Sex + \beta_3YrsEmp*Sex + \epsilon$$`
+
+- If Sex = 1 (male), then the marginal effect of years on salary is `\(\beta_1+\beta_3\)`
+
+- `\(\beta_2\)` still tells us how the intercepts compare
+  - If Sex = 1 (male), intercept is `\(\beta_0+\beta_2\)`
+
+---
+# Running an interaction model
+
+
+```r
+sal_mod2 &lt;- lm(salary ~ yrs.service + sex + 
+                 yrs.service*sex, data = Salaries)
+```
+
+```r
+get_regression_table(sal_mod2)
+```
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 82068.509 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7568.722 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.843 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 67188.260 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 96948.757 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; yrs.service &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1637.300 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 523.026 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.130 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 609.020 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2665.579 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; sexMale &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 20128.626 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7991.138 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.519 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.012 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4417.900 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 35839.352 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; yrs.service:sexMale &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -931.736 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 535.243 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.741 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.083 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1984.035 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 120.562 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Interpreting an interaction model
+
+`$$\hat{Salary}=82069+1637*YrsEmp+20129*Sex + -932*YrsEmp*Sex$$`
+
+- What is the predicted change in salary for a male professor given two more years of service?
+
+--
+
+
+```r
+(1637-932)*2
+```
+
+```
+## [1] 1410
+```
+
+- What is the predicted change in salary for a female professor given two more years of service?
+
+--
+
+
+```r
+1637*2
+```
+
+```
+## [1] 3274
+```
+
+---
+# Interpreting an interaction model
+
+- What is the predicted salary for a female professor with 10 years of service?
+
+--
+
+
+```r
+82069+1637*10
+```
+
+```
+## [1] 98439
+```
+
+--
+
+- What is the predicted salary for a male professor with 10 years of service?
+
+--
+
+
+```r
+82069 + 1637*10 + 20129 - 931*10
+```
+
+```
+## [1] 109258
+```
+
+---
+# Linear probability model (LPM)
+
+- Same ol' regression model with a two-level categorical variable for the response
+
+- For a binary outcome (did occur/did not occur), an LPM estimates the effect of our explanatory variables on the probability that the outcome occurs
+
+`$$Pr(y=1)=\beta_0+\beta_1x+\dots+\beta_kx_k+\epsilon$$`
+
+---
+# Running an LPM
+
+
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; Divorce &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Age25to29 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Income &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; Children &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 19 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 46 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 69 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 44 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Suppose we want to know how these the probability of divorce is associated with these variables
+
+---
+# Running an LPM
+
+
+```r
+div_mod &lt;- lm(Divorce ~ Age25to29 + Income + Children,
+              data = divorce)
+```
+
+
+```r
+get_regression_table(div_mod)
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.379 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.217 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.747 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.092 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.067 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.824 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Age25to29 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.407 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.162 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.512 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.019 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.074 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.741 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Income &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.003 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.283 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.779 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.005 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.007 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Children &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.178 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.071 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -2.506 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.019 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.324 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -0.032 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+---
+# Interpreting an LPM
+
+`$$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$`
+
+- How does having a child affect the probability of divorce?
+
+--
+
+
+```r
+-0.18*1
+```
+
+```
+## [1] -0.18
+```
+
+- Reduces the probability of divorce by 18%
+
+--
+
+- What is the probability of a 27 year-old making 50,000 who has 0 children?
+
+--
+
+
+```r
+0.38 + 0.4*1 + 0.001*50 - 0.18*0
+```
+
+```
+## [1] 0.83
+```
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

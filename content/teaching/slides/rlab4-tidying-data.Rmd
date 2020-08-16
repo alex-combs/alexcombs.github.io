@@ -1,0 +1,407 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "RLab 4: Tidying Data"
+author: "Alex Combs"
+institute: "UGA | SPIA | PADP"
+date: "September 16, 2020"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+      highlightlines: true
+---
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Pivot a wide dataset to long
+- Pivot a long dataset to wide
+- Separate a variable into multiple variables
+- Unite multiple variables to one variable
+
+---
+# Start a new project
+
+- Using the file directory on your computer
+  - Go to the parent folder that contains your RLabs folders
+  - Create a new folder named RLab4
+
+--
+
+- In RStudio
+  - Create new project
+  - Select Existing Directory
+  - Click Browse and select the RLab4 folder you just created
+  - Click Create Project
+  
+---
+# Start a R notebook
+
+- Use the dropdown menu in the upper-left of RStudio to start a notebook
+
+- Change YAML
+
+```{r, eval=FALSE}
+---
+title: "RLab 4: Tidying Data"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+- Delete all of the content included in the template
+
+---
+# Packages
+
+- Load the `tidyverse` and `knitr` packages, suppressing the code and output
+
+--
+
+```{r, message=FALSE}
+library(tidyverse)
+library(knitr)
+```
+
+```{r, include=FALSE}
+library(gapminder)
+```
+
+---
+# Tidy data
+
+Tidy data satisfy three rules:
+
+- Each variable has its own column
+- Each observation (unit of analysis) has its own row
+- Each value (datum) has its own cell
+
+![](labs_files/tidy.png)
+
+---
+# Tidy data
+
+- Let's revisit the state finance data from RLab3
+
+- Insert a header "Untidy State Finance Data"
+
+- `load` the `stf_f_select.RData` file in your notebook, suppressing the code and and output
+
+--
+
+```{r, eval=FALSE}
+load('stf_f_select.RData')
+```
+
+```{r, include=FALSE}
+load('labs_files/stf_f_select.RData')
+```
+
+---
+# Tidy Data
+
+- Let's show readers a sample of the data using `head`
+
+- Provide the first 6 rows, suppress the code
+
+--
+
+```{r, eval=FALSE}
+stf_f_select %>% 
+  head()
+```
+
+```{r, echo=FALSE}
+stf_f_select %>% 
+  head() %>% 
+  kable()
+```
+
+---
+class: inverse, center, middle
+
+# Are these data tidy? Why or why not?
+
+---
+# Untidy Data
+
+```{r, echo=FALSE}
+stf_f_select %>% 
+  head(n=4) %>% 
+  kable()
+```
+
+- What is the unit of analysis?
+
+--
+
+- There are two rows per observation (unit of analysis)
+
+--
+
+- Why?
+
+--
+
+- Because `finance_type` should be two variables, not one
+
+---
+# Long vs. Wide Data
+
+- Most tidying issues involve whether a dataset should be long or wide
+
+--
+
+- Is `stf_f_select` in long or wide format?
+
+```{r, echo=FALSE}
+stf_f_select %>% 
+  head(n=4) %>% 
+  kable()
+```
+
+---
+# Long vs. Wide Data
+
+- Here is a different example that is very common.
+
+```{r, echo=FALSE}
+uspop <- gapminder %>% 
+  filter(country == 'United States' & year >= 1997) %>% 
+  select(country, year, pop) %>% 
+  pivot_wider(names_from = year, names_prefix = 'pop', values_from = pop) 
+
+ 
+kable(uspop, format = 'html')
+```
+
+- Are these data in long or wide format?
+
+--
+
+- Are these data tidy? Why or why not?
+
+---
+# Tidy State Finance Data
+
+- Our goal is to tidy `stf_f_select`
+
+- It is long when it should be wide
+
+--
+
+- To achieve this, we can use the `pivot_wider` function
+
+- General logic
+
+```{r, eval=FALSE}
+new_data <- current_data %>% 
+  pivot_wider(names_from = column-with-variable-names,
+              values_from = column-with-values)
+```
+
+---
+# Tidy State Finance Data
+
+```{r, echo=FALSE}
+stf_f_select %>% 
+  head(n=2) %>% 
+  kable()
+```
+
+- Insert a header "Tidy State Finance Data"
+
+- Let's start a code chunk that creates a new dataset `stf_tidy`
+
+```{r, eval=FALSE}
+stf_tidy <- stf_f_select %>% 
+```
+
+- Next, add a line that drops `finance_source` since it is redundant
+
+--
+
+```{r, eval=FALSE}
+stf_tidy <- stf_f_select %>% 
+  select(-finance_source) %>% 
+```
+
+---
+# Tidy State Finance Data
+
+```{r, echo=FALSE}
+stf_f_select %>% 
+  head(n=4) %>% 
+  kable()
+```
+
+```{r, eval=FALSE}
+new_data <- current_data %>% 
+  pivot_wider(names_from = column-with-variable-names,
+              values_from = column-with-values)
+```
+
+- Which column contains the names of the new variables we want?
+- Which column contains the values for the new variables?
+- Add `pivot_wider` to your code chunk according to answers.
+
+---
+# Tidy State Finance Data
+
+```{r}
+stf_tidy <- stf_f_select %>% 
+  select(-finance_source) %>% 
+  pivot_wider(names_from = finance_type,
+              values_from = amount_1000)
+```
+
+- Execute your code and examine the new dataset to see if/how it worked
+
+---
+# Tidy State Finance Data
+
+- Let's provide the reader with the first 6 rows of our new dataset, suppressing code and output
+
+```{r, eval=FALSE}
+stf_tidy %>% 
+  head()
+```
+
+```{r, echo=FALSE}
+stf_tidy %>% 
+  head() %>% 
+  kable()
+```
+
+---
+# Wide to Long
+
+```{r, echo=FALSE}
+kable(uspop, format = 'html')
+```
+
+- To tidy wide data to long format, we can use `pivot_longer`
+
+```{r}
+uspop_tidy <- uspop %>% 
+  pivot_longer(cols = pop1997:pop2007,
+               names_to = 'year',
+               names_prefix = 'pop',
+               values_to = 'population')
+```
+
+```{r, echo=FALSE}
+kable(uspop_tidy)
+```
+
+---
+# Untidy Enrollment Data
+
+- Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder
+
+- Let's open this file and take a look at the data
+
+---
+# Untidy Enrollment Data
+
+- Insert a header "Untidy Enrollment Data"
+
+- Import `ky_private_school_enrollment.csv`, suppressing code and output
+
+- Name the new dataset `ky_priv_enroll_wide`
+
+--
+
+```{r, eval=FALSE}
+ky_priv_enroll_wide <- read_csv('ky_private_school_enrollment.csv')
+```
+
+```{r, include=FALSE}
+ky_priv_enroll_wide <- read_csv('labs_files/ky_private_school_enrollment.csv')
+```
+
+---
+# Untidy Enrollment Data
+
+- Provide the reader the first 6 rows of these data, suppressing the code
+
+--
+
+```{r, eval=FALSE}
+head(ky_priv_enroll_wide)
+```
+
+```{r, echo=FALSE}
+head(ky_priv_enroll_wide) %>% 
+  kable()
+```
+
+---
+# Untidy Enrollment Data
+
+- We need to take the enroll columns and name them to a new variable 'year' and send the values to a variable 'enrollment'
+
+- Recall how this was done for the `uspop` data
+
+```{r, eval=FALSE}
+uspop_tidy <- uspop %>% 
+  pivot_longer(cols = pop1997:pop2007,
+               names_to = 'year',
+               names_prefix = 'pop',
+               values_to = 'population')
+```
+
+- Create a new dataset called `ky_priv_enroll` that is in long format
+
+```{r, include=FALSE}
+ky_priv_enroll <- ky_priv_enroll_wide %>% 
+  pivot_longer(cols = enroll2000:enroll2010,
+               names_to = 'year',
+               names_prefix = 'enroll',
+               values_to = 'enrollment')
+```
+
+---
+class: inverse, center, middle
+
+# Are these data tidy? Why or why not?
+
+---
+# Separating variables
+
+![](labs_files/separate.png)
+
+---
+# Tidy Enrollment Data
+
+- We should `separate` city_county into city and county
+
+- Overwrite the `ky_priv_enroll` with `city_county` separated, suppressing code and output
+
+--
+
+```{r, warning=FALSE}
+ky_priv_enroll <- ky_priv_enroll %>% 
+  separate(city_county, c('city', 'county'))
+```
+
+--
+
+- Finally, provide the reader the first 6 rows of these tidy data, suppressing the code
+- Knit to HTML and check that the output looks correct
+
+---
+# Uniting variables
+
+![](labs_files/unite.png)
+
+---
+# Submit Lab
+
+- Upload your notebook and .html file to eLC

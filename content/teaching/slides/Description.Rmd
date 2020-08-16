@@ -1,0 +1,571 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "Data Description"
+author: "Alex Combs"
+institute: "UGA/SPIA/PADP"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+# Outline
+
+- Distinguish between descriptive and inferential statistics
+
+- Identify population, sample, parameter, and statistic
+
+- Distributions and their description
+
+---
+# Two types of statistics
+
+.center[
+![](lectures_files/stats_types.png)
+]
+
+- **Descriptive statistics** has the goal of summarizing qualities of variables, typically describing aspects of their distributions or the relationship between two variables.
+
+- **Inferential statistics** has the goal of using the descriptive statistics of a sample to make conclusions about an unobserved population.
+
+---
+# Descriptive vs. inferential
+
+- Suppose we survey 100 PADP alumni 2 years after completing their MPA
+
+.pull-left[
+**Descriptive**
+
+- What is the average income of respondents?
+- What percentage of respondents are employed?
+- How many earn more than they did prior to starting MPA?
+
+]
+
+.pull-right[
+**Inferential**
+
+- What is the expected income for MPA grads 2 years after graduation?
+- Does getting an MPA increase the likelihood of being employed?
+- Does getting an MPA increase income?
+]
+
+---
+# Population vs. sample
+
+- **Population:** all members of a specified group pertaining to a research question
+- **Sample:** a subset of that population
+
+- In many cases, we cannot study an entire population because of logistics or cost
+- Instead we take a sample to make inferences about the population
+
+- We can describe a sample or a population
+- Inference is specifically using a sample to describe a population
+
+---
+# Parameter vs. statistic
+
+- **Parameter:** a measure pertaining to a population
+- **Statistic:** a measure pertaining to a sample
+
+- In inference, a statistic is often referred to as an **estimate** because it is being used to estimate a population parameter
+
+- The average income of our 100 survey respondents is a statistic
+- It could be used as an estimate of the average income of all MPA graduates
+- The average income of all MPA grads is a parameter
+
+---
+# Practice
+
+Suppose you are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than other states. You find this dubious. You take a sample of 100 college-educated women in Georgia and compute their average salary.
+
+- What is the unit of analysis in your dataset?
+- What is the the variable in your dataset?
+- What is the population and sample for this study?
+- What is the parameter and statistic/estimate for this study?
+
+---
+class: inverse, middle, center
+
+# Data description begins with the distribution of a variable. A distribution shows the (possible) values for a variable and how often they occur.
+
+---
+# Distribution
+
+- Sometimes we know the possible values and the frequency each value will occur
+  - Roll of a die
+  - Sex of newborn child
+
+- Many times we do not know the distribution
+  - Cancer
+  - Promotion
+
+- We can also be interested in **conditional distributions**
+  - Cancer given smoking
+  - Promotion given female
+
+---
+# Distribution
+
+```{r, include=FALSE}
+library(tidyverse)
+nc <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTm2WZwNBoQdZhMgot7urbtu8eG7tzAq-60ZJsQ_nupykCAcW0OXebVpHksPWyR4x8xJTVQ8KAulAFS/pub?gid=202410847&single=true&output=csv")
+```
+
+.center[
+
+```{r, echo=FALSE}
+ggplot(nc, aes(x = weeks)) +
+  geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
+  labs(title = 'Weeks of pregnancy in North Carolina') +
+  theme_light()
+```
+]
+
+---
+# Conditional distributions
+
+.center[
+
+```{r, echo=FALSE}
+ggplot(nc, aes(x = weeks, fill = habit)) +
+  geom_density(alpha = 0.4, bw = 0.6) +
+  labs(title = 'Weeks of pregnancy in North Carolina') +
+  theme_light()
+```
+]
+
+---
+class: inverse, center, middle
+
+# Descriptive statistics reports key measures of distributions. These measures fall in one of three broad categories: center, spread, and association.
+
+---
+# Measures of center
+
+- Mean: the balancing point of the distribution
+- Median: the middle of the distribution (50th percentile)
+- Mode: the peak(s) of the distribution
+
+---
+# Mean (average)
+
+- Add values and divide by the count of values
+
+```{r}
+(2 + 4 + 6 + 8 + 10)/5
+```
+
+```{r, include=FALSE}
+x <- tibble(ID = 1:5, variable = c(2,4,6,8,10))
+library(knitr)
+```
+
+.pull-left[
+```{r, echo=FALSE}
+kable(x, format = 'html')
+```
+]
+
+.pull-right[
+```{r}
+mean(x$variable)
+```
+
+![](lectures_files/mean.png)
+]
+
+---
+# Median
+
+- Arrange values in order, find the middle value
+- If no middle value because even number of values, average the two middle values
+
+.pull-left[
+```{r, echo=FALSE}
+kable(x, format = 'html')
+```
+]
+
+.pull-right[
+```{r}
+median(x$variable)
+```
+
+![](lectures_files/median.png)
+]
+
+---
+# Mode
+
+- The value that occurs most frequently
+
+.pull-left[
+```{r, echo=FALSE}
+kable(x, format = 'html')
+```
+]
+
+.pull-right[
+
+- Variable has no mode. One more of any of the 5 values would make that value the mode.
+]
+
+---
+# Mean vs. median vs. mode
+
+- Measures of center are our way of communicating the *typical* value of a distribution.
+- Some measures are better representations of typcial than others depending on the situation.
+
+![](lectures_files/center.png)
+
+---
+# Mean vs. median vs. mode
+
+- Mean is sensitive to extreme values, median and mode are not
+- Median is better to use when a distribution is skewed
+- Mode is rarely used for continuous variables, usually used for the frequency of categorical variables
+
+--
+
+- Which measure of center is best for describing typical income?
+
+---
+class: inverse, center, middle
+
+# Let's consider a few deceptive uses of mean and median
+
+---
+# Deceptive description
+
+- **Politician A:** The economy is awful! Thirty states had falling incomes last year.
+
+- **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
+
+---
+# Deceptive description
+
+- Suppose PADP has only 5 classes with no student in more than 1 class
+
+- 4 classes have 5 students
+
+- 1 class has 100 students
+
+- Average class size is touted as being only 24. Put that on our website!
+
+---
+# Deceptive description
+
+- Average class size
+```{r}
+(100 + 5 + 5 + 5 + 5)/5
+```
+
+- Class size of average student; surveyed all 120 students about class size
+  - 100 would answer 100
+  - 20 would answer 5
+
+```{r}
+(100*100+20*5)/120
+```
+
+---
+# Deceptive description
+
+- An expensive new drug increases the median life expectancy among patients by two weeks. 
+
+- Insurance won't cover such an expensive drug for such small gains in life expectancy.
+
+---
+# Mean vs. median vs. mode
+
+- If a distribution is normal, measures of center will be similar
+
+.pull-left[
+```{r, echo=FALSE}
+mode <- function(v) {
+  uniqv <- unique(v)
+  uniqv[which.max(tabulate(match(v, uniqv)))]
+}
+
+ggplot(nc, aes(x = weeks)) +
+  geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
+  labs(title = 'Weeks of pregnancy in North Carolina') +
+  theme_light()
+```
+]
+
+.pull-right[
+```{r}
+mean(nc$weeks)
+median(nc$weeks)
+mode(nc$weeks)
+```
+]
+
+---
+class: inverse, middle, center
+
+# Measures of center tell us one point within the distribution. They give us no sense of how much and how frequently values deviate above and below the center.
+
+---
+# Measures of spread
+
+- **Variance:** the average squared deviation from the mean
+
+- **Standard deviation:** the average deviation from the mean
+
+- **Interquartile range:** the difference between 75th and 25th percentiles
+
+- **Range:** the difference between the maximum and minimum values
+
+---
+# Variance
+
+- Subtract mean from each value, square the deviation, add up deviation, divide by count of values minus 1
+
+```{r, include=FALSE}
+xvar <- x %>% 
+  mutate(deviation = variable - mean(variable), squared_dev = deviation^2)
+```
+
+<br>
+
+.pull-left[
+```{r, echo=FALSE}
+kable(xvar, format = 'html')
+```
+]
+.pull-right[
+```{r}
+sum(xvar$squared_dev)
+sum(xvar$squared_dev)/4
+var(xvar$variable)
+```
+]
+
+---
+# Standard deviation (SD)
+
+- Variance is very important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
+- If our original variable were dollars, the variance says that on average variable deviates from the mean by 10 squared dollars
+- Standard deviation is the square root of variance, returns us to the original unit of the variable
+
+```{r}
+sqrt(10)
+sd(xvar$variable)
+```
+
+- On average, variable deviates from its mean of 6 dollars by 3.2 dollars
+
+---
+# Interquartile range (IQR)
+
+- Divide the distribution into 4 equal parts 
+- The value of each divider line is called a quartile
+- IQR is the difference between 1st and 3rd quartiles
+
+```{r}
+quantile(x$variable, c(.25, .75))
+IQR(x$variable)
+```
+
+---
+# SD vs. IQR
+
+- SD and IQR are our way of describing the typical deviation of a distribution from its center
+- SD is based on the mean, so it is also sensitive to extreme values
+- IQR is based on percentiles like median, so it is not sensitive to extreme values
+
+.pull-left[
+```{r, echo=FALSE}
+xextreme <- tibble(ID = 1:5, variable = c(2,4,6,8,100))
+kable(xextreme, format = 'html')
+```
+]
+
+.pull-right[
+```{r}
+sd(xextreme$variable)
+IQR(xextreme$variable)
+```
+]
+
+---
+# SD vs. IQR
+
+.pull-left[
+```{r, echo=FALSE}
+ggplot(nc, aes(x = weeks)) +
+  geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
+  labs(title = 'Weeks of pregnancy in North Carolina') +
+  theme_light()
+```
+]
+
+.pull-right[
+```{r}
+var(nc$weeks)
+sd(nc$weeks)
+IQR(nc$weeks)
+```
+]
+
+---
+# Range
+
+- Answer to what is the greatest extent this variable changes
+
+- Or what are the possible or plausible values of this variable
+
+- Or how different are the most different values
+
+--
+
+```{r}
+range(x$variable)
+range(xextreme$variable)
+```
+
+---
+class: inverse, middle, center
+
+# When deciding between mean and median, standard deviation and IQR, consider whether extreme values are distractions or an important part of the story
+
+---
+# Measures of association
+
+- Instead of describing the distribution of one variable, now describing conditional probabilities
+
+- What does the distribution of one variable look like *given* a value within another variable's distribution
+
+- Requires at least two variables: an explanatory variable (x) and a response variable (y)
+
+---
+# Measures of association
+
+What is the association between the weight a mother gains during pregnancy and the weight of the child?
+
+.pull-left[
+```{r, echo=FALSE}
+nc %>% 
+  select(gained, weight) %>% 
+  head(n=8) %>% 
+  kable(format = 'html')
+```
+]
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(nc, aes(x = gained, y = weight)) +
+  geom_point() +
+  theme_minimal()
+```
+]
+
+---
+# Measures of association
+
+- The association between two or more variables can be described in terms of
+
+- **Direction:** when one variable increases, does the other variable increase or decrease
+
+- **Strength:** how much do the variables move together in tandem
+
+- **Magnitude:** when one variable increases or decreases, by how much does the other variable increase or decrease
+
+---
+# Measures of association
+
+- **Covariance:** measures direction of association between between two variables
+
+- **Correlation:** measures direction and strength of association between two variables
+
+- **Regression coefficient:** measures the direction and magnitude of association between an explanatory variable and an outcome variable
+
+- **Coefficient of determination ($R^2$):** measures the strength of association between a set of one or more explanatory variables and an outcome variable
+
+---
+# Covariance
+
+.pull-left[
+- If covariance is positive, then y tends to be above its mean when x is above its mean
+
+- If covariance is negative, then y tends to be below its mean when x is above its mean
+
+- If covariance is zero, no tendency
+]
+
+--
+
+.pull-right[
+```{r, echo=FALSE}
+ggplot(nc, aes(x = gained, y = weight)) +
+  geom_point() +
+  geom_hline(yintercept = 7.2, color = 'red', size = 2, linetype = 'dashed') +
+  geom_vline(xintercept = 30.8, color = 'blue', size = 2, linetype = 'dashed') +
+  theme_minimal()
+```
+]
+
+---
+# Covariance
+
+```{r}
+cov(nc$gained, nc$weight)
+```
+
+- This confirms the association between weight gained by mother and baby weight is positive
+
+- But covariance is like variance, it is a very important component to statistical formulae but not useful for description
+
+- Why describe only the direction when correlation can give us direction and strength
+
+---
+# Correlation
+
+- Ranges between -1 and 1
+
+- The closer to -1 or 1, the stronger the association, with 0 indicating no association
+
+- General rule of thumb:
+  - 0.8: very strong correlation
+  - 0.6: moderately strong
+  - 0.4: correlated
+  - 0.2: weakly correlated
+
+```{r}
+cor(nc$gained, nc$weight)
+```
+
+---
+# Weaknesses of correlation
+
+- Measures only linear association
+
+- Sensitive to extreme values
+
+- Is necessary but not sufficient to claim causation
+
+---
+# Spurious correlation
+
+
+Crime is strongly correlated with ice cream sales.
+
+
+--
+
+
+![](lectures_files/butter_divorce.png)
+
+
+---
+class: inverse, middle, center
+
+# Regression is simply an extension of correlation, it has the same weaknesses as correlation.
+
+

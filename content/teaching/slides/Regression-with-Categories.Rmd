@@ -1,0 +1,284 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "Regression with Categorical Variables"
+author: "Alex Combs"
+institute: "UGA/SPIA/PADP"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+# Outline
+
+```{r, include=FALSE}
+library(tidyverse)
+library(moderndive)
+library(knitr)
+library(carData)
+options(scipen = 999)
+```
+
+- Add categorical variables as explanatory variables
+
+- Interact numerical and categorical variables
+
+- Use a categorical variable as an outcome variable
+
+---
+# Adding to our toolbox
+
+- So far, we have covered simple and multiple regression using quantitative or numerical variables
+
+.font120[$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$]
+
+- Any of the explanatory variables could be categorical
+
+- The outcome couls be categorical
+
+---
+# Example
+
+- Suppose HR wants to examine if male professors are paid differently than female professors
+
+```{r}
+glimpse(Salaries)
+```
+
+- discipline coded as "A" for theoretical and "B" for applied
+
+- What do we want to include and what directions to we expect?
+
+---
+# Example
+
+.center[
+```{r, echo=FALSE, out.width='65%'}
+ggplot(Salaries, aes(x = yrs.service, y = salary)) +
+  geom_point(size = 5) +
+  theme(text = element_text(size = 20))
+```
+]
+
+---
+# Example
+
+.center[
+```{r, echo=FALSE, fig.width=8}
+ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
+  geom_point(size = 5) +
+  theme(text = element_text(size = 20))
+```
+]
+
+---
+# Example
+$$Salary=\beta_0+\beta_1YrsEmployed+\beta_2Sex + \epsilon$$
+```{r}
+sal_mod <- lm(salary ~ yrs.service + sex, data = Salaries)
+```
+```{r, eval=FALSE}
+get_regression_table(sal_mod)
+```
+```{r, echo=FALSE}
+get_regression_table(sal_mod) %>% 
+  kable(format = 'html')
+```
+
+- For each year of employment, salary increases $748, on average.
+- Male professors earn an average of $9,072 more than female professors.
+
+---
+# Interpreting categorical results
+
+$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
+
+- What is the predicted change in salary for a male professor three years later?
+```{r}
+748*3
+```
+- For a female professor?
+```{r}
+748*3
+```
+
+---
+# Interpreting categorical results
+
+$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
+
+- What is the predicted salary for a male professor employed 20 years?
+```{r}
+92357+748*20+9072*1
+```
+- For a female professor employed 20 years?
+```{r}
+92357+748*20+9072*0
+```
+
+---
+# Example
+.center[
+```{r, echo=FALSE, fig.width=8}
+ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
+  geom_point(size = 5) +
+  geom_abline(slope = 747, intercept = 92357, color = 'red', size = 2) +
+  geom_abline(slope = 747, intercept = 101429, color = 'blue', size = 2) +
+  theme(text = element_text(size = 20))
+```
+]
+
+---
+class: inverse, middle, center
+
+# Why force the slopes to be parallel? Why not allow the effect of years employed differ between male and female professors?
+
+---
+# Example
+.center[
+```{r, echo=FALSE, fig.width=8}
+ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
+  geom_point(alpha = 0.6, size = 5) +
+  geom_smooth(method = 'lm', se = FALSE, size = 2) +
+  theme(text = element_text(size = 20))
+```
+]
+
+---
+# Interaction
+
+- An interaction allows the effect of one variable to differ depending on the value of another variable
+
+$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Sex + \beta_3YrsEmp*Sex + \epsilon$$
+
+- If Sex = 1 (male), then the marginal effect of years on salary is $\beta_1+\beta_3$
+
+- $\beta_2$ still tells us how the intercepts compare
+  - If Sex = 1 (male), intercept is $\beta_0+\beta_2$
+
+---
+# Running an interaction model
+
+```{r}
+sal_mod2 <- lm(salary ~ yrs.service + sex + 
+                 yrs.service*sex, data = Salaries)
+```
+```{r, eval=FALSE}
+get_regression_table(sal_mod2)
+```
+```{r, echo=FALSE}
+get_regression_table(sal_mod2) %>% 
+  kable(format = 'html')
+```
+
+---
+# Interpreting an interaction model
+
+$$\hat{Salary}=82069+1637*YrsEmp+20129*Sex + -932*YrsEmp*Sex$$
+
+- What is the predicted change in salary for a male professor given two more years of service?
+
+--
+
+```{r}
+(1637-932)*2
+```
+
+- What is the predicted change in salary for a female professor given two more years of service?
+
+--
+
+```{r}
+1637*2
+```
+
+---
+# Interpreting an interaction model
+
+- What is the predicted salary for a female professor with 10 years of service?
+
+--
+
+```{r}
+82069+1637*10
+```
+
+--
+
+- What is the predicted salary for a male professor with 10 years of service?
+
+--
+
+```{r}
+82069 + 1637*10 + 20129 - 931*10
+```
+
+---
+# Linear probability model (LPM)
+
+- Same ol' regression model with a two-level categorical variable for the response
+
+- For a binary outcome (did occur/did not occur), an LPM estimates the effect of our explanatory variables on the probability that the outcome occurs
+
+$$Pr(y=1)=\beta_0+\beta_1x+\dots+\beta_kx_k+\epsilon$$
+
+---
+# Running an LPM
+
+```{r, include=FALSE}
+load("lectures_files/divorce.RData")
+divorce <- rename(divorce, Age25to29 = Age)
+```
+
+```{r, echo=FALSE}
+head(divorce, n=5) %>% 
+  kable(format = 'html')
+```
+
+- Suppose we want to know how these the probability of divorce is associated with these variables
+
+---
+# Running an LPM
+
+```{r}
+div_mod <- lm(Divorce ~ Age25to29 + Income + Children,
+              data = divorce)
+```
+
+```{r, eval=FALSE}
+get_regression_table(div_mod)
+```
+
+```{r, echo=FALSE}
+get_regression_table(div_mod) %>% 
+  kable(format = 'html')
+```
+
+---
+# Interpreting an LPM
+
+$$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$
+
+- How does having a child affect the probability of divorce?
+
+--
+
+```{r}
+-0.18*1
+```
+
+- Reduces the probability of divorce by 18%
+
+--
+
+- What is the probability of a 27 year-old making 50,000 who has 0 children?
+
+--
+
+```{r}
+0.38 + 0.4*1 + 0.001*50 - 0.18*0
+```
+

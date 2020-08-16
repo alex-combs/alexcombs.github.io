@@ -578,7 +578,8 @@ stf_filtered &lt;- filter(state_finance_16,
                        finance_source == "Total Revenue" |
                        finance_source == "Total Expenditure")
 
-stf_f_select &lt;- select(stf_filtered, 
+stf_f_select &lt;- select(stf_filtered,
+                       -id2,
                        -finance_type_id, 
                        -finance_source_id)
 ```
@@ -593,7 +594,8 @@ stf_f_select &lt;- select(stf_filtered,
 stf_f_select &lt;- state_finance_16 %&gt;% 
   filter(finance_source == "Total Revenue" |
          finance_source == "Total Expenditure") %&gt;% 
-  select(-finance_type_id, 
+  select(-id2,
+         -finance_type_id, 
          -finance_source_id)
 ```
 
@@ -803,6 +805,18 @@ ga_schdist %&gt;%
 - These data are **untidy**
 
 - We will learn how to tidy data next week
+
+---
+# Save data and submit lab
+
+- We need to save `stf_f_select` to use next week
+
+
+```r
+save(stf_f_select, file = 'stf_f_select.RData')
+```
+
+- Upload your notebook to eLC
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

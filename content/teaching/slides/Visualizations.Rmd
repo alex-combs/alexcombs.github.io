@@ -1,0 +1,220 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "Data Visualization"
+author: "Alex Combs"
+institute: "UGA/SPIA/PADP"
+date: "`r Sys.Date()`"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+# Outline
+
+- Principles of good and bad visualization
+
+- Which visualizations to use given types of data
+
+---
+# Exploratory vs. explanatory
+
+- Like most applications in statistics, visualizations can either explore or explain
+
+.center[
+![](lectures_files/twogoals.png)
+]
+
+---
+# An exploratory graph
+
+```{r, include=FALSE}
+library(tidyverse)
+library(gapminder)
+
+gm_americas <- gapminder %>% 
+  filter(continent == "Americas" & year == 2007) %>% 
+  select(country, lifeExp, gdpPercap)
+```
+
+.center[
+```{r, echo=FALSE}
+ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+]
+
+---
+# An explanatory graph
+.center[
+```{r, echo=FALSE, message=FALSE}
+ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(se = FALSE, linetype = "dashed", color = "gray", span = 1) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(title = "Life Expectancy and Wealth In the Americas",
+       subtitle = "2007",
+       y = "Life Expectancy",
+       x = "GDP Per Capita",
+       caption = "Source: Gapminder Dataset") +
+  theme_classic()
+```
+]
+---
+class: inverse, middle, center
+
+# Keep in mind while there are general guidelines to good visualization, there remains some subjectivity.
+
+---
+# Qualities of good viz
+
+1. Properly chosen format and design
+
+2. Use words, numbers, and drawing together
+
+3. Display an accessible complexity of detail
+
+4. Avoid content-free decoration--chart junk
+
+5. Maximize data-to-ink ratio
+
+---
+# The best data viz ever?
+
+.center[
+![](lectures_files/napolean.png)
+]
+
+---
+# Qualities of bad viz
+
+1. Bad taste, unnecessary ink
+
+2. Bad data
+
+3. Bad perspective
+
+---
+# Bad taste?
+
+.center[
+![:scale 80%](lectures_files/monstrouscosts.png)
+]
+
+---
+# Bad taste?
+
+.center[
+![](lectures_files/boxplots.png)
+]
+
+---
+# Bad data
+
+- Reproduction of a graph in the *New York Times* about a crisis in democracy
+
+.center[
+![](lectures_files/badcrisis.png)
+]
+
+---
+# Bad data
+
+.center[
+![:scale 85%](lectures_files/bettercrisis.png)
+]
+
+- Previous graph hid the decade of birth and focused on the percentage of people who gave a rating or 10
+
+---
+# Bad perception
+
+.center[
+![](lectures_files/3dgraph.png)
+]
+
+---
+# Bad perception
+
+.center[
+![](lectures_files/badstackbars.png)
+]
+
+- Difficult to compare floating middle groups
+
+---
+# Bad perception
+
+.center[
+![](lectures_files/badaspect.png)
+]
+
+---
+# Bad perception
+
+.center[
+![](lectures_files/lawaxes.png)
+]
+---
+# Bad perception
+
+.center[
+![](lectures_files/showzero.png)
+]
+
+---
+class: inverse, middle, center
+
+# Human vision has evolved to have certain strengths and weaknesses
+
+---
+# Contrast
+
+.center[
+![:scale 65%](lectures_files/grideffect.png)
+]
+
+---
+# Decoding numerical visualization
+
+.center[
+![](lectures_files/encode1.png)
+]
+
+---
+# Decoding categorical visualization
+
+.center[
+![:scale 70%](lectures_files/encode2.png)
+]
+
+---
+# Find the blue circle
+
+.center[
+![:scale 40%](lectures_files/bluecirc1.png)
+]
+---
+# Find the blue circle
+.center[
+![:scale 40%](lectures_files/bluecirc2.png)
+]
+---
+# Find the blue circle
+.center[
+![:scale 40%](lectures_files/bluecirc3.png)
+]
+---
+# Find the blue circle
+.center[
+![:scale 40%](lectures_files/bluecirc4.png)
+]
+---
+# Find the blue circle
+.center[
+![:scale 40%](lectures_files/bluecirc5.png)
+]
+
