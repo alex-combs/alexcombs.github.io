@@ -1,5 +1,5 @@
 ---
-
+title: Alex Combs, Ph.D.
 ---
 <style>
 .column-left{
@@ -16,12 +16,14 @@
 </style>
 
 <div class="column-left">
+
+<br>
+
 ![](static-files/Combs.jpg)
 </div>
 
-<div class="column-right">
 
-<br>
+<div class="column-right">
 
 I am an assistant professor in the School of Public and International Affairs at the University of Georgia. I earned my Ph.D. from the Martin School of Public Policy and Administration at the University of Kentucky. My research focuses on education finance and policy at state and local levels of government. I teach courses in public finance, quantitative methods, policy analysis, and nonprofit management.
 

@@ -5,7 +5,7 @@ output:
     theme: spacelab
     highlight: textmate
 navbar:
-  title: "Alex Combs"
+  title: ""
   left:
     - text: "Writing"
       href: papers.html
