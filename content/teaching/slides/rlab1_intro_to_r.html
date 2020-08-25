@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-07-18" />
+    <meta name="date" content="2020-08-26" />
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -14,8 +14,8 @@ class: center, middle, inverse, title-slide
 # PADP 7120 Data Applications in PA
 ## RLab 1: Intro to R
 ### Alex Combs
-### UGA/SPIA/PADP
-### 2020-07-18
+### UGA | SPIA | PADP
+### August 26, 2020
 
 ---
 
@@ -37,15 +37,15 @@ class: inverse, middle, center
 # RLab1: Introduction to R and R Workflow
 
 ---
-
 # Starting R
 
 - You need to have R and RStudio installed on your computer
 
 - Launch RStudio
 
-- Let's understand what the heck we're looking at
-  
+- Let's understand what we're looking at
+
+- 3 Panes
   - Console
   - Environment
   - Files (and other tabs)
@@ -61,13 +61,15 @@ class: inverse, middle, center
 ---
 # R Projects
 
-## R Projects are the best way to organize your work in R
+&gt; R Projects are the best way to organize your work
 
 - Let's learn how to create an R Project
 
 - Our objective is to create a project called `RLAB1` in a file location of our choice
 
-- You can find plenty of instruction on the web (including our textbooks) if you forget how
+--
+
+- `R Demo 1` on eLC walks you through it in case you forget how
 
 ---
 # Opening data already formatted for R
@@ -78,9 +80,12 @@ class: inverse, middle, center
 
 --
 
-- Error in load(states1.RData) : object 'states1.RData' not found
+
+```r
+Error in load(states1.RData) : object 'states1.RData' not found
 Calls: &lt;Anonymous&gt; ... withCallingHandlers -&gt; withVisible -&gt; eval -&gt; eval -&gt; load
 Execution halted
+```
 
 - What is wrong?
 
@@ -117,8 +122,7 @@ Execution halted
 
 - Scripts support two elements:
   - Code
-  - Comments
-  - Use a hashtag `#` so R knows what is a comment
+  - Comments (use a hashtag `#` so R knows what is a comment)
   
 
 ```r
@@ -136,6 +140,11 @@ Execution halted
 - Objects are anything you tell R to temporarily save during a session, which can also be permanently saved if you tell R to do so. The environment pane keeps a list of your objects. 
 
 - You should already have an object `states1`
+
+- You can click on an object to see what it contains or use the drop down toggle (if it is a dataset)
+
+---
+# Creating an object
 
 - Let's create another object using the code below
 
@@ -185,23 +194,27 @@ xsquared
 ---
 # R Notebook
 
-- We will use notebooks in this class
+- We will usually use notebooks in this class
 
 - Start a notebook--the template is informative
 
 - The R Markdown cheatsheet is more informative
   - Go to Help-&gt;Cheatsheets-&gt;R Markdown Cheat Sheet
   
-- Let's add a few headers to the template
+- Let's add a few generic headers to the template just to make some changes
 
 ---
 # Knitting a notebook
 
-- Knit the template to HTML
+- Knit the template to HTML 
+  - Keyboard shortcut: `Cmd+Shift+K`
+  - Or click on the `Knit` button at the top of your notebook (might display as `Preview` at first)
 
-- Name the notebook `test`
+- Name the notebook `test` when R asks you to save it
 
-- You should see two new files in your `files` pane (bottom-right) titled `test.Rmd` and `test.html`.
+- You should see two new files in your `files` pane (bottom-right) titled `test.Rmd` and `test.html`
+
+- Click on `test.html` and select `open in browser`
 
 ---
 # YAML header
@@ -218,6 +231,8 @@ author: 'Your Name'
 output: html_document
 ---
 ```
+
+- Knit to HTML again
 
 ---
 class: inverse, middle, center
@@ -266,7 +281,10 @@ R loads with a lot of base functionality, but some things we want to do requires
 kable(states1)
 ```
 
+
+```r
 Error in kable(states1) : could not find function "kable"
+```
 
 ---
 # Loading packages
@@ -309,6 +327,8 @@ load("states1.RData")
 &gt; Your notebook knits in the order of your code chunks. If you use a function on data that you load **below** the function, it's the same as not having the data loaded.
 
 &gt; If a code chunk depends on another chunk, then the latter needs to be done before the former.
+
+--
 
 - Copy-and-paste the `load` chunk above the `kable` chunk.
 
