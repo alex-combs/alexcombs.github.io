@@ -2,8 +2,8 @@
 title: "PADP 7120 Data Applications in PA"
 subtitle: "Intro & Overview"
 author: "Alex Combs"
-institute: "UGA/SPIA/PADP"
-date: "`r Sys.Date()`"
+institute: "UGA | SPIA | PADP"
+date: "August 26, 2020"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -48,9 +48,13 @@ class: inverse, center, middle
 
 --
 
-- R is dominant in data science
+- **Replication**
 
-- Learning R is harder but more generalizable
+--
+
+- R is popular across many industries and disciplines
+
+- Learning R is somewhat harder but more generalizable
 
 - R is free
 
@@ -66,7 +70,7 @@ class: inverse, center, middle
 
 --
 
-- Competency in statistics helps us be better thinkers in all areas of life because a lot of key concepts are not strictly mathematical
+- Competency in statistics helps us be better thinkers in all areas of life because many key concepts in stats are not strictly mathematical
 
 ---
 class: inverse, center, middle
@@ -80,7 +84,7 @@ class: inverse, center, middle
 
 ![:scale 75%](Intro_Slides_files/plane.png)
 
-Suppose we had 100 pounds/kg of armor to add to each plane. How would you explain the best way to distribute that armor around the plane?
+Suppose we had 100 pounds (or 45.5 kg) of armor to add to each plane. How would you explain the best way to distribute that armor around the plane?
 
 ]
 

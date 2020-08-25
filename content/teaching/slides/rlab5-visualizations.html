@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-09-23" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## RLab 5: Visualizations
+### Alex Combs
+### UGA | SPIA | PADP
+### September 23, 2020
+
+---
+
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Create an appropriate graph based on intended message and available data  
+
+---
+# Start a new project
+- Using the file directory on your computer
+  - Go to the parent folder that contains your RLabs folders
+  - Create a new folder named RLab5
+
+--
+
+- In RStudio
+  - Create new project
+  - Select Existing Directory
+  - Click Browse and select the RLab5 folder you just created
+  - Click Create Project
+  
+---
+# Start a R notebook
+
+- Use the dropdown menu in the upper-left of RStudio to start a notebook
+
+- Change YAML
+
+
+```r
+---
+title: "RLab 5: Visualizations"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+- Delete all of the content included in the template
+
+---
+# Packages
+
+- Load the following packages, suppressing the code and output.
+
+--
+
+
+```r
+library(data.table)
+library(tidyverse)
+library(arsenal)
+library(lubridate)
+```
+
+---
+# County COVID Data
+
+- Let's load the latest COVID data for every U.S. county from the New York Times
+
+- These data include *cumulative* counts of COVID cases and deaths every day since January 21, 2020
+
+
+```r
+covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+```
+
+---
+# Some Wrangling
+
+- Let's focus on Georgia
+- Use one or more wrangling verbs to create a new dataset called `covid_ga` with only counties in Georgia
+
+--
+
+
+```r
+covid_ga &lt;- covid %&gt;% 
+  filter(state == 'Georgia')
+```
+
+---
+# Variable Type Conversions
+
+- Let's convert `date` from character to date format by telling R that `date` is ordered by year, month, date (ymd)
+
+- Let's also save a specific date to use throughout, `today`
+
+
+```r
+covid_ga$date &lt;- ymd(covid_ga$date)
+
+today &lt;- '2020-08-16'
+```
+
+--
+
+- Convert `county` from character to factor
+
+--
+
+
+```r
+covid_ga$county &lt;- as.factor(covid_ga$county)
+```
+
+---
+# Daily Counts
+
+- It will be useful to have the count of new cases and deaths for each day, not cumulative counts
+
+
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  group_by(county) %&gt;% 
+  arrange(date) %&gt;% 
+  mutate(day_cases = cases - lag(cases),
+         day_deaths = deaths - lag(deaths)) %&gt;% 
+  ungroup()
+```
+
+
+---
+# Summary Stats
+
+- Use the `summary` function to get a quick sense of the data. Suppress code and output.
+
+--
+
+
+
+--
+
+- Note the minimum values for `day_cases` and `day_deaths`. How can this be?
+
+--
+
+- According to NYT, this can occur when corrections are made or when a state moves cases from one county to another. Good to know!
+
+---
+# 5 Counties
+
+- Let's create one more dataset that includes five GA counties of our choice. Suppress code and output.
+
+
+```r
+ga_counties &lt;- c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')
+
+covid_ga_five &lt;- covid_ga %&gt;% 
+  filter(county %in% ga_counties)
+```
+
+---
+# Summary Table 
+
+- Let's provide the reader a summary table for our 5 counties, suppressing the code.
+
+
+```r
+sum.covid_ga &lt;- tableby(county ~ cases + deaths + day_cases + day_deaths, 
+                        data = covid_ga_five,
+                        digits = 0,
+                        test = FALSE)
+
+labels(sum.covid_ga) &lt;- c(cases = 'Total Cases', deaths = 'Total Deaths',
+                          day_cases = 'Daily Cases', day_deaths = 'Daily Deaths')
+```
+
+
+```r
+summary(sum.covid_ga)
+```
+
+- Knit to HTML
+
+---
+# Viz 1
+
+- Suppose we are asked for the distribution of total county cases for the most recent available date.
+- What kind of graph should we use?
+
+--
+
+- A histogram
+- Generate a histogram for cases during the most recent date
+- Suppress code and any messages
+- Generate another histogram for deaths during the most recent date
+
+---
+# Viz 1 &amp; 2
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = cases)) +
+  geom_histogram()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+
+---
+# Viz 1 &amp; 2
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = deaths)) +
+  geom_histogram()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+# Viz 3
+
+- Suppose we are asked for the distribution of total county deaths during the most recent date that includes visual markers along key points of the distribution
+- Which graph should we use?
+
+--
+
+- A box-and-whiskers plot
+- Generate a box plot for county deaths during the most recent date. Suppress the code.
+
+---
+# Viz 3
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;%
+  ggplot(aes(x = deaths)) +
+  geom_boxplot()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+# Viz 4
+
+- Rather than total cases or deaths for all counties as of the most recent date, let's focus on the distribution daily counts for a single county.
+
+- Generate a box plot for Clarke county daily cases during all available dates
+
+---
+# Viz 4
+
+
+```r
+covid_ga %&gt;% 
+  filter(county == 'Clarke') %&gt;%
+  ggplot(aes(x = day_cases)) +
+  geom_boxplot()
+```
+
+```
+## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+
+---
+# Viz 5
+
+- Enough distributions, let's compare counties.
+- Suppose we are asked to compare total cases as of the most recent day in the data across our 5 counties
+- What kind of visualization could/should we use?
+
+--
+
+- Bar graphs are made using `geom_bar` or `geom_col`. Which should we use?
+
+--
+
+- Cases and deaths are already aggregated. Therefore, we should use `geom_col`.
+- Generate a bar graph for total cases during the most recent date across our 5 counties
+
+---
+# Viz 5
+
+
+```r
+covid_ga_five %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+# Viz 6 &amp; 7
+
+- Suppose we want to show the trends in total cases and deaths for our 5 counties
+- Which graph should we use?
+
+--
+
+- Line graph
+- Generate a line graph over the time span in the data for our 5 counties.
+- Give each county its own line.
+- Suppress the code.
+
+---
+# Viz 6 &amp; 7
+
+
+```r
+covid_ga_five %&gt;% 
+  ggplot(aes(x = date, y = cases, color = county)) +
+  geom_line()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+---
+# Viz 6 &amp; 7
+
+
+```r
+covid_ga_five %&gt;% 
+  ggplot(aes(x = date, y = deaths, color = county)) +
+  geom_line()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+# What's the Problem?
+
+- All of our comparisons between counties have been somewhat flawed or potentially misleading. Why?
+
+--
+
+- We haven't adjusted for county population. If our goal is to compare spread of COVID-19 across counties, we need to account for the underlying population.
+
+--
+
+- Therefore, we need to compute rates; cases and/or deaths *per* some standard number of people.
+- Which means we need more data to add to these data. We'll learn how next week.
+
+---
+# Submit lab
+
+- Upload your notebook and output to eLC.
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"highlightlines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

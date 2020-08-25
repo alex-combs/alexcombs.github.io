@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-09-23" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## RLab 7: Polished Visualizations
+### Alex Combs
+### UGA | SPIA | PADP
+### September 23, 2020
+
+---
+
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Polish graphs to share with an audience  
+
+---
+# Start a new project
+- Using the file directory on your computer
+  - Go to the parent folder that contains your RLabs folders
+  - Create a new folder named RLab7
+
+--
+
+- In RStudio
+  - Create new project
+  - Select Existing Directory
+  - Click Browse and select the RLab7 folder you just created
+  - Click Create Project
+  
+---
+# Start New Notebook
+
+- Change YAML
+
+
+```r
+---
+title: "RLab 7: Polished Visualizations"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+---
+# Packages
+
+- Load the following packages, suppressing all code and output.
+
+
+```r
+library(data.table)
+library(tidyverse)
+library(lubridate)
+```
+
+---
+# Copy and Paste Previous Labs
+
+- Open your notebooks from RLabs 5 &amp; 6
+
+- From RLab 5 or 6, copy and paste the code needed to generate the `covid_ga` dataset
+
+
+```r
+covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+covid_ga &lt;- covid %&gt;% 
+  filter(state == 'Georgia')
+
+covid_ga$date &lt;- ymd(covid_ga$date)
+
+today &lt;- '2020-08-16'
+```
+
+---
+# Copy and Paste Previous Labs
+
+
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  group_by(county) %&gt;% 
+  arrange(date) %&gt;% 
+  mutate(day_cases = cases - lag(cases),
+         day_deaths = deaths - lag(deaths)) %&gt;% 
+  ungroup()
+```
+
+---
+# Copy and Paste Previous Labs
+
+- Copy `ga_county_pop.csv` from your RLab 6 folder and paste into your RLab 7 folder
+- From RLab 6 notebook, copy and paste the code that imported and left joined `ga_county_pop`
+
+
+```r
+ga_county_pop &lt;- read_csv('ga_county_pop.csv')
+```
+
+
+
+
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  left_join(ga_county_pop, by = 'county')
+
+covid_ga$county &lt;- as.factor(covid_ga$county)
+```
+
+---
+# Copy and Paste Previous Labs
+
+- Finally, copy and paste all the code used to make the visualizations from RLab 5
+
+---
+# Brief Aside About Replication
+
+- In a real scenario, we would probably just update the notebook we've been working on since RLab 5
+
+- But suppose we needed to start a new project that involved similar code
+
+- We don't have to start from scratch or reverse engineer point-and-clicks
+
+- Once we have code that works, we have a template for future projects
+
+---
+# Rerun Code
+
+- If you haven't done so already, run the code to get the `covid_ga` dataset that includes county population
+
+---
+# Adjusting for Population
+
+- We decided in RLab5 that it is not right to compare counts of COVID cases and/or deaths across counties of different size populations
+
+--
+
+- We need to compute counts *per* capita or some standard number of people, such as 100,000
+
+- Let's create four new variables, `cases_rate`, `deaths_rate`, `day_cases_rate`, and `day_deaths_rate`, using per 100,000 people.
+
+--
+
+Before trying in R, think through and describe the steps we need to take to obtain cases or deaths per 100,000 given our data in `covid_ga`.
+
+---
+# Adjusting for Population
+
+  - We need to create a new variable for population in 100,000s by dividing population by 100,000
+
+--
+
+  - Then, create the rate variables by dividing cases and deaths by this new measure of population in 100,000s
+
+--
+
+  - Now that we know the plan, try executing it in R, overwriting the `covid_ga` dataset
+
+---
+# Adjusting for Population
+
+
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  mutate(pop100thou = population/100000) %&gt;% 
+  mutate(cases_rate = cases/pop100thou, 
+         deaths_rate = deaths/pop100thou,
+         day_cases_rate = day_cases/pop100thou, 
+         day_deaths_rate = day_deaths/pop100thou)
+```
+
+---
+# Selected Counties
+
+- First, quick summary
+
+
+```r
+summary(covid_ga)
+```
+
+- Now we are ready to recreate the dataset that includes only the five counties we selected from before, which will now have all the changes we made to `covid_ga`
+
+
+```r
+ga_counties &lt;- c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')
+
+covid_ga_five &lt;- covid_ga %&gt;% 
+  filter(county %in% ga_counties)
+```
+
+---
+# Common Viz Adjustments
+
+- Non-data ink
+  - Labels (title and axes)
+  - Themes
+  - Axes &amp; scales (tick marks, commas, dollars, log scale)
+
+--
+
+- Geometric object
+  - Color
+  - Shape/line type &amp; size
+  - Transparency
+  - Reference lines
+
+---
+# Viz 1 &amp; 2
+
+- Suppose we are asked for the distribution of county cases for the most recent available date.
+- What kind of graph should we use?
+
+- A histogram
+- Generate a histogram for cases during the most recent date
+- Suppress code and any messages
+- Generate another histogram for deaths during the most recent date
+
+---
+# Viz 1
+
+- Let's improve this graph by adding a title and labels as well as change the theme to one of R's default themes
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = cases)) +
+  geom_histogram()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+---
+# Viz 1
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = cases)) +
+  geom_histogram() +
+  labs(title = 'Total County Cases Today',
+       x = 'Total Cases',
+       y = 'Counties') +
+  theme_minimal()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+---
+# Viz 1
+
+- Let's fix the skew using log scale
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = cases)) +
+  geom_histogram() +
+  labs(title = 'Total County Cases Today',
+       x = 'Total Cases',
+       y = 'Counties') +
+  scale_x_log10() +
+  theme_minimal()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+---
+# Viz 1
+
+- Let's change the color and outline of the bins of the histogram
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = cases)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'Total County Cases Today',
+       x = 'Total Cases',
+       y = 'Counties') +
+  scale_x_log10() +
+  theme_minimal()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+
+---
+# Viz 1: Adding Comma Separator
+
+
+```r
+library(scales)
+```
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = cases)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'Total County Cases Today',
+       x = 'Total Cases',
+       y = 'Counties') +
+  scale_x_log10(labels = comma) +
+  theme_minimal()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+---
+# Viz 2
+
+- On your own, make the same adjustments for the histogram of total county deaths
+
+---
+# Viz 3
+
+- Suppose we are asked for the distribution of county deaths during the most recent date that includes visual markers along key points of the distribution
+- Which graph should we use?
+
+- A box-and-whiskers plot
+- Generate a box plot for county deaths during the most recent date. Suppress the code.
+
+---
+# Viz 3
+
+.pull-left[
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;%
+  ggplot(aes(x = deaths)) +
+  geom_boxplot()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+- Common issue with box plots is that one axis doesn't mean anything.
+- In this case, we should remove the tick marks, line, and text for the y axis
+]
+
+---
+# Viz 3: Remove axis elements
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;%
+  ggplot(aes(x = deaths)) +
+  geom_boxplot() +
+  theme(axis.ticks.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank())
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+
+---
+# Viz 3: Change background and color
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;%
+  ggplot(aes(x = deaths)) +
+  geom_boxplot(fill = 'steelblue') +
+  theme_classic() +
+  theme(axis.ticks.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank())
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+---
+# Viz 3: Title and axis label
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == today) %&gt;%
+  ggplot(aes(x = deaths)) +
+  geom_boxplot(fill = 'steelblue') +
+  labs(title = 'Total County COVID Deaths as of Today',
+       x = 'Total Deaths') +
+  theme_classic() +
+  theme(axis.ticks.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank())
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+
+---
+# Viz 4
+
+- Rather than total cases or deaths for all counties as of the most recent date, let's focus on the distribution daily counts for a single county.
+
+- Generate a box plot for Clarke county daily cases during all available dates
+
+- Make the same adjustments to this box plot as we did the last one
+
+---
+# Viz 4
+
+
+```r
+covid_ga %&gt;% 
+  filter(county == 'Clarke') %&gt;%
+  ggplot(aes(x = cases)) +
+  geom_boxplot(fill = 'steelblue') +
+  labs(title = 'Daily COVID Cases for Clarke County',
+       subtitle = 'January 21 - September 30',
+       x = '') +
+  theme_classic() +
+  theme(axis.ticks.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank())
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+
+---
+# Viz 5
+
+- Suppose we are asked to compare cases for the most recent day in the data across our 5 counties
+- Cases and deaths are already aggregated. Therefore, we should use `geom_col`.
+
+- Generate a bar graph for cases *per 100,000* during the most recent date across our 5 counties
+
+---
+# Viz 5
+
+
+```r
+covid_ga_five %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = county, y = cases_rate)) +
+  geom_col()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+
+---
+# Viz 5: Reorder bars
+
+- We typically want heights of bars to be in ascending or descending order
+
+- Let's reorder to descending
+
+
+```r
+covid_ga_five %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = reorder(county, -cases_rate), y = cases_rate)) +
+  geom_col()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+
+---
+# Viz 5: Other Adjustments
+
+
+```r
+covid_ga_five %&gt;% 
+  filter(date == today) %&gt;% 
+  ggplot(aes(x = reorder(county, -cases_rate), y = cases_rate)) +
+  geom_col(fill = 'red', color = 'white') +
+  scale_y_continuous(labels = comma) +
+  labs(title = 'COVID Cases Per 100,000 Today',
+       x = 'County',
+       y = 'Cases per 100,000') +
+  theme_minimal()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
+---
+# Viz 6
+
+- Suppose we want to show the trends in cases and deaths for our 5 counties
+
+- Generate a line graph over the time span in the data for our 5 counties.
+- Give each county its own line.
+- Suppress the code.
+
+- First, let's change this graph to use cases per 100,000 people
+
+---
+# Viz 6
+
+
+```r
+covid_ga_five %&gt;% 
+  ggplot(aes(x = date, y = cases_rate, color = county)) +
+  geom_line()
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
+
+---
+# Viz 6: Change line type and size
+
+
+```r
+covid_ga_five %&gt;% 
+  ggplot(aes(x = date, y = cases_rate, color = county)) +
+  geom_line(linetype = 'dashed', size = 4)
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
+
+---
+# Viz 6: Readjust
+
+- Those changes aren't improvements, let's stick with the defaults
+
+- Let's change the title of the legend
+
+
+```r
+covid_ga_five %&gt;% 
+  ggplot(aes(x = date, y = cases_rate, color = county)) +
+  geom_line() +
+  labs(legend = 'County')
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"highlightlines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

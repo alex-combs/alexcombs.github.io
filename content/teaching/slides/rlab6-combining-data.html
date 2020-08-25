@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-09-23" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## RLab 6: Combining Data
+### Alex Combs
+### UGA | SPIA | PADP
+### September 23, 2020
+
+---
+
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Handle the most common scenarios involving the combination of multiple datasets
+  - Append
+  - Right/left join
+
+---
+# Start a new project
+- Using the file directory on your computer
+  - Go to the parent folder that contains your RLabs folders
+  - Create a new folder named RLab5
+
+- In RStudio
+  - Create new project
+  - Select Existing Directory
+  - Click Browse and select the RLab5 folder you just created
+  - Click Create Project
+  
+---
+# Start a R notebook
+
+- Use the dropdown menu in the upper-left of RStudio to start a notebook
+
+- Change YAML
+
+
+```r
+---
+title: "RLab 5: Visualizations"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+- Delete all of the content included in the template
+
+---
+# Packages
+
+- Load the following packages, suppressing the code and output.
+
+--
+
+
+```r
+library(data.table)
+library(tidyverse)
+library(lubridate)
+```
+
+---
+# County COVID Data
+
+- Open your RLab5 notebook
+- Copy and paste the code needed to recreate the Georgia COVID data used for RLab5
+
+
+```r
+covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+
+covid_ga &lt;- covid %&gt;% 
+  filter(state == 'Georgia')
+
+covid_ga$date &lt;- ymd(covid_ga$date)
+today &lt;- '2020-08-16'
+
+covid_ga$county &lt;- as.factor(covid_ga$county)
+```
+
+- We will create the five counties dataset once we have added data to this dataset
+
+---
+# County Covid Data
+
+- Recreate daily counts
+
+
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  group_by(county) %&gt;% 
+  arrange(date) %&gt;% 
+  mutate(day_cases = cases - lag(cases),
+         day_deaths = deaths - lag(deaths)) %&gt;% 
+  ungroup()
+```
+
+- We are now have the data we ended last lab with, updated with the most recent data
+
+---
+# Download &amp; Import Data
+
+- Download the `st_fin_2014.csv`, `st_fin_2015.csv`, and `st_fin_2016.csv` files from eLC and add them to your project folder.
+- Import them into R.
+
+
+```r
+st_fin_14 &lt;- 
+st_fin_15 &lt;- 
+st_fin_16 &lt;- 
+```
+
+--
+
+
+```r
+st_fin_14 &lt;- read_csv("st_fin_2014.csv")
+st_fin_15 &lt;- read_csv("st_fin_2015.csv")
+st_fin_16 &lt;- read_csv("st_fin_2016.csv")
+```
+
+
+
+---
+# Append
+
+- Combining observations among two or more datasets with **identical** layout. 
+
+- Example: Adding multiple time periods together of the same data that is released annually.
+
+![:scale 50%](labs_files/append.png)
+
+---
+# Append
+
+- Appending is pretty easy to do in something like Excel, but it can become very tedious if you need to append many datasets
+
+- And like always, Excel doesn't allow the process to be easily replicated for later use
+
+- R can append datasets with much less work involved
+
+---
+# Append Example
+
+
+
+- Suppose I need to append three datasets with same layout but different years
+
+
+```r
+glimpse(gapminder07)
+```
+
+```
+## Rows: 142
+## Columns: 3
+## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
+## $ year      &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007,…
+## $ gdpPercap &lt;dbl&gt; 974.5803, 5937.0295, 6223.3675, 4797.2313, 12779.3796, 3443…
+```
+
+```r
+glimpse(gapminder02)
+```
+
+```
+## Rows: 142
+## Columns: 3
+## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
+## $ year      &lt;int&gt; 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002,…
+## $ gdpPercap &lt;dbl&gt; 726.7341, 4604.2117, 5288.0404, 2773.2873, 8797.6407, 30687…
+```
+
+---
+# Append Example
+
+
+```r
+glimpse(gapminder97)
+```
+
+```
+## Rows: 142
+## Columns: 3
+## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
+## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997,…
+## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 2699…
+```
+
+- To append, all we need to do is `bind` the `rows` of each dataset using the `bind_rows` function
+
+- General logic
+
+
+```r
+new_dataset &lt;- bind_rows(dataset1, dataset2, ...)
+```
+
+---
+# Append Example
+
+
+```r
+gapminder97_07 &lt;- bind_rows(gapminder97, gapminder02, gapminder07)
+
+glimpse(gapminder97_07)
+```
+
+```
+## Rows: 426
+## Columns: 3
+## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
+## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997,…
+## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 2699…
+```
+
+- Note that there are now 426 rows in the new dataset (3 x 142)
+
+---
+# Append Practice
+
+- You have three datasets with the same layout
+
+
+```r
+glimpse(st_fin_16)
+```
+
+```
+## Rows: 50
+## Columns: 14
+## $ id          &lt;chr&gt; "01", "02", "04", "05", "06", "08", "09", "10", "12", "13…
+## $ state       &lt;chr&gt; "Alabama", "Alaska", "Arizona", "Arkansas", "California",…
+## $ year        &lt;dbl&gt; 2016, 2016, 2016, 2016, 2016, 2016, 2016, 2016, 2016, 201…
+## $ corp_tax    &lt;dbl&gt; 376.680, 212.252, 570.548, 450.159, 9902.185, 626.109, 71…
+## $ corrections &lt;dbl&gt; 541.525, 332.443, 1073.370, 429.314, 9528.475, 1079.854, …
+## $ education   &lt;dbl&gt; 11376.230, 2864.158, 12805.986, 8449.234, 93606.370, 1179…
+## $ health      &lt;dbl&gt; 517.728, 251.371, 2640.044, 296.508, 9053.782, 620.427, 1…
+## $ welfare     &lt;dbl&gt; 7203.252, 2372.655, 14280.071, 6979.738, 107043.559, 8639…
+## $ general_rev &lt;dbl&gt; 25249.580, 7628.651, 34582.961, 20346.096, 282907.926, 27…
+## $ sales_tax   &lt;dbl&gt; 2596.223, NA, 6660.817, 3314.363, 39189.007, 2840.173, 37…
+## $ inc_tax     &lt;dbl&gt; 3492.904, NA, 3967.924, 2781.458, 80753.345, 6485.602, 75…
+## $ tot_gen_exp &lt;dbl&gt; 26348.626, 10873.494, 37788.496, 20974.796, 276187.498, 2…
+## $ tot_rev     &lt;dbl&gt; 30133.184, 8071.732, 38232.376, 21439.227, 322332.341, 31…
+## $ tot_tax     &lt;dbl&gt; 9919.794, 1042.164, 14676.375, 9452.883, 155231.252, 1279…
+```
+
+- Append them to create a new dataset `st_fin_14_16`
+
+--
+
+
+```r
+st_fin_14_16 &lt;- bind_rows(st_fin_16, st_fin_15, st_fin_14)
+```
+
+---
+# Append Practice
+
+- Take a `glimpse` of your new dataset to confirm it worked
+
+
+```r
+glimpse(st_fin_14_16)
+```
+
+- You should have 150 observations (3 years X 50 states)
+
+- Now we can explore things like changes in state finances over time if we wanted to
+
+---
+# Left (and Right) Joins
+
+- A left join (aka merge) is used when we want to add variables from a new dataset (y) to our main dataset (x), matching across common units of analysis (key)
+- Keeps ALL of the observations in our main dataset
+- Observations in our new dataset that don't match with the main dataset aren't added
+
+![:scale 75%](labs_files/left_join.png)
+
+---
+# Key is Key to Joins/Merges
+
+- The `key` is the variable or set of variables that uniquely identify each observation/row that is shared across the datasets you want to join.
+
+- If you can identify the unit of analysis in both datasets, you have identified the key to use for joins
+
+- Datasets must have the same key in order to join them; they do not need to be named the same across datasets
+
+---
+# General Logic of Left Joins
+
+- If a single variable is the key and named the same across datasets
+
+
+```r
+new_dataset &lt;- name_of_x_dataset %&gt;% 
+  left_join(name_of_y_dataset, 
+            by = "name_of_key")
+```
+
+--
+
+-  If multiple variables of the same name are the key
+
+
+```r
+new_dataset &lt;- name_of_x_dataset %&gt;% 
+  left_join(name_of_y_dataset, 
+            by = c("name_of_key1", "name_of_key2", ...))
+```
+
+---
+# General Logic of Left Joins
+
+- If one variable is the key and named differently across datasets
+
+
+```r
+new_dataset &lt;- name_of_x_dataset %&gt;% 
+  left_join(name_of_y_dataset, 
+            by = c("key_in_x_data" = "key_in_y_data"))
+```
+
+--
+
+- If multiple variables are the key and at least one is named differently
+
+
+```r
+new_dataset &lt;- name_of_x_dataset %&gt;% 
+  left_join(name_of_y_dataset, 
+            by = c("key_in_x_data" = "key_in_y_data",
+                   "common_key", ...))
+```
+
+---
+# Left Join Example
+
+- Suppose I want to add population to the `gapminder97_07` that I appended earlier
+
+
+```r
+glimpse(gapminder97_07)
+```
+
+```
+## Rows: 426
+## Columns: 3
+## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
+## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997,…
+## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 2699…
+```
+
+---
+# Left Join Example
+
+- Suppose I could find population data for only the U.S.
+
+
+
+
+```r
+glimpse(gap_pop_US)
+```
+
+```
+## Rows: 12
+## Columns: 3
+## $ country &lt;fct&gt; United States, United States, United States, United States, U…
+## $ year    &lt;int&gt; 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2…
+## $ pop     &lt;int&gt; 157553000, 171984000, 186538000, 198712000, 209896000, 220239…
+```
+
+- Note that there are only 12 observations, not 426 as in `gapminder97_07`
+
+---
+# Left Join Example
+
+- What is the key for `gapminder97_07` and `gap_pop_US`?
+
+--
+
+- `country` AND `year`
+
+--
+
+
+```r
+gap_pop_97_07 &lt;- gapminder97_07 %&gt;% 
+  left_join(gap_pop_US, 
+            by = c('country', 'year'))
+```
+
+---
+# Left Join Example
+
+
+
+
+```r
+summary(sum.gap_pop_97_07)
+```
+
+
+
+|                            |    Overall (N=426)    |
+|:---------------------------|:---------------------:|
+|**gdpPercap**               |                       |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) |     10229 (11473)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     |      241 - 49357      |
+|**pop**                     |                       |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss    |          423          |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) | 287242411 (14119077)  |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     | 272911760 - 301139947 |
+
+- Why are we missing 423 values for population?
+
+---
+# Left Join Practice
+
+- Download `ga_county_pop.csv`, add it to your project folder, and import into R
+
+--
+
+
+```r
+ga_county_pop &lt;- read_csv('ga_county_pop.csv')
+```
+
+
+
+---
+# County Pop Data
+
+- These data include total county population for 2019 from the Census
+
+
+```r
+glimpse(ga_county_pop)
+```
+
+```
+## Rows: 159
+## Columns: 2
+## $ county     &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks…
+## $ population &lt;dbl&gt; 18386, 8165, 11164, 3038, 44890, 19234, 83240, 107738, 167…
+```
+
+- What is the key between `covid_ga` and `ga_county_pop`?
+
+--
+
+- `county` (not ideal to match using names but it's what we got)
+
+---
+# Variable Type Mismatch
+
+- Before using a key to join data, make sure they are stored as the same type in both datasets
+
+- `county` is stored as a factor in `covid_ga` and character in `ga_county_pop`
+
+- Convert `county` to factor in `ga_county_pop`
+
+--
+
+
+```r
+ga_county_pop$county &lt;- as.factor(ga_county_pop$county)
+```
+
+- Now we are ready to join `ga_county_pop` to `covid_ga`. Give it a shot. Overwrite `covid_ga` instead of creating a new dataset.
+
+---
+# Left Join Practice
+
+
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  left_join(ga_county_pop, by = 'county')
+```
+
+- Take a `glimpse` of our dataset
+
+
+```r
+glimpse(covid_ga)
+```
+
+```
+## Rows: 23,609
+## Columns: 9
+## $ date       &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-0…
+## $ county     &lt;fct&gt; Fulton, Fulton, Fulton, Fulton, Fulton, Polk, Cobb, Fulton…
+## $ state      &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Ge…
+## $ fips       &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13…
+## $ cases      &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1…
+## $ deaths     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
+## $ day_cases  &lt;int&gt; NA, 0, 0, 0, 0, NA, NA, 2, NA, 0, NA, 2, 1, 0, 0, 0, 1, NA…
+## $ day_deaths &lt;int&gt; NA, 0, 0, 0, 0, NA, NA, 0, NA, 0, NA, 0, 0, 0, 0, 0, 0, NA…
+## $ population &lt;dbl&gt; 1063937, 1063937, 1063937, 1063937, 1063937, 42613, 760141…
+```
+
+---
+# Recap
+
+- In one chunk of code, we had R merge each county's population to all of the rows for that county in our COVID data
+
+- We are now ready to compute rates and visualize fair comparisons
+
+- We will pick that up next week
+
+- Upload your notebook to eLC
+
+---
+# Several other types of joins
+
+- Inner joins are sometimes useful
+
+![:scale 75%](labs_files/inner_join.png)
+
+- Just replace `left_join` with `inner_join` in the code we wrote
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"highlightlines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
