@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-07-18" />
+    <meta name="date" content="2020-08-26" />
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## RLab 2: Importing &amp; Exporting Data &amp; Documents
 ### Alex Combs
 ### UGA/SPIA/PADP
-### 2020-07-18
+### 2020-08-26
 
 ---
 
@@ -418,7 +418,7 @@ name_for_new_object &lt;- fread('url')
 covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv')
 ```
 
-- Add `eval=FALSE` to the above chunk so it doesn't run everytime you knit
+- Add `eval=FALSE` to the above chunk so it doesn't run every time you knit
 
 ---
 # Knit to Word
@@ -434,13 +434,15 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 - In order to knit to PDF, your computer needs a copy of LaTeX
 
-- You can install a light version of LaTeX within RStudio using the following code
+- You can install a light version of LaTeX within RStudio. Run the following code in your console.
 
 
 ```r
-install.packages('tinytex')
-tinytex::install_tinytex()
-# to uninstall TinyTeX, run tinytex::uninstall_tinytex()
+# First
+install.packages('tinytex') # hit Enter
+# Next
+tinytex::install_tinytex() # hit Enter, this will take a few minutes
+# if you ever need to uninstall TinyTeX, run tinytex::uninstall_tinytex()
 ```
 
 - Try to Knit to PDF. If it works, there is nothing else you need to know or do.
