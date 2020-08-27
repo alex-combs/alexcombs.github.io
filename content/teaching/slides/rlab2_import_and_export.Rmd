@@ -315,7 +315,7 @@ library(readxl)
 - To import CSV, we use the following code
 
 ```{r, eval=FALSE}
-name_for_new_object <- read_csv("filname.csv")
+name_for_new_object <- read_csv("filename.csv")
 ```
 
 - Let's try this with ncbirths
