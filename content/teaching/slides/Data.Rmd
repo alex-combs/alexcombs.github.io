@@ -2,7 +2,7 @@
 title: "PADP 7120 Data Applications in PA"
 subtitle: "Data"
 author: "Alex Combs"
-institute: "UGA/SPIA/PADP"
+institute: "UGA | SPIA | PADP"
 date: "September 2, 2020"
 output:
   xaringan::moon_reader:
@@ -15,10 +15,6 @@ output:
 # Outline
 
 - Identify types of variables & data structures
-
-- Measurement validity
-
-- Measurement reliability
 
 - RLab2:  Import data & export useful documents
 
@@ -96,7 +92,7 @@ kable(generic, format = 'html')
 ---
 # Variables
 
-- Suppose we are asked to describe the homeless population in Athens-Clarke County
+- Suppose we are asked to investigate the homeless population in Athens-Clarke County
 
 - If the unit of analysis is `year`, what variables might we want to collect?
 
@@ -110,12 +106,12 @@ kable(generic, format = 'html')
 ---
 class: inverse, middle, center
 
-# A **qualitative** or **categorical** variable is a variable that is naturally expressed in words with no inherent numerical value
+# A **qualitative** or **categorical** variable is a variable that is naturally expressed in words with no intrinsic numerical value
 
 ---
 class: inverse, middle, center
 
-# A **quantitative** or **numerical** variable is a variable that has inherent numerical meaning
+# A **quantitative** or **numerical** variable is a variable that has intrinsic numerical meaning
 
 ---
 class: inverse, middle, center
