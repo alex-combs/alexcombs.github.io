@@ -46,7 +46,6 @@ By the end of this lab, you will have learned how to...
 - reorder rows using `arrange`
 - print a few of the top or bottom rows using `head` and `tail`
 - combine functions in one chunk using the pipe operator `%&gt;%`
-- print nice looking tables using `kable`
 - compute summary stats using `summarize` and `group_by`
 
 ---
@@ -204,7 +203,7 @@ ga_schdist_raw &lt;- rename_at(ga_schdist_raw, vars(schdist_oldnames),
                         ~ schdist_newnames)
 ```
 
-- Don't worry about understanding all of the code. You can follow its logic for any dataset.
+- Don't worry about understanding the code. You can apply its logic for any dataset.
 
 - Show reader the new `state_finance_16` and `ga_schdist_raw` names using `glimpse`
 
@@ -252,7 +251,6 @@ state_finance_16$state &lt;- as.factor(state_finance_16$state)
 - Several character variables in `ga_schdist_raw` need converted to numeric
 
 - In your notebook, convert numeric variables stored as character to numeric
-
 
 
 
@@ -372,6 +370,47 @@ stf_f_select &lt;- select(stf_filtered, -id2)
 
 
 
+---
+# Subsetting
+
+- Sometimes it makes sense to remove or keep rows or columns by their position in the dataset
+  - Position in terms of row or column number in the dataset
+
+- Recall that the last row in `ga_schdist_raw` shouldn't be included because it includes totals, which is analysis, not data
+
+- Suppose we want to remove that row by identifying the row number (subsetting)
+
+---
+# Subsetting
+
+- General logic
+
+
+```r
+dataset &lt;- dataset[row number(s) to keep or remove, 
+                   column number(s) to keep or remove]
+
+dataset &lt;- dataset[5, 2]
+# would keep only the 5th row and 2nd column
+
+dataset &lt;- dataset[-5, -2]
+# would drop 5th row and 2nd column
+
+dataset &lt;- dataset[c(-3,-5), c(1:10)]
+# would drop 3rd and 5th rows, and columns 1 to 10
+```
+
+---
+# Subsetting
+
+- Let's drop the last row of `ga_schdist_raw` along with the `state` variable since it is somewhat unnecessary
+
+--
+
+
+```r
+ga_schdist_raw &lt;- ga_schdist_raw[-224, -2]
+```
 
 ---
 # Mutate
@@ -482,21 +521,20 @@ arrange(ga_schdist, frpl)
 ```
 
 ```
-## # A tibble: 223 x 11
-##    district state charter enroll    lep  sped  frpl white expenditures
-##    &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;
-##  1 STATE C… GEOR… 3-All …    870  2.07  17.1   0     56.6      4789000
-##  2 STATE C… GEOR… 3-All …    470 NA      8.51  0     69.6      3312000
-##  3 STATE C… GEOR… 3-All …    384 NA      4.17  1.82  41.7      3220000
-##  4 COMMISS… Geor… 1-All …    820  1.10   8.54 11.6   79.6      6169000
-##  5 CITY SC… Geor… 3-All …   4858  1.69   8.46 14.2   63.8     88714000
-##  6 FORSYTH… Geor… 3-All …  44286  5.32  12.2  16.5   65.7    540691000
-##  7 OCONEE … Geor… 3-All …   7271  2.82  11.1  20.5   79.7     76232000
-##  8 STATE C… Geor… 1-All …    927  1.83  10.0  21.6   66.8      8398000
-##  9 CHICKAM… Geor… 3-All …   1350  0.296  5.41 22.9   97.1     12611000
-## 10 BREMEN … Geor… 3-All …   2222  0.315  8.64 23.9   89.4     25602000
-## # … with 213 more rows, and 2 more variables: exp_per_pupil &lt;dbl&gt;,
-## #   non_white &lt;dbl&gt;
+## # A tibble: 223 x 10
+##    district charter enroll    lep  sped  frpl white expenditures exp_per_pupil
+##    &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;
+##  1 STATE C… 3-All …    870  2.07  17.1   0     56.6      4789000         5505.
+##  2 STATE C… 3-All …    470 NA      8.51  0     69.6      3312000         7047.
+##  3 STATE C… 3-All …    384 NA      4.17  1.82  41.7      3220000         8385.
+##  4 COMMISS… 1-All …    820  1.10   8.54 11.6   79.6      6169000         7523.
+##  5 CITY SC… 3-All …   4858  1.69   8.46 14.2   63.8     88714000        18261.
+##  6 FORSYTH… 3-All …  44286  5.32  12.2  16.5   65.7    540691000        12209.
+##  7 OCONEE … 3-All …   7271  2.82  11.1  20.5   79.7     76232000        10484.
+##  8 STATE C… 1-All …    927  1.83  10.0  21.6   66.8      8398000         9059.
+##  9 CHICKAM… 3-All …   1350  0.296  5.41 22.9   97.1     12611000         9341.
+## 10 BREMEN … 3-All …   2222  0.315  8.64 23.9   89.4     25602000        11522.
+## # … with 213 more rows, and 1 more variable: non_white &lt;dbl&gt;
 ```
 
 ---
@@ -528,15 +566,15 @@ arrange(ga_schdist, frpl) %&gt;%
 ```
 
 ```
-## # A tibble: 5 x 11
-##   district state charter enroll   lep  sped  frpl white expenditures
-##   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;
-## 1 STATE C… GEOR… 3-All …    870  2.07 17.1   0     56.6      4789000
-## 2 STATE C… GEOR… 3-All …    470 NA     8.51  0     69.6      3312000
-## 3 STATE C… GEOR… 3-All …    384 NA     4.17  1.82  41.7      3220000
-## 4 COMMISS… Geor… 1-All …    820  1.10  8.54 11.6   79.6      6169000
-## 5 CITY SC… Geor… 3-All …   4858  1.69  8.46 14.2   63.8     88714000
-## # … with 2 more variables: exp_per_pupil &lt;dbl&gt;, non_white &lt;dbl&gt;
+## # A tibble: 5 x 10
+##   district charter enroll   lep  sped  frpl white expenditures exp_per_pupil
+##   &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;
+## 1 STATE C… 3-All …    870  2.07 17.1   0     56.6      4789000         5505.
+## 2 STATE C… 3-All …    470 NA     8.51  0     69.6      3312000         7047.
+## 3 STATE C… 3-All …    384 NA     4.17  1.82  41.7      3220000         8385.
+## 4 COMMISS… 1-All …    820  1.10  8.54 11.6   79.6      6169000         7523.
+## 5 CITY SC… 3-All …   4858  1.69  8.46 14.2   63.8     88714000        18261.
+## # … with 1 more variable: non_white &lt;dbl&gt;
 ```
 
 ---
@@ -553,15 +591,15 @@ arrange(ga_schdist, desc(frpl)) %&gt;%
 ```
 
 ```
-## # A tibble: 5 x 11
-##   district state charter enroll    lep  sped  frpl white expenditures
-##   &lt;chr&gt;    &lt;chr&gt; &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;
-## 1 VALDOST… Geor… 3-All …   7836  3.00  12.7   99.7 14.9      97410000
-## 2 BURKE C… Geor… 3-All …   4320  0.718 11.6   99.7 27.3      57772000
-## 3 DOUGHER… Geor… 2-All …  15194  1.69   9.04  99.5  6.71    172205000
-## 4 EVANS C… Geor… 3-All …   1857 10.6   11.0   99.5 37.8      19120000
-## 5 CLAYTON… Geor… 2-All …  54136  9.18  10.3   99.5  2.64    516208000
-## # … with 2 more variables: exp_per_pupil &lt;dbl&gt;, non_white &lt;dbl&gt;
+## # A tibble: 5 x 10
+##   district charter enroll    lep  sped  frpl white expenditures exp_per_pupil
+##   &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;
+## 1 VALDOST… 3-All …   7836  3.00  12.7   99.7 14.9      97410000        12431.
+## 2 BURKE C… 3-All …   4320  0.718 11.6   99.7 27.3      57772000        13373.
+## 3 DOUGHER… 2-All …  15194  1.69   9.04  99.5  6.71    172205000        11334.
+## 4 EVANS C… 3-All …   1857 10.6   11.0   99.5 37.8      19120000        10296.
+## 5 CLAYTON… 2-All …  54136  9.18  10.3   99.5  2.64    516208000         9535.
+## # … with 1 more variable: non_white &lt;dbl&gt;
 ```
 
 - What is this `%&gt;%` symbol? 
@@ -727,6 +765,8 @@ output:
 summarize(data_set, name = function(variable),
           name = function(variable),...)
 ```
+
+- where function is one of many possible summarizing functions (see dplyr cheatsheet)
 
 ---
 # Summarize

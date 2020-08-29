@@ -40,7 +40,6 @@ By the end of this lab, you will have learned how to...
 - reorder rows using `arrange`
 - print a few of the top or bottom rows using `head` and `tail`
 - combine functions in one chunk using the pipe operator `%>%`
-- print nice looking tables using `kable`
 - compute summary stats using `summarize` and `group_by`
 
 ---
@@ -194,7 +193,7 @@ ga_schdist_raw <- rename_at(ga_schdist_raw, vars(schdist_oldnames),
                         ~ schdist_newnames)
 ```
 
-- Don't worry about understanding all of the code. You can follow its logic for any dataset.
+- Don't worry about understanding the code. You can apply its logic for any dataset.
 
 - Show reader the new `state_finance_16` and `ga_schdist_raw` names using `glimpse`
 
@@ -248,7 +247,6 @@ ga_schdist_raw$frpl <- as.numeric(ga_schdist_raw$frpl)
 ga_schdist_raw$white <- as.numeric(ga_schdist_raw$white)
 ga_schdist_raw$expenditures <- as.numeric(ga_schdist_raw$expenditures)
 ```
-
 
 ---
 # Filter
@@ -350,6 +348,45 @@ stf_f_select <- select(stf_filtered, -id2)
 stf_f_select <- select(stf_filtered, -id2, -finance_type_id, -finance_source_id)
 ```
 
+---
+# Subsetting
+
+- Sometimes it makes sense to remove or keep rows or columns by their position in the dataset
+  - Position in terms of row or column number in the dataset
+
+- Recall that the last row in `ga_schdist_raw` shouldn't be included because it includes totals, which is analysis, not data
+
+- Suppose we want to remove that row by identifying the row number (subsetting)
+
+---
+# Subsetting
+
+- General logic
+
+```{r, eval=FALSE}
+dataset <- dataset[row number(s) to keep or remove, 
+                   column number(s) to keep or remove]
+
+dataset <- dataset[5, 2]
+# would keep only the 5th row and 2nd column
+
+dataset <- dataset[-5, -2]
+# would drop 5th row and 2nd column
+
+dataset <- dataset[c(-3,-5), c(1:10)]
+# would drop 3rd and 5th rows, and columns 1 to 10
+```
+
+---
+# Subsetting
+
+- Let's drop the last row of `ga_schdist_raw` along with the `state` variable since it is somewhat unnecessary
+
+--
+
+```{r}
+ga_schdist_raw <- ga_schdist_raw[-224, -2]
+```
 
 ---
 # Mutate
@@ -631,6 +668,8 @@ output:
 summarize(data_set, name = function(variable),
           name = function(variable),...)
 ```
+
+- where function is one of many possible summarizing functions (see dplyr cheatsheet)
 
 ---
 # Summarize
