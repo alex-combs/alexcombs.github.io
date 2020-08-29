@@ -34,14 +34,14 @@ By the end of this lab, you will have learned how to...
 
 - rename variables
 - change the type of variable
-- extract observations using `filter`
-- extract columns using `select`
+- extract observations/rows using `filter`
+- extract variables/columns using `select`
 - create new variables or change existing variables using `mutate`
 - reorder rows using `arrange`
-- extract a few of the top or bottom rows using `head` and `tail`
+- print a few of the top or bottom rows using `head` and `tail`
 - combine functions in one chunk using the pipe operator `%>%`
 - print nice looking tables using `kable`
-- report summary stats using `summarize` and `group_by`
+- compute summary stats using `summarize` and `group_by`
 
 ---
 # Start a new project
@@ -258,7 +258,7 @@ ga_schdist_raw$expenditures <- as.numeric(ga_schdist_raw$expenditures)
 - General logic
 
 ```{r, eval=FALSE}
-filtered_data_set <- filter(unflitered_data_set, criteria)
+filtered_data_set <- filter(unfiltered_data_set, criteria)
 ```
 
 ---
