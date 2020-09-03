@@ -61,9 +61,11 @@ By the end of this lab, you will have learned how to...
 # Start a R notebook
 
 - Use the dropdown menu in the upper-left of RStudio to start a notebook
+
 - Let's make some minimal changes to the YAML header
   - Change the title to "RLab 3: Data Wrangling"
   - Change the output to `html_document`
+  
 - Delete all of the content included in the template
 
 ---
@@ -72,6 +74,8 @@ By the end of this lab, you will have learned how to...
 - Virtually all wrangling can/should be done with the tidyverse package written by Hadley Wickham
 
 - Load the tidyverse package. Hide the code and any output using one of the code chunk options we learned last week.
+
+--
 
 ```{r, include=FALSE}
 library(tidyverse)
@@ -101,7 +105,7 @@ load('ga_schdist_raw.RData')
 
 - In general, we want variable names to be in snake_case_format and as short as possible
 - The names for `state_finance_16` aren't bad
-- I already wrangled these data some
+- I already wrangled these data via the import
 
 --
 
@@ -119,11 +123,11 @@ state_finance_16 <- read_csv("SGF_2016_00A1_with_ann.csv",
 ---
 # Show reader original data
 
-- Insert a header 'Raw Data'
+- Insert a header '# Raw Data'
 
 - Show the reader the original data using `glimpse`
 
-```{r, results='hide'}
+```{r}
 glimpse(state_finance_16)
 ```
 
@@ -139,33 +143,28 @@ data_set <- rename(data_set, 'new_var' = 'old_var',
 
 - Let's rename 'id2' to 'id' and 'id1' to 'id2' in `state_finance_16`
 
-```{r, results='hide'}
-state_finance_16 <- rename(state_finance_16, 'id' = 'id2', 'id2' = 'id1')
+```{r}
+state_finance_16 <- rename(state_finance_16, 'id' = 'id2', 
+                           'id2' = 'id1')
 ```
 
 ---
-# Renaming many long variables
+# Renaming many variables
 
-- The names in the `ga_schdist_raw` data are super long
-- We could rename using the same function, copy and pasting the current names to the code
+- Start a code chunk and run the following code
+
+```{r}
+names(ga_schdist_raw)
+```
+
+
+- Could rename using the same process
 - There is a quicker way
 
 ---
 # Renaming many long variables
 
-- Start a code chunk
-- Run the following code
-
-```{r, eval=FALSE}
-names(ga_schdist_raw)
-```
-
-- The `names` functions returns a list of all variable names
-- We can save this list to a new object
-
---
-
-- Add the following to the code chunk
+- Add the following to the same code chunk 
 
 ```{r}
 schdist_oldnames <- names(ga_schdist_raw)
@@ -177,8 +176,11 @@ schdist_oldnames <- names(ga_schdist_raw)
 - Now we need to save a list of new variable names
 
 ```{r}
-schdist_newnames <- c("district", "state", "charter", "enroll", "lep", "sped", 
-    "frpl", "white", "expenditures")
+schdist_newnames <- c("district", "state", 
+                      "charter", "enroll", 
+                      "lep", "sped", 
+                      "frpl", "white", 
+                      "expenditures")
 ```
 
 - Tedious but you only have to do this once for multiple datasets with the same variables
@@ -189,11 +191,12 @@ schdist_newnames <- c("district", "state", "charter", "enroll", "lep", "sped",
 - Finally, we tell R to replace the old names with our new names
 
 ```{r, message=FALSE}
-ga_schdist_raw <- rename_at(ga_schdist_raw, vars(schdist_oldnames), 
-                        ~ schdist_newnames)
+ga_schdist_raw <- rename_at(ga_schdist_raw, 
+                            vars(schdist_oldnames), 
+                            ~ schdist_newnames)
 ```
 
-- Don't worry about understanding the code. You can apply its logic for any dataset.
+- You can apply this code to any dataset.
 
 - Show reader the new `state_finance_16` and `ga_schdist_raw` names using `glimpse`
 
@@ -239,11 +242,9 @@ state_finance_16$state <- as.factor(state_finance_16$state)
 
 - In your notebook, convert numeric variables stored as character to numeric
 
-```{r, include=FALSE}
-ga_schdist_raw$enroll <- as.numeric(ga_schdist_raw$enroll)
-ga_schdist_raw$lep <- as.numeric(ga_schdist_raw$lep)
-ga_schdist_raw$sped <- as.numeric(ga_schdist_raw$sped)
-ga_schdist_raw$frpl <- as.numeric(ga_schdist_raw$frpl)
+--
+
+```{r}
 ga_schdist_raw$white <- as.numeric(ga_schdist_raw$white)
 ga_schdist_raw$expenditures <- as.numeric(ga_schdist_raw$expenditures)
 ```
@@ -264,7 +265,7 @@ filtered_data_set <- filter(unfiltered_data_set, criteria)
 
 - Insert a header 'Filter'
 
-- Run the following code in your console
+- Run the following code **in your console**
 
 ```{r}
 unique(state_finance_16$finance_type)
@@ -274,6 +275,8 @@ unique(state_finance_16$finance_type)
 
 ---
 # Filter
+
+- Insert code chunk and run following code
 
 ```{r}
 stf_filtered <- filter(state_finance_16, 
@@ -307,7 +310,7 @@ unique(stf_filtered$finance_type)
 
 - Use filter to keep only the rows with total revenue or total expenditure
 
-- Name the new object `stf_filtered`, which will overwrite the current object
+- Name the new object `stf_filtered`, which will overwrite the existing object
 
 ---
 # Select
@@ -342,10 +345,18 @@ new_dataset <- select(old_dataset, -var1, -var2, ...)
 stf_f_select <- select(stf_filtered, -id2)
 ```
 
+---
+#Select
+
 - In your notebook, create a new object `stf_f_select` that drops `id2`, `finance_type_id` and `finance_source_id`
 
-```{r, include=FALSE}
-stf_f_select <- select(stf_filtered, -id2, -finance_type_id, -finance_source_id)
+--
+
+```{r}
+stf_f_select <- select(stf_filtered, 
+                       -id2, 
+                       -finance_type_id, 
+                       -finance_source_id)
 ```
 
 ---
@@ -380,7 +391,7 @@ dataset <- dataset[c(-3,-5), c(1:10)]
 ---
 # Subsetting
 
-- Let's drop the last row of `ga_schdist_raw` along with the `state` variable since it is somewhat unnecessary
+- Drop the last row of `ga_schdist_raw` along with the `state` variable since it is somewhat unnecessary
 
 --
 
@@ -427,7 +438,9 @@ ga_schdist <- mutate(ga_schdist_raw, exp_per_pupil = expenditures/enroll)
 
 - Use `mutate` to add another new variable to `ga_schdist` that equals the number of students of color named `non_white`
 
-```{r, include=FALSE}
+--
+
+```{r}
 ga_schdist <- mutate(ga_schdist, non_white = enroll - white)
 ```
 
@@ -471,14 +484,15 @@ arrange(data_set, var)
 # Where var is the variable on which you want to arrange
 ```
 
+---
+# Arrange
+
 - By default, `arrange` arranges in ascending order
 - You can `arrange` in descending order like so
 
 ```{r, eval=FALSE}
 arrange(data_set, desc(var))
 ```
-
---
 
 - Usually doesn't make sense to create a new dataset with `arrange` but helpful for printing tables
 
@@ -495,38 +509,28 @@ arrange(ga_schdist, frpl)
 # Head and Tail
 
 - Too many rows in the previous table
-- Use `head` and `tail` to extract the top or bottom rows of a dataset
-
-- General logic
-```{r, eval=FALSE}
-head(data_set, n = number_of_top_rows)
-tail(data_set, n = number_of_bottom_rows)
-```
-
----
-# Head and tail
 
 - Insert header 'Head and Tail'
 
-- Five GA districts with lowest FRPL
+- Four GA districts with lowest FRPL
 
 - Add the following code
 
 ```{r}
 arrange(ga_schdist, frpl) %>% 
-  head(n=5)
+  head(n=4)
 ```
 
 ---
 # Head and tail
 
-- Five GA districts with highest FRPL
+- Four GA districts with highest FRPL
 
 - Add the following code
 
 ```{r}
 arrange(ga_schdist, desc(frpl)) %>% 
-  head(n=5)
+  head(n=4)
 ```
 
 - What is this `%>%` symbol? 
@@ -551,7 +555,7 @@ stf_f_select <- select(stf_filtered,
 ---
 # Pipe operator
 
-- Instead, we can get to the end result without creating a intermediate dataset
+- Instead, we can get to the end result without creating an intermediate dataset
 
 ```{r}
 stf_f_select <- state_finance_16 %>% 
@@ -583,7 +587,9 @@ ga_schdist %>%
 
 - Knit to html
 
-```{r, include=FALSE}
+--
+
+```{r}
 ga_schdist %>% 
   select(district, sped) %>% 
   arrange(desc(sped)) %>% 
@@ -614,7 +620,7 @@ ga_schdist %>%
   select(district, sped) %>% 
   arrange(desc(sped)) %>% 
   head(n=5) %>% 
-  kable()
+  kable(digits = 1)
 ```
 
 ---
@@ -716,7 +722,9 @@ ga_schdist %>%
 
 - Provide a table that reports the average amounts in the `stf_f_select` data separately for each state. Execute the code to check if it works.
 
-```{r, include=FALSE}
+--
+
+```{r}
 stf_f_select %>% 
   group_by(state) %>% 
   summarize(AvgAmount = mean(amount_1000, na.rm = TRUE))

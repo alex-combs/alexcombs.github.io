@@ -2,7 +2,7 @@
 title: "PADP 7120 Data Applications in PA"
 subtitle: "Measurement Validity & Reliability"
 author: "Alex Combs"
-institute: "UGA/SPIA/PADP"
+institute: "UGA | SPIA | PADP"
 date: "September 9, 2020"
 output:
   xaringan::moon_reader:
@@ -148,7 +148,6 @@ gapminder %>%
 
 - Missingness is also a measurement issue
 - Almost never missing at random; reason may or may not be critical to your work; you don't know if you don't think about it
-- We will learn what to do with missing data later
 
 ---
 class: inverse, middle, center

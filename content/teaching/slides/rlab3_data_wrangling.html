@@ -67,9 +67,11 @@ By the end of this lab, you will have learned how to...
 # Start a R notebook
 
 - Use the dropdown menu in the upper-left of RStudio to start a notebook
+
 - Let's make some minimal changes to the YAML header
   - Change the title to "RLab 3: Data Wrangling"
   - Change the output to `html_document`
+  
 - Delete all of the content included in the template
 
 ---
@@ -78,6 +80,8 @@ By the end of this lab, you will have learned how to...
 - Virtually all wrangling can/should be done with the tidyverse package written by Hadley Wickham
 
 - Load the tidyverse package. Hide the code and any output using one of the code chunk options we learned last week.
+
+--
 
 
 
@@ -103,7 +107,7 @@ load('ga_schdist_raw.RData')
 
 - In general, we want variable names to be in snake_case_format and as short as possible
 - The names for `state_finance_16` aren't bad
-- I already wrangled these data some
+- I already wrangled these data via the import
 
 --
 
@@ -122,13 +126,27 @@ state_finance_16 &lt;- read_csv("SGF_2016_00A1_with_ann.csv",
 ---
 # Show reader original data
 
-- Insert a header 'Raw Data'
+- Insert a header '# Raw Data'
 
 - Show the reader the original data using `glimpse`
 
 
 ```r
 glimpse(state_finance_16)
+```
+
+```
+## Rows: 2,200
+## Columns: 9
+## $ id1               &lt;chr&gt; "0400000US01", "0400000US01", "0400000US01", "04000…
+## $ id2               &lt;chr&gt; "01", "01", "01", "01", "01", "01", "01", "01", "01…
+## $ state             &lt;chr&gt; "Alabama", "Alabama", "Alabama", "Alabama", "Alabam…
+## $ year              &lt;int&gt; 2016, 2016, 2016, 2016, 2016, 2016, 2016, 2016, 201…
+## $ finance_type_id   &lt;chr&gt; "01", "01", "01", "01", "01", "01", "01", "01", "01…
+## $ finance_type      &lt;chr&gt; "Revenue", "Revenue", "Revenue", "Revenue", "Revenu…
+## $ finance_source_id &lt;chr&gt; "01", "010", "0101", "0102", "01021", "01022", "010…
+## $ finance_source    &lt;chr&gt; "Total Revenue", "General Revenue", "Intergovernmen…
+## $ amount_1000       &lt;dbl&gt; 30133184, 25249580, 9521969, 9919794, 2596223, 2509…
 ```
 
 ---
@@ -146,33 +164,33 @@ data_set &lt;- rename(data_set, 'new_var' = 'old_var',
 
 
 ```r
-state_finance_16 &lt;- rename(state_finance_16, 'id' = 'id2', 'id2' = 'id1')
+state_finance_16 &lt;- rename(state_finance_16, 'id' = 'id2', 
+                           'id2' = 'id1')
 ```
 
 ---
-# Renaming many long variables
+# Renaming many variables
 
-- The names in the `ga_schdist_raw` data are super long
-- We could rename using the same function, copy and pasting the current names to the code
-- There is a quicker way
-
----
-# Renaming many long variables
-
-- Start a code chunk
-- Run the following code
+- Start a code chunk and run the following code
 
 
 ```r
 names(ga_schdist_raw)
 ```
 
-- The `names` functions returns a list of all variable names
-- We can save this list to a new object
+```
+## [1] "district"     "state"        "charter"      "enroll"       "lep"         
+## [6] "sped"         "frpl"         "white"        "expenditures"
+```
 
---
 
-- Add the following to the code chunk
+- Could rename using the same process
+- There is a quicker way
+
+---
+# Renaming many long variables
+
+- Add the following to the same code chunk 
 
 
 ```r
@@ -186,8 +204,11 @@ schdist_oldnames &lt;- names(ga_schdist_raw)
 
 
 ```r
-schdist_newnames &lt;- c("district", "state", "charter", "enroll", "lep", "sped", 
-    "frpl", "white", "expenditures")
+schdist_newnames &lt;- c("district", "state", 
+                      "charter", "enroll", 
+                      "lep", "sped", 
+                      "frpl", "white", 
+                      "expenditures")
 ```
 
 - Tedious but you only have to do this once for multiple datasets with the same variables
@@ -199,11 +220,12 @@ schdist_newnames &lt;- c("district", "state", "charter", "enroll", "lep", "sped"
 
 
 ```r
-ga_schdist_raw &lt;- rename_at(ga_schdist_raw, vars(schdist_oldnames), 
-                        ~ schdist_newnames)
+ga_schdist_raw &lt;- rename_at(ga_schdist_raw, 
+                            vars(schdist_oldnames), 
+                            ~ schdist_newnames)
 ```
 
-- Don't worry about understanding the code. You can apply its logic for any dataset.
+- You can apply this code to any dataset.
 
 - Show reader the new `state_finance_16` and `ga_schdist_raw` names using `glimpse`
 
@@ -252,7 +274,24 @@ state_finance_16$state &lt;- as.factor(state_finance_16$state)
 
 - In your notebook, convert numeric variables stored as character to numeric
 
+--
 
+
+```r
+ga_schdist_raw$white &lt;- as.numeric(ga_schdist_raw$white)
+```
+
+```
+## Warning: NAs introduced by coercion
+```
+
+```r
+ga_schdist_raw$expenditures &lt;- as.numeric(ga_schdist_raw$expenditures)
+```
+
+```
+## Warning: NAs introduced by coercion
+```
 
 ---
 # Filter
@@ -271,7 +310,7 @@ filtered_data_set &lt;- filter(unfiltered_data_set, criteria)
 
 - Insert a header 'Filter'
 
-- Run the following code in your console
+- Run the following code **in your console**
 
 
 ```r
@@ -289,6 +328,8 @@ unique(state_finance_16$finance_type)
 
 ---
 # Filter
+
+- Insert code chunk and run following code
 
 
 ```r
@@ -328,7 +369,7 @@ unique(stf_filtered$finance_type)
 
 - Use filter to keep only the rows with total revenue or total expenditure
 
-- Name the new object `stf_filtered`, which will overwrite the current object
+- Name the new object `stf_filtered`, which will overwrite the existing object
 
 ---
 # Select
@@ -366,9 +407,20 @@ new_dataset &lt;- select(old_dataset, -var1, -var2, ...)
 stf_f_select &lt;- select(stf_filtered, -id2)
 ```
 
+---
+#Select
+
 - In your notebook, create a new object `stf_f_select` that drops `id2`, `finance_type_id` and `finance_source_id`
 
+--
 
+
+```r
+stf_f_select &lt;- select(stf_filtered, 
+                       -id2, 
+                       -finance_type_id, 
+                       -finance_source_id)
+```
 
 ---
 # Subsetting
@@ -403,7 +455,7 @@ dataset &lt;- dataset[c(-3,-5), c(1:10)]
 ---
 # Subsetting
 
-- Let's drop the last row of `ga_schdist_raw` along with the `state` variable since it is somewhat unnecessary
+- Drop the last row of `ga_schdist_raw` along with the `state` variable since it is somewhat unnecessary
 
 --
 
@@ -453,7 +505,12 @@ ga_schdist &lt;- mutate(ga_schdist_raw, exp_per_pupil = expenditures/enroll)
 
 - Use `mutate` to add another new variable to `ga_schdist` that equals the number of students of color named `non_white`
 
+--
 
+
+```r
+ga_schdist &lt;- mutate(ga_schdist, non_white = enroll - white)
+```
 
 ---
 # Mutate many variables
@@ -498,6 +555,9 @@ arrange(data_set, var)
 # Where var is the variable on which you want to arrange
 ```
 
+---
+# Arrange
+
 - By default, `arrange` arranges in ascending order
 - You can `arrange` in descending order like so
 
@@ -505,8 +565,6 @@ arrange(data_set, var)
 ```r
 arrange(data_set, desc(var))
 ```
-
---
 
 - Usually doesn't make sense to create a new dataset with `arrange` but helpful for printing tables
 
@@ -541,64 +599,51 @@ arrange(ga_schdist, frpl)
 # Head and Tail
 
 - Too many rows in the previous table
-- Use `head` and `tail` to extract the top or bottom rows of a dataset
-
-- General logic
-
-```r
-head(data_set, n = number_of_top_rows)
-tail(data_set, n = number_of_bottom_rows)
-```
-
----
-# Head and tail
 
 - Insert header 'Head and Tail'
 
-- Five GA districts with lowest FRPL
+- Four GA districts with lowest FRPL
 
 - Add the following code
 
 
 ```r
 arrange(ga_schdist, frpl) %&gt;% 
-  head(n=5)
+  head(n=4)
 ```
 
 ```
-## # A tibble: 5 x 10
+## # A tibble: 4 x 10
 ##   district charter enroll   lep  sped  frpl white expenditures exp_per_pupil
 ##   &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;
 ## 1 STATE C… 3-All …    870  2.07 17.1   0     56.6      4789000         5505.
 ## 2 STATE C… 3-All …    470 NA     8.51  0     69.6      3312000         7047.
 ## 3 STATE C… 3-All …    384 NA     4.17  1.82  41.7      3220000         8385.
 ## 4 COMMISS… 1-All …    820  1.10  8.54 11.6   79.6      6169000         7523.
-## 5 CITY SC… 3-All …   4858  1.69  8.46 14.2   63.8     88714000        18261.
 ## # … with 1 more variable: non_white &lt;dbl&gt;
 ```
 
 ---
 # Head and tail
 
-- Five GA districts with highest FRPL
+- Four GA districts with highest FRPL
 
 - Add the following code
 
 
 ```r
 arrange(ga_schdist, desc(frpl)) %&gt;% 
-  head(n=5)
+  head(n=4)
 ```
 
 ```
-## # A tibble: 5 x 10
+## # A tibble: 4 x 10
 ##   district charter enroll    lep  sped  frpl white expenditures exp_per_pupil
 ##   &lt;chr&gt;    &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;        &lt;dbl&gt;         &lt;dbl&gt;
 ## 1 VALDOST… 3-All …   7836  3.00  12.7   99.7 14.9      97410000        12431.
 ## 2 BURKE C… 3-All …   4320  0.718 11.6   99.7 27.3      57772000        13373.
 ## 3 DOUGHER… 2-All …  15194  1.69   9.04  99.5  6.71    172205000        11334.
 ## 4 EVANS C… 3-All …   1857 10.6   11.0   99.5 37.8      19120000        10296.
-## 5 CLAYTON… 2-All …  54136  9.18  10.3   99.5  2.64    516208000         9535.
 ## # … with 1 more variable: non_white &lt;dbl&gt;
 ```
 
@@ -625,7 +670,7 @@ stf_f_select &lt;- select(stf_filtered,
 ---
 # Pipe operator
 
-- Instead, we can get to the end result without creating a intermediate dataset
+- Instead, we can get to the end result without creating an intermediate dataset
 
 
 ```r
@@ -670,7 +715,26 @@ ga_schdist %&gt;%
 
 - Knit to html
 
+--
 
+
+```r
+ga_schdist %&gt;% 
+  select(district, sped) %&gt;% 
+  arrange(desc(sped)) %&gt;% 
+  head(n=5)
+```
+
+```
+## # A tibble: 5 x 2
+##   district                                         sped
+##   &lt;chr&gt;                                           &lt;dbl&gt;
+## 1 STATE SCHOOLS- ATLANTA AREA SCHOOL FOR THE DEAF 100  
+## 2 STATE SCHOOLS- GEORGIA ACADEMY FOR THE BLIND    100  
+## 3 STATE SCHOOLS- GEORGIA SCHOOL FOR THE DEAF      100  
+## 4 DEPARTMENT OF HUMAN RESOURCES                    97  
+## 5 DEPARTMENT OF CORRECTIONS                        84.2
+```
 
 ---
 # Printing tables
@@ -698,18 +762,18 @@ ga_schdist %&gt;%
   select(district, sped) %&gt;% 
   arrange(desc(sped)) %&gt;% 
   head(n=5) %&gt;% 
-  kable()
+  kable(digits = 1)
 ```
 
 
 
-|district                                        |      sped|
-|:-----------------------------------------------|---------:|
-|STATE SCHOOLS- ATLANTA AREA SCHOOL FOR THE DEAF | 100.00000|
-|STATE SCHOOLS- GEORGIA ACADEMY FOR THE BLIND    | 100.00000|
-|STATE SCHOOLS- GEORGIA SCHOOL FOR THE DEAF      | 100.00000|
-|DEPARTMENT OF HUMAN RESOURCES                   |  97.00000|
-|DEPARTMENT OF CORRECTIONS                       |  84.21053|
+|district                                        |  sped|
+|:-----------------------------------------------|-----:|
+|STATE SCHOOLS- ATLANTA AREA SCHOOL FOR THE DEAF | 100.0|
+|STATE SCHOOLS- GEORGIA ACADEMY FOR THE BLIND    | 100.0|
+|STATE SCHOOLS- GEORGIA SCHOOL FOR THE DEAF      | 100.0|
+|DEPARTMENT OF HUMAN RESOURCES                   |  97.0|
+|DEPARTMENT OF CORRECTIONS                       |  84.2|
 
 ---
 # Changing how all tables print
@@ -831,7 +895,35 @@ ga_schdist %&gt;%
 
 - Provide a table that reports the average amounts in the `stf_f_select` data separately for each state. Execute the code to check if it works.
 
+--
 
+
+```r
+stf_f_select %&gt;% 
+  group_by(state) %&gt;% 
+  summarize(AvgAmount = mean(amount_1000, na.rm = TRUE))
+```
+
+```
+## `summarise()` ungrouping output (override with `.groups` argument)
+```
+
+```
+## # A tibble: 50 x 2
+##    state        AvgAmount
+##    &lt;fct&gt;            &lt;dbl&gt;
+##  1 Alabama      30172318.
+##  2 Alaska       10253958 
+##  3 Arizona      40158735 
+##  4 Arkansas     22175064 
+##  5 California  324585088.
+##  6 Colorado     32998096.
+##  7 Connecticut  30170712.
+##  8 Delaware      8731273 
+##  9 Florida      86898037 
+## 10 Georgia      46862728 
+## # … with 40 more rows
+```
 
 ---
 # Interpretation

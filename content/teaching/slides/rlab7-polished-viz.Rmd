@@ -75,7 +75,7 @@ covid_ga <- covid %>%
 
 covid_ga$date <- ymd(covid_ga$date)
 
-today <- '2020-08-16'
+today <- '2020-08-31'
 ```
 
 ---
@@ -477,11 +477,26 @@ covid_ga_five %>%
 
 - Those changes aren't improvements, let's stick with the defaults
 
-- Let's change the title of the legend
+- Let's change the title of the legend and other labels as well as the theme
+
+- Let's save this graph to as an object
 
 ```{r, fig.width=6, fig.height=4}
-covid_ga_five %>% 
+g.rates <- covid_ga_five %>% 
   ggplot(aes(x = date, y = cases_rate, color = county)) +
   geom_line() +
-  labs(legend = 'County')
+  labs(color = 'County',
+       x = '',
+       y = 'Cases per 100,000 population') +
+  theme_minimal()
+```
+
+```{r, fig.width=6, fig.height=4}
+g.rates +
+  scale_x_date(date_breaks = '1 month', 
+               labels = date_format('%B')) +
+  theme(panel.grid.minor.x = element_blank()) +
+  geom_vline(xintercept = date('2020-08-15'), 
+             color = 'black', 
+             linetype = 'dashed')
 ```
