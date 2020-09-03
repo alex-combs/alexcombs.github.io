@@ -392,6 +392,12 @@ name_for_new_object <- read_csv("filename.csv")
 
 - Add to your notebook. Suppress code and output.
 
+```{r, include=FALSE}
+ga_schdist_raw <- read_xlsx("labs_files/ga_schdist_raw.xlsx", 
+                            range = "A7:I231")
+save(ga_schdist_raw, file = 'ga_schdist_raw.RData')
+```
+
 ```{r, eval=FALSE}
 ga_schdist_raw <- read_xlsx("ga_schdist_raw.xlsx", 
                             range = "A7:I231")

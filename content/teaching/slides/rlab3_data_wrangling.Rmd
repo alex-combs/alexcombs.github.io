@@ -144,7 +144,7 @@ data_set <- rename(data_set, 'new_var' = 'old_var',
 - Let's rename 'id2' to 'id' and 'id1' to 'id2' in `state_finance_16`
 
 ```{r}
-state_finance_16 <- rename(state_finance_16, 'id' = 'id2', 
+stf <- rename(state_finance_16, 'id' = 'id2', 
                            'id2' = 'id1')
 ```
 
@@ -191,14 +191,14 @@ schdist_newnames <- c("district", "state",
 - Finally, we tell R to replace the old names with our new names
 
 ```{r, message=FALSE}
-ga_schdist_raw <- rename_at(ga_schdist_raw, 
-                            vars(schdist_oldnames), 
-                            ~ schdist_newnames)
+ga_schdist <- rename_at(ga_schdist_raw, 
+                        vars(schdist_oldnames), 
+                        ~ schdist_newnames)
 ```
 
 - You can apply this code to any dataset.
 
-- Show reader the new `state_finance_16` and `ga_schdist_raw` names using `glimpse`
+- Show reader the new `stf` and `ga_schdist` names using `glimpse`
 
 ---
 # Converting variable types
@@ -223,14 +223,14 @@ as.factor()
 ---
 # Converting variable types
 
-- From glimpsing the data, we see that `state_finance_16$state` is stored as a character variable
+- From glimpsing the data, we see that `stf$state` is stored as a character variable
 
 - That's OK, but suppose we want R to recognize it as a categorical, nominal variable
 
 - R stores categorical variables as **factors**
 
 ```{r}
-state_finance_16$state <- as.factor(state_finance_16$state)
+stf$state <- as.factor(stf$state)
 ```
 
 - Use `glimpse` again to check if it worked
@@ -238,15 +238,19 @@ state_finance_16$state <- as.factor(state_finance_16$state)
 ---
 # Skill check
 
-- Several character variables in `ga_schdist_raw` need converted to numeric
+- Several character variables in `ga_schdist` need converted to numeric
 
 - In your notebook, convert numeric variables stored as character to numeric
 
 --
 
-```{r}
-ga_schdist_raw$white <- as.numeric(ga_schdist_raw$white)
-ga_schdist_raw$expenditures <- as.numeric(ga_schdist_raw$expenditures)
+```{r, warning=FALSE}
+ga_schdist$enroll <- as.numeric(ga_schdist$enroll)
+ga_schdist$lep <- as.numeric(ga_schdist$lep)
+ga_schdist$sped <- as.numeric(ga_schdist$sped)
+ga_schdist$frpl <- as.numeric(ga_schdist$frpl)
+ga_schdist$white <- as.numeric(ga_schdist$white)
+ga_schdist$expenditures <- as.numeric(ga_schdist$expenditures)
 ```
 
 ---
@@ -268,7 +272,7 @@ filtered_data_set <- filter(unfiltered_data_set, criteria)
 - Run the following code **in your console**
 
 ```{r}
-unique(state_finance_16$finance_type)
+unique(stf$finance_type)
 ```
 
 - Suppose we want to keep the rows if: **`finance_type` *equals* 'Revenue' *or* 'Expenditure'**
@@ -279,7 +283,7 @@ unique(state_finance_16$finance_type)
 - Insert code chunk and run following code
 
 ```{r}
-stf_filtered <- filter(state_finance_16, 
+stf_filtered <- filter(stf, 
                        finance_type == 'Revenue' | finance_type == 'Expenditure')
 ```
 
@@ -306,11 +310,23 @@ unique(stf_filtered$finance_type)
 ---
 # Skill check
 
-- Use `unique` to examine the different levels for `state_finance_16$finance_source`
+- Use `unique` to examine the different levels for `stf_filtered$finance_source`
 
 - Use filter to keep only the rows with total revenue or total expenditure
 
 - Name the new object `stf_filtered`, which will overwrite the existing object
+
+--
+
+```{r, eval=FALSE}
+unique(stf_filtered$finance_source)
+```
+
+```{r}
+stf_filtered <- filter(stf_filtered, 
+                       finance_source == "Total Revenue" | 
+                         finance_source == "Total Expenditure")
+```
 
 ---
 # Select
@@ -365,7 +381,7 @@ stf_f_select <- select(stf_filtered,
 - Sometimes it makes sense to remove or keep rows or columns by their position in the dataset
   - Position in terms of row or column number in the dataset
 
-- Recall that the last row in `ga_schdist_raw` shouldn't be included because it includes totals, which is analysis, not data
+- Recall that the last row in `ga_schdist` shouldn't be included because it includes totals, which is analysis, not data
 
 - Suppose we want to remove that row by identifying the row number (subsetting)
 
@@ -391,12 +407,12 @@ dataset <- dataset[c(-3,-5), c(1:10)]
 ---
 # Subsetting
 
-- Drop the last row of `ga_schdist_raw` along with the `state` variable since it is somewhat unnecessary
+- Drop the last row of `ga_schdist` along with the `state` variable since it is somewhat unnecessary
 
 --
 
 ```{r}
-ga_schdist_raw <- ga_schdist_raw[-224, -2]
+ga_schdist <- ga_schdist[-224, -2]
 ```
 
 ---
@@ -416,7 +432,7 @@ new_dataset <- mutate(old_dataset, newvar = whatever)
 ---
 # Mutate
 
-- The `ga_schdist_raw` data has several absolute counts, such as `expenditures`
+- The `ga_schdist` data has several absolute counts, such as `expenditures`
 
 - Not good if we want to compare; larger districts will probably have higher counts of anything
 
@@ -430,7 +446,7 @@ new_dataset <- mutate(old_dataset, newvar = whatever)
 - Let's add a new variable `exp_per_pupil`
 
 ```{r}
-ga_schdist <- mutate(ga_schdist_raw, exp_per_pupil = expenditures/enroll)
+ga_schdist <- mutate(ga_schdist, exp_per_pupil = expenditures/enroll)
 ```
 
 ---
@@ -703,6 +719,7 @@ data_set %>%
 ```
 
 - Year and any nominal variable are common grouping variables
+
 ---
 # Group By
 

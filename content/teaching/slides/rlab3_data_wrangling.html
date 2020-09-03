@@ -164,7 +164,7 @@ data_set &lt;- rename(data_set, 'new_var' = 'old_var',
 
 
 ```r
-state_finance_16 &lt;- rename(state_finance_16, 'id' = 'id2', 
+stf &lt;- rename(state_finance_16, 'id' = 'id2', 
                            'id2' = 'id1')
 ```
 
@@ -179,8 +179,15 @@ names(ga_schdist_raw)
 ```
 
 ```
-## [1] "district"     "state"        "charter"      "enroll"       "lep"         
-## [6] "sped"         "frpl"         "white"        "expenditures"
+## [1] "Agency Name"                                                                          
+## [2] "State Name [District] Latest available year"                                          
+## [3] "Agency Charter Status [District] 2015-16"                                             
+## [4] "Total Students, All Grades (Excludes AE) [District] 2015-16"                          
+## [5] "Limited English Proficient (LEP) / English Language Learners (ELL) [District] 2015-16"
+## [6] "Individualized Education Program Students [District] 2015-16"                         
+## [7] "Free and Reduced Lunch Students [Public School] 2015-16"                              
+## [8] "White Students [District] 2015-16"                                                    
+## [9] "Total Expenditures (TOTALEXP) [District Finance] 2015-16"
 ```
 
 
@@ -220,14 +227,14 @@ schdist_newnames &lt;- c("district", "state",
 
 
 ```r
-ga_schdist_raw &lt;- rename_at(ga_schdist_raw, 
-                            vars(schdist_oldnames), 
-                            ~ schdist_newnames)
+ga_schdist &lt;- rename_at(ga_schdist_raw, 
+                        vars(schdist_oldnames), 
+                        ~ schdist_newnames)
 ```
 
 - You can apply this code to any dataset.
 
-- Show reader the new `state_finance_16` and `ga_schdist_raw` names using `glimpse`
+- Show reader the new `stf` and `ga_schdist` names using `glimpse`
 
 ---
 # Converting variable types
@@ -254,7 +261,7 @@ as.factor()
 ---
 # Converting variable types
 
-- From glimpsing the data, we see that `state_finance_16$state` is stored as a character variable
+- From glimpsing the data, we see that `stf$state` is stored as a character variable
 
 - That's OK, but suppose we want R to recognize it as a categorical, nominal variable
 
@@ -262,7 +269,7 @@ as.factor()
 
 
 ```r
-state_finance_16$state &lt;- as.factor(state_finance_16$state)
+stf$state &lt;- as.factor(stf$state)
 ```
 
 - Use `glimpse` again to check if it worked
@@ -270,7 +277,7 @@ state_finance_16$state &lt;- as.factor(state_finance_16$state)
 ---
 # Skill check
 
-- Several character variables in `ga_schdist_raw` need converted to numeric
+- Several character variables in `ga_schdist` need converted to numeric
 
 - In your notebook, convert numeric variables stored as character to numeric
 
@@ -278,19 +285,12 @@ state_finance_16$state &lt;- as.factor(state_finance_16$state)
 
 
 ```r
-ga_schdist_raw$white &lt;- as.numeric(ga_schdist_raw$white)
-```
-
-```
-## Warning: NAs introduced by coercion
-```
-
-```r
-ga_schdist_raw$expenditures &lt;- as.numeric(ga_schdist_raw$expenditures)
-```
-
-```
-## Warning: NAs introduced by coercion
+ga_schdist$enroll &lt;- as.numeric(ga_schdist$enroll)
+ga_schdist$lep &lt;- as.numeric(ga_schdist$lep)
+ga_schdist$sped &lt;- as.numeric(ga_schdist$sped)
+ga_schdist$frpl &lt;- as.numeric(ga_schdist$frpl)
+ga_schdist$white &lt;- as.numeric(ga_schdist$white)
+ga_schdist$expenditures &lt;- as.numeric(ga_schdist$expenditures)
 ```
 
 ---
@@ -314,7 +314,7 @@ filtered_data_set &lt;- filter(unfiltered_data_set, criteria)
 
 
 ```r
-unique(state_finance_16$finance_type)
+unique(stf$finance_type)
 ```
 
 ```
@@ -333,7 +333,7 @@ unique(state_finance_16$finance_type)
 
 
 ```r
-stf_filtered &lt;- filter(state_finance_16, 
+stf_filtered &lt;- filter(stf, 
                        finance_type == 'Revenue' | finance_type == 'Expenditure')
 ```
 
@@ -365,11 +365,25 @@ unique(stf_filtered$finance_type)
 ---
 # Skill check
 
-- Use `unique` to examine the different levels for `state_finance_16$finance_source`
+- Use `unique` to examine the different levels for `stf_filtered$finance_source`
 
 - Use filter to keep only the rows with total revenue or total expenditure
 
 - Name the new object `stf_filtered`, which will overwrite the existing object
+
+--
+
+
+```r
+unique(stf_filtered$finance_source)
+```
+
+
+```r
+stf_filtered &lt;- filter(stf_filtered, 
+                       finance_source == "Total Revenue" | 
+                         finance_source == "Total Expenditure")
+```
 
 ---
 # Select
@@ -428,7 +442,7 @@ stf_f_select &lt;- select(stf_filtered,
 - Sometimes it makes sense to remove or keep rows or columns by their position in the dataset
   - Position in terms of row or column number in the dataset
 
-- Recall that the last row in `ga_schdist_raw` shouldn't be included because it includes totals, which is analysis, not data
+- Recall that the last row in `ga_schdist` shouldn't be included because it includes totals, which is analysis, not data
 
 - Suppose we want to remove that row by identifying the row number (subsetting)
 
@@ -455,13 +469,13 @@ dataset &lt;- dataset[c(-3,-5), c(1:10)]
 ---
 # Subsetting
 
-- Drop the last row of `ga_schdist_raw` along with the `state` variable since it is somewhat unnecessary
+- Drop the last row of `ga_schdist` along with the `state` variable since it is somewhat unnecessary
 
 --
 
 
 ```r
-ga_schdist_raw &lt;- ga_schdist_raw[-224, -2]
+ga_schdist &lt;- ga_schdist[-224, -2]
 ```
 
 ---
@@ -482,7 +496,7 @@ new_dataset &lt;- mutate(old_dataset, newvar = whatever)
 ---
 # Mutate
 
-- The `ga_schdist_raw` data has several absolute counts, such as `expenditures`
+- The `ga_schdist` data has several absolute counts, such as `expenditures`
 
 - Not good if we want to compare; larger districts will probably have higher counts of anything
 
@@ -497,7 +511,7 @@ new_dataset &lt;- mutate(old_dataset, newvar = whatever)
 
 
 ```r
-ga_schdist &lt;- mutate(ga_schdist_raw, exp_per_pupil = expenditures/enroll)
+ga_schdist &lt;- mutate(ga_schdist, exp_per_pupil = expenditures/enroll)
 ```
 
 ---
@@ -866,6 +880,7 @@ data_set %&gt;%
 ```
 
 - Year and any nominal variable are common grouping variables
+
 ---
 # Group By
 
@@ -911,7 +926,7 @@ stf_f_select %&gt;%
 ```
 ## # A tibble: 50 x 2
 ##    state        AvgAmount
-##    &lt;fct&gt;            &lt;dbl&gt;
+##    &lt;chr&gt;            &lt;dbl&gt;
 ##  1 Alabama      30172318.
 ##  2 Alaska       10253958 
 ##  3 Arizona      40158735 
