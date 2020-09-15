@@ -67,15 +67,7 @@ output:
 ---
 # Packages
 
-- Load the `tidyverse` and `knitr` packages, suppressing the code and output
-
---
-
-
-```r
-library(tidyverse)
-library(knitr)
-```
+- Load the `tidyverse` package, suppressing the code and output
 
 
 
@@ -99,29 +91,14 @@ Tidy data satisfy three rules:
 
 - `load` the `stf_f_select.RData` file in your notebook, suppressing the code and and output
 
---
-
-
-```r
-load('stf_f_select.RData')
-```
-
 
 
 ---
 # Tidy Data
 
-- Let's show readers a sample of the data using `head`
+- Let's show readers a sample of the data
 
-- Provide the first 6 rows, suppress the code
-
---
-
-
-```r
-stf_f_select %&gt;% 
-  head()
-```
+- Provide the first 4 rows, suppressing the code
 
 
 |id |state   | year|finance_type |finance_source    | amount_1000|
@@ -130,8 +107,6 @@ stf_f_select %&gt;%
 |01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
 |02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
 |02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
-|04 |Arizona | 2016|Revenue      |Total Revenue     |    38232376|
-|04 |Arizona | 2016|Expenditure  |Total Expenditure |    42085094|
 
 ---
 class: inverse, center, middle
@@ -221,7 +196,7 @@ class: inverse, center, middle
 
 - To achieve this, we can use the `pivot_wider` function
 
-- General logic
+- General syntax
 
 
 ```r
@@ -250,13 +225,7 @@ stf_tidy &lt;- stf_f_select %&gt;%
 
 - Next, add a line that drops `finance_source` since it is redundant
 
---
 
-
-```r
-stf_tidy &lt;- stf_f_select %&gt;% 
-  select(-finance_source) %&gt;% 
-```
 
 ---
 # Tidy State Finance Data
@@ -296,13 +265,7 @@ stf_tidy &lt;- stf_f_select %&gt;%
 ---
 # Tidy State Finance Data
 
-- Let's provide the reader with the first 6 rows of our new dataset, suppressing code and output
-
-
-```r
-stf_tidy %&gt;% 
-  head()
-```
+- Provide the reader with top 4 rows of the new dataset, suppress code
 
 
 |id |state      | year|   Revenue| Expenditure|
@@ -359,7 +322,7 @@ uspop_tidy &lt;- uspop %&gt;%
 
 - Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder
 
-- Let's open this file and take a look at the data
+- Open this file using whatever spreadsheet software is on your computer
 
 ---
 # Untidy Enrollment Data
@@ -370,41 +333,24 @@ uspop_tidy &lt;- uspop %&gt;%
 
 - Name the new dataset `ky_priv_enroll_wide`
 
---
-
-
-```r
-ky_priv_enroll_wide &lt;- read_csv('ky_private_school_enrollment.csv')
-```
-
 
 
 ---
 # Untidy Enrollment Data
 
-- Provide the reader the first 6 rows of these data, suppressing the code
-
---
+- Provide the reader the first 3 rows of these data, suppressing the code
 
 
-```r
-head(ky_priv_enroll_wide)
-```
-
-
-|ncesid  |school_name                  |state    | county_fips|city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
-|:-------|:----------------------------|:--------|-----------:|:--------------------|----------:|----------:|----------:|----------:|----------:|----------:|
-|1613912 |LANDMARK CHRISTIAN ACADEMY   |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        153|        146|        170|        184|        156|        119|
-|1649825 |ST-FRANCIS HIGH SCHOOL       |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        130|        121|        125|         NA|         NA|         NA|
-|1649836 |ST JOHNS ACADEMY             |KENTUCKY |       21111|LOUISVILLE JEFFERSON |         NA|         16|         NA|         NA|         NA|         NA|
-|1930137 |THE DE PAUL SCHOOL           |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        243|        278|        258|        246|        235|        218|
-|1930159 |EMMA L MINNIS JUNIOR ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |         49|         30|         25|         24|         35|         22|
-|1930308 |ELIAHU ACADEMY               |KENTUCKY |       21111|LOUISVILLE JEFFERSON |         92|         87|         62|         71|         36|         NA|
+|ncesid  |school_name                |state    | county_fips|city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
+|:-------|:--------------------------|:--------|-----------:|:--------------------|----------:|----------:|----------:|----------:|----------:|----------:|
+|1613912 |LANDMARK CHRISTIAN ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        153|        146|        170|        184|        156|        119|
+|1649825 |ST-FRANCIS HIGH SCHOOL     |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        130|        121|        125|         NA|         NA|         NA|
+|1649836 |ST JOHNS ACADEMY           |KENTUCKY |       21111|LOUISVILLE JEFFERSON |         NA|         16|         NA|         NA|         NA|         NA|
 
 ---
 # Untidy Enrollment Data
 
-- We need to take the enroll columns and name them to a new variable 'year' and send the values to a variable 'enrollment'
+- We need to take the `enrollyear` columns and name them to a new variable `year` and send the values to a variable we will name `enrollment`
 
 - Recall how this was done for the `uspop` data
 
@@ -449,6 +395,7 @@ ky_priv_enroll &lt;- ky_priv_enroll %&gt;%
 --
 
 - Finally, provide the reader the first 6 rows of these tidy data, suppressing the code
+
 - Knit to HTML and check that the output looks correct
 
 ---

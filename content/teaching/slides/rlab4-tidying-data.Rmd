@@ -60,16 +60,11 @@ output:
 ---
 # Packages
 
-- Load the `tidyverse` and `knitr` packages, suppressing the code and output
-
---
-
-```{r, message=FALSE}
-library(tidyverse)
-library(knitr)
-```
+- Load the `tidyverse` package, suppressing the code and output
 
 ```{r, include=FALSE}
+library(tidyverse)
+library(knitr)
 library(gapminder)
 ```
 
@@ -93,12 +88,6 @@ Tidy data satisfy three rules:
 
 - `load` the `stf_f_select.RData` file in your notebook, suppressing the code and and output
 
---
-
-```{r, eval=FALSE}
-load('stf_f_select.RData')
-```
-
 ```{r, include=FALSE}
 load('labs_files/stf_f_select.RData')
 ```
@@ -106,20 +95,13 @@ load('labs_files/stf_f_select.RData')
 ---
 # Tidy Data
 
-- Let's show readers a sample of the data using `head`
+- Let's show readers a sample of the data
 
-- Provide the first 6 rows, suppress the code
-
---
-
-```{r, eval=FALSE}
-stf_f_select %>% 
-  head()
-```
+- Provide the first 4 rows, suppressing the code
 
 ```{r, echo=FALSE}
 stf_f_select %>% 
-  head() %>% 
+  head(n = 4) %>% 
   kable()
 ```
 
@@ -198,7 +180,7 @@ kable(uspop, format = 'html')
 
 - To achieve this, we can use the `pivot_wider` function
 
-- General logic
+- General syntax
 
 ```{r, eval=FALSE}
 new_data <- current_data %>% 
@@ -225,9 +207,7 @@ stf_tidy <- stf_f_select %>%
 
 - Next, add a line that drops `finance_source` since it is redundant
 
---
-
-```{r, eval=FALSE}
+```{r, include=FALSE, eval=FALSE}
 stf_tidy <- stf_f_select %>% 
   select(-finance_source) %>% 
 ```
@@ -266,12 +246,7 @@ stf_tidy <- stf_f_select %>%
 ---
 # Tidy State Finance Data
 
-- Let's provide the reader with the first 6 rows of our new dataset, suppressing code and output
-
-```{r, eval=FALSE}
-stf_tidy %>% 
-  head()
-```
+- Provide the reader with top 4 rows of the new dataset, suppress code
 
 ```{r, echo=FALSE}
 stf_tidy %>% 
@@ -305,7 +280,7 @@ kable(uspop_tidy)
 
 - Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder
 
-- Let's open this file and take a look at the data
+- Open this file using whatever spreadsheet software is on your computer
 
 ---
 # Untidy Enrollment Data
@@ -316,12 +291,6 @@ kable(uspop_tidy)
 
 - Name the new dataset `ky_priv_enroll_wide`
 
---
-
-```{r, eval=FALSE}
-ky_priv_enroll_wide <- read_csv('ky_private_school_enrollment.csv')
-```
-
 ```{r, include=FALSE}
 ky_priv_enroll_wide <- read_csv('labs_files/ky_private_school_enrollment.csv')
 ```
@@ -329,23 +298,17 @@ ky_priv_enroll_wide <- read_csv('labs_files/ky_private_school_enrollment.csv')
 ---
 # Untidy Enrollment Data
 
-- Provide the reader the first 6 rows of these data, suppressing the code
-
---
-
-```{r, eval=FALSE}
-head(ky_priv_enroll_wide)
-```
+- Provide the reader the first 3 rows of these data, suppressing the code
 
 ```{r, echo=FALSE}
-head(ky_priv_enroll_wide) %>% 
+head(ky_priv_enroll_wide, n=3) %>% 
   kable()
 ```
 
 ---
 # Untidy Enrollment Data
 
-- We need to take the enroll columns and name them to a new variable 'year' and send the values to a variable 'enrollment'
+- We need to take the `enrollyear` columns and name them to a new variable `year` and send the values to a variable we will name `enrollment`
 
 - Recall how this was done for the `uspop` data
 
@@ -394,6 +357,7 @@ ky_priv_enroll <- ky_priv_enroll %>%
 --
 
 - Finally, provide the reader the first 6 rows of these tidy data, suppressing the code
+
 - Knit to HTML and check that the output looks correct
 
 ---
