@@ -20,6 +20,12 @@ output:
 
 - Distributions and their description
 
+```{r, include=FALSE}
+library(tidyverse)
+library(knitr)
+ncbirths <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTm2WZwNBoQdZhMgot7urbtu8eG7tzAq-60ZJsQ_nupykCAcW0OXebVpHksPWyR4x8xJTVQ8KAulAFS/pub?gid=202410847&single=true&output=csv")
+```
+
 ---
 # Two types of statistics
 
@@ -45,6 +51,8 @@ output:
 
 ]
 
+--
+
 .pull-right[
 **Inferential**
 
@@ -57,91 +65,73 @@ output:
 # Population vs. sample
 
 - **Population:** all members of a specified group pertaining to a research question
+
 - **Sample:** a subset of that population
 
-- In many cases, we cannot study an entire population because of logistics or cost
-- Instead we take a sample to make inferences about the population
-
 - We can describe a sample or a population
-- Inference is specifically using a sample to describe a population
+
+- Inference involves describing a sample to guess about a population
 
 ---
 # Parameter vs. statistic
 
 - **Parameter:** a measure pertaining to a population
+
 - **Statistic:** a measure pertaining to a sample
+  - In inference, often referred to as an **estimate** because it is being used to estimate a population parameter
 
-- In inference, a statistic is often referred to as an **estimate** because it is being used to estimate a population parameter
+--
 
-- The average income of our 100 survey respondents is a statistic
-- It could be used as an estimate of the average income of all MPA graduates
-- The average income of all MPA grads is a parameter
+- Thinking back to that survey of PADP alumni...
+  - What statistic could we report from the survey of PADP alumni?
+  - When might that statistic be referred to as an estimate?
+  - What parameter might we be estimating?
 
 ---
 # Practice
 
-Suppose you are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than other states. You find this dubious. You take a sample of 100 college-educated women in Georgia and compute their average salary.
+Suppose you are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, indicating a college degree may provide a better return on investment for women in Georgia than women in other states. You find this dubious. 
+
+The national average is publicly available. You take a sample of 100 college-educated women in Georgia and compute their average salary.
 
 - What is the unit of analysis in your dataset?
-- What is the the variable in your dataset?
+- What is the variable in your dataset?
 - What is the population and sample for this study?
 - What is the parameter and statistic/estimate for this study?
 
 ---
 class: inverse, middle, center
 
-# Data description begins with the distribution of a variable. A distribution shows the (possible) values for a variable and how often they occur.
+# Data description begins with the distribution of a variable.
 
 ---
 # Distribution
 
-- Sometimes we know the possible values and the frequency each value will occur
-  - Roll of a die
-  - Sex of newborn child
+- A distribution shows the (possible) values for a variable and how often they occur.
 
-- Many times we do not know the distribution
-  - Cancer
-  - Promotion
-
-- We can also be interested in **conditional distributions**
-  - Cancer given smoking
-  - Promotion given female
-
----
-# Distribution
-
-```{r, include=FALSE}
-library(tidyverse)
-nc <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTm2WZwNBoQdZhMgot7urbtu8eG7tzAq-60ZJsQ_nupykCAcW0OXebVpHksPWyR4x8xJTVQ8KAulAFS/pub?gid=202410847&single=true&output=csv")
-```
-
-.center[
-
-```{r, echo=FALSE}
-ggplot(nc, aes(x = weeks)) +
+```{r, echo=FALSE, fig.align='center', fig.height=6.5}
+ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
   labs(title = 'Weeks of pregnancy in North Carolina') +
   theme_light()
 ```
-]
 
 ---
 # Conditional distributions
 
-.center[
+- Distribution of a variable *given* another variable's values
 
-```{r, echo=FALSE}
-ggplot(nc, aes(x = weeks, fill = habit)) +
+```{r, echo=FALSE, fig.align='center'}
+ggplot(ncbirths, aes(x = weeks, fill = habit)) +
   geom_density(alpha = 0.4, bw = 0.6) +
   labs(title = 'Weeks of pregnancy in North Carolina') +
-  theme_light()
+  theme_minimal()
 ```
-]
 
 ---
 class: inverse, center, middle
 
-# Descriptive statistics reports key measures of distributions. These measures fall in one of three broad categories: center, spread, and association.
+# Descriptive statistics reports key measures of distributions.
 
 ---
 # Measures of center
@@ -175,7 +165,15 @@ kable(x, format = 'html')
 mean(x$variable)
 ```
 
-![](lectures_files/mean.png)
+```{r, echo=FALSE}
+include_graphics('lectures_files/mean.png')
+```
+
+```{r}
+mean(ncbirths$weeks)
+```
+
+
 ]
 
 ---
@@ -196,6 +194,11 @@ median(x$variable)
 ```
 
 ![](lectures_files/median.png)
+
+```{r}
+median(ncbirths$weeks)
+```
+
 ]
 
 ---
@@ -212,13 +215,19 @@ kable(x, format = 'html')
 .pull-right[
 
 - Variable has no mode. One more of any of the 5 values would make that value the mode.
+
+```{r}
+mode(ncbirths$weeks)
+```
+
 ]
 
 ---
 # Mean vs. median vs. mode
 
 - Measures of center are our way of communicating the *typical* value of a distribution.
-- Some measures are better representations of typcial than others depending on the situation.
+
+- Some measures are better representations of typical than others depending on the situation.
 
 ![](lectures_files/center.png)
 
@@ -231,12 +240,16 @@ kable(x, format = 'html')
 
 --
 
+- Which measure of center is best for describing typical weeks pregnant?
+
+--
+
 - Which measure of center is best for describing typical income?
 
 ---
 class: inverse, center, middle
 
-# Let's consider a few deceptive uses of mean and median
+# Let's consider a few deceptive uses of description
 
 ---
 # Deceptive description
@@ -254,8 +267,6 @@ class: inverse, center, middle
 
 - 1 class has 100 students
 
-- Average class size is touted as being only 24. Put that on our website!
-
 ---
 # Deceptive description
 
@@ -264,7 +275,10 @@ class: inverse, center, middle
 (100 + 5 + 5 + 5 + 5)/5
 ```
 
-- Class size of average student; surveyed all 120 students about class size
+  - Average class size is touted as being only 24. Put that on our website!
+  
+- What about class size experienced by average student
+  - Survey all 120 students about class size
   - 100 would answer 100
   - 20 would answer 5
 
@@ -275,41 +289,16 @@ class: inverse, center, middle
 ---
 # Deceptive description
 
-- An expensive new drug increases the median life expectancy among patients by two weeks. 
+- An expensive new drug increases the median life expectancy among patients by only two weeks. 
 
 - Insurance won't cover such an expensive drug for such small gains in life expectancy.
 
----
-# Mean vs. median vs. mode
-
-- If a distribution is normal, measures of center will be similar
-
-.pull-left[
-```{r, echo=FALSE}
-mode <- function(v) {
-  uniqv <- unique(v)
-  uniqv[which.max(tabulate(match(v, uniqv)))]
-}
-
-ggplot(nc, aes(x = weeks)) +
-  geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
-  labs(title = 'Weeks of pregnancy in North Carolina') +
-  theme_light()
-```
-]
-
-.pull-right[
-```{r}
-mean(nc$weeks)
-median(nc$weeks)
-mode(nc$weeks)
-```
-]
+- What may be wrong with this rationale?
 
 ---
 class: inverse, middle, center
 
-# Measures of center tell us one point within the distribution. They give us no sense of how much and how frequently values deviate above and below the center.
+# Measures of center tell us one point within the distribution. They give us no sense of by how much and how frequently values deviate above and below the center.
 
 ---
 # Measures of spread
@@ -371,6 +360,7 @@ sd(xvar$variable)
 ```{r}
 quantile(x$variable, c(.25, .75))
 IQR(x$variable)
+quantile(ncbirths$weeks, c(.25, .5, .75))
 ```
 
 ---
@@ -399,7 +389,7 @@ IQR(xextreme$variable)
 
 .pull-left[
 ```{r, echo=FALSE}
-ggplot(nc, aes(x = weeks)) +
+ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
   labs(title = 'Weeks of pregnancy in North Carolina') +
   theme_light()
@@ -408,26 +398,27 @@ ggplot(nc, aes(x = weeks)) +
 
 .pull-right[
 ```{r}
-var(nc$weeks)
-sd(nc$weeks)
-IQR(nc$weeks)
+var(ncbirths$weeks)
+sd(ncbirths$weeks)
+IQR(ncbirths$weeks)
 ```
 ]
 
 ---
 # Range
 
-- Answer to what is the greatest extent this variable changes
+- Answer to what is the greatest extent this variable changes?
 
-- Or what are the possible or plausible values of this variable
+- Or what are the possible or plausible values of this variable?
 
-- Or how different are the most different values
+- Or how different are the most different values?
 
 --
 
 ```{r}
 range(x$variable)
 range(xextreme$variable)
+range(ncbirths$weeks)
 ```
 
 ---
@@ -451,7 +442,7 @@ What is the association between the weight a mother gains during pregnancy and t
 
 .pull-left[
 ```{r, echo=FALSE}
-nc %>% 
+ncbirths %>% 
   select(gained, weight) %>% 
   head(n=8) %>% 
   kable(format = 'html')
@@ -460,7 +451,7 @@ nc %>%
 
 .pull-right[
 ```{r, echo=FALSE}
-ggplot(nc, aes(x = gained, y = weight)) +
+ggplot(ncbirths, aes(x = gained, y = weight)) +
   geom_point() +
   theme_minimal()
 ```
@@ -503,7 +494,7 @@ ggplot(nc, aes(x = gained, y = weight)) +
 
 .pull-right[
 ```{r, echo=FALSE}
-ggplot(nc, aes(x = gained, y = weight)) +
+ggplot(ncbirths, aes(x = gained, y = weight)) +
   geom_point() +
   geom_hline(yintercept = 7.2, color = 'red', size = 2, linetype = 'dashed') +
   geom_vline(xintercept = 30.8, color = 'blue', size = 2, linetype = 'dashed') +
@@ -515,14 +506,14 @@ ggplot(nc, aes(x = gained, y = weight)) +
 # Covariance
 
 ```{r}
-cov(nc$gained, nc$weight)
+cov(ncbirths$gained, ncbirths$weight)
 ```
 
 - This confirms the association between weight gained by mother and baby weight is positive
 
-- But covariance is like variance, it is a very important component to statistical formulae but not useful for description
+- But covariance is like variance, it is a very important component to statistical inference but not useful for description
 
-- Why describe only the direction when correlation can give us direction and strength
+- Why describe only the direction when correlation can give us direction and strength?
 
 ---
 # Correlation
@@ -538,11 +529,11 @@ cov(nc$gained, nc$weight)
   - 0.2: weakly correlated
 
 ```{r}
-cor(nc$gained, nc$weight)
+cor(ncbirths$gained, ncbirths$weight)
 ```
 
 ---
-# Weaknesses of correlation
+# Limitations of correlation
 
 - Measures only linear association
 
@@ -554,11 +545,11 @@ cor(nc$gained, nc$weight)
 # Spurious correlation
 
 
-Crime is strongly correlated with ice cream sales.
-
+- For example, crime is strongly correlated with ice cream sales.
 
 --
 
+- Many such examples
 
 ![](lectures_files/butter_divorce.png)
 
@@ -568,4 +559,80 @@ class: inverse, middle, center
 
 # Regression is simply an extension of correlation, it has the same weaknesses as correlation.
 
+---
+# Describing categorical variables
 
+.pull-left[
+```{r, echo=FALSE}
+ggplot(ncbirths, aes(x = premie)) +
+  geom_bar()
+```
+]
+
+.pull-right[
+
+- There isn't a continuous distribution to calculate mean, median, variance, SD, IQR, or range.
+
+- Mode still works.
+
+- Frequency and cross-tabulations (contingency tables) are common.
+]
+
+---
+# Frequency Table
+
+```{r}
+(premie_table <- table(ncbirths$premie)) %>% 
+  kable()
+```
+
+```{r}
+prop.table(premie_table) %>% 
+  kable()
+```
+
+---
+# Contingency Table
+
+```{r}
+(mytable <- table(ncbirths$habit, ncbirths$premie)) %>% 
+  kable()
+```
+
+- Typically want to report the table above using proportions or percentages
+
+- Important to consider which variable your question conditions on
+
+- The frequency of an outcome *conditional on* a treatment
+
+---
+# Contingency Table
+
+```{r}
+prop.table(mytable, 1) %>% 
+  kable(digits = 2)
+```
+- This table reports row proportions
+
+- Conditional on smoking status, the relative frequency of full term and premature
+
+---
+# Contingency Table
+
+```{r}
+prop.table(mytable, 2) %>% 
+  kable(digits = 2)
+```
+
+- This table reports column proportions
+
+- Conditional on term status, the relative frequency of smoking
+
+---
+# Contingency Table
+
+- If your question involves an outcome and a possible explanation
+
+- Place the outcome in the columns
+
+- Use row percentages

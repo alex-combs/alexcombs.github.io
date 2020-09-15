@@ -27,6 +27,8 @@ class: center, middle, inverse, title-slide
 
 - Distributions and their description
 
+
+
 ---
 # Two types of statistics
 
@@ -52,6 +54,8 @@ class: center, middle, inverse, title-slide
 
 ]
 
+--
+
 .pull-right[
 **Inferential**
 
@@ -64,78 +68,63 @@ class: center, middle, inverse, title-slide
 # Population vs. sample
 
 - **Population:** all members of a specified group pertaining to a research question
+
 - **Sample:** a subset of that population
 
-- In many cases, we cannot study an entire population because of logistics or cost
-- Instead we take a sample to make inferences about the population
-
 - We can describe a sample or a population
-- Inference is specifically using a sample to describe a population
+
+- Inference involves describing a sample to guess about a population
 
 ---
 # Parameter vs. statistic
 
 - **Parameter:** a measure pertaining to a population
+
 - **Statistic:** a measure pertaining to a sample
+  - In inference, often referred to as an **estimate** because it is being used to estimate a population parameter
 
-- In inference, a statistic is often referred to as an **estimate** because it is being used to estimate a population parameter
+--
 
-- The average income of our 100 survey respondents is a statistic
-- It could be used as an estimate of the average income of all MPA graduates
-- The average income of all MPA grads is a parameter
+- Thinking back to that survey of PADP alumni...
+  - What statistic could we report from the survey of PADP alumni?
+  - When might that statistic be referred to as an estimate?
+  - What parameter might we be estimating?
 
 ---
 # Practice
 
-Suppose you are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than other states. You find this dubious. You take a sample of 100 college-educated women in Georgia and compute their average salary.
+Suppose you are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, indicating a college degree may provide a better return on investment for women in Georgia than women in other states. You find this dubious. 
+
+The national average is publicly available. You take a sample of 100 college-educated women in Georgia and compute their average salary.
 
 - What is the unit of analysis in your dataset?
-- What is the the variable in your dataset?
+- What is the variable in your dataset?
 - What is the population and sample for this study?
 - What is the parameter and statistic/estimate for this study?
 
 ---
 class: inverse, middle, center
 
-# Data description begins with the distribution of a variable. A distribution shows the (possible) values for a variable and how often they occur.
+# Data description begins with the distribution of a variable.
 
 ---
 # Distribution
 
-- Sometimes we know the possible values and the frequency each value will occur
-  - Roll of a die
-  - Sex of newborn child
+- A distribution shows the (possible) values for a variable and how often they occur.
 
-- Many times we do not know the distribution
-  - Cancer
-  - Promotion
-
-- We can also be interested in **conditional distributions**
-  - Cancer given smoking
-  - Promotion given female
-
----
-# Distribution
-
-
-
-.center[
-
-![](Description_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
-]
+&lt;img src="Description_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Conditional distributions
 
-.center[
+- Distribution of a variable *given* another variable's values
 
-![](Description_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
-]
+&lt;img src="Description_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 class: inverse, center, middle
 
-# Descriptive statistics reports key measures of distributions. These measures fall in one of three broad categories: center, spread, and association.
+# Descriptive statistics reports key measures of distributions.
 
 ---
 # Measures of center
@@ -203,7 +192,18 @@ mean(x$variable)
 ## [1] 6
 ```
 
-![](lectures_files/mean.png)
+&lt;img src="lectures_files/mean.png" width="1105" /&gt;
+
+
+```r
+mean(ncbirths$weeks)
+```
+
+```
+## [1] 38.4675
+```
+
+
 ]
 
 ---
@@ -256,6 +256,16 @@ median(x$variable)
 ```
 
 ![](lectures_files/median.png)
+
+
+```r
+median(ncbirths$weeks)
+```
+
+```
+## [1] 39
+```
+
 ]
 
 ---
@@ -299,13 +309,24 @@ median(x$variable)
 .pull-right[
 
 - Variable has no mode. One more of any of the 5 values would make that value the mode.
+
+
+```r
+mode(ncbirths$weeks)
+```
+
+```
+## [1] "numeric"
+```
+
 ]
 
 ---
 # Mean vs. median vs. mode
 
 - Measures of center are our way of communicating the *typical* value of a distribution.
-- Some measures are better representations of typcial than others depending on the situation.
+
+- Some measures are better representations of typical than others depending on the situation.
 
 ![](lectures_files/center.png)
 
@@ -318,12 +339,16 @@ median(x$variable)
 
 --
 
+- Which measure of center is best for describing typical weeks pregnant?
+
+--
+
 - Which measure of center is best for describing typical income?
 
 ---
 class: inverse, center, middle
 
-# Let's consider a few deceptive uses of mean and median
+# Let's consider a few deceptive uses of description
 
 ---
 # Deceptive description
@@ -341,8 +366,6 @@ class: inverse, center, middle
 
 - 1 class has 100 students
 
-- Average class size is touted as being only 24. Put that on our website!
-
 ---
 # Deceptive description
 
@@ -356,7 +379,10 @@ class: inverse, center, middle
 ## [1] 24
 ```
 
-- Class size of average student; surveyed all 120 students about class size
+  - Average class size is touted as being only 24. Put that on our website!
+  
+- What about class size experienced by average student
+  - Survey all 120 students about class size
   - 100 would answer 100
   - 20 would answer 5
 
@@ -372,50 +398,16 @@ class: inverse, center, middle
 ---
 # Deceptive description
 
-- An expensive new drug increases the median life expectancy among patients by two weeks. 
+- An expensive new drug increases the median life expectancy among patients by only two weeks. 
 
 - Insurance won't cover such an expensive drug for such small gains in life expectancy.
 
----
-# Mean vs. median vs. mode
-
-- If a distribution is normal, measures of center will be similar
-
-.pull-left[
-![](Description_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-
-```r
-mean(nc$weeks)
-```
-
-```
-## [1] 38.4675
-```
-
-```r
-median(nc$weeks)
-```
-
-```
-## [1] 39
-```
-
-```r
-mode(nc$weeks)
-```
-
-```
-## [1] 39
-```
-]
+- What may be wrong with this rationale?
 
 ---
 class: inverse, middle, center
 
-# Measures of center tell us one point within the distribution. They give us no sense of how much and how frequently values deviate above and below the center.
+# Measures of center tell us one point within the distribution. They give us no sense of by how much and how frequently values deviate above and below the center.
 
 ---
 # Measures of spread
@@ -559,6 +551,15 @@ IQR(x$variable)
 ## [1] 4
 ```
 
+```r
+quantile(ncbirths$weeks, c(.25, .5, .75))
+```
+
+```
+## 25% 50% 75% 
+##  38  39  40
+```
+
 ---
 # SD vs. IQR
 
@@ -622,13 +623,13 @@ IQR(xextreme$variable)
 # SD vs. IQR
 
 .pull-left[
-![](Description_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
 
 ```r
-var(nc$weeks)
+var(ncbirths$weeks)
 ```
 
 ```
@@ -636,7 +637,7 @@ var(nc$weeks)
 ```
 
 ```r
-sd(nc$weeks)
+sd(ncbirths$weeks)
 ```
 
 ```
@@ -644,7 +645,7 @@ sd(nc$weeks)
 ```
 
 ```r
-IQR(nc$weeks)
+IQR(ncbirths$weeks)
 ```
 
 ```
@@ -655,11 +656,11 @@ IQR(nc$weeks)
 ---
 # Range
 
-- Answer to what is the greatest extent this variable changes
+- Answer to what is the greatest extent this variable changes?
 
-- Or what are the possible or plausible values of this variable
+- Or what are the possible or plausible values of this variable?
 
-- Or how different are the most different values
+- Or how different are the most different values?
 
 --
 
@@ -678,6 +679,14 @@ range(xextreme$variable)
 
 ```
 ## [1]   2 100
+```
+
+```r
+range(ncbirths$weeks)
+```
+
+```
+## [1] 20 45
 ```
 
 ---
@@ -745,7 +754,7 @@ What is the association between the weight a mother gains during pregnancy and t
 ]
 
 .pull-right[
-![](Description_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -784,7 +793,7 @@ What is the association between the weight a mother gains during pregnancy and t
 --
 
 .pull-right[
-![](Description_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -792,7 +801,7 @@ What is the association between the weight a mother gains during pregnancy and t
 
 
 ```r
-cov(nc$gained, nc$weight)
+cov(ncbirths$gained, ncbirths$weight)
 ```
 
 ```
@@ -801,9 +810,9 @@ cov(nc$gained, nc$weight)
 
 - This confirms the association between weight gained by mother and baby weight is positive
 
-- But covariance is like variance, it is a very important component to statistical formulae but not useful for description
+- But covariance is like variance, it is a very important component to statistical inference but not useful for description
 
-- Why describe only the direction when correlation can give us direction and strength
+- Why describe only the direction when correlation can give us direction and strength?
 
 ---
 # Correlation
@@ -820,7 +829,7 @@ cov(nc$gained, nc$weight)
 
 
 ```r
-cor(nc$gained, nc$weight)
+cor(ncbirths$gained, ncbirths$weight)
 ```
 
 ```
@@ -828,7 +837,7 @@ cor(nc$gained, nc$weight)
 ```
 
 ---
-# Weaknesses of correlation
+# Limitations of correlation
 
 - Measures only linear association
 
@@ -840,11 +849,11 @@ cor(nc$gained, nc$weight)
 # Spurious correlation
 
 
-Crime is strongly correlated with ice cream sales.
-
+- For example, crime is strongly correlated with ice cream sales.
 
 --
 
+- Many such examples
 
 ![](lectures_files/butter_divorce.png)
 
@@ -853,6 +862,121 @@ Crime is strongly correlated with ice cream sales.
 class: inverse, middle, center
 
 # Regression is simply an extension of correlation, it has the same weaknesses as correlation.
+
+---
+# Describing categorical variables
+
+.pull-left[
+![](Description_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+- There isn't a continuous distribution to calculate mean, median, variance, SD, IQR, or range.
+
+- Mode still works.
+
+- Frequency and cross-tabulations (contingency tables) are common.
+]
+
+---
+# Frequency Table
+
+
+```r
+(premie_table &lt;- table(ncbirths$premie)) %&gt;% 
+  kable()
+```
+
+
+
+|Var1      | Freq|
+|:---------|----:|
+|full term |  694|
+|premie    |  106|
+
+
+```r
+prop.table(premie_table) %&gt;% 
+  kable()
+```
+
+
+
+|Var1      |   Freq|
+|:---------|------:|
+|full term | 0.8675|
+|premie    | 0.1325|
+
+---
+# Contingency Table
+
+
+```r
+(mytable &lt;- table(ncbirths$habit, ncbirths$premie)) %&gt;% 
+  kable()
+```
+
+
+
+|          | full term| premie|
+|:---------|---------:|------:|
+|nonsmoker |       625|     91|
+|smoker    |        69|     15|
+
+- Typically want to report the table above using proportions or percentages
+
+- Important to consider which variable your question conditions on
+
+- The frequency of an outcome *conditional on* a treatment
+
+---
+# Contingency Table
+
+
+```r
+prop.table(mytable, 1) %&gt;% 
+  kable(digits = 2)
+```
+
+
+
+|          | full term| premie|
+|:---------|---------:|------:|
+|nonsmoker |      0.87|   0.13|
+|smoker    |      0.82|   0.18|
+- This table reports row proportions
+
+- Conditional on smoking status, the relative frequency of full term and premature
+
+---
+# Contingency Table
+
+
+```r
+prop.table(mytable, 2) %&gt;% 
+  kable(digits = 2)
+```
+
+
+
+|          | full term| premie|
+|:---------|---------:|------:|
+|nonsmoker |       0.9|   0.86|
+|smoker    |       0.1|   0.14|
+
+- This table reports column proportions
+
+- Conditional on term status, the relative frequency of smoking
+
+---
+# Contingency Table
+
+- If your question involves an outcome and a possible explanation
+
+- Place the outcome in the columns
+
+- Use row percentages
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
