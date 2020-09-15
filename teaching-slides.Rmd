@@ -15,6 +15,8 @@ output: html_document
 
 ### [Measurement Validity & Reliability](content/teaching/slides/measurement.html)
 
+### [Data Description](content/teaching/slides/Description.html)
+
 <br><br>
 
 ## R Labs
@@ -26,3 +28,5 @@ output: html_document
 ### [Import & Export Data & Documents](content/teaching/slides/rlab2_import_and_export.html)
 
 ### [Data Wrangling](content/teaching/slides/rlab3_data_wrangling.html)
+
+### [Tidying Data](content/teaching/slides/rlab4-tidying-data.html)
