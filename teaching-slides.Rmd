@@ -17,6 +17,12 @@ output: html_document
 
 ### [Data Description](content/teaching/slides/Description.html)
 
+### [Visualizations](content/teaching/slides/Visualizations.html)
+
+### [Regression](content/teaching/slides/Regression.html)
+
+### [Regression with Categories](content/teaching/slides/Regression-with-Categories.html)
+
 <br><br>
 
 ## R Labs
@@ -30,3 +36,9 @@ output: html_document
 ### [Data Wrangling](content/teaching/slides/rlab3_data_wrangling.html)
 
 ### [Tidying Data](content/teaching/slides/rlab4-tidying-data.html)
+
+### [Basic Viz](content/teaching/slides/rlab5-visualizations.html)
+
+### [Combining Data](content/teaching/slides/rlab6-combining-data.html)
+
+### [Polished Viz](content/teaching/slides/rlab7-polished-viz.html)
