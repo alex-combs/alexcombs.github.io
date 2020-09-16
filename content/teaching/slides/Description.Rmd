@@ -216,9 +216,7 @@ kable(x, format = 'html')
 
 - Variable has no mode. One more of any of the 5 values would make that value the mode.
 
-```{r}
-mode(ncbirths$weeks)
-```
+- Realistically, you will never need to compute mode. More important is whether a distribution has multiple modes (i.e. peaks).
 
 ]
 
@@ -276,6 +274,8 @@ class: inverse, center, middle
 ```
 
   - Average class size is touted as being only 24. Put that on our website!
+
+--
   
 - What about class size experienced by average student
   - Survey all 120 students about class size
@@ -294,6 +294,15 @@ class: inverse, center, middle
 - Insurance won't cover such an expensive drug for such small gains in life expectancy.
 
 - What may be wrong with this rationale?
+
+---
+# Deceptive descriptions
+
+- [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/)
+
+- When presented with a percentage or rate, think carefully about what the denominator is and whether it is measured validly and reliably
+
+- [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
 
 ---
 class: inverse, middle, center
