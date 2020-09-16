@@ -645,3 +645,20 @@ prop.table(mytable, 2) %>%
 - Place the outcome in the columns
 
 - Use row percentages
+
+---
+# Quick Summary Stats
+
+```{r}
+summary(ncbirths)
+```
+
+---
+# Quick Summary Stats
+
+```{r}
+ncbirths$premie <- as.factor(ncbirths$premie)
+summary(ncbirths)
+```
+
+

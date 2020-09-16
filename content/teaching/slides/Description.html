@@ -981,6 +981,85 @@ prop.table(mytable, 2) %&gt;%
 - Place the outcome in the columns
 
 - Use row percentages
+
+---
+# Quick Summary Stats
+
+
+```r
+summary(ncbirths)
+```
+
+```
+##       fage            mage          mature              weeks      
+##  Min.   :14.00   Min.   :15.00   Length:800         Min.   :20.00  
+##  1st Qu.:25.00   1st Qu.:22.00   Class :character   1st Qu.:38.00  
+##  Median :30.00   Median :28.00   Mode  :character   Median :39.00  
+##  Mean   :30.24   Mean   :27.61                      Mean   :38.47  
+##  3rd Qu.:35.00   3rd Qu.:33.00                      3rd Qu.:40.00  
+##  Max.   :55.00   Max.   :50.00                      Max.   :45.00  
+##     premie              visits        marital              gained     
+##  Length:800         Min.   : 0.00   Length:800         Min.   : 0.00  
+##  Class :character   1st Qu.:10.00   Class :character   1st Qu.:21.75  
+##  Mode  :character   Median :12.00   Mode  :character   Median :30.00  
+##                     Mean   :12.44                      Mean   :30.77  
+##                     3rd Qu.:15.00                      3rd Qu.:39.00  
+##                     Max.   :30.00                      Max.   :85.00  
+##      weight       lowbirthweight        gender             habit          
+##  Min.   : 1.000   Length:800         Length:800         Length:800        
+##  1st Qu.: 6.545   Class :character   Class :character   Class :character  
+##  Median : 7.380   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   : 7.209                                                           
+##  3rd Qu.: 8.130                                                           
+##  Max.   :11.630                                                           
+##    whitemom        
+##  Length:800        
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+## 
+```
+
+---
+# Quick Summary Stats
+
+
+```r
+ncbirths$premie &lt;- as.factor(ncbirths$premie)
+summary(ncbirths)
+```
+
+```
+##       fage            mage          mature              weeks      
+##  Min.   :14.00   Min.   :15.00   Length:800         Min.   :20.00  
+##  1st Qu.:25.00   1st Qu.:22.00   Class :character   1st Qu.:38.00  
+##  Median :30.00   Median :28.00   Mode  :character   Median :39.00  
+##  Mean   :30.24   Mean   :27.61                      Mean   :38.47  
+##  3rd Qu.:35.00   3rd Qu.:33.00                      3rd Qu.:40.00  
+##  Max.   :55.00   Max.   :50.00                      Max.   :45.00  
+##        premie        visits        marital              gained     
+##  full term:694   Min.   : 0.00   Length:800         Min.   : 0.00  
+##  premie   :106   1st Qu.:10.00   Class :character   1st Qu.:21.75  
+##                  Median :12.00   Mode  :character   Median :30.00  
+##                  Mean   :12.44                      Mean   :30.77  
+##                  3rd Qu.:15.00                      3rd Qu.:39.00  
+##                  Max.   :30.00                      Max.   :85.00  
+##      weight       lowbirthweight        gender             habit          
+##  Min.   : 1.000   Length:800         Length:800         Length:800        
+##  1st Qu.: 6.545   Class :character   Class :character   Class :character  
+##  Median : 7.380   Mode  :character   Mode  :character   Mode  :character  
+##  Mean   : 7.209                                                           
+##  3rd Qu.: 8.130                                                           
+##  Max.   :11.630                                                           
+##    whitemom        
+##  Length:800        
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+## 
+```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
