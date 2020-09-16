@@ -2,8 +2,8 @@
 title: "PADP 7120 Data Applications in PA"
 subtitle: "Data Visualization"
 author: "Alex Combs"
-institute: "UGA/SPIA/PADP"
-date: "`r Sys.Date()`"
+institute: "UGA | SPIA | PADP"
+date: "September 23, 2020"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -16,7 +16,7 @@ output:
 
 - Principles of good and bad visualization
 
-- Which visualizations to use given types of data
+- Qualities of human perception
 
 ---
 # Exploratory vs. explanatory
