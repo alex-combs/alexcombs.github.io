@@ -15,9 +15,7 @@ output:
 ---
 # Objectives
 
-By the end of this lab, you will have learned how to...
-
-- Create an appropriate graph based on intended message and available data  
+- Create an appropriate graph according to your intended message and available data
 
 ---
 # Start a new project
@@ -86,7 +84,7 @@ covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/u
 
 --
 
-```{r}
+```{r, include=FALSE}
 covid_ga <- covid %>% 
   filter(state == 'Georgia')
 ```
@@ -96,12 +94,12 @@ covid_ga <- covid %>%
 
 - Let's convert `date` from character to date format by telling R that `date` is ordered by year, month, date (ymd)
 
-- Let's also save a specific date to use throughout, `today`
+- Let's save the most recent date with data and name it `today`
 
 ```{r}
 covid_ga$date <- ymd(covid_ga$date)
 
-today <- '2020-08-16'
+today <- '2020-09-22'
 ```
 
 --
@@ -120,12 +118,12 @@ covid_ga$county <- as.factor(covid_ga$county)
 - It will be useful to have the count of new cases and deaths for each day, not cumulative counts
 
 ```{r}
-covid_ga <- covid_ga %>% 
-  group_by(county) %>% 
-  arrange(date) %>% 
-  mutate(day_cases = cases - lag(cases),
-         day_deaths = deaths - lag(deaths)) %>% 
-  ungroup()
+covid_ga <- covid_ga %>% # take covid_ga
+  group_by(county) %>% # and for each county
+  arrange(date) %>% # sort date in ascending order
+  mutate(day_cases = cases - lag(cases), 
+         day_deaths = deaths - lag(deaths)) %>% # subtract yesterday from each day
+  ungroup() # stop grouping by county
 ```
 
 
@@ -176,7 +174,7 @@ labels(sum.covid_ga) <- c(cases = 'Total Cases', deaths = 'Total Deaths',
 ```
 
 ```{r, eval=FALSE}
-summary(sum.covid_ga)
+summary(sum.covid_ga) # remember to add results='asis' inside curly brackets
 ```
 
 - Knit to HTML
@@ -191,13 +189,14 @@ summary(sum.covid_ga)
 
 - A histogram
 - Generate a histogram for cases during the most recent date
+- Remember to include only `today` observations
 - Suppress code and any messages
 - Generate another histogram for deaths during the most recent date
 
 ---
 # Viz 1 & 2
 
-```{r, message=FALSE, fig.width=7, fig.height=5}
+```{r, echo=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga %>% 
   filter(date == today) %>% 
   ggplot(aes(x = cases)) +
@@ -207,7 +206,7 @@ covid_ga %>%
 ---
 # Viz 1 & 2
 
-```{r, message=FALSE, fig.width=7, fig.height=5}
+```{r, echo=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga %>% 
   filter(date == today) %>% 
   ggplot(aes(x = deaths)) +
@@ -228,7 +227,7 @@ covid_ga %>%
 ---
 # Viz 3
 
-```{r, fig.width=7, fig.height=5}
+```{r, echo=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga %>% 
   filter(date == today) %>%
   ggplot(aes(x = deaths)) +
@@ -238,14 +237,14 @@ covid_ga %>%
 ---
 # Viz 4
 
-- Rather than total cases or deaths for all counties as of the most recent date, let's focus on the distribution daily counts for a single county.
+- Rather than total cases or deaths for all counties as of the most recent date, let's focus on the distribution of daily counts for a single county.
 
 - Generate a box plot for Clarke county daily cases during all available dates
 
 ---
 # Viz 4
 
-```{r, fig.width=7, fig.height=5}
+```{r, echo=FALSE, warning=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga %>% 
   filter(county == 'Clarke') %>%
   ggplot(aes(x = day_cases)) +
@@ -255,7 +254,7 @@ covid_ga %>%
 ---
 # Viz 5
 
-- Enough distributions, let's compare counties.
+- Let's compare counties now.
 - Suppose we are asked to compare total cases as of the most recent day in the data across our 5 counties
 - What kind of visualization could/should we use?
 
@@ -271,7 +270,7 @@ covid_ga %>%
 ---
 # Viz 5
 
-```{r, fig.width=7, fig.height=5}
+```{r, echo=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga_five %>% 
   filter(date == today) %>% 
   ggplot(aes(x = county, y = cases)) +
@@ -294,7 +293,7 @@ covid_ga_five %>%
 ---
 # Viz 6 & 7
 
-```{r, fig.width=7, fig.height=5}
+```{r, echo=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga_five %>% 
   ggplot(aes(x = date, y = cases, color = county)) +
   geom_line()
@@ -303,7 +302,7 @@ covid_ga_five %>%
 ---
 # Viz 6 & 7
 
-```{r, fig.width=7, fig.height=5}
+```{r, echo=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga_five %>% 
   ggplot(aes(x = date, y = deaths, color = county)) +
   geom_line()

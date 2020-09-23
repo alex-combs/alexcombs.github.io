@@ -21,9 +21,7 @@ class: center, middle, inverse, title-slide
 
 # Objectives
 
-By the end of this lab, you will have learned how to...
-
-- Create an appropriate graph based on intended message and available data  
+- Create an appropriate graph according to your intended message and available data
 
 ---
 # Start a new project
@@ -96,23 +94,19 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 --
 
 
-```r
-covid_ga &lt;- covid %&gt;% 
-  filter(state == 'Georgia')
-```
 
 ---
 # Variable Type Conversions
 
 - Let's convert `date` from character to date format by telling R that `date` is ordered by year, month, date (ymd)
 
-- Let's also save a specific date to use throughout, `today`
+- Let's save the most recent date with data and name it `today`
 
 
 ```r
 covid_ga$date &lt;- ymd(covid_ga$date)
 
-today &lt;- '2020-08-16'
+today &lt;- '2020-09-22'
 ```
 
 --
@@ -133,12 +127,12 @@ covid_ga$county &lt;- as.factor(covid_ga$county)
 
 
 ```r
-covid_ga &lt;- covid_ga %&gt;% 
-  group_by(county) %&gt;% 
-  arrange(date) %&gt;% 
-  mutate(day_cases = cases - lag(cases),
-         day_deaths = deaths - lag(deaths)) %&gt;% 
-  ungroup()
+covid_ga &lt;- covid_ga %&gt;% # take covid_ga
+  group_by(county) %&gt;% # and for each county
+  arrange(date) %&gt;% # sort date in ascending order
+  mutate(day_cases = cases - lag(cases), 
+         day_deaths = deaths - lag(deaths)) %&gt;% # subtract yesterday from each day
+  ungroup() # stop grouping by county
 ```
 
 
@@ -190,7 +184,7 @@ labels(sum.covid_ga) &lt;- c(cases = 'Total Cases', deaths = 'Total Deaths',
 
 
 ```r
-summary(sum.covid_ga)
+summary(sum.covid_ga) # remember to add results='asis' inside curly brackets
 ```
 
 - Knit to HTML
@@ -205,34 +199,19 @@ summary(sum.covid_ga)
 
 - A histogram
 - Generate a histogram for cases during the most recent date
+- Remember to include only `today` observations
 - Suppress code and any messages
 - Generate another histogram for deaths during the most recent date
 
 ---
 # Viz 1 &amp; 2
 
-
-```r
-covid_ga %&gt;% 
-  filter(date == today) %&gt;% 
-  ggplot(aes(x = cases)) +
-  geom_histogram()
-```
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 1 &amp; 2
 
-
-```r
-covid_ga %&gt;% 
-  filter(date == today) %&gt;% 
-  ggplot(aes(x = deaths)) +
-  geom_histogram()
-```
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 3
@@ -248,44 +227,24 @@ covid_ga %&gt;%
 ---
 # Viz 3
 
-
-```r
-covid_ga %&gt;% 
-  filter(date == today) %&gt;%
-  ggplot(aes(x = deaths)) +
-  geom_boxplot()
-```
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 4
 
-- Rather than total cases or deaths for all counties as of the most recent date, let's focus on the distribution daily counts for a single county.
+- Rather than total cases or deaths for all counties as of the most recent date, let's focus on the distribution of daily counts for a single county.
 
 - Generate a box plot for Clarke county daily cases during all available dates
 
 ---
 # Viz 4
 
-
-```r
-covid_ga %&gt;% 
-  filter(county == 'Clarke') %&gt;%
-  ggplot(aes(x = day_cases)) +
-  geom_boxplot()
-```
-
-```
-## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
-```
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 5
 
-- Enough distributions, let's compare counties.
+- Let's compare counties now.
 - Suppose we are asked to compare total cases as of the most recent day in the data across our 5 counties
 - What kind of visualization could/should we use?
 
@@ -301,15 +260,7 @@ covid_ga %&gt;%
 ---
 # Viz 5
 
-
-```r
-covid_ga_five %&gt;% 
-  filter(date == today) %&gt;% 
-  ggplot(aes(x = county, y = cases)) +
-  geom_col()
-```
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 6 &amp; 7
@@ -327,26 +278,12 @@ covid_ga_five %&gt;%
 ---
 # Viz 6 &amp; 7
 
-
-```r
-covid_ga_five %&gt;% 
-  ggplot(aes(x = date, y = cases, color = county)) +
-  geom_line()
-```
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 6 &amp; 7
 
-
-```r
-covid_ga_five %&gt;% 
-  ggplot(aes(x = date, y = deaths, color = county)) +
-  geom_line()
-```
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # What's the Problem?
