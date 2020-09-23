@@ -63,6 +63,15 @@ ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
   theme_classic()
 ```
 ]
+
+---
+
+# Another graph for an audience
+
+.center[
+![](labs_files/lifeExp.png)
+]
+
 ---
 class: inverse, middle, center
 
@@ -105,7 +114,7 @@ class: inverse, middle, center
 ]
 
 ---
-# Bad taste?
+# Maximize data-to-ink?
 
 .center[
 ![](lectures_files/boxplots.png)
