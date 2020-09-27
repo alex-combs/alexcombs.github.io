@@ -2,8 +2,8 @@
 title: "PADP 7120 Data Applications in PA"
 subtitle: "Simple & Multiple Regression"
 author: "Alex Combs"
-institute: "UGA/SPIA/PADP"
-date: "`r Sys.Date()`"
+institute: "UGA | SPIA | PADP"
+date: "September 30, 2020"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -33,7 +33,7 @@ library(knitr)
 
 
 .pull-left[
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 ggplot(gpa, aes(x = studyweek, y = gpa)) +
   geom_point() +
   geom_smooth(method = 'lm', se = FALSE) +
@@ -54,7 +54,7 @@ ggplot(gpa, aes(x = studyweek, y = gpa)) +
 # Basic idea
 
 - Regression is a statistical method to
-  - **Explain** the relationship between an outcome variable and one or more explanatory variables
+  - **Explain** the relationship between an outcome variable and one or more explanatory variables, and/or
   - **Predict** the value of an outcome given a value(s) of one or more explanatory variables
 
 - Either way, regression is a way of modeling an outcome $y$ as a function of explanatory $x$
@@ -65,15 +65,18 @@ ggplot(gpa, aes(x = studyweek, y = gpa)) +
 .pull-left[
 .font120[$$y=\beta_0+\beta_1x+\epsilon$$]
 
-- $y$ referred to as outcome, response, dependent variable
+- $y$ referred to as the outcome, response, dependent variable
 - $\beta_0$ (beta-naught) is the y-intercept constant
 - $\beta_1$ is the slope of the regression line; the marginal effect of $x$ on $y$
 - $x$ referred to as explanatory, independent variable
 - $\epsilon$ is referred to as the error term or random noise
 ]
+
+--
+
 .pull-right[
 - This is a **population** model. 
-- The $\beta$s are **population parameters** we wish to estimate.
+- The $\beta$s are **population parameters** we wish to estimate, assuming we don't observe the entire population.
 - $\epsilon$ is also a parameter that captures all the other factors that affect $y$ for which we cannot include in our model
 ]
 
@@ -89,8 +92,10 @@ ggplot(gpa, aes(x = studyweek, y = gpa)) +
 - the $b$s are often referred to as **coefficients**
 ]
 
+--
+
 .pull-right[
-- This equestion represents our sample regression equation
+- This is our sample regression equation based on the population model
 ]
 
 ---
@@ -99,6 +104,8 @@ ggplot(gpa, aes(x = studyweek, y = gpa)) +
 .font120[$$\hat{y}=b_0+b_1x$$]
 
 On average, a one-[unit] change in $x$ [is associated with] a change of $b_1$ [units] in $y$.
+
+--
 
 - Replace [unit] with the actual units of the $x$ variable (e.g. dollars, percentage point, count of people or things like houses)
 - Replace $x$ with what $x$ is
@@ -112,17 +119,23 @@ On average, a one-[unit] change in $x$ [is associated with] a change of $b_1$ [u
 
 $$GPA=\beta_0+\beta_1STUDYHOURS+\epsilon$$
 
+--
+
 ```{r, echo=FALSE}
 gpa1 <- lm(gpa ~ studyweek, data = gpa)
 get_regression_table(gpa1) %>% 
   kable(format = 'html')
 ```
 
+--
+
 $$\hat{GPA}=3.578+0.001 \times STUDYHOURS$$
 
-On average, a one-hour increase in study hours per week is associated with a 0.001 point increse in GPA.
+--
 
-Results indicate each additional hour students study per week inceases GPA by 0.001 point, on average.
+On average, a one-hour increase in study hours per week is associated with a 0.001 point increase in GPA.
+
+Results indicate each additional hour students study per week increases GPA by 0.001 point, on average.
 
 If students studied 10 more hours each week, GPA is predicted to increase 0.01 point.
 
@@ -162,6 +175,8 @@ What if students slept 3 more hours than they currently do?
 GPA is predicted to increase by 0.06 points
 ]
 
+--
+
 .pull-right[
 What is the predicted GPA of a student who sleeps 8 hours?
 ```{r}
@@ -174,7 +189,7 @@ What is the predicted GPA of a student who sleeps 8 hours?
 
 $$GPA=\beta_0+\beta_1NightsOut+\epsilon$$
 
-```{r}
+```{r, echo=FALSE}
 gpa3 <- lm(gpa ~ out, data = gpa)
 get_regression_table(gpa3) %>% 
   kable(format = 'html')
@@ -258,7 +273,7 @@ class: inverse, center, middle
 ---
 # The residual
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 ggplot(gpa, aes(x = studyweek, y = gpa)) +
   geom_point() +
   geom_smooth(method = 'lm', se = FALSE) +
@@ -276,8 +291,8 @@ get_regression_points(gpa1)
 ```
 
 .left-column[
-- We can view the regression results for each observation
-- We see the observed data, the predicted outcome, and the difference between observed and predicted
+- Regression results for each observation
+- Shows observed data, the predicted outcome, and their difference
 ]
 
 .right-column[
@@ -306,7 +321,7 @@ class: inverse, center, middle
 # OLS
 
 .pull-left[
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 ggplot(gpa, aes(x = studyweek, y = gpa)) +
   geom_point() +
   geom_smooth(method = 'lm', se = FALSE) +
@@ -397,7 +412,7 @@ get_regression_summaries(gpa3) %>%
 
 --
 
-- Model 3 has the highest $R^2$, thus it is the best model
+- Model 3 has the highest $R^2$, thus it is the *statistically* superior model
 
 ---
 class: inverse, center, middle
@@ -413,17 +428,17 @@ class: inverse, center, middle
 **Sample model**
 .font120[$$\hat{y}=b_0+b_1x_1+b_2x_2+\dots+b_kx_k$$]
 
-- Nothing fundamentally different; just more variables
+- Nothing fundamentally different; just more explanatory variables
 
 ---
 # Controlling for other factors
 
 - Each of the three previous regressions controlled for one factor we might suspect affects GPA
 
-- With the model for study hours, there is any number of additional factors contained in the error term $\epsilon$
+- With the model using study hours, there is any number of additional factors contained in the error term $\epsilon$
 
 - Generally, if we can, we should include those additional factors in the same regression model
-  - Especially if one of those factors affect study hours
+  - Especially if one of those factors also affects study hours
 
 ---
 # Controlling for other factors
@@ -498,4 +513,4 @@ get_regression_summaries(gpa4) %>%
 
 - Adjusted $R^2$ accounts for this and penalizes for adding bad (i.e. statistically insignificant) variables
 
-- All of these examples do a very poor job at explaining GPA, at least in for this sample of students
+- All of these examples do a very poor job at explaining GPA (at least for this sample of students)
