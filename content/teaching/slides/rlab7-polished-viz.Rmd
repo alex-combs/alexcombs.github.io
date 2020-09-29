@@ -1,6 +1,6 @@
 ---
 title: "PADP 7120 Data Applications in PA"
-subtitle: "RLab 7: Polished Visualizations"
+subtitle: "RLab 7: Professional Visualizations"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
 date: "September 23, 2020"
@@ -17,7 +17,7 @@ output:
 
 By the end of this lab, you will have learned how to...
 
-- Polish graphs to share with an audience  
+- Fancify graphs to share with an audience  
 
 ---
 # Start a new project
@@ -42,7 +42,7 @@ covid_ga <- covid %>%
 
 covid_ga$date <- ymd(covid_ga$date)
 
-today <- '2020-10-06'
+today <- '2020-09-28'
 
 covid_ga$county <- as.factor(covid_ga$county)
 
@@ -52,6 +52,13 @@ ga_county_pop$county <- as.factor(ga_county_pop$county)
 
 covid_ga <- covid_ga %>% 
   left_join(ga_county_pop, by = 'county')
+
+covid_ga <- covid_ga %>%
+  group_by(county) %>% 
+  arrange(date) %>% 
+  mutate(day_cases = cases - lag(cases), 
+         day_deaths = deaths - lag(deaths)) %>% 
+  ungroup() 
 ```
   
 ---
@@ -71,6 +78,8 @@ title: "RLab 7: Polished Visualizations"
 # Rerun Code
 
 - Run the code to up to the point where we get the `covid_ga` dataset that includes county population
+
+- Also run code that creates `day_cases` and `day_deaths`
 
 ---
 # Adjusting for Population
@@ -144,19 +153,7 @@ covid_ga_five <- covid_ga %>%
 - Geometric object
   - Color
   - Shape/line type & size
-  - Transparency
   - Reference lines
-
----
-# Viz 1 & 2
-
-- Suppose we are asked for the distribution of county cases for the most recent available date.
-- What kind of graph should we use?
-
-- A histogram
-- Generate a histogram for cases during the most recent date
-- Suppress code and any messages
-- Generate another histogram for deaths during the most recent date
 
 ---
 # Viz 1
@@ -206,7 +203,7 @@ covid_ga %>%
 
 - Let's change the color and outline of the bins of the histogram
 
-```{r, message=FALSE, fig.width=5, fig.height=3}
+```{r, message=FALSE, fig.width=4.5, fig.height=2.5}
 covid_ga %>% 
   filter(date == today) %>% 
   ggplot(aes(x = cases)) +
@@ -225,7 +222,7 @@ covid_ga %>%
 library(scales)
 ```
 
-```{r, message=FALSE, fig.width=5, fig.height=3}
+```{r, message=FALSE, fig.width=3.5, fig.height=2}
 covid_ga %>% 
   filter(date == today) %>% 
   ggplot(aes(x = cases)) +
@@ -243,13 +240,19 @@ covid_ga %>%
 - On your own, make the same adjustments for the histogram of total county deaths
 
 ---
-# Viz 3
+# Viz 2
 
-- Suppose we are asked for the distribution of county deaths during the most recent date that includes visual markers along key points of the distribution
-- Which graph should we use?
-
-- A box-and-whiskers plot
-- Generate a box plot for county deaths during the most recent date. Suppress the code.
+```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=6}
+covid_ga %>% 
+  filter(date == today) %>% 
+  ggplot(aes(x = deaths)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'Total County Deaths Today',
+       x = 'Total Deaths',
+       y = 'Counties') +
+  scale_x_log10(labels = comma) +
+  theme_minimal()
+```
 
 ---
 # Viz 3
@@ -296,7 +299,7 @@ covid_ga %>%
 ```
 
 ---
-# Viz 3: Title and axis label
+# Viz 3: Title, subtitle, and axis label
 
 ```{r, fig.width=5, fig.height=3}
 covid_ga %>% 
@@ -304,7 +307,7 @@ covid_ga %>%
   ggplot(aes(x = deaths)) +
   geom_boxplot(fill = 'steelblue') +
   labs(title = 'Total County COVID Deaths as of Today',
-       x = 'Total Deaths') +
+       subtitle = 'October 6, 2020', x = 'Total Deaths') +
   theme_classic() +
   theme(axis.ticks.y = element_blank(),
         axis.line.y = element_blank(),
@@ -314,11 +317,20 @@ covid_ga %>%
 ---
 # Viz 4
 
-- Rather than total cases or deaths for all counties as of the most recent date, let's focus on the distribution daily counts for a single county.
+- Make the same adjustments to this box plot
 
-- Generate a box plot for Clarke county daily cases during all available dates
-
-- Make the same adjustments to this box plot as we did the last one
+```{r, echo=FALSE, fig.width=8, fig.height=6}
+covid_ga %>% 
+  filter(county == 'Clarke') %>%
+  ggplot(aes(x = cases)) +
+  geom_boxplot(fill = 'steelblue') +
+  labs(title = 'Daily COVID Cases for Clarke County',
+       subtitle = 'January 21 - September 30', x = 'Cases') +
+  theme_classic() +
+  theme(axis.ticks.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank())
+```
 
 ---
 # Viz 4
@@ -329,8 +341,7 @@ covid_ga %>%
   ggplot(aes(x = cases)) +
   geom_boxplot(fill = 'steelblue') +
   labs(title = 'Daily COVID Cases for Clarke County',
-       subtitle = 'January 21 - September 30',
-       x = '') +
+       subtitle = 'January 21 - September 30', x = 'Cases') +
   theme_classic() +
   theme(axis.ticks.y = element_blank(),
         axis.line.y = element_blank(),
@@ -339,9 +350,6 @@ covid_ga %>%
 
 ---
 # Viz 5
-
-- Suppose we are asked to compare cases for the most recent day in the data across our 5 counties
-- Cases and deaths are already aggregated. Therefore, we should use `geom_col`.
 
 - Generate a bar graph for cases *per 100,000* during the most recent date across our 5 counties
 
@@ -357,8 +365,6 @@ covid_ga_five %>%
 
 ---
 # Viz 5: Reorder bars
-
-- We typically want heights of bars to be in ascending or descending order
 
 - Let's reorder to descending
 
@@ -387,16 +393,7 @@ covid_ga_five %>%
 ---
 # Viz 6
 
-- Suppose we want to show the trends in cases and deaths for our 5 counties
-
-- Generate a line graph over the time span in the data for our 5 counties.
-- Give each county its own line.
-- Suppress the code.
-
 - First, let's change this graph to use cases per 100,000 people
-
----
-# Viz 6
 
 ```{r, fig.width=7, fig.height=5}
 covid_ga_five %>% 
@@ -420,24 +417,89 @@ covid_ga_five %>%
 
 - Let's change the title of the legend and other labels as well as the theme
 
-- Let's save this graph to as an object
+- Let's save this graph as an object
 
 ```{r, fig.width=6, fig.height=4}
-g.rates <- covid_ga_five %>% 
+covid_ga_linegraph <- covid_ga_five %>% 
   ggplot(aes(x = date, y = cases_rate, color = county)) +
   geom_line() +
-  labs(color = 'County',
-       x = '',
+  labs(color = 'County', x = '',
        y = 'Cases per 100,000 population') +
   theme_minimal()
 ```
 
+---
+# Calling our saved object
+
+```{r}
+covid_ga_linegraph
+```
+
+- We now have a base graph we like that we can tweak
+
+---
+# Improving Dates Along Axis
+
 ```{r, fig.width=6, fig.height=4}
-g.rates +
+covid_ga_linegraph +
   scale_x_date(date_breaks = '1 month', 
-               labels = date_format('%B')) +
-  theme(panel.grid.minor.x = element_blank()) +
+               labels = date_format('%b'))
+```
+
+---
+# Adding a Reference Line
+
+```{r, fig.width=6, fig.height=4}
+covid_ga_linegraph +
+  scale_x_date(date_breaks = '1 month', 
+               labels = date_format('%b')) +
   geom_vline(xintercept = date('2020-08-15'), 
              color = 'black', 
              linetype = 'dashed')
 ```
+
+---
+# Viz 7
+
+- Make the same adjustments to the line graph displaying deaths per 100,000
+
+```{r, echo=FALSE, fig.width=8, fig.height=6}
+covid_ga_five %>% 
+  ggplot(aes(x = date, y = deaths_rate, color = county)) +
+  geom_line() +
+  labs(color = 'County', x = '',
+       y = 'Deaths per 100,000 population') +
+  theme_minimal() +
+  scale_x_date(date_breaks = '1 month', 
+               labels = date_format('%b')) +
+  geom_vline(xintercept = date('2020-08-15'), 
+             color = 'black', 
+             linetype = 'dashed')
+```
+
+---
+# Viz 7
+
+```{r, fig.show='hide'}
+covid_ga_five %>% 
+  ggplot(aes(x = date, y = deaths_rate, color = county)) +
+  geom_line() +
+  labs(color = 'County', x = '',
+       y = 'Deaths per 100,000 population') +
+  theme_minimal() +
+  scale_x_date(date_breaks = '1 month', 
+               labels = date_format('%b')) +
+  geom_vline(xintercept = date('2020-08-15'), 
+             color = 'black', 
+             linetype = 'dashed')
+```
+
+---
+class: inverse, middle, center
+
+# Did bringing students back to UGA kill people?
+
+---
+class: inverse, middle, center
+
+# If so, was it worth it?

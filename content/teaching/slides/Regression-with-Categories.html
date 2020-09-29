@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-08-16" />
+    <meta name="date" content="2020-10-07" />
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -14,8 +14,8 @@ class: center, middle, inverse, title-slide
 # PADP 7120 Data Applications in PA
 ## Regression with Categorical Variables
 ### Alex Combs
-### UGA/SPIA/PADP
-### 2020-08-16
+### UGA | SPIA | PADP
+### October 7, 2020
 
 ---
 
@@ -198,11 +198,6 @@ class: inverse, middle, center
 ---
 # Example
 .center[
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
 ![](Regression-with-Categories_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 ]
 
@@ -285,7 +280,7 @@ get_regression_table(sal_mod2)
 ---
 # Interpreting an interaction model
 
-`$$\hat{Salary}=82069+1637*YrsEmp+20129*Sex + -932*YrsEmp*Sex$$`
+`$$\hat{Salary}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$`
 
 - What is the predicted change in salary for a male professor given two more years of service?
 
@@ -347,7 +342,7 @@ get_regression_table(sal_mod2)
 ---
 # Linear probability model (LPM)
 
-- Same ol' regression model with a two-level categorical variable for the response
+- Same regression model with a two-level (dummy) categorical variable for the response
 
 - For a binary outcome (did occur/did not occur), an LPM estimates the effect of our explanatory variables on the probability that the outcome occurs
 
