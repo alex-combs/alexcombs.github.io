@@ -7,6 +7,7 @@ date: "September 30, 2020"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
+    mathjax: "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML"
     nature:
       beforeInit: "macros.js"
       highlightStyle: github
@@ -511,6 +512,19 @@ get_regression_summaries(gpa4) %>%
 
 - $R^2$ increases mechanically as you add more variables whether those variables improve the model or not
 
+- Therefore, we should not use $R^2$ to compare models with different numbers of explanatory variables
+
 - Adjusted $R^2$ accounts for this and penalizes for adding bad (i.e. statistically insignificant) variables
 
-- All of these examples do a very poor job at explaining GPA (at least for this sample of students)
+---
+# Goodness-of-fit
+
+- $R^2$ isn't very useful in assessing the predictive power of our regression model
+
+- Root mean squared error (RMSE) provides the average deviation of observed data from the regression line
+
+- RMSE answers the question: "How far off is our model, on average, from predicting observed outcomes?
+
+- The lower the RMSE the better our model is at fitting the data
+
+- $R^2$, Adjusted $R^2$, and RMSE will virtually always agree

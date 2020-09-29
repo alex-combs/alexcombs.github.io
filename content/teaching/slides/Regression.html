@@ -1026,9 +1026,22 @@ get_regression_summaries(gpa4)
 
 - `\(R^2\)` increases mechanically as you add more variables whether those variables improve the model or not
 
+- Therefore, we should not use `\(R^2\)` to compare models with different numbers of explanatory variables
+
 - Adjusted `\(R^2\)` accounts for this and penalizes for adding bad (i.e. statistically insignificant) variables
 
-- All of these examples do a very poor job at explaining GPA (at least for this sample of students)
+---
+# Goodness-of-fit
+
+- `\(R^2\)` isn't very useful in assessing the predictive power of our regression model
+
+- Root mean squared error (RMSE) provides the average deviation of observed data from the regression line
+
+- RMSE answers the question: "How far off is our model, on average, from predicting observed outcomes?
+
+- The lower the RMSE the better our model is at fitting the data
+
+- `\(R^2\)`, Adjusted `\(R^2\)`, and RMSE will virtually always agree
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -1127,7 +1140,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
