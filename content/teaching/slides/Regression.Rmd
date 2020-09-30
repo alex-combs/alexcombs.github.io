@@ -64,7 +64,7 @@ ggplot(gpa, aes(x = studyweek, y = gpa)) +
 # Simple linear regression model
 
 .pull-left[
-.font120[$$y=\beta_0+\beta_1x+\epsilon$$]
+$$y=\beta_0+\beta_1x+\epsilon$$
 
 - $y$ referred to as the outcome, response, dependent variable
 - $\beta_0$ (beta-naught) is the y-intercept constant
@@ -85,7 +85,7 @@ ggplot(gpa, aes(x = studyweek, y = gpa)) +
 # Simple linear regression model
 
 .pull-left[
-.font120[$$\hat{y}=b_0+b_1x$$]
+$$\hat{y}=b_0+b_1x$$
 
 - $\hat{y}$ is the **predicted** value of $y$ given a value of $x$
 - $b_0$ is the estimate of $\beta_0$; our prediction of $y$ if $x$ equaled 0
@@ -102,16 +102,17 @@ ggplot(gpa, aes(x = studyweek, y = gpa)) +
 ---
 # Interpreting Regression Results
 
-.font120[$$\hat{y}=b_0+b_1x$$]
+$$\hat{y}=b_0+b_1x$$
 
-On average, a one-[unit] change in $x$ [is associated with] a change of $b_1$ [units] in $y$.
+On average, a [one] [unit] [increase/decrease] in $x$ [is associated with] a [increase/decrease] of $b_1$ [units] in $y$.
 
 --
 
-- Replace [unit] with the actual units of the $x$ variable (e.g. dollars, percentage point, count of people or things like houses)
+- [one] can be any number
+- Replace [unit] with the actual units of the $x$ variable (e.g. dollars, percentage point, count of houses)
 - Replace $x$ with what $x$ is
-- [is associate with] can be any combination of words that express the intended relationship (causes, results in)
-- Replace $b_1$ with the numerical estimate we get from the results
+- [is associated with] can be any combination of words that expresses the intended relationship (causes, results in)
+- Replace $b_1$ with the estimate from the results
 - Replace [units] with the units of the $y$ variable
 - Replace $y$ with what $y$ is
 
@@ -138,7 +139,7 @@ On average, a one-hour increase in study hours per week is associated with a 0.0
 
 Results indicate each additional hour students study per week increases GPA by 0.001 point, on average.
 
-If students studied 10 more hours each week, GPA is predicted to increase 0.01 point.
+If students studied 10 more hours each week, GPA is predicted to increase 0.01 point, on average.
 
 ---
 # Many ways to interpret
@@ -151,7 +152,7 @@ If students studied 10 more hours each week, GPA is predicted to increase 0.01 p
 - Any answer can be obtained by plugging the results into the equation, then plugging the scenario into the equation to solve
 
 ---
-# Change vs. value
+# Predicted Change vs. Predicted Value
 
 $$GPA=\beta_0+\beta_1SleepHours+\epsilon$$
 ```{r, echo=FALSE}
@@ -173,7 +174,7 @@ What if students slept 3 more hours than they currently do?
 ```{r}
 0.02*3
 ```
-GPA is predicted to increase by 0.06 points
+GPA is predicted to **increase** by 0.06 points, on average.
 ]
 
 --
@@ -183,6 +184,8 @@ What is the predicted GPA of a student who sleeps 8 hours?
 ```{r}
 3.46 + 0.02*8
 ```
+
+GPA is predicted to **equal** 3.62, on average.
 ]
 
 ---
@@ -250,11 +253,11 @@ summary(gpa1)
 ---
 # Recap of population and sample regressions
 
-.font120[$$y=\beta_0+\beta_1x+\epsilon$$]
+$$y=\beta_0+\beta_1x+\epsilon$$
 
 $$GPA=\beta_0+\beta_1SleepHours+\epsilon$$
 
-.font120[$$\hat{y}=b_0+b_1x$$]
+$$\hat{y}=b_0+b_1x$$
 $$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$
 
 ---
@@ -265,7 +268,7 @@ class: inverse, center, middle
 ---
 # The residual
 
-.font140[$$e=y-\hat{y}$$]
+$$e=y-\hat{y}$$
 
 - The residual is the difference between the *observed* outcome and the *predicted* outcome from our regression model
 
@@ -371,7 +374,8 @@ class: inverse, middle, center
 
 - When we ask how good is our best regression line, one way to answer is the percent of total variance in the outcome accounted for with that line
 
-- This measure is called $R^2$ (r-squared)
+- $R^2$ (r-squared)
+  - Ranges from 0 to 1
   - The percent of variation in $y$ explained by our regression
 
 ---
@@ -387,7 +391,7 @@ get_regression_summaries(gpa1) %>%
   kable(format = 'html')
 ```
 
-The regression using study hours exlains only 0.2% of total variation in GPA.
+The regression using study hours explains only 0.2% of total variation in GPA.
 
 ---
 # Goodness of fit
@@ -424,10 +428,10 @@ class: inverse, center, middle
 # Multiple regression
 
 **Population model**
-.font120[$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$]
+$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$
 
 **Sample model**
-.font120[$$\hat{y}=b_0+b_1x_1+b_2x_2+\dots+b_kx_k$$]
+$$\hat{y}=b_0+b_1x_1+b_2x_2+\dots+b_kx_k$$
 
 - Nothing fundamentally different; just more explanatory variables
 
@@ -448,7 +452,12 @@ class: inverse, center, middle
 
 **Interpretation**
 
-On average, a one-[unit] increase in $x_k$ is associated with a $b_k$ [unit] change in $y$, **holding all else constant/equal.**
+On average, a [one-unit] [increase/decrease] in $x_k$ [is associated with] a $b_k$ [unit] [increase/decrease] in $y$, [**holding other factors constant].**
+
+- Variations on above:
+  - all else equal
+  - controlling for other factors
+  - *ceteris paribus*
 
 ---
 # Running multiple regression
@@ -474,7 +483,7 @@ get_regression_table(gpa4) %>%
   kable(format = 'html')
 ```
 
-Controlling for study hours and sleep, what is the predicted change in GPA if nights out increases by 3?
+Controlling for study hours and sleep, what is the predicted change in GPA if nights out increase by 3?
 
 --
 
