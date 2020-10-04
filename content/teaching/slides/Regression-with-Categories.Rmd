@@ -55,10 +55,21 @@ glimpse(Salaries)
 ---
 # Example
 
-.center[
-```{r, echo=FALSE, out.width='65%'}
+.pull-left[
+```{r, eval=FALSE}
+ggplot(Salaries, 
+       aes(x = yrs.service, 
+           y = salary)) +
+  geom_point(size = 4) +
+  theme(
+    text = element_text(size = 20))
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, out.width='99%'}
 ggplot(Salaries, aes(x = yrs.service, y = salary)) +
-  geom_point(size = 5) +
+  geom_point(size = 4) +
   theme(text = element_text(size = 20))
 ```
 ]
@@ -66,10 +77,21 @@ ggplot(Salaries, aes(x = yrs.service, y = salary)) +
 ---
 # Example
 
-.center[
-```{r, echo=FALSE, fig.width=8}
+.pull-left[
+```{r, eval=FALSE}
+ggplot(Salaries, 
+       aes(x = yrs.service, 
+           y = salary, 
+           color = sex)) +
+  geom_point(size = 4) +
+  theme(text = element_text(size = 20))
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, out.width='99%'}
 ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
-  geom_point(size = 5) +
+  geom_point(size = 4) +
   theme(text = element_text(size = 20))
 ```
 ]
@@ -120,11 +142,11 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 ```
 
 ---
-# Example
+# Visualizing Parallel Slopes
 .center[
 ```{r, echo=FALSE, fig.width=8}
 ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
-  geom_point(size = 5) +
+  geom_point(size = 4) +
   geom_abline(slope = 747, intercept = 92357, color = 'red', size = 2) +
   geom_abline(slope = 747, intercept = 101429, color = 'blue', size = 2) +
   theme(text = element_text(size = 20))
@@ -137,9 +159,22 @@ class: inverse, middle, center
 # Why force the slopes to be parallel? Why not allow the effect of years employed differ between male and female professors?
 
 ---
-# Example
-.center[
-```{r, echo=FALSE, message=FALSE, fig.width=8}
+# Visualizing Interaction Model
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(Salaries, 
+       aes(x = yrs.service, 
+           y = salary, 
+           color = sex)) +
+  geom_point(alpha = 0.6, size = 5) +
+  geom_smooth(method = 'lm', se = FALSE, size = 2) +
+  theme(text = element_text(size = 20))
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE, out.width='99%'}
 ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
   geom_point(alpha = 0.6, size = 5) +
   geom_smooth(method = 'lm', se = FALSE, size = 2) +
@@ -171,7 +206,7 @@ get_regression_table(sal_mod2)
 ```
 ```{r, echo=FALSE}
 get_regression_table(sal_mod2) %>% 
-  kable(format = 'html')
+  kable(format = 'html', digits = 2)
 ```
 
 ---
