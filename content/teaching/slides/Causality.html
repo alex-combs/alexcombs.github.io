@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-10-28" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## Causality
+### Alex Combs
+### UGA | SPIA | PADP
+### October 28, 2020
+
+---
+
+# Outline
+
+
+
+- How to know if we can conclude that `\(x\)` *causes* a change in `\(y\)`
+
+- How to know if our model has omitted variable bias and what can be done about it
+
+---
+# Potential outcomes
+
+- A causal effect is a comparison of two potential outcomes
+
+--
+
+- The outcome that we observe in the presence of the event
+
+- The outcome that we would have observed had the event **not happened**
+
+--
+
+- What would have happened in this alternate reality is referred to as the **counterfactual**
+
+---
+# Counterfactual Key to Effect
+
+&lt;img src="lectures_files/prog-effect.png" width="575" style="display: block; margin: auto;" /&gt;
+
+---
+# Half of Causal Data is Missing
+
+&lt;img src="lectures_files/counterfact.png" width="1065" /&gt;
+
+---
+# The challenge of counterfactual
+
+- So what can we do?
+
+- Compare outcomes between observed groups
+  - Randomize treatment
+  - Use quasi-experimental model
+  - Control for the **right** variables and argue you have engineered virtual twins between treated and control as if randomized
+
+---
+# Criteria for causation
+
+1. Correlation between `\(x\)` and `\(y\)` -- as `\(x\)` changes, `\(y\)` must also tend to change not due to random noise
+
+2. Temporal precedence -- `\(x\)` must occur before `\(y\)`
+
+3. No plausible rival or alternative explanations -- no other variable `\(Z\)` can influence the change in `\(y\)` we attribute to `\(x\)`
+
+---
+# Correlation between X and Y
+
+- Easiest to satisfy
+
+- If you run a regression and the coefficient is statistically significant, you have established correlation
+
+- Many things correlate that share no causal relationship
+
+---
+# Temporal Precedence
+
+- Somewhat easy to establish when studying an event or intervention
+  - Effect of Medicaid expansion on health outcomes
+  
+- More difficult when studying observed facts
+  - Effect of exercise on Body Mass Index (BMI)
+  - Do people have a high BMI because they don't exercise or do they not exercise because they already have a high BMI?
+  
+- Possible solution: Use values of `\(x\)` measured prior to `\(y\)`
+
+---
+# No plausible alternative explanation
+
+- No other variable `\(z\)` can influence the change in `\(y\)` we attribute to `\(x\)`
+
+- Participant of a job training program gets a new job after completing the program
+  - Plausible alternatives?
+  
+---
+# Key questions
+
+- When I run a regression, how do I know if I can conclude a one-unit change in `\(x\)` **causes** a (value of coefficient) change in `\(y\)`?
+
+- Or do my results provide only a correlation/association between `\(x\)` and `\(y\)`?
+
+---
+class: inverse, center, middle
+
+# Directed Acyclical Graphs (DAGS)
+
+---
+# DAGS
+
+- Visual representation of causal pathways
+
+- Used to identify causal effects in **observational** data
+
+- Requires you to consider your assumptions
+
+- Can incorporate existing theory and research as well as your own hypotheses
+
+---
+# Regression and DAGS
+
+- Behind every regression is a DAG
+
+`$$BMI=\beta_0+\beta_1Exercise+\epsilon$$`
+
+&lt;img src="lectures_files/dag1.png" width="559" style="display: block; margin: auto;" /&gt;
+
+---
+# Notation and Rules
+
+.pull-left[
+
+- Solid arrow: effect is observable
+
+- Dashed arrow: effect is unobservable
+
+- Two types of causal paths:
+  - Direct `\(X \rightarrow Y\)`
+  - Mediated (indirect) `\(X \rightarrow Z \rightarrow Y\)`
+
+]
+
+.pull-right[
+
+&lt;img src="lectures_files/dag2.png" width="336" /&gt;
+
+- No two-way arrows
+
+- No direct path from `\(Y\)` back to `\(X\)`
+
+]
+
+---
+# Our focus on DAGS
+
+- Backdoor paths
+- Adjusting for **confounding** and **colliding** variables
+- Translating regression to DAGS and vice versa
+
+- Further reading on DAGS: Pearl, J. (2018). [The Book of Why](https://www.amazon.com/dp/B07CYJ4G2L/ref=cm_sw_em_r_mt_dp_QlXEFb2CK71MS)
+
+---
+# Backdoor paths
+
+- Any path from `\(X\)` to `\(Y\)` with an arrow pointing into `\(X\)`
+
+- Or an arrow from `\(X\)` to another variable(s) that trace to `\(Y\)`
+
+--
+
+- Our goal is to close all backdoor paths
+
+---
+# Generic backdoor path
+
+&lt;img src="lectures_files/dag3.png" width="552" style="display: block; margin: auto;" /&gt;
+
+- `\(Z\)` is a **confounder**
+
+- Leads to **omitted variable bias** (OVB)
+
+---
+# Close the backdoor
+
+Two ways to close a backdoor path
+
+--
+
+1. Control for the **confounder**
+
+---
+# Close the backdoor
+
+&lt;img src="lectures_files/dag4.png" width="700" style="display: block; margin: auto;" /&gt;
+
+.pull-left[
+`$$Y=\beta_0+\beta_1X+\epsilon$$`
+
+- Backdoor open - OVB
+]
+
+.pull-right[
+`$$Y=\beta_0+\beta_1X+\beta_2Z+\epsilon$$`
+
+- Backdoor closed - No OVB
+]
+
+---
+# Close the backdoor
+
+Two ways to close a backdoor path
+
+1. Control for the **confounder**
+
+--
+
+2. Identify a **collider** variable that closes the backdoor path
+
+---
+# Collider variable
+
+&lt;img src="lectures_files/dag6.png" width="533" style="display: block; margin: auto;" /&gt;
+
+- `\(Z\)` is a **collider**
+
+- Colliders close backdoors
+
+---
+# Close the backdoor
+
+&lt;img src="lectures_files/dag5.png" width="351" style="display: block; margin: auto;" /&gt;
+
+.center[
+`\(X \rightarrow Y\)`
+
+`\(X \leftarrow Z \rightarrow K \leftarrow Y\)`
+]
+
+.pull-left[
+`$$Y=\beta_0+\beta_1X+\epsilon$$`
+`$$Y=\beta_0+\beta_1X+\beta_2Z+\epsilon$$`
+- Either is fine; backdoor closed; no OVB
+]
+
+.pull-right[
+`$$Y=\beta_0+\beta_1X+\beta_2K+\epsilon$$`
+
+- Backdoor open; OVB
+
+- **Controlling for a collider opens the backdoor it closed**
+]
+
+---
+class: inverse, center, middle
+
+# If we can demonstrate all backdoor paths are blocked along the way by either controlling for a confounder or identifying a collider, and only the path from `\(X\)` to `\(Y\)` remains, then we can claim we have satisfied the third criterion of causality.
+
+---
+# The error term and OVB
+
+&lt;img src="lectures_files/dag8.png" width="796" style="display: block; margin: auto;" /&gt;
+
+.center[
+
+`$$Y=\beta_0+\beta_1X+\epsilon$$`
+
+]
+
+- If true model was left DAG, out estimate `\(b_1\)` is *not* solely due to `\(X\)`, but rather unobserved factors contained in `\(\epsilon\)`
+
+- Referred to as **endogeneity** or "X is endogenous"
+
+---
+# Error term and OVB
+
+.center[
+`$$BMI=\beta_0+\beta_1Exercise+\epsilon$$`
+]
+
+.pull-left[
+&lt;img src="lectures_files/dag1.png" width="559" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+- What variables might the error term contain?
+
+- Do any of those variables also affect exercise?
+]
+
+---
+class: inverse, center, middle
+
+# Using DAGS starting from a research question
+
+---
+# Using DAGS
+
+- Suppose we want to know if college, `\(C\)`, increases earnings, `\(Y\)`?
+
+- `\(C \rightarrow Y\)`
+
+`$$Y=\beta_0+\beta_1C+\epsilon$$`
+
+--
+
+- Now we should think of all the factors that affect earnings and/or going to college
+
+- Suppose we identify three factors: parent's education `\(PE\)`, family income `\(I\)`, natural aptitude `\(A\)`
+
+---
+# Using DAGS
+
+- Now we think of the relationships between all of our factors and draw the corresponding DAG
+
+- Suppose we settle on the following DAG
+
+&lt;img src="lectures_files/dag10.png" width="473" style="display: block; margin: auto;" /&gt;
+
+- Next step is to list paths between `\(C\)` and `\(Y\)`
+
+---
+# Using DAGS
+
+&lt;img src="lectures_files/dag10.png" width="394" style="display: block; margin: auto;" /&gt;
+
+1. `\(C \rightarrow Y\)` (the causal effect of college on earnings)
+
+--
+
+2. `\(C \leftarrow I \rightarrow Y\)` (backdoor 1)
+
+--
+
+3. `\(C \leftarrow PE \rightarrow I \rightarrow Y\)` (backdoor 2)
+
+--
+
+4. `\(C \leftarrow A \rightarrow PE \rightarrow I \rightarrow Y\)` (backdoor3)
+
+--
+
+- Are there any colliders closing one or more backdoors? No.
+
+- We have three open backdoor paths; systematic non-causal correlations between `\(C\)` and `\(Y\)`
+
+---
+# Using DAGS
+
+1. `\(C \rightarrow Y\)` (the causal effect of college on earnings)
+2. `\(C \leftarrow I \rightarrow Y\)` (backdoor 1)
+3. `\(C \leftarrow PE \rightarrow I \rightarrow Y\)` (backdoor 2)
+4. `\(C \leftarrow A \rightarrow PE \rightarrow I \rightarrow Y\)` (backdoor3)
+
+- Next step is to identify the minimum set of control variables needed to close all backdoors.
+
+--
+
+- Controlling for family income `\(I\)` closes all three backdoors
+
+.center[
+`$$Y=\beta_0+\beta_1C+\beta_2I+\epsilon$$`
+]
+
+- If we believe this DAG, then we now have the causal effect of college on earnings.
+
+---
+# Assumptions
+
+&lt;img src="lectures_files/dag10.png" width="394" style="display: block; margin: auto;" /&gt;
+
+- There are at least two key assumptions this DAG makes
+
+1. Other than natural aptitude `\(A\)`, there are no other unobserved factors that affect `\(C\)`, thus avoiding **endogeneity**
+
+--
+
+2. Natural aptitude does not directly affect earnings `\(Y\)`
+
+---
+# Assumptions
+
+&lt;img src="lectures_files/dag11.png" width="389" style="display: block; margin: auto;" /&gt;
+
+--
+
+.pull-left[
+1. `\(C \rightarrow Y\)` 
+2. `\(C \leftarrow I \rightarrow Y\)` 
+3. `\(C \leftarrow PE \rightarrow I \rightarrow Y\)`
+4. `\(C \leftarrow A \rightarrow PE \rightarrow I \rightarrow Y\)` 
+5. `\(C \leftarrow A \rightarrow Y\)`
+6. `\(C \leftarrow PE \leftarrow A \rightarrow Y\)`
+7. `\(C \leftarrow I \leftarrow PE \leftarrow A \rightarrow Y\)`
+]
+
+.pull-right[
+
+- Controlling for `\(I\)` closes 2, 3, 4, &amp; 7
+
+- Controlling for `\(PE\)` closes 6
+
+- Currently no way to close 5; our causal hopes are dashed
+]
+
+---
+class: inverse, center, middle
+
+# Collider Bias Revisited
+
+---
+# Collider bias
+
+- Collider bias can occur in two ways:
+
+- Controlling for a collider in our regression in a way that opens a backdoor path that would have been closed
+
+- Using a sample where observations are based on a collider variable
+
+---
+# Collider bias (1) bad control
+
+&lt;img src="lectures_files/dag12.png" width="351" style="display: block; margin: auto;" /&gt;
+
+1. `\(Marijuana \rightarrow CarAcc\)`
+2. `\(Marijuana \leftarrow Norms \rightarrow Seatbelt \leftarrow Safety \rightarrow CarAcc\)`
+
+
+`$$CarAcc = \beta_0 + \beta_1Marijuana + \beta_2Seatbelt + \epsilon$$`
+
+- Controlling for seatbelt usage introduces bias
+
+
+---
+# Seeing collider bias
+
+- Creating a dataset with 2500 observations and 3 variables drawn randomly from a normal distribution
+
+
+```r
+collider_bias &lt;- data.frame(k = rnorm(2500, mean = 10, sd = 4), 
+                            e = rnorm(2500), 
+                            u = rnorm(2500))
+```
+
+
+|     k|     e|     u|
+|-----:|-----:|-----:|
+|  7.76| -0.68| -0.49|
+|  9.08|  0.57|  1.13|
+| 16.23| -0.70| -1.15|
+| 10.28| -0.53|  1.48|
+
+---
+# Seeing collider bias
+
+- Adding the explanatory variable of interest `\(X\)` equal to 1 when `\(k\)` is greater than or equal to 12 (arbitrary choice)
+
+
+```r
+collider_bias &lt;- collider_bias %&gt;% 
+  mutate(X = if_else( k &gt;= 12, 1, 0))
+```
+
+--
+
+- Creating a known parameter for the effect of `\(X\)` on `\(Y\)`. 
+
+
+```r
+collider_bias &lt;- collider_bias %&gt;% 
+  mutate(Y = 100 + 50*X + e)
+```
+
+--
+
+- Creating a collider `\(Z\)` that is a function of `\(X\)` and `\(Y\)`. `\(Y\)` **is not** a function of `\(Z\)`.
+
+
+```r
+collider_bias &lt;- collider_bias %&gt;% 
+  mutate(Z = 50*X + Y + u)
+```
+
+---
+# Seeing collider bias
+
+- Now have the data we need to run two regressions
+
+
+|     k|     e|     u|  X|      Y|      Z|
+|-----:|-----:|-----:|--:|------:|------:|
+|  7.76| -0.68| -0.49|  0|  99.32|  98.83|
+|  9.08|  0.57|  1.13|  0| 100.57| 101.70|
+| 16.23| -0.70| -1.15|  1| 149.30| 198.15|
+| 10.28| -0.53|  1.48|  0|  99.47| 100.95|
+
+`$$Y=\beta_0 + \beta_1X + \epsilon$$`
+
+`$$Y=\beta_0 + \beta_1X + \beta_2Z + \epsilon$$`
+
+
+```r
+valid &lt;- lm(Y ~ X, data = collider_bias)
+biased &lt;- lm(Y ~ X + Z, data = collider_bias)
+```
+
+---
+# Seeing collider bias
+
+.pull-left[
+
+|term      | estimate|
+|:---------|--------:|
+|intercept |   100.01|
+|X         |    49.93|
+]
+
+.pull-right[
+
+|term      | estimate|
+|:---------|--------:|
+|intercept |    49.32|
+|X         |    -0.70|
+|Z         |     0.51|
+]
+
+- Coefficient for `\(X\)` should be 50 because I engineered it to.
+
+- Because `\(X \rightarrow Z \leftarrow Y\)`, controlling for Z introduces serious bias
+
+---
+# Collider bias (2) bad sample
+
+- Suppose a nonprofit that works with at-risk youth wants to understand the effect of school absences on grades. It only has access to data on its own clients.
+
+- Suppose at-risk youth are identified by socioeconomic status, GPA, and absences
+
+&lt;img src="lectures_files/dag13.png" width="385" style="display: block; margin: auto;" /&gt;
+
+---
+# Collider bias (2) bad sample
+
+`$$GPA = \beta_0 + \beta_1TotAbsences + \beta_2 SES + \epsilon$$`
+
+&lt;img src="lectures_files/dag13.png" width="385" style="display: block; margin: auto;" /&gt;
+
+.pull-left[
+
+1. `\(TA \rightarrow GPA\)`
+2. `\(TA \leftarrow SES \rightarrow GPA\)`
+3. `\(TA \rightarrow AtRisk \leftarrow GPA\)`
+4. `\(TA \leftarrow SES \rightarrow AtRisk \leftarrow GPA\)`
+
+]
+
+.pull-right[
+
+- Will out estimate `\(b_1\)` be unbiased?
+
+- No. Because our sample is selected from `\(AtRisk\)`; same as controlling for it.
+
+- Selection bias
+]
+
+---
+# Seeing selection bias
+
+`\(Absent \rightarrow AtRisk \leftarrow GPA\)`
+
+- Suppose our sample only includes those at-risk
+
+- But we want to estimate the effect of absences on GPA
+
+
+
+
+---
+# Seeing selection bias
+
+.pull-left[
+
+![](Causality_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+
+|term      | estimate|
+|:---------|--------:|
+|intercept |    3.223|
+|absent    |   -0.190|
+
+]
+
+---
+# Seeing selection bias
+
+.pull-left[
+
+![](Causality_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+
+|term      | estimate|
+|:---------|--------:|
+|intercept |    3.105|
+|absent    |   -0.061|
+
+]
+
+---
+# Seeing selection bias
+
+.pull-left[
+
+![](Causality_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+
+]
+
+.pull-right[
+
+
+|term      | estimate|
+|:---------|--------:|
+|intercept |    2.536|
+|absent    |   -0.004|
+
+]
+
+---
+# Seeing Selection Bias
+
+&lt;img src="Causality_files/figure-html/unnamed-chunk-35-1.png" height="90%" style="display: block; margin: auto;" /&gt;
+
+
+---
+# Recap
+
+- What would be the ideal experiment and how does my analysis differ?
+
+--
+
+- Can I convincingly claim there is no OVB?
+
+--
+
+- If so, internally valid. On to external validity.
+
+--
+
+- To whom can I generalize my results? Are those in my sample systematically different than those in the population?
+
+-- 
+
+- If different, was my sample drawn from a collider?
+  - Yes? Then all backdoors are not closed. Start over.
+  - No? I can generalize to the subgroup my sample represents.
+
+---
+# Causal inference models
+
+&lt;img src="lectures_files/dag14.png" width="468" style="display: block; margin: auto;" /&gt;
+
+- Random assignment breaks any OVB from the error term
+
+- Random assignment is often difficult to achieve in social sciences
+
+- There are regression modeling techniques that achieve the same break from the error term without random assignment
+  - Difference-in-differences, regression discontinuity, instrumental variables, synthetic control, fixed effects, propensity score matching
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
