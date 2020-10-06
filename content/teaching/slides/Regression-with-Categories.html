@@ -27,18 +27,18 @@ class: center, middle, inverse, title-slide
 
 - Interact numerical and categorical variables
 
-- Use a categorical variable as an outcome variable
+- Use a binary categorical variable as an outcome
 
 ---
 # Adding to our toolbox
 
-- So far, we have covered simple and multiple regression using quantitative or numerical variables
+- So far, we have covered simple and multiple regression using quantitative/numerical variables
 
 .font120[$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$]
 
 - Any of the explanatory variables could be categorical
 
-- The outcome couls be categorical
+- The outcome could be categorical as well
 
 ---
 # Example
@@ -63,7 +63,7 @@ glimpse(Salaries)
 
 - discipline coded as "A" for theoretical and "B" for applied
 
-- What do we want to include and what directions to we expect?
+- What do we want to include and what directions do we expect?
 
 ---
 # Example
@@ -75,6 +75,7 @@ ggplot(Salaries,
        aes(x = yrs.service, 
            y = salary)) +
   geom_point(size = 4) +
+  theme_minimal() +
   theme(
     text = element_text(size = 20))
 ```
@@ -94,7 +95,9 @@ ggplot(Salaries,
        aes(x = yrs.service, 
            y = salary, 
            color = sex)) +
-  geom_point(size = 4) +
+  geom_point(size = 4,
+             alpha = 0.5) +
+  theme_minimal() +
   theme(text = element_text(size = 20))
 ```
 ]
@@ -184,6 +187,8 @@ get_regression_table(sal_mod)
 ## [1] 2244
 ```
 
+- If slopes are parallel, then the predicted change must be the same.
+
 ---
 # Interpreting categorical results
 
@@ -207,6 +212,8 @@ get_regression_table(sal_mod)
 ```
 ## [1] 107317
 ```
+
+- Predicted value will not be the same because each group has a different intercept
 
 ---
 # Visualizing Parallel Slopes
