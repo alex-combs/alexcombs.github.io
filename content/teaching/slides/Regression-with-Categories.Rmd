@@ -104,7 +104,7 @@ ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
 
 ---
 # Example
-$$Salary=\beta_0+\beta_1YrsEmployed+\beta_2Sex + \epsilon$$
+$$Salary=\beta_0+\beta_1YrsEmployed+\beta_2Male + \epsilon$$
 ```{r}
 sal_mod <- lm(salary ~ yrs.service + sex, data = Salaries)
 ```
@@ -116,19 +116,44 @@ get_regression_table(sal_mod) %>%
   kable(format = 'html')
 ```
 
-- For each year of employment, salary increases $748, on average.
-- Male professors earn an average of $9,072 more than female professors.
+
 
 ---
-# Interpreting categorical results
+# Interpreting results
 
-$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
+$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$
+
+- What's the standard interpretation for the YrsEmployed coefficient?
+
+--
+
+- All else equal, for each year of employment, salary increases $748, on average.
+
+--
+
+What's the standard interpretation for the Male coefficient?
+
+--
+
+- On average, male professors earn $9,072 more than female professors, controlling for years of employment.
+
+---
+# Interpreting results
 
 - What is the predicted change in salary for a male professor three years later?
+
+--
+
 ```{r}
 748*3
 ```
+
+--
+
 - For a female professor?
+
+--
+
 ```{r}
 748*3
 ```
@@ -136,20 +161,29 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 - If slopes are parallel, then the predicted change must be the same.
 
 ---
-# Interpreting categorical results
+# Interpreting results
 
-$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
+$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$
 
 - What is the predicted salary for a male professor employed 20 years?
+
+--
+
 ```{r}
 92357+748*20+9072*1
 ```
+
+--
+
 - For a female professor employed 20 years?
+
+--
+
 ```{r}
 92357+748*20+9072*0
 ```
 
-- Predicted value will not be the same because each group has a different intercept
+- Predicted value will **not** be the same because each group has a different intercept
 
 ---
 # Visualizing Parallel Slopes
@@ -198,12 +232,12 @@ ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
 
 - An interaction allows the effect of one variable to differ depending on the value of another variable
 
-$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Sex + \beta_3YrsEmp*Sex + \epsilon$$
+$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Male + \beta_3YrsEmp*Male + \epsilon$$
 
-- If Sex = 1 (male), then the marginal effect of years on salary is $\beta_1+\beta_3$
+- If Male = 1, then the marginal effect of years on salary is $\beta_1+\beta_3$
 
 - $\beta_2$ still tells us how the intercepts compare
-  - If Sex = 1 (male), intercept is $\beta_0+\beta_2$
+  - If Male = 1, intercept is $\beta_0+\beta_2$
 
 ---
 # Running an interaction model
@@ -223,7 +257,7 @@ get_regression_table(sal_mod2) %>%
 ---
 # Interpreting an interaction model
 
-$$\hat{Salary}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$
+$$\hat{Salary}=82069+1637*YrsEmp+20129*Male - 932*YrsEmp*Male$$
 
 - What is the predicted change in salary for a male professor given two more years of service?
 
@@ -316,11 +350,11 @@ $$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$
 -0.18*1
 ```
 
-- Reduces the probability of divorce by 18%
+- All else equal, each child reduces the probability of divorce by 18%, on average.
 
 --
 
-- What is the probability of a 27 year-old making 50,000 who has 0 children?
+- What is the probability of divorce for someone 27 years old making 50,000 and has 0 children?
 
 --
 
