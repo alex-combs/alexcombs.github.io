@@ -497,9 +497,4 @@ covid_ga_five %>%
 ---
 class: inverse, middle, center
 
-# Did bringing students back to UGA kill people?
-
----
-class: inverse, middle, center
-
-# If so, was it worth it?
+# Did bringing students, faculty, and staff back to UGA kill people?

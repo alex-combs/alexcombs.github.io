@@ -1,0 +1,550 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "Sampling"
+author: "Alex Combs"
+institute: "UGA | SPIA | PADP"
+date: "November 4, 2020"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+# Outline
+
+```{r, include=FALSE}
+library(tidyverse)
+library(moderndive)
+library(knitr)
+library(fivethirtyeight)
+set.seed(123)
+options(scipen = 999)
+
+state_trump <- hate_crimes %>%
+  mutate(share_white = 1 - share_non_white,
+         urbanization = if_else(share_pop_metro<=0.75, "low", "high")) %>% 
+  select(state, 
+         median_house_inc, 
+         share_pop_hs, 
+         share_white, 
+         share_white_poverty, 
+         share_vote_trump,
+         urbanization) %>%
+  filter(state != "District of Columbia") %>% 
+  mutate_at(vars(share_pop_hs, share_white, share_white_poverty,
+              share_vote_trump), funs(.*100)) %>% 
+  rename(white = share_white, white_pov = share_white_poverty)
+```
+
+- Reinforce concepts related to sampling
+  - Population parameter vs. sample estimate
+  - Normal distribution and standard deviation (68-95-99 rule)
+  - Law of large numbers
+  - Central limit theorem
+
+---
+# Credible analysis
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/credible.png')
+```
+
+---
+# Regression table
+
+$$PctVotedTrump = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$ 
+
+```{r, include=FALSE}
+trump_mod <- lm(share_vote_trump ~ white + white_pov,
+                data = state_trump)
+```
+
+```{r, echo=FALSE}
+get_regression_table(trump_mod) %>% 
+  kable()
+```
+
+- We will learn the building blocks for producing the `std_error`, `lower_ci`, and `upper_ci` columns. 
+
+--
+
+- What allows us to use a sample to make conclusions about a population?
+
+- We need not be experts in the math but there are key lessons that can help us be better producers and consumers of statistics.
+
+---
+# Inference
+
+```{r, echo=FALSE, fig.align='center', out.height='90%'}
+include_graphics('lectures_files/sample-estimate.png')
+```
+
+---
+# Sample estimates
+
+- A sample estimate can be any statistical measure we are interested in.
+
+- Mean, median
+- Proportion, percentage
+- Difference in means, medians, percentages between groups
+- Regression coefficient
+
+---
+# Key questions
+
+1. Is our estimate an accurate guess of the population parameter?
+
+$$\hat{\theta} = \theta  ?$$
+
+--
+
+2. How precise is our estimate? Is it useful?
+
+$$[\hat{\theta}-?, \hat{\theta}+?]$$
+
+- The larger the range needed to confidently capture the parameter, the less useful it is.
+
+---
+# Steps in inference
+
+1. We take a random sample. Maybe not *truly* random but at least not in a way the draws observations that are systematically different from those in the population along some characteristic that is correlated with the statistical measure we are interested in.
+
+--
+
+2. **Law of large numbers (LLN)** allows us to say our sample estimate is expected to be close to the population parameter. Think many rolls of a six-sided die resulting in an average of 3.5.
+
+--
+
+3. **Central limit theorem (CLT)** allows us to assume the **sampling distribution** of our estimate is a **normal distribution**.
+
+--
+
+4. We calculate the standard deviation of the sampling distribution, a.k.a. **standard error**, and construct **confidence intervals** based on the **68-95-99 rule**.
+
+---
+# Example Step 1
+
+- Suppose we take a sample of 50 UGA professors and record their salaries. We eventually want to use this sample to estimate average professor salary at UGA.
+
+--
+
+- Random sampling means literally every professor had equal chance of being selected. Hard to achieve in reality, but there are sampling and statistical techniques to work around it.
+
+--
+
+- Maybe we have to rely on professors walking outside and/or those who respond to our question. Will these folks have systematically different salaries?
+
+--
+
+- As long as we did not over- or under-sample a characteristic correlated with salary (e.g. sex, race, age, department, etc.), we might be OK. If we did, we can control for those variables (assuming we recorded them) via sample weighting or multiple regression.
+
+---
+# Example Step 1
+
+.pull-left[
+```{r}
+salaries <- tibble(ID = c(1:2000), 
+                   salary = rnorm(2000, 80000, 7000))
+```
+
+- Created a population of 2,000 professors with mean salary of 80,000 and standard deviation of 7,000.
+
+```{r}
+sal_sample <- rep_sample_n(salaries,
+                           size = 50)
+```
+
+- Took sample of 50.
+
+]
+
+.pull-right[
+
+- Visualize distribution of sample.
+
+```{r, echo=FALSE, message=FALSE}
+sal_sample %>% 
+  ggplot(aes(x = salary)) +
+  geom_histogram(fill = 'darkred', 
+                 color = 'white') +
+  theme_minimal()
+```
+]
+
+---
+# The population
+
+```{r, echo=FALSE, message=FALSE, fig.align='center', out.height='90%'}
+ggplot(salaries, aes(x = salary)) +
+  geom_histogram(bins = 100, fill = 'darkred', color = 'white') +
+  scale_x_continuous(labels = scales::dollar_format()) +
+  theme_minimal()
+```
+
+---
+# The 68-95-99 rule
+
+```{r, echo=FALSE, fig.align='center', out.height='90%'}
+include_graphics('lectures_files/normdist.png')
+```
+
+---
+# The population
+
+.pull-left[
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+salaries %>% 
+  ggplot(aes(x = salary)) +
+  geom_histogram(fill = 'darkred', 
+                 color = 'white') +
+  theme_minimal()
+```
+]
+
+.pull-right[
+- Mean is 80,000 with SD of 7,000
+
+- Since distribution is normal, we could answer descriptive questions about the range of salaries that captures a percentage of professors or the percent of professors above or below a certain salary.
+]
+
+- What percent of professors have salary greater than 94,000 dollars?
+
+---
+# Example Step 2
+
+```{r}
+mean(sal_sample$salary)
+```
+
+- We know the true mean is 80,000. Normally do not know this.
+
+- So what allows us to conclude this sample estimate is close to the population parameter?
+
+--
+
+**Law of large numbers (LLN)** - the average of many random outcomes will settle around the expected value of the population parameter.
+
+---
+# Law of large numbers
+
+- Suppose the data-generating process of an important phenomenon in the population, like education level, disease, or wild fires, was based on a six-sided die.
+
+--
+
+- The outcome will be among integers 1 through 6 each with equal probability
+
+- What's the expected value of the population parameter?
+
+--
+
+$$\frac{1+2+3+4+5+6}{6}=3.5$$
+--
+
+- If we roll a die enough times, the average of those rolls will start to settle around 3.5
+
+---
+# Example Step 2
+
+- Unlike a die roll, we don't know the data-generating process of most phenomena, so we don't know the expected value of the outcome in the population unless we actually calculated it.
+
+--
+
+- Instead, we claim there is an expected value (population parameter) out there to estimate.
+
+--
+
+- As long as our sample was taken randomly (or at least unbiasedly), then each observation in our sample is like rolling the die in terms of obtaining a random outcome.
+
+--
+
+- We roll the die enough times (i.e. sample size) and the average of those rolls will settle around whatever is the expected value in the population.
+
+---
+# Example Step 2
+
+```{r}
+sal_sample2 <- rep_sample_n(salaries,
+                           size = 10)
+```
+
+```{r}
+sal_sample3 <- rep_sample_n(salaries,
+                           size = 250)
+```
+
+```{r}
+mean(sal_sample2$salary)
+```
+
+```{r}
+mean(sal_sample3$salary)
+```
+
+**As sample size increases, accuracy of estimate tends to increase (as long as sample is not biased)**
+
+---
+# Example Step 3
+
+- Highly unlikely our estimate *equals* the population parameter, so we can't treat the estimate as if it does.
+
+--
+
+- We need to calculate the range of plausible values that will capture the population parameter with a chosen frequency of success.
+
+--
+
+- Imagine if, instead of a distribution of salaries, we had a distribution of average salary estimates where each estimate is from a different sample of UGA professors. This is called a **sampling distribution**.
+
+--
+
+- The **central limit theorem** allows us to assume our estimate was drawn from a sampling distribution that is **distributed normally**.
+
+---
+# Sampling distribution
+
+- Sampling 50 professors and repeating 100 times to get 100 samples of size 50
+
+```{r}
+sal_100_samples <- salaries %>% 
+  rep_sample_n(size = 50, reps = 100)
+```
+
+```{r, echo=FALSE}
+ungroup(sal_100_samples) %>% 
+  slice_sample(n=5) %>% 
+  kable(digits = 0, caption = 'Preview of data')
+```
+
+---
+# Sampling distribution
+
+- Calculating average salary for each of 100 samples
+
+```{r, message=FALSE, warning=FALSE}
+sal_dist_means <- sal_100_samples %>% 
+  group_by(replicate) %>% 
+  summarize(AvgSal = mean(salary))
+```
+
+```{r, echo=FALSE}
+head(sal_dist_means, n=5) %>% 
+  kable(digits = 0, caption = 'Preview of data')
+```
+
+---
+# Sampling distribution
+
+```{r, echo=FALSE, message=FALSE, fig.align='center', fig.height=5}
+sal_dist_means %>% 
+  ggplot(aes(x = AvgSal)) +
+  geom_histogram(fill = 'darkred', 
+                 color = 'white') +
+  theme_minimal()
+```
+
+- Distribution of our 100 estimates.
+
+- The **CLT** demonstrates that sampling distributions approach normal regardless of the underlying variable's distribution.
+
+---
+# Sampling distribution
+
+.pull-left[
+```{r, echo=FALSE, message=FALSE, fig.align='center', out.height='60%'}
+sal_dist_means %>% 
+  ggplot(aes(x = AvgSal)) +
+  geom_histogram(fill = 'darkred', 
+                 color = 'white') +
+  geom_vline(xintercept = 80225, size = 2) +
+  geom_vline(xintercept = 81053, linetype = 'dashed', size = 2) +
+  theme_minimal()
+```
+]
+
+.pull-right[
+- **LLN** tells us the center of the sampling distribution is close to the population parameter.
+
+```{r}
+mean(sal_dist_means$AvgSal)
+```
+
+- We assume our original estimate is close to this center.
+
+```{r}
+mean(sal_sample$salary)
+```
+
+]
+
+---
+# Example Step 4
+
+- We need to provide a range of plausible values for the population parameter
+
+--
+
+- Thanks to the **CLT**, we can assume the sampling distribution is normal. Therefore...
+
+--
+
+- 68% of the estimates fall within one standard deviation
+- 95% of the estimates fall within two (1.96) standard deviations
+- 99% fall within three (2.58) standard deviations
+
+--
+
+- We need the standard deviation
+
+---
+# Standard error
+
+- The **standard error** is the standard deviation of a sampling distribution
+
+--
+
+- If we calculate the standard error, we can apply the **68-95-99 rule** to construct a range of values that will capture the population parameter 68, 95, or 99 percent of the time. The latter two are common choices.
+
+--
+
+- Two standard errors above and below our estimate will generate a **95% confidence interval**
+
+--
+
+- But how do we calculate the standard error when we don't actually see the sampling distribution? We only have one sample and one estimate.
+
+---
+# Standard error
+
+- There are formulas for standard errors of various estimates. The standard error of a sample mean $\bar{x}$ is:
+
+$$SE_{\bar{x}}=\frac{s}{\sqrt{n}}$$
+
+- Where $s$ is the standard deviation of $x$ in our sample and $n$ is the size of our sample
+
+---
+# Example Step 4
+
+```{r}
+mean(sal_sample$salary)
+```
+
+```{r}
+sd(sal_sample$salary)/sqrt(50)
+```
+
+```{r}
+81052-(1.96*904)
+81052+(1.96*904)
+```
+
+---
+# Example Step 4
+
+- Our 95% confidence interval for the average salary among UGA professors is 79,280 - 82,824. Does it capture the population parameter?
+
+```{r, echo=FALSE, message=FALSE, fig.align='center', fig.height=5}
+sal_dist_means %>% 
+  ggplot(aes(x = AvgSal)) +
+  geom_histogram(fill = 'darkred', 
+                 color = 'white') +
+  geom_vline(xintercept = 80000, size = 2) +
+  geom_vline(xintercept = 79280, linetype = 'dashed', size = 2) +
+  geom_vline(xintercept = 82824, linetype = 'dashed', size = 2) +
+  theme_minimal()
+```
+
+---
+# Back to reality
+
+- We engineered a population and a known parameter to evaluate the process of inference
+
+- But we don't observe the population, otherwise we wouldn't need inference
+
+--
+
+- We have only one sample and estimate. We do not observe the sampling distribution, its shape, or its standard error.
+
+--
+
+- **LLN** and **CLT** allow us to assume our estimate is the center of the unobserved sampling distribution and the sampling distribution is normal.
+
+--
+
+- Our estimate almost certainly does not equal the parameter, so we estimate the standard error and construct a confidence interval that provides a range of plausible values.
+
+---
+# Confidence interval
+
+A 95% confidence interval **does not** mean there is a 95% probability that it captures the parameter. It either does or it does not.
+
+--
+
+Rather, if we were to do this "study" 100 times, our method of constructing the 95% CI is *expected* to produce 95 successful CIs and 5 unsuccessful CIs. 
+
+--
+
+We saw that our one CI was successful because we knew the parameter. In reality, our CI could be one of the unsuccessful ones. But we accept this knowing that our method is expected to fail only 5 out of 100 times.
+
+--
+
+Or could construct a 99% CI expected to fail only 1 out of 100 times. But this produces a *wider* interval that is less precise and perhaps less useful. It's up to us to consider this trade-off.
+
+---
+# Point estimate vs. CI
+
+- Our point estimate for average salary was $81,053. This is what often gets reported. This is for brevity and convenience.
+
+--
+
+- The point estimate **does not** represent the most likely value for the parameter within the CI. No value within the CI is more or less likely to represent the parameter.
+
+--
+
+- Assuming we have a successful CI, the parameter could fall **anywhere** within it, including the lower and upper bounds.
+
+--
+
+- Depending on the context of our study and the width of the CI, only reporting the point estimate could be very misleading.
+
+---
+# Sample size and CI
+
+- We already saw that larger sample size improves accuracy.
+
+**Standard error for sample size of 10**
+```{r}
+sd(sal_sample2$salary)/sqrt(10)
+```
+
+**Standard error for sample size of 250**
+```{r}
+sd(sal_sample3$salary)/sqrt(250)
+```
+
+- **Larger sample size also improves precision (i.e. more narrow CI)**
+
+---
+# Sample size and CI
+
+- With sample of size 10, our estimate for average salary was 79,611. 95% CI is: 
+
+```{r}
+79611-(1.96*1817)
+79611+(1.96*1817)
+```
+
+---
+# Sample size and CI
+
+- With sample of size 250, our estimate was 79,841. The 95% CI is:
+
+```{r}
+79841-(1.96*425)
+79841+(1.96*425)
+```
+
+---
+# Back to regression table
+
