@@ -37,16 +37,16 @@ class: center, middle, inverse, title-slide
 ---
 # Regression table
 
-`$$PctVotedTrump = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$` 
+`$$MedHHInc = \beta_0 + \beta_1HSDegree + \beta_2 Urbanization + \epsilon$$` 
 
 
 
 
 |term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
 |:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |   18.859|     6.407|     2.943|   0.005|    5.969|   31.748|
-|white     |    0.212|     0.076|     2.791|   0.008|    0.059|    0.364|
-|white_pov |    1.770|     0.510|     3.471|   0.001|    0.744|    2.797|
+|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs        |     1993|       262|         8|       0|     1465|     2521|
+|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 - We will learn the building blocks for producing the `std_error`, `lower_ci`, and `upper_ci` columns. 
 
@@ -559,7 +559,8 @@ sd(sal_sample3$salary)/sqrt(250)
 ## [1] 83172.32
 ```
 
---
+---
+# Sample size and CI
 
 - With sample of size 250, our estimate was 79,841. The 95% CI is:
 
@@ -579,6 +580,156 @@ sd(sal_sample3$salary)/sqrt(250)
 ```
 ## [1] 80674
 ```
+
+---
+# Back to regression table
+
+`$$MedHHInc = \beta_0 + \beta_1HSDegree + \beta_2 Urbanization + \epsilon$$` 
+
+
+|term      |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
+|:---------|----------:|---------:|---------:|-------:|-----------:|----------:|
+|intercept | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
+|hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
+|urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+
+- Now we can apply the concepts to our regression table
+- We took one sample of state data
+- Obtained estimates for `\(\beta\)`s (similar to sample mean; different math)
+- **LLN** and **CLT** allow us to assume each estimate is close to the parameter and is drawn from a sampling distribution that is normal
+
+---
+# Back to regression table
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs        |     1993|       262|         8|       0|     1465|     2521|
+|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+
+- Therefore, we calculate the standard error (similar to before but math is different)
+- Then calculate the lower and upper bounds of the 95% CI
+
+---
+# Back to the regression table
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs        |     1993|       262|         8|       0|     1465|     2521|
+|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+
+- Report on the point estimate for `hs` would be something like "On average, as the percent of a state's population with at least a high school degree increases 1 percentage point, median household income tends to increase almost 2,000 dollars."
+
+- Assuming this estimate is unbiased, it is still just one possible value for the *true* value of `\(\beta_1\)`
+
+---
+# Back to the regression table
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs        |     1993|       262|         8|       0|     1465|     2521|
+|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+
+
+```r
+# not equal due to rounding
+1993 - 1.96*262
+```
+
+```
+## [1] 1479.48
+```
+
+```r
+1993 + 1.96*262
+```
+
+```
+## [1] 2506.52
+```
+
+---
+# Back to the regression table
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs        |     1993|       262|         8|       0|     1465|     2521|
+|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+
+- `\(\beta_1\)` could fall anywhere in the 95% CI with equal likelihood
+
+- So we might want to say, "On average, as the percent of a state's population with at least a high school degree increases 1 percentage point, median household income tends to increase between 1,500 and 2,500 dollars."
+
+- Remember, precision can be used to make us more confident in an answer than we should be.
+
+---
+# Back to the regression table
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs        |     1993|       262|         8|       0|     1465|     2521|
+|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+
+- Even still, our sample could be one of the 5 out of 100 samples where our method of inference is expected to fail to capture `\(\beta_1\)`.
+
+- We could lower this likelihood of failure by reporting a 99% CI...
+
+---
+# Back to the regression table
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs        |     1993|       262|         8|       0|     1465|     2521|
+|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+
+
+```r
+1993-2.54*262
+```
+
+```
+## [1] 1327.52
+```
+
+```r
+1993+2.54*262
+```
+
+```
+## [1] 2658.48
+```
+
+---
+# Final points for consumers
+
+- Beware a point estimate without a confidence interval or at least the standard error
+
+--
+
+- Consider measurement validity &amp; reliability, and omitted variable bias
+
+--
+
+- Sample size improves the accuracy of the estimate settling on parameter
+
+--
+
+- Sample size improves the precision of the CI
+
+--
+
+- The worse our regression fits the data (i.e. lower `\(R^2\)` or higher RMSE), the larger the standard error and thus less precise our CI
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

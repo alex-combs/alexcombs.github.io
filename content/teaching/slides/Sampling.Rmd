@@ -35,7 +35,7 @@ state_trump <- hate_crimes %>%
   filter(state != "District of Columbia") %>% 
   mutate_at(vars(share_pop_hs, share_white, share_white_poverty,
               share_vote_trump), funs(.*100)) %>% 
-  rename(white = share_white, white_pov = share_white_poverty)
+  rename(med_inc = median_house_inc, hs = share_pop_hs, urban = urbanization)
 ```
 
 - Reinforce concepts related to sampling
@@ -54,16 +54,16 @@ include_graphics('lectures_files/credible.png')
 ---
 # Regression table
 
-$$PctVotedTrump = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$ 
+$$MedHHInc = \beta_0 + \beta_1HSDegree + \beta_2 Urbanization + \epsilon$$ 
 
 ```{r, include=FALSE}
-trump_mod <- lm(share_vote_trump ~ white + white_pov,
-                data = state_trump)
+inc_mod <- lm(med_inc ~ hs + urban, 
+              data = state_trump)
 ```
 
 ```{r, echo=FALSE}
-get_regression_table(trump_mod) %>% 
-  kable()
+get_regression_table(inc_mod) %>% 
+  kable(digits = 0)
 ```
 
 - We will learn the building blocks for producing the `std_error`, `lower_ci`, and `upper_ci` columns. 
@@ -548,3 +548,111 @@ sd(sal_sample3$salary)/sqrt(250)
 ---
 # Back to regression table
 
+$$MedHHInc = \beta_0 + \beta_1HSDegree + \beta_2 Urbanization + \epsilon$$ 
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable()
+```
+
+- Now we can apply the concepts to our regression table
+- We took one sample of state data
+- Obtained estimates for $\beta$s (similar to sample mean; different math)
+- **LLN** and **CLT** allow us to assume each estimate is close to the parameter and is drawn from a sampling distribution that is normal
+
+---
+# Back to regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits=0)
+```
+
+- Therefore, we calculate the standard error (similar to before but math is different)
+- Then calculate the lower and upper bounds of the 95% CI
+
+---
+# Back to the regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits=0)
+```
+
+- Report on the point estimate for `hs` would be something like "On average, as the percent of a state's population with at least a high school degree increases 1 percentage point, median household income tends to increase almost 2,000 dollars."
+
+- Assuming this estimate is unbiased, it is still just one possible value for the *true* value of $\beta_1$
+
+---
+# Back to the regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits=0)
+```
+
+```{r}
+# not equal due to rounding
+1993 - 1.96*262
+1993 + 1.96*262
+```
+
+---
+# Back to the regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits=0)
+```
+
+- $\beta_1$ could fall anywhere in the 95% CI with equal likelihood
+
+- So we might want to say, "On average, as the percent of a state's population with at least a high school degree increases 1 percentage point, median household income tends to increase between 1,500 and 2,500 dollars."
+
+- Remember, precision can be used to make us more confident in an answer than we should be.
+
+---
+# Back to the regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits=0)
+```
+
+- Even still, our sample could be one of the 5 out of 100 samples where our method of inference is expected to fail to capture $\beta_1$.
+
+- We could lower this likelihood of failure by reporting a 99% CI...
+
+---
+# Back to the regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits=0)
+```
+
+```{r}
+1993-2.54*262
+1993+2.54*262
+```
+
+---
+# Final points for consumers
+
+- Beware a point estimate without a confidence interval or at least the standard error
+
+--
+
+- Consider measurement validity & reliability, and omitted variable bias
+
+--
+
+- Sample size improves the accuracy of the estimate settling on parameter
+
+--
+
+- Sample size improves the precision of the CI
+
+--
+
+- The worse our regression fits the data (i.e. lower $R^2$ or higher RMSE), the larger the standard error and thus less precise our CI
