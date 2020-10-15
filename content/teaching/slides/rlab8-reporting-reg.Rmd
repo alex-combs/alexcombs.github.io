@@ -1,0 +1,280 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "RLab 8: Reporting Regression Results"
+author: "Alex Combs"
+institute: "UGA | SPIA | PADP"
+date: "October 21, 2020"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+      highlightlines: true
+---
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Report regression results via tables and graphs in a realistic and accurate manner
+
+```{r, include=FALSE}
+library(tidyverse)
+library(moderndive)
+library(knitr)
+library(carData)
+library(stargazer) # for regression tables
+library(jtools) # for regression visualizations
+library(interactions) # for regression viz of interactions
+```
+
+---
+# Set-up
+
+- Start a new project and notebook
+- Open your script from the R Chapter on regression with interactions (or the one I provided as answers)
+
+- Copy and paste the script code into the notebook (remember to place the code inside code chunks)
+
+---
+# Set-up
+
+Change YAML
+
+```{r, eval=FALSE}
+---
+title: "RLab 8: Reporting Regression Results"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+---
+# Packages
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(moderndive)
+library(knitr)
+library(carData)
+library(stargazer) # for regression tables
+library(jtools) # for regression visualizations
+```
+
+- Remember to set `include=FALSE`
+
+---
+# Reporting Results
+
+- You ran a regression that explains salaries.
+
+- You are proud of your work and need to provide the results in a report or a presentation.
+
+- Make sure the following code is in a code chunk. Knit to HTML.
+
+```{r, eval=FALSE}
+sal_mod <- lm(salary ~ sex + yrs.service + sex*yrs.service, data = Salaries)
+get_regression_table(sal_mod)
+```
+
+
+---
+# Reporting Results
+
+- The tables you've produced so far are not typically used
+
+```{r}
+sal_mod <- lm(salary ~ sex + yrs.service + sex*yrs.service, data = Salaries)
+```
+```{r, eval=FALSE}
+get_regression_table(sal_mod)
+```
+```{r, include=FALSE}
+get_regression_table(sal_mod) %>% 
+  kable()
+```
+
+---
+# Reporting results
+
+- Conventional regression results tables include:
+  - estimate
+  - standard error or t-statistic; never both
+  - stars to indicate statistical significance based on p-value
+  - Nicely formatted variable names
+  
+- Sometimes include confidence intervals
+
+---
+# Option 1: kable
+
+- Add this code and knit to HTML again
+
+```{r, eval=FALSE}
+regtable.colnames <- c('Variable', 'Estimate', 
+                       'SE', 'P-Value', 
+                       'Lower 95%', 'Upper 95%')
+
+get_regression_table(sal_mod) %>% 
+  select(-statistic) %>% 
+  kable(col.names = regtable.colnames, digits = 0)
+```
+
+---
+# Option 2: stargazer
+
+- Add this code. Include the chunk option `results='asis'`. Knit to HTML.
+
+```{r, eval=FALSE}
+stargazer(sal_mod,
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years of Service", "Male X Service"),
+          keep.stat=c("n","rsq"),
+          digits = 0,
+          digits.extra = 3)
+```
+
+---
+# Option 2: stargazer
+
+- Change first line like so to include confidence intervals instead of standard errors. Knit to HTML.
+
+```{r, eval=FALSE}
+stargazer(sal_mod, ci=TRUE, ci.separator = "-",
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years of Service", "Male X Service"),
+          keep.stat=c("n","rsq"),
+          digits = 0,
+          digits.extra = 3)
+```
+
+---
+# Option 2: stargazer export to Word
+
+- Add last line like so generate a new document named `sal_mod.htm` that you can open in Word. Knit to HTML.
+
+```{r, eval=FALSE}
+stargazer(sal_mod, ci=TRUE, ci.separator = "-",
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years of Service", "Male X Service"),
+          keep.stat=c("n","rsq"),
+          digits = 0,
+          digits.extra = 3,
+          out = "sal_mod.htm")
+```
+
+---
+# Option 2: stargazer
+
+- Also plays nicely with PDF provided you installed `tinytex` back in RLab2
+
+```{r, eval=FALSE}
+# First
+install.packages('tinytex') # hit Enter
+# Next
+tinytex::install_tinytex() # hit Enter, this will take a few minutes
+# if you ever need to uninstall TinyTeX, run tinytex::uninstall_tinytex()
+```
+
+---
+# Option 2: stargazer
+
+- Delete `type="html"` and table will be formatted for PDF export instead
+
+```{r, eval=FALSE}
+stargazer(sal_mod, ci=TRUE, ci.separator = "-",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years of Service", "Male X Service"),
+          keep.stat=c("n","rsq"),
+          digits = 0,
+          digits.extra = 3)
+```
+
+---
+class: inverse, center, middle
+
+# Tables aren't great for presentations. We want to use graphs instead.
+
+---
+# Visualizing Regression Line
+
+- We already know one option
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(Salaries, 
+       aes(x = yrs.service, 
+           y = salary, 
+           color = sex)) +
+  geom_point(alpha = 0.6, size = 5) +
+  geom_smooth(method = 'lm', se = FALSE, size = 2) +
+  theme_minimal() +
+  theme(text = element_text(size = 20))
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE, out.width='99%'}
+ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
+  geom_point(alpha = 0.6, size = 5) +
+  geom_smooth(method = 'lm', se = FALSE, size = 2) +
+  theme_minimal() +
+  theme(text = element_text(size = 20))
+```
+]
+
+---
+# Visualizing Regression Line
+
+- This is about as far as `ggplot` can go
+- If we had one more variable in our regression, we wouldn't be able to visualize it this way because there is not an easy way to add it to the graph
+
+---
+# Visualizing Regression Line
+
+- Add code
+
+```{r, fig.align='center', fig.height=4}
+effect_plot(sal_mod, pred = yrs.service, plot.points = TRUE)
+```
+
+---
+# Visualizing Regression Line
+
+```{r, fig.align='center', fig.height=4}
+interact_plot(sal_mod, pred = yrs.service, modx = sex, plot.points = TRUE)
+```
+
+---
+# Visualizing regression estimates
+
+- Very common to visualize the estimates instead of the regression line. 
+
+- Add following code and knit to HTML.
+
+```{r, eval=FALSE}
+plot_summs(sal_mod, 
+           coefs = c("Male" = "sexMale", 
+                     "Years of Service" = "yrs.service", 
+                     "Male X Service" = "sexMale:yrs.service"))
+ggsave('sal_mod_est.png')
+```
+
+```{r, echo=FALSE, message=FALSE, fig.align='center', fig.height=4}
+plot_summs(sal_mod, 
+           coefs = c("Male" = "sexMale", 
+                     "Years of Service" = "yrs.service", 
+                     "Male X Service" = "sexMale:yrs.service"))
+```
+

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-10-21" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## RLab 8: Reporting Regression Results
+### Alex Combs
+### UGA | SPIA | PADP
+### October 21, 2020
+
+---
+
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Report regression results via tables and graphs in a realistic and accurate manner
+
+
+
+---
+# Set-up
+
+- Start a new project and notebook
+- Open your script from the R Chapter on regression with interactions (or the one I provided as answers)
+
+- Copy and paste the script code into the notebook (remember to place the code inside code chunks)
+
+---
+# Set-up
+
+Change YAML
+
+
+```r
+---
+title: "RLab 8: Reporting Regression Results"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+---
+# Packages
+
+
+```r
+library(tidyverse)
+library(moderndive)
+library(knitr)
+library(carData)
+library(stargazer) # for regression tables
+library(jtools) # for regression visualizations
+```
+
+- Remember to set `include=FALSE`
+
+---
+# Reporting Results
+
+- You ran a regression that explains salaries.
+
+- You are proud of your work and need to provide the results in a report or a presentation.
+
+- Make sure the following code is in a code chunk. Knit to HTML.
+
+
+```r
+sal_mod &lt;- lm(salary ~ sex + yrs.service + sex*yrs.service, data = Salaries)
+get_regression_table(sal_mod)
+```
+
+
+---
+# Reporting Results
+
+- The tables you've produced so far are not typically used
+
+
+```r
+sal_mod &lt;- lm(salary ~ sex + yrs.service + sex*yrs.service, data = Salaries)
+```
+
+```r
+get_regression_table(sal_mod)
+```
+
+
+---
+# Reporting results
+
+- Conventional regression results tables include:
+  - estimate
+  - standard error or t-statistic; never both
+  - stars to indicate statistical significance based on p-value
+  - Nicely formatted variable names
+  
+- Sometimes include confidence intervals
+
+---
+# Option 1: kable
+
+- Add this code and knit to HTML again
+
+
+```r
+regtable.colnames &lt;- c('Variable', 'Estimate', 
+                       'SE', 'P-Value', 
+                       'Lower 95%', 'Upper 95%')
+
+get_regression_table(sal_mod) %&gt;% 
+  select(-statistic) %&gt;% 
+  kable(col.names = regtable.colnames, digits = 0)
+```
+
+---
+# Option 2: stargazer
+
+- Add this code. Include the chunk option `results='asis'`. Knit to HTML.
+
+
+```r
+stargazer(sal_mod,
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years of Service", "Male X Service"),
+          keep.stat=c("n","rsq"),
+          digits = 0,
+          digits.extra = 3)
+```
+
+---
+# Option 2: stargazer
+
+- Change first line like so to include confidence intervals instead of standard errors. Knit to HTML.
+
+
+```r
+stargazer(sal_mod, ci=TRUE, ci.separator = "-",
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years of Service", "Male X Service"),
+          keep.stat=c("n","rsq"),
+          digits = 0,
+          digits.extra = 3)
+```
+
+---
+# Option 2: stargazer export to Word
+
+- Add last line like so generate a new document named `sal_mod.htm` that you can open in Word. Knit to HTML.
+
+
+```r
+stargazer(sal_mod, ci=TRUE, ci.separator = "-",
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years of Service", "Male X Service"),
+          keep.stat=c("n","rsq"),
+          digits = 0,
+          digits.extra = 3,
+          out = "sal_mod.htm")
+```
+
+---
+# Option 2: stargazer
+
+- Also plays nicely with PDF provided you installed `tinytex` back in RLab2
+
+
+```r
+# First
+install.packages('tinytex') # hit Enter
+# Next
+tinytex::install_tinytex() # hit Enter, this will take a few minutes
+# if you ever need to uninstall TinyTeX, run tinytex::uninstall_tinytex()
+```
+
+---
+# Option 2: stargazer
+
+- Delete `type="html"` and table will be formatted for PDF export instead
+
+
+```r
+stargazer(sal_mod, ci=TRUE, ci.separator = "-",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years of Service", "Male X Service"),
+          keep.stat=c("n","rsq"),
+          digits = 0,
+          digits.extra = 3)
+```
+
+---
+class: inverse, center, middle
+
+# Tables aren't great for presentations. We want to use graphs instead.
+
+---
+# Visualizing Regression Line
+
+- We already know one option
+
+.pull-left[
+
+```r
+ggplot(Salaries, 
+       aes(x = yrs.service, 
+           y = salary, 
+           color = sex)) +
+  geom_point(alpha = 0.6, size = 5) +
+  geom_smooth(method = 'lm', se = FALSE, size = 2) +
+  theme_minimal() +
+  theme(text = element_text(size = 20))
+```
+]
+
+.pull-right[
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-15-1.png" width="99%" /&gt;
+]
+
+---
+# Visualizing Regression Line
+
+- This is about as far as `ggplot` can go
+- If we had one more variable in our regression, we wouldn't be able to visualize it this way because there is not an easy way to add it to the graph
+
+---
+# Visualizing Regression Line
+
+- Add code
+
+
+```r
+effect_plot(sal_mod, pred = yrs.service, plot.points = TRUE)
+```
+
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Visualizing Regression Line
+
+
+```r
+interact_plot(sal_mod, pred = yrs.service, modx = sex, plot.points = TRUE)
+```
+
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Visualizing regression estimates
+
+- Very common to visualize the estimates instead of the regression line. 
+
+- Add following code and knit to HTML.
+
+
+```r
+plot_summs(sal_mod, 
+           coefs = c("Male" = "sexMale", 
+                     "Years of Service" = "yrs.service", 
+                     "Male X Service" = "sexMale:yrs.service"))
+ggsave('sal_mod_est.png')
+```
+
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"highlightlines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>

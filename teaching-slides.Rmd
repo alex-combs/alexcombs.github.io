@@ -48,3 +48,5 @@ output: html_document
 ### [Combining Data](content/teaching/slides/rlab6-combining-data.html)
 
 ### [Polished Viz](content/teaching/slides/rlab7-polished-viz.html)
+
+### [Reporting Regressions](content/teaching/slides/rlab8-reporting-reg.html)
