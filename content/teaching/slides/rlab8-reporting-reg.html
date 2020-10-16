@@ -31,14 +31,8 @@ By the end of this lab, you will have learned how to...
 # Set-up
 
 - Start a new project and notebook
-- Open your script from the R Chapter on regression with interactions (or the one I provided as answers)
 
-- Copy and paste the script code into the notebook (remember to place the code inside code chunks)
-
----
-# Set-up
-
-Change YAML
+- Change YAML
 
 
 ```r
@@ -55,6 +49,8 @@ output:
 ---
 # Packages
 
+- Remember to set `include=FALSE`
+
 
 ```r
 library(tidyverse)
@@ -63,81 +59,136 @@ library(knitr)
 library(carData)
 library(stargazer) # for regression tables
 library(jtools) # for regression visualizations
+library(interactions) # for regression viz of interactions
 ```
 
-- Remember to set `include=FALSE`
+---
+# Revisiting Professor Salaries
+
+- In R Chapter 22 (interactions), you ran the following model.
+
+
+```r
+sal_mod &lt;- lm(salary ~ sex + yrs.service + sex*yrs.service, 
+              data = Salaries)
+```
+
+```r
+get_regression_table(sal_mod)
+```
+
+
+- Add this code to your notebook
+
+---
+# Revisiting Professor Salaries
+
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+- The data suggests we may want to model `yrs.service` using a quadratic
+
+---
+# Quadratic Salary Model
+
+- Let's run a new model for `salary` that allows our regression to change direction once.
+
+$$Salary = \beta_0 + \beta_1Male + \beta_2YrsServe + \beta_3YrsServe^2 + \epsilon $$
+
+-Add the following code.
+
+
+```r
+sal_mod2 &lt;- lm(salary ~ sex + yrs.service + I(yrs.service^2),
+               data = Salaries)
+```
 
 ---
 # Reporting Results
-
-- You ran a regression that explains salaries.
 
 - You are proud of your work and need to provide the results in a report or a presentation.
 
-- Make sure the following code is in a code chunk. Knit to HTML.
+- Add following code. Knit to HTML.
 
 
 ```r
-sal_mod &lt;- lm(salary ~ sex + yrs.service + sex*yrs.service, data = Salaries)
-get_regression_table(sal_mod)
+get_regression_table(sal_mod2)
 ```
-
 
 ---
 # Reporting Results
 
-- The tables you've produced so far are not typically used
+- This table isn't great for an external audience
 
 
-```r
-sal_mod &lt;- lm(salary ~ sex + yrs.service + sex*yrs.service, data = Salaries)
-```
-
-```r
-get_regression_table(sal_mod)
-```
-
+|term             |  estimate| std_error| statistic| p_value|  lower_ci|  upper_ci|
+|:----------------|---------:|---------:|---------:|-------:|---------:|---------:|
+|intercept        | 77227.504|  4929.331|    15.667|   0.000| 67536.347| 86918.662|
+|sexMale          |  9392.245|  4574.882|     2.053|   0.041|   397.942| 18386.548|
+|yrs.service      |  2984.383|   327.463|     9.114|   0.000|  2340.584|  3628.182|
+|I(yrs.service^2) |   -51.272|     7.111|    -7.210|   0.000|   -65.252|   -37.291|
 
 ---
 # Reporting results
 
-- Conventional regression results tables include:
+- Regression results tables usually include:
   - estimate
-  - standard error or t-statistic; never both
+  - standard error or t-statistic; rarely both
   - stars to indicate statistical significance based on p-value
-  - Nicely formatted variable names
-  
+  - clear variable names
+  - number of observations
+
+- Sometimes goodness-of-fit measure like `\(R^2\)`  
 - Sometimes include confidence intervals
 
 ---
 # Option 1: kable
 
+- Add heading "Kable"
 - Add this code and knit to HTML again
 
 
 ```r
 regtable.colnames &lt;- c('Variable', 'Estimate', 
                        'SE', 'P-Value', 
-                       'Lower 95%', 'Upper 95%')
+                       'Lower 95% CI', 'Upper 95% CI')
 
-get_regression_table(sal_mod) %&gt;% 
+get_regression_table(sal_mod2) %&gt;% 
   select(-statistic) %&gt;% 
-  kable(col.names = regtable.colnames, digits = 0)
+  kable(col.names = regtable.colnames)
 ```
 
 ---
 # Option 2: stargazer
 
+- Add heading "Stargazer"
 - Add this code. Include the chunk option `results='asis'`. Knit to HTML.
 
 
 ```r
-stargazer(sal_mod,
+stargazer(sal_mod2,
           type="html",
           title="Regression Results",
           dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years of Service", "Male X Service"),
-          keep.stat=c("n","rsq"),
+          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
+          keep.stat=c("n"), # reports only the number of observations
+          digits = 0, # no decimals
+          digits.extra = 3) #allows up to 3 decimals if rounding causes a 0
+```
+
+---
+# Option 2: stargazer
+
+- Change first line like so to include confidence intervals instead of standard errors.
+- Knit to HTML.
+
+
+```r
+stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
+          keep.stat=c("n"),
           digits = 0,
           digits.extra = 3)
 ```
@@ -145,36 +196,19 @@ stargazer(sal_mod,
 ---
 # Option 2: stargazer
 
-- Change first line like so to include confidence intervals instead of standard errors. Knit to HTML.
+- Add last line like so to generate a new document named `sal_mod2.htm` that you can open in Word. Knit to HTML.
 
 
 ```r
-stargazer(sal_mod, ci=TRUE, ci.separator = "-",
+stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
           type="html",
           title="Regression Results",
           dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years of Service", "Male X Service"),
-          keep.stat=c("n","rsq"),
-          digits = 0,
-          digits.extra = 3)
-```
-
----
-# Option 2: stargazer export to Word
-
-- Add last line like so generate a new document named `sal_mod.htm` that you can open in Word. Knit to HTML.
-
-
-```r
-stargazer(sal_mod, ci=TRUE, ci.separator = "-",
-          type="html",
-          title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years of Service", "Male X Service"),
-          keep.stat=c("n","rsq"),
+          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
+          keep.stat=c("n"),
           digits = 0,
           digits.extra = 3,
-          out = "sal_mod.htm")
+          out = "sal_mod2.htm")
 ```
 
 ---
@@ -198,11 +232,11 @@ tinytex::install_tinytex() # hit Enter, this will take a few minutes
 
 
 ```r
-stargazer(sal_mod, ci=TRUE, ci.separator = "-",
+stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
           title="Regression Results",
           dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years of Service", "Male X Service"),
-          keep.stat=c("n","rsq"),
+          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
+          keep.stat=c("n"),
           digits = 0,
           digits.extra = 3)
 ```
@@ -215,7 +249,7 @@ class: inverse, center, middle
 ---
 # Visualizing Regression Line
 
-- We already know one option
+- We already know one option using `ggplot`
 
 .pull-left[
 
@@ -232,36 +266,43 @@ ggplot(Salaries,
 ]
 
 .pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-15-1.png" width="99%" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-18-1.png" width="99%" /&gt;
 ]
 
 ---
 # Visualizing Regression Line
 
-- This is about as far as `ggplot` can go
-- If we had one more variable in our regression, we wouldn't be able to visualize it this way because there is not an easy way to add it to the graph
+- At most, `ggplot` can easily visualize regression models that include:
+  - **ONE** numerical explanatory variable
+  - **ONE** categorical explanatory variable (interacted with numerical or not)
+  
+- The quadratic is difficult to add
+- If we decided to control for one more variable, our graph would not be showing the relationship between salary and years of service **controlling for that other variable**
 
 ---
 # Visualizing Regression Line
 
-- Add code
+- `effect_plot` from the `jtools` package makes this very easy. Add code:
 
 
 ```r
-effect_plot(sal_mod, pred = yrs.service, plot.points = TRUE)
+effect_plot(sal_mod2, pred = yrs.service, plot.points = TRUE)
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing Regression Line
 
+- If we want to include Male, `interact_plot` from `interactions` package is useful. 
+- Works the same had we interacted `sex` with `yrs.service`.
+
 
 ```r
-interact_plot(sal_mod, pred = yrs.service, modx = sex, plot.points = TRUE)
+interact_plot(sal_mod2, pred = yrs.service, modx = sex, plot.points = TRUE)
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing regression estimates
@@ -272,14 +313,49 @@ interact_plot(sal_mod, pred = yrs.service, modx = sex, plot.points = TRUE)
 
 
 ```r
-plot_summs(sal_mod, 
+plot_summs(sal_mod2, 
            coefs = c("Male" = "sexMale", 
-                     "Years of Service" = "yrs.service", 
-                     "Male X Service" = "sexMale:yrs.service"))
-ggsave('sal_mod_est.png')
+                     "Years Served" = "yrs.service", 
+                     "Years Served Sq." = "I(yrs.service^2)"))
+ggsave('sal_mod2_est.png') # saves most recent graph to separate file
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Multiple models
+
+- We have two models `sal_mod` and `sal_mod2` we may want to report together
+- Add code and knit to HTML
+
+
+```r
+stargazer(sal_mod, sal_mod2, ci=TRUE, ci.separator = " : ",
+          type = "html",
+          title="Regression Results",
+          dep.var.labels=c("Salary"),
+          covariate.labels=c("Male", "Years Served","Males X Years Served", "Years Served Sq."),
+          keep.stat=c("n"),
+          digits = 0,
+          digits.extra = 2)
+```
+
+---
+# Multiple Models
+
+- Add code. Knit to HTML.
+
+
+```r
+plot_summs(sal_mod, sal_mod2, 
+           coefs = c("Male" = "sexMale", 
+                     "Years Served" = "yrs.service", 
+                     "Male X Years Served" = "sexMale:yrs.service",
+                     "Years Served^2" = "I(yrs.service^2)"))
+```
+
+---
+# Save and upload to eLC
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
