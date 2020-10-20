@@ -1,0 +1,215 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "RLab 9: Reporting Regression Results"
+author: "Alex Combs"
+institute: "UGA | SPIA | PADP"
+date: "October 28, 2020"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+      highlightlines: true
+---
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Compare two models on the basis of their omitted variable bias
+- Hypothesize the direction of omitted variable bias
+
+```{r, include=FALSE}
+library(tidyverse)
+library(moderndive)
+library(knitr)
+```
+
+---
+# Set-up
+
+- Start a new project and notebook
+
+- Change YAML
+
+```{r, eval=FALSE}
+---
+title: "RLab 9: Omitted Variable Bias"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+---
+# Set-up
+
+- Download `predicting_happiness.RData` from eLC and `load` into RStudio
+
+```{r, include=FALSE}
+load('labs_files/predicting_happiness.RData')
+```
+
+- Load following packages
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(moderndive)
+```
+
+---
+# Introduction
+
+- Governments want citizens to be happy. 
+
+- Happy citizens cost less, spend more, attract business, and do not overthrow their government overlords. 
+
+- Suppose we are government elites interested in whether citizens' social networks affect their happiness. Perhaps we can implement new policies or modify city design to foster better social networking and subdue the masses...for now.
+
+---
+# Data
+
+.pull-left[
+```{r}
+head(predicting_happiness, n = 4) %>% 
+  kable()
+```
+]
+
+.pull-right[
+- Subjective Well Being (SWB) - individual's own level of happiness from 0 to 40.
+- Network Diversity (ND) - scope and variability of a person's social capital from 0 to 10.
+- Perceived Social Support (PSS) - perception of how much support received from social networks from 0 to 100.
+
+]
+
+---
+# Correlations
+
+- Let's examine the correlations between the three numerical variables
+
+- Feed the three numerical variables to the `cor()` function and complete the following sentences
+
+- ND is _ correlated with SWB.
+- PSS is _ correlated with SWB.
+- PSS is _ correlated with ND.
+
+---
+# Correlations
+
+.pull-left[
+```{r}
+predicting_happiness %>% 
+  select(-Id) %>% 
+  cor() %>% 
+  kable(digits = 2)
+```
+]
+
+.pull-right[
+
+- ND is positively correlated with SWB.
+- PSS is positively correlated with SWB.
+- PSS is positively correlated with ND.
+
+]
+
+---
+# DAG
+
+- Suppose we theorize the effect of ND and PSS on SWB like so
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('labs_files/happydag.png')
+```
+
+--
+
+- Therefore, what is the correct regression model?
+
+---
+# Dueling Models
+
+$$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$
+
+- But suppose we are only able to estimate the following model
+
+$$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$
+
+--
+
+Based on the correlations between these three variables, what direction is the OVB on $ND$ for the incorrect model?
+
+---
+# OVB Direction
+
+- PSS affects SWB and ND according to our theoretical DAG 
+
+- PSS effect is the same direction on SWB and ND according to the correlations
+
+- We can predict this OVB will be positive
+
+---
+# Biased regression
+
+- Estimate the biased model and provide the results
+
+```{r, eval=FALSE}
+biased <- 
+```
+
+---
+# Biased regression
+
+```{r}
+biased <- lm(SWB ~ ND, data = predicting_happiness)
+get_regression_table(biased) %>% 
+  kable()
+```
+
+- Knowing the direction of the OVB, can we make a valid conclusion concerning the effect of network diversity (ND) on happiness (SWB)?
+
+--
+
+- No. Our estimate is positive and our OVB is predicted to be positive. Therefore, our estimate for ND may be statistically insignificant if not for the positive OVB pushing it above 0.
+
+---
+# Valid regression
+
+Estimate the valid model and provide the results.
+
+```{r, eval=FALSE}
+valid <- 
+```
+
+---
+# Valid regression
+
+```{r}
+valid <- lm(SWB ~ ND + PSS, data = predicting_happiness)
+get_regression_table(valid) %>% 
+  kable()
+```
+
+---
+# Computing OVB
+
+- OVB can be calculated like so:
+
+$$\beta^{biased}-\beta^{valid}$$
+
+- What is the magnitude of the OVB on the estimate for ND between the two models? Does it comport with our prediction concerning the direction of the bias?
+
+---
+# Computing OVB
+
+```{r}
+0.523 - (-0.050)
+```
+
+- As we feared, the OVB was the culprit for ND being statistically significant. Eliminating OVB by including PSS renders ND statistically insignificant.
+
+- You now understand bias. Congratulations!

@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-10-28" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## RLab 9: Reporting Regression Results
+### Alex Combs
+### UGA | SPIA | PADP
+### October 28, 2020
+
+---
+
+# Objectives
+
+By the end of this lab, you will have learned how to...
+
+- Compare two models on the basis of their omitted variable bias
+- Hypothesize the direction of omitted variable bias
+
+
+
+---
+# Set-up
+
+- Start a new project and notebook
+
+- Change YAML
+
+
+```r
+---
+title: "RLab 9: Omitted Variable Bias"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+---
+# Set-up
+
+- Download `predicting_happiness.RData` from eLC and `load` into RStudio
+
+
+
+- Load following packages
+
+
+```r
+library(tidyverse)
+library(moderndive)
+```
+
+---
+# Introduction
+
+- Governments want citizens to be happy. 
+
+- Happy citizens cost less, spend more, attract business, and do not overthrow their government overlords. 
+
+- Suppose we are government elites interested in whether citizens' social networks affect their happiness. Perhaps we can implement new policies or modify city design to foster better social networking and subdue the masses...for now.
+
+---
+# Data
+
+.pull-left[
+
+```r
+head(predicting_happiness, n = 4) %&gt;% 
+  kable()
+```
+
+
+
+| Id| SWB| ND| PSS|
+|--:|---:|--:|---:|
+|  1|  33|  5|  93|
+|  2|  33|  6|  95|
+|  3|  29|  5|  89|
+|  4|  21|  6|  74|
+]
+
+.pull-right[
+- Subjective Well Being (SWB) - individual's own level of happiness from 0 to 40.
+- Network Diversity (ND) - scope and variability of a person's social capital from 0 to 10.
+- Perceived Social Support (PSS) - perception of how much support received from social networks from 0 to 100.
+
+]
+
+---
+# Correlations
+
+- Let's examine the correlations between the three numerical variables
+
+- Feed the three numerical variables to the `cor()` function and complete the following sentences
+
+- ND is _ correlated with SWB.
+- PSS is _ correlated with SWB.
+- PSS is _ correlated with ND.
+
+---
+# Correlations
+
+.pull-left[
+
+```r
+predicting_happiness %&gt;% 
+  select(-Id) %&gt;% 
+  cor() %&gt;% 
+  kable(digits = 2)
+```
+
+
+
+|    |  SWB|   ND|  PSS|
+|:---|----:|----:|----:|
+|SWB | 1.00| 0.13| 0.47|
+|ND  | 0.13| 1.00| 0.31|
+|PSS | 0.47| 0.31| 1.00|
+]
+
+.pull-right[
+
+- ND is positively correlated with SWB.
+- PSS is positively correlated with SWB.
+- PSS is positively correlated with ND.
+
+]
+
+---
+# DAG
+
+- Suppose we theorize the effect of ND and PSS on SWB like so
+
+&lt;img src="labs_files/happydag.png" width="407" style="display: block; margin: auto;" /&gt;
+
+--
+
+- Therefore, what is the correct regression model?
+
+---
+# Dueling Models
+
+`$$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$`
+
+- But suppose we are only able to estimate the following model
+
+`$$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$`
+
+--
+
+Based on the correlations between these three variables, what direction is the OVB on `\(ND\)` for the incorrect model?
+
+---
+# OVB Direction
+
+- PSS affects SWB and ND according to our theoretical DAG 
+
+- PSS effect is the same direction on SWB and ND according to the correlations
+
+- We can predict this OVB will be positive
+
+---
+# Biased regression
+
+- Estimate the biased model and provide the results
+
+
+```r
+biased &lt;- 
+```
+
+---
+# Biased regression
+
+
+```r
+biased &lt;- lm(SWB ~ ND, data = predicting_happiness)
+get_regression_table(biased) %&gt;% 
+  kable()
+```
+
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |   20.995|     1.189|    17.651|   0.000|   18.656|   23.334|
+|ND        |    0.523|     0.197|     2.657|   0.008|    0.136|    0.910|
+
+- Knowing the direction of the OVB, can we make a valid conclusion concerning the effect of network diversity (ND) on happiness (SWB)?
+
+--
+
+- No. Our estimate is positive and our OVB is predicted to be positive. Therefore, our estimate for ND may be statistically insignificant if not for the positive OVB pushing it above 0.
+
+---
+# Valid regression
+
+Estimate the valid model and provide the results.
+
+
+```r
+valid &lt;- 
+```
+
+---
+# Valid regression
+
+
+```r
+valid &lt;- lm(SWB ~ ND + PSS, data = predicting_happiness)
+get_regression_table(valid) %&gt;% 
+  kable()
+```
+
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |   -2.350|     2.589|    -0.908|   0.365|   -7.439|    2.740|
+|ND        |   -0.050|     0.185|    -0.271|   0.787|   -0.415|    0.314|
+|PSS       |    0.316|     0.032|     9.892|   0.000|    0.253|    0.379|
+
+---
+# Computing OVB
+
+- OVB can be calculated like so:
+
+`$$\beta^{biased}-\beta^{valid}$$`
+
+- What is the magnitude of the OVB on the estimate for ND between the two models? Does it comport with our prediction concerning the direction of the bias?
+
+---
+# Computing OVB
+
+
+```r
+0.523 - (-0.050)
+```
+
+```
+## [1] 0.573
+```
+
+- As we feared, the OVB was the culprit for ND being statistically significant. Eliminating OVB by including PSS renders ND statistically insignificant.
+
+- You now understand bias. Congratulations!
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false,
+"highlightlines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
