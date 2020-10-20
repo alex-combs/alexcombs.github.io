@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Regression with Nonlinear Variables"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "October 10, 2020"
+date: "October 21, 2020"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
