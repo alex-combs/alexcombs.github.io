@@ -42,7 +42,7 @@ output:
 ---
 # Set-up
 
-- Download the follwing data available on eLC
+- Download the following data available on eLC and add to your project folder
 
 
 ```r
@@ -104,21 +104,207 @@ By the end of this lab, you will have learned how to...
 3. Using and evaluating a forecasting model
 
 ---
-# Creating a TS object
+# Creating a time series (TS) object
 
-- Before starting prelim analysis, we need to prep data
-- The below code converts the `voting` data to a new TS object.
+- First, need to tell R that data is time series
+
+- Generic syntax:
 
 
 ```r
-voting_ts &lt;- ts(voting[,-1], start = 1912, end = 2016, frequency = 0.25)
+ts_name &lt;- ts(data_name[,-1], # tells R to skip the first row of names
+              start = first_time_period,
+              end = last_time_period, 
+              frequency = unit_of_time_between_observations)
 ```
 
-5. Convert the `sales` data to a new TS object.
+---
+# TS object examples
+
+- annual time series
+
+&lt;img src="labs_files/tsobjannual.png" width="1277" style="display: block; margin: auto;" /&gt;
 
 
 ```r
-sales_ts &lt;- 
+ts_data &lt;- ts(data[,-1], start = 2012, end = 2016,
+              frequency = 1)
+```
+
+---
+# TS object examples
+
+
+
+- quarterly data (head &amp; tail shown)
+
+
+| year| quarter| value|
+|----:|-------:|-----:|
+| 2016|       1|    28|
+| 2016|       2|    49|
+
+
+
+| year| quarter| value|
+|----:|-------:|-----:|
+| 2020|       3|    56|
+| 2020|       4|    37|
+
+
+```r
+ts_quarterly &lt;- ts(quarterly[,-1], start = 2016, end = 2020,
+                   frequency = 4)
+```
+
+---
+# TS object examples
+
+- monthly data (head &amp; tail shown)
+
+
+
+
+| year| month| value|
+|----:|-----:|-----:|
+| 2016|     1|    59|
+| 2016|     2|    53|
+
+
+
+| year| month| value|
+|----:|-----:|-----:|
+| 2020|    11|    52|
+| 2020|    12|    57|
+
+
+```r
+ts_monthly &lt;- ts(monthly[,-1], start = 2016, end = 2020,
+                   frequency = 12)
+```
+
+---
+# TS object examples
+
+- biennial data (head &amp; tail shown)
+
+
+
+
+| year| value|
+|----:|-----:|
+| 2000|    41|
+| 2002|    54|
+
+
+
+| year| value|
+|----:|-----:|
+| 2018|    53|
+| 2020|    50|
+
+
+```r
+ts_biennial &lt;- ts(biennial[,-1], start = 2000, end = 2020,
+                   frequency = 0.5)
+```
+
+---
+# Frequencies
+
+
+|Data        |frequency |
+|:-----------|:---------|
+|Quadrennial |0.25      |
+|Biennial    |0.5       |
+|Annual      |1         |
+|Quarterly   |4         |
+|Monthly     |12        |
+|Weekly      |52        |
+|Daily       |365       |
+
+---
+# Creating TS object
+
+- `voting` contains national turnout for each U.S. presidential election from 1912 to 2016
+
+- Try to set `voting` as a TS object on your own
+
+
+```r
+ts_voting &lt;- 
+```
+
+--
+
+
+```r
+ts_voting &lt;- ts(voting[,-1], start = 1912, end = 2016, 
+                frequency = 0.25)
+```
+
+---
+# Creating TS object
+
+- `sales` contains data for a social enterprise
+
+- Examine `sales` and try to convert to TS on your own
+
+
+```r
+ts_sales &lt;- 
+```
+
+--
+
+
+```r
+ts_sales &lt;- ts(sales[,-1], start = 1981, end = 2005, 
+               frequency = 4)
+```
+
+---
+# Exploratory plotting
+
+- The purpose of exploratory plotting is to detect **patterns**
+
+- Patterns provide inforation for prediction in the future
+
+- Certain forecast models are better for certain patterns
+
+---
+# Types of patterns
+
+1. Trend - A long-term increase or decrease in the data
+
+2. Seasonal - A periodic pattern that follows the calendar (e.g. quarter, month, day of the week)
+
+3. Cyclic - Data rises and falls not according to a fixed period (e.g. recessions)
+  
+---
+# Patterns
+
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Patterns
+
+&lt;img src="labs_files/patterns-colfinance.png" width="1005" height="5" style="display: block; margin: auto;" /&gt;
+
+---
+# Exploratory plots
+
+- With a TS object, line graphs can be made very quickly
+
+- Add following code
+
+
+```r
+autoplot(ts_voting)
+```
+
+```r
+autoplot(ts_sales)
 ```
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

@@ -1,0 +1,294 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "RLab 10: Forecasting"
+author: "Alex Combs"
+institute: "UGA | SPIA | PADP"
+date: "November 18, 2020"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+      highlightlines: true
+---
+# Set-up
+
+```{r, include=FALSE}
+library(tidyverse)
+library(forecast)
+library(fpp2)
+library(knitr)
+```
+
+- Start a new project and notebook
+
+- Change YAML
+
+```{r, eval=FALSE}
+---
+title: "RLab 10: Forecasting"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
+
+---
+# Set-up
+
+- Download the following data available on eLC and add to your project folder
+
+```{r, eval=FALSE}
+load("sales.RData")
+load("voting.RData")
+```
+
+```{r, include=FALSE}
+load("labs_files/sales.RData")
+load("labs_files/voting.RData")
+```
+
+---
+# Packages
+
+- Remember to set `include=FALSE`
+
+```{r, eval=FALSE}
+library(tidyverse)
+library(forecast)
+library(fpp2)
+```
+
+---
+# Learning objectives
+
+By the end of this lab, you will have learned how to...
+
+- Convert a dataset to a time series dataset in R
+- Explore time series for patterns
+- Execute some simple forecasting models like naive, average, and (seasonal) trend
+- Execute exponential smoothing
+- Exucute a regression-adjusted forecast
+- Evaluate and choose between forecast models
+
+---
+# Forecasts
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('labs_files/hurricaneforecast.png')
+```
+
+---
+# Forecasts
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('labs_files/hurricanespag.png')
+```
+
+---
+# Forecasts
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('labs_files/tourismspag.png')
+```
+
+---
+# Forecasts
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('labs_files/tourismforecast.png')
+```
+
+---
+# Steps of forecasting
+
+1. Preliminary/exploratory analysis
+2. Choosing and fitting models
+3. Using and evaluating a forecasting model
+
+---
+# Creating a time series (TS) object
+
+- First, need to tell R that data is time series
+
+- Generic syntax:
+
+```{r, eval=FALSE}
+ts_name <- ts(data_name[,-1], # tells R to skip the first row of names
+              start = first_time_period,
+              end = last_time_period, 
+              frequency = unit_of_time_between_observations)
+```
+
+---
+# TS object examples
+
+- annual time series
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('labs_files/tsobjannual.png')
+```
+
+```{r, eval=FALSE}
+ts_data <- ts(data[,-1], start = 2012, end = 2016,
+              frequency = 1)
+```
+
+---
+# TS object examples
+
+```{r, include=FALSE}
+quarterly <- tibble::tibble(year = rep(2016:2020, 4), quarter = rep(1:4, 5), value = round(rnorm(20, 50, 10),0))
+
+quarterly <- arrange(quarterly, year, quarter)
+```
+
+- quarterly data (head & tail shown)
+
+```{r, echo=FALSE}
+head(quarterly, n = 2) %>% kable()
+tail(quarterly, n = 2) %>% kable()
+```
+
+```{r, eval=FALSE}
+ts_quarterly <- ts(quarterly[,-1], start = 2016, end = 2020,
+                   frequency = 4)
+```
+
+---
+# TS object examples
+
+- monthly data (head & tail shown)
+
+```{r, include=FALSE}
+monthly <- tibble::tibble(year = rep(2016:2020, 12), month = rep(1:12, 5), value = round(rnorm(60, 50, 10),0))
+
+monthly <- arrange(monthly, year, month)
+```
+
+```{r, echo=FALSE}
+head(monthly, n = 2) %>% kable()
+tail(monthly, n = 2) %>% kable()
+```
+
+```{r, eval=FALSE}
+ts_monthly <- ts(monthly[,-1], start = 2016, end = 2020,
+                   frequency = 12)
+```
+
+---
+# TS object examples
+
+- biennial data (head & tail shown)
+
+```{r, include=FALSE}
+biennial <- tibble::tibble(year = seq(2000, 2020, 2), value = round(rnorm(11, 50, 10),0))
+
+biennial <- arrange(biennial, year)
+```
+
+```{r, echo=FALSE}
+head(biennial, n = 2) %>% kable()
+tail(biennial, n = 2) %>% kable()
+```
+
+```{r, eval=FALSE}
+ts_biennial <- ts(biennial[,-1], start = 2000, end = 2020,
+                   frequency = 0.5)
+```
+
+---
+# Frequencies
+
+```{r, echo=FALSE}
+freq.table <- tibble(Data = c('Quadrennial', 'Biennial', 'Annual', 'Quarterly', 'Monthly', 'Weekly', 'Daily'), frequency = c('0.25', '0.5', '1', '4', '12', '52', '365'))
+
+freq.table %>% 
+  kable()
+```
+
+---
+# Creating TS object
+
+- `voting` contains national turnout for each U.S. presidential election from 1912 to 2016
+
+- Try to set `voting` as a TS object on your own
+
+```{r, eval=FALSE}
+ts_voting <- 
+```
+
+--
+
+```{r}
+ts_voting <- ts(voting[,-1], start = 1912, end = 2016, 
+                frequency = 0.25)
+```
+
+---
+# Creating TS object
+
+- `sales` contains data for a social enterprise
+
+- Examine `sales` and try to convert to TS on your own
+
+```{r, eval=FALSE}
+ts_sales <- 
+```
+
+--
+
+```{r}
+ts_sales <- ts(sales[,-1], start = 1981, end = 2005, 
+               frequency = 4)
+```
+
+---
+# Exploratory plotting
+
+- The purpose of exploratory plotting is to detect **patterns**
+
+- Patterns provide inforation for prediction in the future
+
+- Certain forecast models are better for certain patterns
+
+---
+# Types of patterns
+
+1. Trend - A long-term increase or decrease in the data
+
+2. Seasonal - A periodic pattern that follows the calendar (e.g. quarter, month, day of the week)
+
+3. Cyclic - Data rises and falls not according to a fixed period (e.g. recessions)
+  
+---
+# Patterns
+
+```{r, echo=FALSE, fig.align='center'}
+autoplot(usmelec) +
+  labs(title = 'U.S. monthly net electricity generation')
+```
+
+---
+# Patterns
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('labs_files/patterns-colfinance.png')
+```
+
+---
+# Exploratory plots
+
+- With a TS object, line graphs can be made very quickly
+
+- Add following code
+
+```{r, fig.show='hide'}
+autoplot(ts_voting)
+autoplot(ts_sales)
+```
+
