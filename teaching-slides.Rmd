@@ -25,6 +25,8 @@ output: html_document
 
 ### [Regression with Nonlinear Variables](content/teaching/slides/Regression-with-nonlinears.html)
 
+### [Causality & Bias](content/teaching/slides/Causality.html)
+
 ### [Sampling & Inference](content/teaching/slides/Sampling.html)
 
 ### [Hypothesis Testing](content/teaching/slides/Hypothesis-Testing.html)
@@ -50,3 +52,7 @@ output: html_document
 ### [Polished Viz](content/teaching/slides/rlab7-polished-viz.html)
 
 ### [Reporting Regressions](content/teaching/slides/rlab8-reporting-reg.html)
+
+### [Omitted Variable Bias](content/teaching/slides/rlab9-ovb.html)
+
+### [Forecasting](content/teaching/slides/rlab10-forecasting.html)
