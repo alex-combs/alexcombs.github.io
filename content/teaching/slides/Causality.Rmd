@@ -33,9 +33,9 @@ options(scipen = 999)
 
 --
 
-- The outcome that we observe in the presence of the event
+1. The outcome that we observe in the presence of the event
 
-- The outcome that we would have observed had the event **not happened**
+2. The outcome that we would have observed had the event **not happened**
 
 --
 
@@ -54,6 +54,8 @@ include_graphics('lectures_files/prog-effect.png')
 ```{r, echo=FALSE}
 include_graphics('lectures_files/counterfact.png')
 ```
+
+- For each member in either group, we do not observe their outcome had they been in the other group
 
 ---
 # The challenge of counterfactual
@@ -86,12 +88,17 @@ include_graphics('lectures_files/counterfact.png')
 ---
 # Temporal Precedence
 
-- Somewhat easy to establish when studying an event or intervention
-  - Effect of Medicaid expansion on health outcomes
+- Fairly easy to establish when studying an acute event or intervention
+  - Medicaid expansion on health outcomes
+  - Participation in job training on employment
+
+--
   
-- More difficult when studying observed facts
-  - Effect of exercise on Body Mass Index (BMI)
-  - Do people have a high BMI because they don't exercise or do they not exercise because they already have a high BMI?
+- More difficult when studying nebulous behaviors/facts
+  - Minutes of exercise on Body Mass Index (BMI)
+    - Do people have a high BMI because they don't exercise or do they not exercise because they already have a high BMI?
+  - Merit scholarship on degree completion
+    - Did scholarship increase motivation or did student already have motivation as evidenced by receiving scholarship?
   
 - Possible solution: Use values of $x$ measured prior to $y$
 
@@ -100,8 +107,12 @@ include_graphics('lectures_files/counterfact.png')
 
 - No other variable $z$ can influence the change in $y$ we attribute to $x$
 
-- Participant of a job training program gets a new job after completing the program
-  - Plausible alternatives?
+- Employment rate among those who participated in a job training program is 75% compared to 40% among those who did not participate.
+
+--
+
+- Job training programs increase the likelihood of employment by 35 percentage points. 
+- Plausible alternatives?
   
 ---
 # Key questions
