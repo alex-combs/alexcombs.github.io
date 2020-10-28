@@ -142,10 +142,10 @@ class: inverse, center, middle
 
 - Behind every regression is a DAG
 
-$$BMI=\beta_0+\beta_1Exercise+\epsilon$$
+$$Happiness=\beta_0+\beta_1Age+\beta_2Age^2+\beta_3ln(Inc)+\epsilon$$
 
 ```{r, echo=FALSE, fig.align='center'}
-include_graphics('lectures_files/dag1.png')
+include_graphics('lectures_files/dag15.png')
 ```
 
 ---
@@ -309,19 +309,18 @@ $$Y=\beta_0+\beta_1X+\epsilon$$
 # Error term and OVB
 
 .center[
-$$BMI=\beta_0+\beta_1Exercise+\epsilon$$
-]
+$$Happiness=\beta_0+\beta_1Age+\beta_2Age^2+\beta_3ln(Inc)+\epsilon$$]
 
 .pull-left[
 ```{r, echo=FALSE, fig.align='center'}
-include_graphics('lectures_files/dag1.png')
+include_graphics('lectures_files/dag15.png')
 ```
 ]
 
 .pull-right[
 - What variables might the error term contain?
 
-- Do any of those variables also affect exercise?
+- Do any of our omitted variables also affect age or income?
 ]
 
 ---
