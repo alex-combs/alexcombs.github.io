@@ -23,11 +23,13 @@ class: center, middle, inverse, title-slide
 
 
 
-- Reinforce concepts related to sampling
+- Reinforce fundamental concepts in sampling and inference
   - Population parameter vs. sample estimate
   - Normal distribution and standard deviation (68-95-99 rule)
-  - Law of large numbers
-  - Central limit theorem
+  - Law of large numbers (LLN)
+  - Central limit theorem (CLT)
+  
+- Understand what allows us to take a sample and make conclusions about a population?
 
 ---
 # Credible analysis
@@ -48,11 +50,9 @@ class: center, middle, inverse, title-slide
 |hs        |     1993|       262|         8|       0|     1465|     2521|
 |urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
-- We will learn the building blocks for producing the `std_error`, `lower_ci`, and `upper_ci` columns. 
-
 --
 
-- What allows us to use a sample to make conclusions about a population?
+- Our goal is to gain an intuitive understanding of `std_error`, `lower_ci`, and `upper_ci` columns; how they are derived and what they tell us. 
 
 - We need not be experts in the math but there are key lessons that can help us be better producers and consumers of statistics.
 
@@ -64,23 +64,22 @@ class: center, middle, inverse, title-slide
 ---
 # Sample estimates
 
-- A sample estimate can be any statistical measure we are interested in.
-
-- Mean, median
-- Proportion, percentage
-- Difference in means, medians, percentages between groups
-- Regression coefficient
+- A sample estimate can be any statistical measure we are interested in:
+  - Mean, median of a variable
+  - Proportion, percentage of a variable
+  - Difference between two means or percentages between groups
+  - Regression coefficient/estimate of `\(\beta\)`
 
 ---
 # Key questions
 
-1. Is our estimate an accurate guess of the population parameter?
+- Is our estimate an accurate guess of the population parameter?
 
 `$$\hat{\theta} = \theta  ?$$`
 
 --
 
-2. How precise is our estimate? Is it useful?
+- How precise is our estimate? Is it useful?
 
 `$$[\hat{\theta}-?, \hat{\theta}+?]$$`
 
@@ -89,7 +88,7 @@ class: center, middle, inverse, title-slide
 ---
 # Steps in inference
 
-1. We take a random sample. Maybe not *truly* random but at least not in a way the draws observations that are systematically different from those in the population along some characteristic that is correlated with the statistical measure we are interested in.
+1. We take a random sample. Maybe not *truly* random but then we'll need to account/control for any variable that would cause bias.
 
 --
 
@@ -106,19 +105,19 @@ class: center, middle, inverse, title-slide
 ---
 # Example Step 1
 
-- Suppose we take a sample of 50 UGA professors and record their salaries. We eventually want to use this sample to estimate average professor salary at UGA.
+- Suppose we take a sample of 50 MPA graduates and record their salaries. We eventually want to use this sample to estimate average salary of MPA graduates.
 
 --
 
-- Random sampling means literally every professor had equal chance of being selected. Hard to achieve in reality, but there are sampling and statistical techniques to work around it.
+- Random sampling means every graduate had literally equal chance of being selected. Hard to achieve in reality, but there are sampling and statistical techniques to work around it.
 
 --
 
-- Maybe we have to rely on professors walking outside and/or those who respond to our question. Will these folks have systematically different salaries?
+- Maybe we have to rely on graduates who attended an alumni event and responded to our question. Will these folks have systematically different salaries than the population?
 
 --
 
-- As long as we did not over- or under-sample a characteristic correlated with salary (e.g. sex, race, age, department, etc.), we might be OK. If we did, we can control for those variables (assuming we recorded them) via sample weighting or multiple regression.
+- As long as we did not over- or under-sample a characteristic correlated with salary (e.g. sex, race, age, etc.), we might be OK. If we did, we can control for those variables (assuming we recorded them) via sample weighting or multiple regression.
 
 ---
 # Example Step 1
@@ -130,7 +129,7 @@ salaries &lt;- tibble(ID = c(1:2000),
                    salary = rnorm(2000, 80000, 7000))
 ```
 
-- Created a population of 2,000 professors with mean salary of 80,000 and standard deviation of 7,000.
+- Created a population of 2,000 graduates with mean salary of 80,000 and standard deviation of 7,000.
 
 
 ```r
@@ -169,13 +168,15 @@ sal_sample &lt;- rep_sample_n(salaries,
 .pull-right[
 - Mean is 80,000 with SD of 7,000
 
-- Since distribution is normal, we could answer descriptive questions about the range of salaries that captures a percentage of professors or the percent of professors above or below a certain salary.
+- Since distribution is normal, we could answer descriptive questions about the range of salaries that captures a percentage of graduates or the percent of graduates above or below a certain salary.
 ]
 
-- What percent of professors have salary greater than 94,000 dollars?
+- What percent of graduates have salary greater than 94,000 dollars?
 
 ---
 # Example Step 2
+
+- Our estimate for average salary using a sample of 50 is
 
 
 ```r
@@ -186,7 +187,7 @@ mean(sal_sample$salary)
 ## [1] 81052.86
 ```
 
-- We know the true mean is 80,000. Normally do not know this.
+- We know the true population mean is 80,000. Normally do not know this.
 
 - So what allows us to conclude this sample estimate is close to the population parameter?
 
@@ -197,7 +198,7 @@ mean(sal_sample$salary)
 ---
 # Law of large numbers
 
-- Suppose the data-generating process of an important phenomenon in the population, like education level, disease, or wild fires, was based on a six-sided die.
+- Suppose the data-generating process of an important phenomenon in the population, like education level, eviction, job loss, or addiction, was based on a six-sided die.
 
 --
 
@@ -267,7 +268,7 @@ mean(sal_sample3$salary)
 ---
 # Example Step 3
 
-- Highly unlikely our estimate *equals* the population parameter, so we can't treat the estimate as if it does.
+- Highly unlikely our estimate *equals* the population parameter, so we shouldn't treat the estimate as if it does.
 
 --
 
@@ -275,7 +276,7 @@ mean(sal_sample3$salary)
 
 --
 
-- Imagine if, instead of a distribution of salaries, we had a distribution of average salary estimates where each estimate is from a different sample of UGA professors. This is called a **sampling distribution**.
+- Imagine if, instead of a distribution of salaries, we had a distribution of average salary estimates where each estimate is from a different sample of MPA graduates. This is called a **sampling distribution**.
 
 --
 
@@ -284,7 +285,7 @@ mean(sal_sample3$salary)
 ---
 # Sampling distribution
 
-- Sampling 50 professors and repeating 100 times to get 100 samples of size 50
+- Sampling 50 graduates and repeating 100 times to get 100 samples of size 50
 
 
 ```r
@@ -333,7 +334,7 @@ Table: Preview of data
 
 - Distribution of our 100 estimates.
 
-- The **CLT** demonstrates that sampling distributions approach normal regardless of the underlying variable's distribution.
+- The **CLT** demonstrates that sampling distributions approach normal *regardless of the underlying variable's distribution*.
 
 ---
 # Sampling distribution
@@ -379,12 +380,14 @@ mean(sal_sample$salary)
 --
 
 - 68% of the estimates fall within one standard deviation
+
 - 95% of the estimates fall within two (1.96) standard deviations
+
 - 99% fall within three (2.58) standard deviations
 
 --
 
-- We need the standard deviation
+- We need the standard deviation of our sampling distribution
 
 ---
 # Standard error
@@ -393,7 +396,7 @@ mean(sal_sample$salary)
 
 --
 
-- If we calculate the standard error, we can apply the **68-95-99 rule** to construct a range of values that will capture the population parameter 68, 95, or 99 percent of the time. The latter two are common choices.
+- If we calculate the standard error, we can apply the **68-95-99 rule** to construct a range of values that will capture the population parameter 68, 95, or 99 times out of 100 attempts to estimate the parameter. The latter two are common choices.
 
 --
 
@@ -453,7 +456,7 @@ sd(sal_sample$salary)/sqrt(50)
 ---
 # Example Step 4
 
-- Our 95% confidence interval for the average salary among UGA professors is 79,280 - 82,824. Does it capture the population parameter?
+- Our 95% confidence interval for the average salary among MPA graduates is 79,280 - 82,824. Does it capture the population parameter?
 
 &lt;img src="Sampling_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 
