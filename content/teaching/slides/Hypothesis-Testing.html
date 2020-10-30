@@ -24,6 +24,7 @@ class: center, middle, inverse, title-slide
 
 
 - p-values (probability-values)
+- hypothesis testing
 - Comparing a sampling distribution to the null distribution
 - Reporting statistically significant results
 - Practical significance
@@ -42,7 +43,7 @@ class: center, middle, inverse, title-slide
 |hs        |     1993|       262|         8|       0|     1465|     2521|
 |urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
-- We will learn the meaning behind `statistic` (less important) and `p_value` today. 
+- Our goal is to gain an understanding of the `statistic` (less important) and `p_value` columns. 
 
 ---
 class: inverse, center, middle
@@ -52,17 +53,12 @@ class: inverse, center, middle
 ---
 class: inverse, center, middle
 
-# A p-value is the probability of obtaining my result or more extreme in a world where the **null hypothesis** is actually true. The p-value is misunderstood and abused in research. [Article1](https://www.vox.com/science-and-health/2017/7/31/16021654/p-values-statistical-significance-redefine-0005) [Article2](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained)
+# A p-value is the probability of obtaining my result or more extreme in a world where the **null hypothesis** is actually true. The p-value is misunderstood and misused in research to an alarming extent. [Story1](https://www.vox.com/science-and-health/2017/7/31/16021654/p-values-statistical-significance-redefine-0005) [Story2](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained)
 
 ---
 class: inverse, center, middle
 
-# Okay. Let's first seek to understand hypothesis testing.
-
----
-class: inverse, center, middle
-
-# Hypothesis tests ask, "Is my result **so unlikely** that I can conclude with a **sufficient level of confidence** that there is statistically significant evidence in support of my hypothesis?"
+# Hypothesis test: "Is my result **so unlikely** that I can conclude with a **sufficient level of confidence** that there is evidence in support of my hypothesis?"
 
 ---
 # Structure of hypothesis test
@@ -70,6 +66,8 @@ class: inverse, center, middle
 - Alternative hypothesis `\(H_A\)`
   - Claims there is evidence for the phenomenon you are interested in testing.
   - Often denoted as the parameter does not equal `\(\theta \neq 0\)`
+
+--
 
 - Null hypothesis `\(H_0\)`
   - Claims there is no such evidence; the mutually exclusive opposite of the alternative
@@ -129,13 +127,13 @@ class: inverse, center, middle
 # Example
 
 - Descriptive:
-  - For our one sample, we have calculated the proportion of males promoted `\(\hat{p}_M=0.88\)` and proportion of females promoted `\(\hat{p}_F=0.58\)`
-  - In this sample, the difference in proportion promoted is `\(\hat{p}_M-\hat{p}_F= 0.88-0.58=0.3\)` or 30%.
+  - For our one sample, we have calculated the proportion of males promoted `\(p_M=0.88\)` and proportion of females promoted `\(p_F=0.58\)`
+  - In this sample, the difference in proportion promoted is `\(p_M-p_F= 0.88-0.58=0.3\)` or 30 percentage points.
 
 --
 
 - Inference:
-  - But this is just a sample of an unobserved population. If we want to use this sample to claim there is a difference in the population, we need to use inference.
+  - But this is just a sample of an unobserved population.
   - This sample provides us estimates of `\(P_M\)`, `\(P_F\)`, and `\(P_M-P_F\)`
   - The question is whether `\(P_M-P_F=0.3\)` something close enough to that, or does `\(P_M-P_F=0\)`?
 
@@ -143,6 +141,8 @@ class: inverse, center, middle
 # Example
 
 `\(H_A\)`: Males and females are not promoted in equal proportions. `\(P_M-P_F \neq 0\)`
+
+--
 
 `\(H_0\)`: Males and females are promoted in equal proportions. `\(P_M-P_F=0\)`
 
@@ -158,11 +158,14 @@ class: inverse, center, middle
 
 Hypothesis tests result in one of two possible conclusions:
 
-1. Reject the null hypothesis that `\(\theta = 0\)`, thus `\(\theta \neq 0\)`, or
+1. Reject the null hypothesis that `\(\theta = 0\)`, 
+  - `\(\theta \neq 0\)`
 
 --
 
-2. Fail to reject the null hypothesis, thus it could be the case that `\(\theta=0\)` or `\(\theta \neq 0\)`. We can't tell from our evidence.
+2. Fail to reject the null hypothesis, 
+  - Could be that `\(\theta=0\)` or `\(\theta \neq 0\)`. 
+  - We can't tell from our evidence.
 
 --
 
@@ -171,19 +174,19 @@ It is never the case that we accept the null hypothesis that `\(\theta = 0\)`
 ---
 # Example
 
-1. Results reject the null that males and females are promoted equally
-  - Means we have statistically significant evidence that `\(P_M-P_F \neq 0\)`
-  - Our results are too unlikely to be due to random noise
+1. If results reject the null
+  - We found statistically significant evidence that `\(P_M-P_F \neq 0\)`
+  - Result of 0.3 is too improbable to be random noise
 
 --
 
-2. Results fail to reject the null that males and females are promoted equally
-  - Means we do not have statistically significant evidence that `\(P_M-P_F \neq 0\)`
-  - Our results are not unlikely enough; *could* be that `\(P_M-P_F = 0\)`
+2. If results fail to reject the null
+  - We did not find statistically significant evidence that `\(P_M-P_F \neq 0\)`
+  - Result of 0.3 is not improbable enough; *could* be that `\(P_M-P_F = 0\)`
 
 --
 
-- Can **never** conclude males and females *are* promoted equally `\(P_M-P_F = 0\)`.
+- Can **never** conclude males and females *are* promoted equally `\(P_M-P_F = 0\)` from a hypothesis test.
 
 ---
 # Hypothesis test conclusions
@@ -193,22 +196,24 @@ It is never the case that we accept the null hypothesis that `\(\theta = 0\)`
 ---
 # Example
 
-- Suppose our estimate, `\(\hat{p}_M-\hat{p}_F\)`, of `\(P_M-P_F\)` is so unlikely that we reject the null, concluding that males and females are not promoted in equal proportions `\(P_M-P_F \neq 0\)`.
+- Suppose our estimate, `\(p_M-p_F=0.3\)`, of `\(P_M-P_F=?\)` is so unlikely that we reject the null 
+
+- Conclude that males and females are not promoted in equal proportions `\(P_M-P_F \neq 0\)`.
 
 --
 
-- We learned last week that our estimate is a scientific guess based on a sample of data around which we construct a range of plausible values that capture the parameter (i.e. confidence interval)
+- Our estimate is a scientific guess around which we construct a range of plausible values that capture the parameter (i.e. confidence interval)
 
 --
 
-- We also learned that the parameter can fall *anywhere* inside our confidence interval
+- The parameter can fall *anywhere* inside our confidence interval
 
 - And our confidence interval could be 1 of the 5 out of 100 (assuming 95% CI) expected to fail to capture the parameter at all
 
 ---
 # Example
 
-- Therefore, we may reject the null, concluding `\(P_M-P_F \neq 0\)` because our 95% CI does **not** include 0
+- We may reject the null, `\(P_M-P_F \neq 0\)`, because our 95% CI does **not** contain 0
 
 --
 
@@ -218,7 +223,8 @@ It is never the case that we accept the null hypothesis that `\(\theta = 0\)`
 
 --
 
-- Or we could fail to reject the null because our 95% CI does include 0, so we can't rule out with high enough confidence that `\(P_M-P_F \neq 0\)`
+- Or we may fail to reject the null because our 95% CI does include 0, 
+- Can't rule out with high enough confidence that `\(P_M-P_F \neq 0\)`
 
 --
 
@@ -229,11 +235,9 @@ It is never the case that we accept the null hypothesis that `\(\theta = 0\)`
 ---
 # Type I vs. II error
 
-- Is one error worse than another?
+- Is one necessarily worse than the other?
 
---
-
-- No. It depends entirely on the context/consequence of the conclusion.
+- No. Depends entirely on the context or consequence of the conclusion.
 
 --
 
@@ -241,59 +245,68 @@ It is never the case that we accept the null hypothesis that `\(\theta = 0\)`
 
 - Have to balance the two based on the context
 
-- Research community is strongly averse to false positives
+- Research community tolerates false negatives much more than false positives
 
 ---
-class: inverse, center, middle
+# Recap
 
-# "Is my result **so unlikely** that I can reject my null hypothesis with a **sufficient level of confidence**?" The p-value estimates the probability of obtaining our results (or more extreme) in a world where the null hypothesis is in fact true.
+- Hypo test: "Is my result **so unlikely** that I can reject my null hypothesis with a **sufficient level of confidence**?"
 
----
-class: inverse, center, middle
+- p-value: the probability of obtaining our results or more extreme in a world where the null hypothesis is in fact true
 
-# To estimate the probability of our results in a world where the null is true, we have to have an idea of what that world would look like. But we only have one sample of data and we don't know what world we are living in (i.e. null true or not). How do we estimate this probability?
+--
 
----
-class: inverse, center, middle
+- But we only have one sample of data and we don't know which world we are in (null true or not)
 
-# We estimate the null distribution, similar to the sampling distribution, but the null distribution is centered at 0 as if the null hypothesis were actually true.
+- How do we estimate the probability of our result in a null world?
 
 ---
 # Null distribution
 
 &lt;img src="lectures_files/nulldist.png" width="1128" height="66%" style="display: block; margin: auto;" /&gt;
 
-- If the null were true like above, how far out does my estimate have to be for me to reject the null?
+- We estimate a null distribution, similar to the sampling distribution
+
+- Null distribution is centered at 0 as if null were actually true
+
+- Assuming null distribution is normal, we can then calculate the probability of our result
 
 ---
 # Decision rule
 
-- Suppose we declare that if the probability of our estimate `\(\hat{p}_M-\hat{p}_F= 0.88-0.58=0.3\)` in a world where the null, `\(P_M-P_F = 0\)`, is true is less than 5%, then we will reject the null and conclude that `\(P_M-P_F \neq 0\)`.
+- Suppose we declare that if the probability of our estimate `\(p_M-p_F=0.3\)` in a world where the null, `\(P_M-P_F = 0\)`, is true is less than 5%, then we will reject the null and conclude that `\(P_M-P_F \neq 0\)`.
 
 --
 
-- This means we have chosen a **significance level** of 5%, which is the same as choosing a **confidence level** of 95%.
+- We have chosen a **significance level** of 5%, which is the same as choosing a **confidence level** of 95%.
   - Sometimes denoted `\(\alpha = 0.05\)` where `\(\alpha\)` is significance level
 
 --
 
-- Therefore, if our p-value is less than 0.05, we reject the null. If it is greater than or equal to 0.05, we fail to reject the null.
+- Therefore, if p-value is less than 0.05, we reject the null. If it is greater than or equal to 0.05, we fail to reject the null.
 
 --
 
-- If `\(pvalue&lt;\alpha\)`, reject `\(H_0\)`
-- If `\(pvalue \geq \alpha\)`, fail to reject `\(H_0\)`
+- If p-value `\(&lt;\alpha\)`, reject `\(H_0\)`
+- If p-value `\(\geq \alpha\)`, fail to reject `\(H_0\)`
+
+---
+class: inverse, center, middle
+
+# How can we possibly estimate this null distribution with only one sample of data from a world where the null may or may not be true?
 
 ---
 # Example
 
-- If the null were true, then there would be no correlation between gender and promotions
-
-- If the null were true, promotions with respect to gender would be random
+- If the null were true, then promotions would be random with respect to gender
+  - On average, `\(P_M-P_F = 0\)`
+  - Promotions and gender would share no correlation
 
 --
 
-- If random, promotions between genders probably won't be equal, but would they be as different as what we see in our sample?
+- If null were true, promotions between genders unlikely to be *exactly* equal because randomness
+
+- But would they be as different as what we see in our sample?
 
 
 ```r
@@ -307,7 +320,7 @@ class: inverse, center, middle
 ---
 # Example
 
-- To simulate a world in which the null were true, we could randomly shuffle gender in our data
+- To simulate a world in which the null is true, we could randomly shuffle gender in our data
 
 
 | resume number|decision |gender |shuffled gender |
@@ -357,7 +370,7 @@ class: inverse, center, middle
 
 - What if we repeated this random shuffling 1,000 times, calculating the difference in promotions between males and females each time?
 
-- Then we could plot the 1,000 values as a histogram, giving us a distribution of differences between males and females in a world where promotions are random with respect to promotions
+- Then we could plot the 1,000 values as a histogram, giving us a distribution of differences between males and females in a world where promotions are random with respect to gender
 
 - Then we would have a simulated null distribution
 
@@ -419,44 +432,13 @@ sd(null_distribution$stat)/sqrt(1000)
 
 - 95% of differences between male and female promotions fall between -0.01 and 0.006
 
-- Our observed difference was 0.3! How unlikely is this result if the null were actually true?
-
----
-# Example
-
-.pull-left[
-
-| replicate|      stat|
-|---------:|---------:|
-|       307| 0.3750000|
-|       994| 0.3750000|
-|        83| 0.2916667|
-|       137| 0.2916667|
-|       157| 0.2916667|
-|       279| 0.2916667|
-|       379| 0.2916667|
-]
-
-.pull-right[
-
-| replicate|       stat|
-|---------:|----------:|
-|       841| -0.3750000|
-|        43| -0.2916667|
-|        52| -0.2916667|
-|        84| -0.2916667|
-|       138| -0.2916667|
-|       148| -0.2916667|
-|       199| -0.2916667|
-]
-
-- Only 3 out of 1000 simulated differences are greater than or equal in either direction to the difference we observe in our sample. 
+- Our observed difference was 0.3! How likely is this result if the null were actually true?
 
 ---
 # Example p-value
 
 .pull-left[
-&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
@@ -466,11 +448,11 @@ sd(null_distribution$stat)/sqrt(1000)
 |-------:|
 |    0.03|
 
-- The probability of obtaining an estimate of +/- 0.3 or greater is 3%.
+- The probability of obtaining +/- 0.3 or more extreme is 3%.
 
 - `\(0.03&lt;0.05 \rightarrow\)` reject the null `\(H_0\)`
 
-- We have statistically significant evidence that males and females are promoted in different proportions.
+- Statistically significant evidence that males and females are not promoted equally.
 
 ]
 
@@ -540,28 +522,28 @@ There is statistically significant evidence that educational attainment is posit
 ---
 # Example
 
-&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ---
-# Credible analysis
+class: inverse, center, middle
 
-&lt;img src="lectures_files/credible.png" width="1304" style="display: block; margin: auto;" /&gt;
+# Statistical significance does not neccessarily determine whether our results warrant action. We must consider if our results have **practical significance**.
 
 ---
-# Practical significance
+# Practical significance questions
 
-- What is the typical change in the explanatory variable associated with the statistically significant estimate?
-
---
-
-- Is the predicted change in the outcome due to a typical change in the explanatory variable negligible or meaningful?
+1. What is the typical change in the explanatory variable associated with the statistically significant estimate?
 
 --
 
-- If the explanatory variable is statistically significant, is its confidence interval so close to zero that using the upper or lower bound instead of the midpoint estimate would make the predicted change in the outcome negligible? 
+2. Is the predicted change in the outcome due to a typical change in the explanatory variable negligible or meaningful?
 
-  - Or, if the explanatory variable is statistically insignificant, is its confidence interval so closely around zero that the entire range of plausible values of the parameter would lead to a negligible change in the outcome?
+--
+
+3a. If the explanatory variable is statistically significant, is its confidence interval so close to zero that using the upper or lower bound instead of the midpoint would make the predicted change in the outcome negligible? 
+
+3b. Or, if the explanatory variable is statistically insignificant, is its confidence interval so closely around zero that the entire range of plausible values of the parameter would lead to a negligible change in the outcome?
   
 ---
 # Example
