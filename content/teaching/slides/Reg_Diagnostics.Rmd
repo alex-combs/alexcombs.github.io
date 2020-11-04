@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Regression Diagnostics"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "December 2, 2020"
+date: "November 18, 2020"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -362,7 +362,7 @@ $$4/(n-p-1)$$
 
 - Where $n$ is the number of observations and $p$ the number of explanatory variables in our model
 
-- This is a rule of thumb; even if you an observation does not meet this threshold, it is wise to consider whether that observation is different somehow from other observations
+- This is a rule of thumb; even if an observation does not meet this threshold, it is wise to consider whether an observation is different somehow from other observations
 
 ---
 # Cook's distance
@@ -489,13 +489,19 @@ library(gvlma)
 gvlma(trump_mod)
 ```
 
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/gvlma1.png')
+```
+
+---
+# Statistical test on assumptions
+
 ```{r, eval=FALSE}
 gvlma(trump_mod_nodc)
 ```
-
-- Can't show on slide; demonstrate in R
-
-- Excluding DC passes test
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/gvlma2.png')
+```
 
 ---
 # Checking multicollinearity

@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-12-02" />
+    <meta name="date" content="2020-11-18" />
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## Regression Diagnostics
 ### Alex Combs
 ### UGA | SPIA | PADP
-### December 2, 2020
+### November 18, 2020
 
 ---
 
@@ -297,7 +297,7 @@ plot(trump_mod)
 
 - Where `\(n\)` is the number of observations and `\(p\)` the number of explanatory variables in our model
 
-- This is a rule of thumb; even if you an observation does not meet this threshold, it is wise to consider whether that observation is different somehow from other observations
+- This is a rule of thumb; even if an observation does not meet this threshold, it is wise to consider whether an observation is different somehow from other observations
 
 ---
 # Cook's distance
@@ -469,14 +469,16 @@ library(gvlma)
 gvlma(trump_mod)
 ```
 
+&lt;img src="lectures_files/gvlma1.png" width="1064" style="display: block; margin: auto;" /&gt;
+
+---
+# Statistical test on assumptions
+
 
 ```r
 gvlma(trump_mod_nodc)
 ```
-
-- Can't show on slide; demonstrate in R
-
-- Excluding DC passes test
+&lt;img src="lectures_files/gvlma2.png" width="1056" style="display: block; margin: auto;" /&gt;
 
 ---
 # Checking multicollinearity

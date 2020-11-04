@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "RLab 10: Forecasting"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "November 18, 2020"
+date: "December 2, 2020"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'

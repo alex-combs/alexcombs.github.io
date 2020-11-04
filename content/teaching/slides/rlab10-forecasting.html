@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-11-18" />
+    <meta name="date" content="2020-12-02" />
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## RLab 10: Forecasting
 ### Alex Combs
 ### UGA | SPIA | PADP
-### November 18, 2020
+### December 2, 2020
 
 ---
 
@@ -141,15 +141,15 @@ ts_data &lt;- ts(data[,-1], start = 2012, end = 2016,
 
 | year| quarter| value|
 |----:|-------:|-----:|
-| 2016|       1|    42|
-| 2016|       2|    57|
+| 2016|       1|    52|
+| 2016|       2|    70|
 
 
 
 | year| quarter| value|
 |----:|-------:|-----:|
-| 2020|       3|    52|
-| 2020|       4|    32|
+| 2020|       3|    56|
+| 2020|       4|    61|
 
 
 ```r
@@ -167,15 +167,15 @@ ts_quarterly &lt;- ts(quarterly[,-1], start = 2016, end = 2020,
 
 | year| month| value|
 |----:|-----:|-----:|
-| 2016|     1|    57|
-| 2016|     2|    63|
+| 2016|     1|    49|
+| 2016|     2|    70|
 
 
 
 | year| month| value|
 |----:|-----:|-----:|
-| 2020|    11|    42|
-| 2020|    12|    49|
+| 2020|    11|    37|
+| 2020|    12|    32|
 
 
 ```r
@@ -193,15 +193,15 @@ ts_monthly &lt;- ts(monthly[,-1], start = 2016, end = 2020,
 
 | year| value|
 |----:|-----:|
-| 2000|    43|
-| 2002|    54|
+| 2000|    57|
+| 2002|    36|
 
 
 
 | year| value|
 |----:|-----:|
-| 2018|    46|
-| 2020|    43|
+| 2018|    52|
+| 2020|    56|
 
 
 ```r

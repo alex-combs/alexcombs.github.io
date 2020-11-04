@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-12-09" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## Panel Data Analysis
+### Alex Combs
+### UGA | SPIA | PADP
+### December 9, 2020
+
+---
+
+# Outline
+
+
+
+- Our goal is to learn how to incorporate the additional information of panel data into regression and why it matters
+
+- Whether or not to run a fixed effects regression
+
+---
+# Panel Data
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 73.275 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36203463 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10967.282 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 74.340 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38331121 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8797.641 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62.050 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7693188 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3326.143 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 63.883 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8445134 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3413.263 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.554 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3822.137 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Variation across units AND time
+
+---
+# Example
+
+- Suppose we want to examine the effect of unemployment (rate) on homelessness
+
+- Suppose we have homelessness and unemployment data for 4 cities (N = 4) for 4 years (T=4), so we would have a total of 16 observations
+  - Not enough data for an actual analysis; just an example
+
+- Let's assume homelessness increases as unemployment increases
+
+---
+# Example
+
+.pull-left[
+&lt;img src="lectures_files/panel-example.png" width="1024" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+- Cities have same slope
+
+- Each has different intercept
+  - Each city's "effect"
+  - Inherent omitted differences
+]
+
+- Key question is whether we think these omitted differences also affect unemployment. If so, we have omitted variable bias
+
+---
+# Enter fixed effects regression
+
+&lt;img src="lectures_files/fixfx-dag.png" width="1175" style="display: block; margin: auto;" /&gt;
+
+- On left, `\(X\)` is biased
+
+- *IF* we assume *ALL* relevant omitted variables are captured by controlling for **constant** differences between units
+
+- Then we have eliminated the OVB and we are back to a causal estimate of `\(X\)` on `\(Y\)`
+
+---
+# Fixed effects regression
+
+- Fixed effects (FE) regression controls for time-invariant (i.e. constant), unobserved differences across units of a panel
+
+--
+
+- Essentially includes a dummy variable for each unit in the panel, allowing each unit to have its own y-intercept
+
+--
+
+- This controls for whatever constant factor(s) cause the different intercepts
+
+--
+
+- If those constant factors also affect other explanatory variables in our model, then FE closes the backdoor path they created
+
+---
+# Some helpful notation
+
+`$$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$`
+
+- N cross-sectional units `\(i\)` followed over T time periods `\(t\)`
+
+--
+
+- `\(x_{it}\)` vary across units and over time
+  - Education, crime, unemployment, tax rates, etc.
+
+--
+
+- `\(z_i\)` vary across units but are constant over time
+  - Sex, race, geographic region, governance model
+
+--
+
+- `\(w_t\)` vary over time but are constant across units
+  - Macroeconomic trends like inflation or interest rates; events that affect all units like a recession or war
+
+---
+# Fixed effects
+
+`$$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$`
+
+- If we observe (i.e. have data) on all the `\(z_i\)` variables that matter, we could just control for them
+
+--
+
+- If we don't and run fixed effects instead, then ALL of those variables in `\(z_i\)` get collapsed into the intercept
+
+`$$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$`
+
+- Even if we do control for a few `\(z_i\)` variables, they will be absorbed by the fixed effect intercept
+
+---
+# Example
+
+- Suppose we want to investigate state-level college enrollment as a percentage of population age 18-24
+
+- Let's first look at trends over time
+
+&lt;img src="panel_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Example
+&lt;img src="panel_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Example
+
+- Now suppose we want to investigate the effect of average tuition on enrollment
+
+&lt;img src="panel_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Example
+
+&lt;img src="panel_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Example
+
+&lt;img src="panel_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Within and Between Variation
+
+- Last few slides demonstrated within and between variation
+
+&lt;img src="lectures_files/withinbetween.png" width="1227" style="display: block; margin: auto;" /&gt;
+
+---
+# Fixed effects
+
+- Fixed effects estimates the relationship between variables *within* each unit of the panel
+
+- The estimate for an explanatory variable is the average slope of all the individual unit slopes
+
+---
+# Running FE in R and interpretation
+
+- First, standard OLS regression. Tuition is in 1,000s of dollars.
+
+`$$PctEnroll_i = \beta_0 + \beta_1 tuition_i + \epsilon_i$$`
+
+```r
+standard_ols &lt;- lm(enroll_pct ~ tuition, data = statepanel)
+```
+
+
+```r
+get_regression_table(standard_ols)
+```
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |   34.792|     0.379|    91.679|   0.000|   34.047|   35.536|
+|tuition   |   -0.213|     0.066|    -3.230|   0.001|   -0.342|   -0.084|
+
+---
+# Running FE in R and interpretation
+
+`$$PctEnroll_{it} = \alpha_i + \beta_1 tuition_{it} + \epsilon_{it}$$`
+
+```r
+fe &lt;- plm(enroll_pct ~ tuition, data = statepanel,
+              index = c("state", "year"), model = "within")
+```
+
+
+```r
+summary(fe) #get_regression_table won't work
+```
+
+
+```r
+broom::tidy(fe) # nicer looking results
+```
+
+|term    | estimate| std.error| statistic| p.value|
+|:-------|--------:|---------:|---------:|-------:|
+|tuition | 1.057165| 0.0652482|   16.2022|       0|
+
+On average, a 1,000 dollar increase in states' average tuition is associated with a 1 percentage point increase in college enrollment, **controlling for fixed effects**. 
+
+---
+# Example
+
+- Our FE results are counterintuitive; enrollment is not expected to increase as the price increases
+
+- What is a plausible explanation?
+
+--
+
+- Most students do not pay full tuition
+
+- A rise in tuition is typically followed by a rise in financial aid
+
+- We should control for how much tuition students pay
+
+---
+# Example
+
+
+|state         | year|region  | tuition| studentshare| unemp| pop1824| enroll_pct|
+|:-------------|----:|:-------|-------:|------------:|-----:|-------:|----------:|
+|Massachusetts | 1999|NE      |     5.3|         31.1|   3.2|  566828|       20.7|
+|Alabama       | 1999|South   |     4.6|         39.1|   4.7|  440752|       39.2|
+|Minnesota     | 2000|N Cntrl |     3.9|         27.4|   3.1|  473390|       34.1|
+|Montana       | 2013|West    |     6.0|         55.6|   5.4|  100368|       40.0|
+|West Virginia | 2001|West    |     3.7|         39.2|   5.0|  174409|       36.1|
+|Oregon        | 1995|West    |     4.3|         34.8|   4.9|  288121|       33.2|
+
+
+---
+# Better FE model
+
+
+```r
+fe2 &lt;- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824 + region, 
+           data = statepanel,
+           index = c("state", "year"), model = "within")
+```
+
+
+|term         |   estimate| std.error| statistic|   p.value|
+|:------------|----------:|---------:|---------:|---------:|
+|tuition      | -0.6348117| 0.1453996| -4.365981| 0.0000138|
+|studentshare |  0.2648245| 0.0235783| 11.231703| 0.0000000|
+|unemp        |  0.4474627| 0.0487477|  9.179146| 0.0000000|
+|pop1824      |  0.0000009| 0.0000008|  1.042551| 0.2973727|
+
+---
+# Interpretation
+
+- On average, an increase in tuition of 1,000 dollars results in a 0.63 percentage point decrease in enrollment, all else equal.
+
+- Why no estimates for `region`?
+
+--
+
+- Because region does not vary over time ( `\(z_i\)` ); a state's region is always the same
+
+- Therefore, it gets absorbed into the fixed effect
+
+- If we really care about a time-invariant variable, using FE will prevent us from obtaining an estimate
+
+---
+# Back to standard OLS
+
+
+```r
+standard_ols2 &lt;- lm(enroll_pct ~ tuition + studentshare + unemp + pop1824 + region, 
+           data = statepanel)
+```
+
+
+```r
+get_regression_table(standard_ols2)
+```
+
+
+|term         | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:------------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept    |   30.625|     0.733|    41.808|   0.000|   29.188|   32.062|
+|tuition      |   -1.217|     0.147|    -8.299|   0.000|   -1.505|   -0.930|
+|studentshare |    0.234|     0.025|     9.274|   0.000|    0.184|    0.283|
+|unemp        |    0.117|     0.088|     1.320|   0.187|   -0.057|    0.290|
+|pop1824      |    0.000|     0.000|    -1.797|   0.073|    0.000|    0.000|
+|regionNE     |   -3.590|     0.519|    -6.922|   0.000|   -4.608|   -2.572|
+|regionSouth  |    0.714|     0.442|     1.617|   0.106|   -0.152|    1.581|
+|regionWest   |    1.184|     0.474|     2.498|   0.013|    0.254|    2.114|
+
+---
+# Drawbacks of FE
+
+- Can't estimate association/effect of time-invariant variables
+
+- Estimates are less precise than standard OLS regression
+  - FE is like adding a dummy explanatory variable for each unit in the panel
+  - Each explanatory variable imposes a penalty on precision (reduces sample size by 1)
+  - Preferable if we can avoid this loss
+
+---
+# Testing whether FE should be used
+
+
+```r
+pFtest(fe2, standard_ols2)
+```
+
+```
+## 
+## 	F test for individual effects
+## 
+## data:  enroll_pct ~ tuition + studentshare + unemp + pop1824 + region
+## F = 110.92, df1 = 45, df2 = 1164, p-value &lt; 2.2e-16
+## alternative hypothesis: significant effects
+```
+
+- If p-value &lt; 0.05, use FE
+
+- We should use FE in this example
+
+---
+# Controlling for time trends
+
+`$$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$`
+
+- We may also want to control for common time trends, `\(w_t\)`
+- Adds dummy variables for each year in our panel
+- Controls for factors that changed/occurred during this time period that affected all units in the panel similarly
+
+---
+# Adding time trends in FE
+
+
+```r
+fe2_time &lt;- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824 + factor(year),
+                data = statepanel,
+                index = c("state", "year"), model = "within")
+```
+
+
+|term             |   estimate| std.error|  statistic|   p.value|
+|:----------------|----------:|---------:|----------:|---------:|
+|tuition          | -1.2026960| 0.1427770| -8.4235964| 0.0000000|
+|studentshare     |  0.1674229| 0.0239535|  6.9894929| 0.0000000|
+|unemp            | -0.1221213| 0.0776197| -1.5733283| 0.1159203|
+|pop1824          | -0.0000037| 0.0000009| -4.3360937| 0.0000158|
+|factor(year)1992 |  0.9649398| 0.4376657|  2.2047417| 0.0276714|
+|factor(year)1993 |  1.2072950| 0.4386141|  2.7525219| 0.0060077|
+|factor(year)1994 |  1.1716700| 0.4457260|  2.6286779| 0.0086870|
+|factor(year)1995 |  1.0990534| 0.4522063|  2.4304247| 0.0152346|
+|factor(year)1996 |  1.3947738| 0.4560753|  3.0582094| 0.0022786|
+|factor(year)1997 |  1.0101145| 0.4644921|  2.1746645| 0.0298603|
+|factor(year)1998 |  0.7459474| 0.4763949|  1.5658172| 0.1176690|
+|factor(year)1999 |  0.8410190| 0.4824246|  1.7433168| 0.0815479|
+|factor(year)2000 |  0.5360310| 0.4874343|  1.0996990| 0.2716955|
+|factor(year)2001 |  0.3670312| 0.4729972|  0.7759691| 0.4379282|
+|factor(year)2002 |  0.9719954| 0.4580536|  2.1220122| 0.0340519|
+|factor(year)2003 |  1.7764011| 0.4681425|  3.7945737| 0.0001557|
+|factor(year)2004 |  1.9371415| 0.4871035|  3.9768580| 0.0000742|
+|factor(year)2005 |  2.3876419| 0.5022739|  4.7536647| 0.0000023|
+|factor(year)2006 |  2.5523922| 0.5161318|  4.9452336| 0.0000009|
+|factor(year)2007 |  2.9567011| 0.5197156|  5.6890750| 0.0000000|
+|factor(year)2008 |  3.7043158| 0.4968479|  7.4556337| 0.0000000|
+|factor(year)2009 |  5.0992817| 0.5165848|  9.8711414| 0.0000000|
+|factor(year)2010 |  7.2188352| 0.5296473| 13.6295147| 0.0000000|
+|factor(year)2011 |  7.6902227| 0.5366920| 14.3289299| 0.0000000|
+|factor(year)2012 |  7.0029446| 0.5689061| 12.3094916| 0.0000000|
+|factor(year)2013 |  6.0373303| 0.5861072| 10.3007277| 0.0000000|
+|factor(year)2014 |  5.3487621| 0.6026947|  8.8747448| 0.0000000|
+|factor(year)2015 |  4.6833658| 0.6194395|  7.5606512| 0.0000000|
+
+---
+# Testing whether to include time trends
+
+- Adding a dummy for each year costs us more observations
+
+
+```r
+pFtest(fe2_time, fe2)
+```
+
+```
+## 
+## 	F test for individual effects
+## 
+## data:  enroll_pct ~ tuition + studentshare + unemp + pop1824 + factor(year)
+## F = 14.734, df1 = 24, df2 = 1140, p-value &lt; 2.2e-16
+## alternative hypothesis: significant effects
+```
+
+- If p-value &lt; 0.05, include time trends
+
+---
+# Recap
+
+- Remember, FE eliminates OVB caused by time-invariant explanatory variables only
+
+- Omitted variables that change over time can still cause OVB
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
