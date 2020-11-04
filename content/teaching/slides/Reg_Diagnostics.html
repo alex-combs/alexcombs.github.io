@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>PADP 7120 Data Applications in PA</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Alex Combs" />
+    <meta name="date" content="2020-12-02" />
+    <link rel="stylesheet" href="mypres.css" type="text/css" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# PADP 7120 Data Applications in PA
+## Regression Diagnostics
+### Alex Combs
+### UGA | SPIA | PADP
+### December 2, 2020
+
+---
+
+# Outline
+
+
+
+- Are my confidence interval and hypothesis test valid?
+  - Classic assumptions of regression (LINE)
+  - Multicollinearity
+  - Outliers, high-leverage, and high-influence
+
+---
+# Credible analysis
+
+&lt;img src="lectures_files/credible.png" width="1304" style="display: block; margin: auto;" /&gt;
+
+- Today is all about statistical conclusion validity
+
+---
+# Regression is BLUE
+
+- Regression gives us the best (most precise), linear, unbiased, estimate
+
+- But only if a set of assumptions hold
+
+---
+# Consequences of violated assumptions
+
+- Can't be so sure that **LLN** and **CLT** are working properly for inference
+
+- Biased estimates
+
+- Invalid hypothesis test
+  - Higher chance of false positives or negatives than p-value indicates
+
+- Less precision around estimate
+  - Undesirable but tolerable
+
+---
+# Regression table
+
+`$$TrumpVote = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$` 
+
+
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |    10.93|      6.53|      1.68|     0.1|    -2.19|    24.05|
+|white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
+|white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
+
+- We finally understand everything this table is telling us. But it could all be wrong if we don't check assumptions.
+
+---
+# It's all about residuals
+
+
+
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Classical regression assumptions
+
+- LINE
+  - **L**inear relationship between `\(x\)`s and `\(y\)` (or nonlinear relationship included appropriately)
+  - **I**ndependent residuals (independent observations; random sampling)
+  - **N**ormality of residuals
+  - **E**qual variance in residuals
+
+--
+
+- Should at least be knowledgeable enough to competently ask an analyst whether they have checked their regression assumptions and explain the consequences
+
+- Of course, we will go one step further and learn how to check them ourselves
+
+---
+# Residual vs. Fitted Plot
+
+.pull-left[
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+- Assumptions L, N, and E can be seen using an RVF plot
+
+- We want to see no discernible pattern in the RVF plot points
+
+---
+# Linear assumption
+
+&lt;img src="lectures_files/rvfp-linear.png" width="1260" style="display: block; margin: auto;" /&gt;
+
+---
+# Linear assumption
+
+&lt;img src="lectures_files/rvfp-linear2.png" width="1272" style="display: block; margin: auto;" /&gt;
+
+---
+# Normally distributed residuals
+
+&lt;img src="lectures_files/norm-residuals.png" width="1109" style="display: block; margin: auto;" /&gt;
+
+---
+# Normally distributed residuals
+
+&lt;img src="lectures_files/rvfp-normality.png" width="1251" style="display: block; margin: auto;" /&gt;
+
+---
+# Equal variance in residuals
+
+&lt;img src="lectures_files/homo-hetero.png" width="1264" style="display: block; margin: auto;" /&gt;
+
+---
+# Equal variance in residuals
+
+&lt;img src="lectures_files/homoskedasticity.png" width="1251" style="display: block; margin: auto;" /&gt;
+
+---
+# Equal variance in residuals
+
+&lt;img src="lectures_files/heteroskedasticity.png" width="1223" style="display: block; margin: auto;" /&gt;
+
+---
+# Independent residuals/observations
+
+- Evidence of linear or normal violation could be due to violation of independence
+
+- Requires an understanding of how sample was collected
+
+- True independence is extremely hard to achieve unless sample was randomized
+
+---
+# Consequences
+
+- Violation of **L** or **N** or **I**
+  - Biased estimates
+
+- Violation of **E**
+  - Biased standard errors, thus biased confidence intervals
+  - Invalid hypothesis testing
+
+---
+# Solutions
+
+- Violation of **L** or **N**
+  - Modify the regression model
+
+- Violation of **E**
+  - Log transform the outcome variable
+  - Statistical correction outside scope of class (robust standard errors)
+
+- Violation of **I**
+  - Obtain a better sample
+  - Control for the variables related to non-randomness
+  - Statistical correction outside scope of class (clustered standard errors)
+
+---
+# Multicollinearity
+
+- When two explanatory variables are strongly correlated with each other
+
+- Since regression computes the association between an `\(x\)` and `\(y\)`, **controlling for all other `\(x\)`s**, multicollinearity can mask statistically significant associations between those `\(x\)`s and the `\(y\)`.
+
+--
+
+- Multicollinearity can cause false negatives
+
+---
+# Multicollinearity
+
+- Detection
+  - If two variables have a correlation stronger than +/- 0.8, multicollinearity might be a problem
+  - Variance Inflation Factor (VIF) &gt; 10 is another method
+
+- Solutions
+  - Combine the collinear variables into a single index variable
+  - If one variable is really important to your RQ, drop the other. Be careful not to introduce OVB!
+
+---
+# Unusual and influential data
+
+- Regression outlier
+  - An observation with a large residual
+
+- High-leverage
+  - An observation with a large deviation from the explanatory variable's mean
+
+- High-influence
+  - A regression outlier with high leverage
+
+- Removing an influential observation will sunbstantially change regression results
+
+---
+# Unusual and influential data
+
+&lt;img src="lectures_files/influence.png" width="1276" style="display: block; margin: auto;" /&gt;
+
+---
+# Back to regression table
+
+`$$TrumpVote = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$` 
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |    10.93|      6.53|      1.68|     0.1|    -2.19|    24.05|
+|white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
+|white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
+
+---
+# In R
+
+- R makes all of this very easy!
+
+- After saving a regression model...
+
+
+```r
+trump_mod &lt;- lm(share_vote_trump ~ white + white_pov,
+                data = state_trump)
+```
+
+- Run the following, which generates four diagnostic plots
+
+
+```r
+plot(trump_mod)
+```
+
+---
+# RVF Plot
+
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+
+- We want to see no pattern and a straight red line along 0
+
+- Especially useful for evaluating **L**
+
+---
+# Normal Q-Q
+
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+
+- We want to see points fall approximately along the straight line
+
+- If not, **N** may be violated
+
+---
+# Scale-Location
+
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+- We want to see a straight red line
+
+- If not, **E** may be violated
+
+---
+# Residuals vs. Leverage
+
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+
+- We want to see a relatively straight red line
+
+- More importantly, this graph will place observations along a dotted Cook's distance that may be a problem
+
+---
+# Cook's distance
+
+- Cook's distance is the most common measure for identifying high-influence observations
+
+- A rule of thumb is that an observation has high influence if Cook's distance exceeds...
+
+`$$4/(n-p-1)$$`
+
+- Where `\(n\)` is the number of observations and `\(p\)` the number of explanatory variables in our model
+
+- This is a rule of thumb; even if you an observation does not meet this threshold, it is wise to consider whether that observation is different somehow from other observations
+
+---
+# Cook's distance
+
+
+```r
+plot(trump_mod, 4)
+```
+
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+
+- This is a separate graph that focuses on Cook's distance
+
+---
+# Precise Cook's distance
+
+
+```r
+library(broom)
+trump_mod.metrics &lt;- augment(trump_mod) %&gt;% 
+  arrange(desc(.cooksd))
+```
+
+
+| share_vote_trump| .fitted| .resid| .std.resid| .hat| .sigma| .cooksd|
+|----------------:|-------:|------:|----------:|----:|------:|-------:|
+|                4|   29.42| -25.42|      -3.01| 0.15|   8.33|    0.52|
+|               33|   57.54| -24.54|      -2.78| 0.07|   8.47|    0.19|
+|               45|   61.11| -16.11|      -1.83| 0.07|   8.92|    0.08|
+|               63|   70.43|  -7.43|      -0.92| 0.22|   9.16|    0.08|
+|               70|   52.99|  17.01|       1.90| 0.04|   8.89|    0.05|
+|               53|   39.99|  13.01|       1.47| 0.06|   9.03|    0.05|
+|               53|   39.32|  13.68|       1.54| 0.05|   9.01|    0.05|
+|               60|   47.04|  12.96|       1.46| 0.05|   9.04|    0.04|
+|               62|   50.28|  11.72|       1.31| 0.05|   9.08|    0.03|
+|               33|   40.85|  -7.85|      -0.90| 0.09|   9.16|    0.03|
+|               65|   49.89|  15.11|       1.67| 0.02|   8.97|    0.02|
+|               57|   47.30|   9.70|       1.09| 0.05|   9.13|    0.02|
+|               64|   52.99|  11.01|       1.23| 0.04|   9.10|    0.02|
+|               34|   47.64| -13.64|      -1.51| 0.03|   9.02|    0.02|
+|               63|   54.25|   8.75|       0.98| 0.05|   9.15|    0.02|
+|               37|   48.04| -11.04|      -1.23| 0.03|   9.10|    0.02|
+|               41|   52.27| -11.27|      -1.25| 0.02|   9.09|    0.01|
+|               38|   48.77| -10.77|      -1.19| 0.02|   9.11|    0.01|
+|               58|   52.41|   5.59|       0.63| 0.06|   9.20|    0.01|
+|               51|   44.28|   6.72|       0.75| 0.04|   9.19|    0.01|
+|               50|   44.02|   5.98|       0.67| 0.04|   9.20|    0.01|
+|               40|   47.38|  -7.38|      -0.82| 0.03|   9.18|    0.01|
+|               69|   66.00|   3.00|       0.35| 0.12|   9.23|    0.01|
+|               55|   47.45|   7.55|       0.83| 0.02|   9.18|    0.00|
+|               40|   42.77|  -2.77|      -0.32| 0.10|   9.23|    0.00|
+|               46|   41.57|   4.43|       0.50| 0.05|   9.22|    0.00|
+|               60|   56.63|   3.37|       0.38| 0.05|   9.23|    0.00|
+|               39|   42.82|  -3.82|      -0.43| 0.04|   9.22|    0.00|
+|               58|   56.24|   1.76|       0.21| 0.13|   9.24|    0.00|
+|               61|   58.54|   2.46|       0.28| 0.07|   9.23|    0.00|
+|               30|   31.21|  -1.21|      -0.15| 0.20|   9.24|    0.00|
+|               35|   37.21|  -2.21|      -0.25| 0.07|   9.24|    0.00|
+|               47|   49.75|  -2.75|      -0.31| 0.04|   9.23|    0.00|
+|               45|   43.47|   1.53|       0.18| 0.11|   9.24|    0.00|
+|               48|   51.14|  -3.14|      -0.35| 0.03|   9.23|    0.00|
+|               42|   45.00|  -3.00|      -0.33| 0.03|   9.23|    0.00|
+|               45|   42.56|   2.44|       0.27| 0.04|   9.24|    0.00|
+|               48|   50.61|  -2.61|      -0.29| 0.02|   9.23|    0.00|
+|               57|   54.71|   2.29|       0.25| 0.03|   9.24|    0.00|
+|               59|   57.08|   1.92|       0.21| 0.04|   9.24|    0.00|
+|               47|   48.03|  -1.03|      -0.12| 0.12|   9.24|    0.00|
+|               41|   42.49|  -1.49|      -0.17| 0.06|   9.24|    0.00|
+|               51|   49.10|   1.90|       0.21| 0.03|   9.24|    0.00|
+|               57|   58.21|  -1.21|      -0.14| 0.05|   9.24|    0.00|
+|               52|   53.58|  -1.58|      -0.18| 0.03|   9.24|    0.00|
+|               49|   50.61|  -1.61|      -0.18| 0.02|   9.24|    0.00|
+|               42|   40.97|   1.03|       0.11| 0.04|   9.24|    0.00|
+|               52|   52.99|  -0.99|      -0.11| 0.04|   9.24|    0.00|
+|               57|   56.49|   0.51|       0.06| 0.05|   9.24|    0.00|
+|               44|   44.40|  -0.40|      -0.04| 0.04|   9.24|    0.00|
+|               49|   49.17|  -0.17|      -0.02| 0.06|   9.24|    0.00|
+
+---
+# Influencer?
+
+
+```r
+4/(51-2-1)
+```
+
+```
+## [1] 0.08333333
+```
+
+- So observation 9 doesn't exceed the threshold, but it still warrants investigation
+
+---
+# Identifying an observation from `plot()`
+
+- With 51 observations, we could easily identify row 9
+
+- But what if we're working with 51,000 observations?
+
+
+```r
+state_trump[9, ]
+```
+
+
+|state                | med_inc|   hs| white| white_pov| share_vote_trump|urban |
+|:--------------------|-------:|----:|-----:|---------:|----------------:|:-----|
+|District of Columbia |   68277| 87.1|    37|         4|                4|high  |
+
+- Even though D.C. doesn't exceed the rule of thumb, it is just different; probably warrants exclusion
+
+---
+# Influencer?
+
+
+```r
+state_trump_nodc &lt;- state_trump %&gt;%
+  filter(state != "District of Columbia")
+
+trump_mod_nodc &lt;- lm(share_vote_trump ~ white + white_pov,
+                data = state_trump_nodc)
+```
+
+
+```r
+get_regression_table(trump_mod_nodc)
+```
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |    18.86|      6.41|      2.94|    0.00|     5.97|    31.75|
+|white     |     0.21|      0.08|      2.79|    0.01|     0.06|     0.36|
+|white_pov |     1.77|      0.51|      3.47|    0.00|     0.74|     2.80|
+
+- Need to compare this to the results including D.C. on slide 6
+
+---
+# Results including DC
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |    10.93|      6.53|      1.68|     0.1|    -2.19|    24.05|
+|white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
+|white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
+
+- Estimates changed a quite a bit
+
+---
+# Comparing regression lines
+
+.pull-left[
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+- D.C. (on left) pulls the left of regression line down; forces slope to be greater
+
+---
+# Statistical test on assumptions
+
+
+```r
+library(gvlma)
+gvlma(trump_mod)
+```
+
+
+```r
+gvlma(trump_mod_nodc)
+```
+
+- Can't show on slide; demonstrate in R
+
+- Excluding DC passes test
+
+---
+# Checking multicollinearity
+
+
+```r
+library(car)
+```
+
+```r
+vif(trump_mod_nodc)
+```
+
+```
+##     white white_pov 
+##  1.043766  1.043766
+```
+
+- Nothing greater than 10; no multicollinearity
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script src="macros.js"></script>
+<script>var slideshow = remark.create({
+"highlightStyle": "github",
+"countIncrementalSlides": false
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
