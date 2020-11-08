@@ -8,6 +8,7 @@ output: html_document
 ## Data Applications in PA
 ***
 
+### Lectures
 
 ### [Introduction & Overview](content/teaching/slides/Intro_Slides.html)
 
@@ -31,11 +32,13 @@ output: html_document
 
 ### [Hypothesis Testing](content/teaching/slides/Hypothesis-Testing.html)
 
+### [Regression Diagnostics](content/teaching/slides/Reg_Diagnostics.html)
+
+### [Panel Analysis](content/teaching/slides/panel.html)
+
 <br><br>
 
-## R Labs
-***
-
+### R Labs
 
 ### [Introduction to R](content/teaching/slides/rlab1_intro_to_r.html)
 
