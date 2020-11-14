@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-10-28" />
+    <meta name="date" content="2020-11-18" />
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## RLab 9: Reporting Regression Results
 ### Alex Combs
 ### UGA | SPIA | PADP
-### October 28, 2020
+### November 18, 2020
 
 ---
 
@@ -67,9 +67,9 @@ library(moderndive)
 
 - Governments want citizens to be happy. 
 
-- Happy citizens cost less, spend more, attract business, and do not overthrow their government overlords. 
+- Happy citizens cost less, spend more, attract new business, stay healthier, and do not overthrow their government overlords. 
 
-- Suppose we are government elites interested in whether citizens' social networks affect their happiness. Perhaps we can implement new policies or modify city design to foster better social networking and subdue the masses...for now.
+- Suppose we are government officials interested in whether citizens' social networks affect their happiness. Perhaps we have concerns about isolation during the pandemic.
 
 ---
 # Data
@@ -147,7 +147,13 @@ predicting_happiness %&gt;%
 
 --
 
-- Therefore, what is the correct regression model?
+- How many backdoor paths between ND and SWB? Is it open or closed?
+
+--
+
+- Therefore, what is the regression model needed to eliminate OVB?
+
+`$$SWB_i=\beta_0+ \dots ?$$`
 
 ---
 # Dueling Models
@@ -158,23 +164,27 @@ predicting_happiness %&gt;%
 
 `$$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$`
 
+---
+# Biased regression
+
+`$$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$`
+
+- What are our null and alternative hypotheses?
+
 --
 
-Based on the correlations between these three variables, what direction is the OVB on `\(ND\)` for the incorrect model?
+- `\(H_0:\beta_1=0\)`
 
----
-# OVB Direction
+- `\(H_A: \beta_1 \neq 0\)`
 
-- PSS affects SWB and ND according to our theoretical DAG 
+--
 
-- PSS effect is the same direction on SWB and ND according to the correlations
-
-- We can predict this OVB will be positive
+What significance level do we want to use? 5% or 1%?
 
 ---
 # Biased regression
 
-- Estimate the biased model and provide the results
+- Estimate the biased model and produce a basic regression table
 
 
 ```r
@@ -182,7 +192,7 @@ biased &lt;-
 ```
 
 ---
-# Biased regression
+# Biased regression results
 
 
 ```r
@@ -198,6 +208,83 @@ get_regression_table(biased) %&gt;%
 |intercept |   20.995|     1.189|    17.651|   0.000|   18.656|   23.334|
 |ND        |    0.523|     0.197|     2.657|   0.008|    0.136|    0.910|
 
+--
+
+- What is the conclusion of our hypothesis test?
+
+--
+
+- Reject the null. `\(H_A: \beta_1 \neq 0\)`
+
+- In other words, our estimate of 0.523 is too far from 0 to be due to random noise. The probability of getting this result (or more extreme) if the null were true is 0.8%. 
+
+---
+# But OVB
+
+- But we know our estimate for ND is biased :(
+
+- Bias causes our estimate to be higher or lower than what it should be.
+
+- So we can't trust our estimate of 0.523. Maybe it should be closer to 0; enough so that we would fail to reject the null.
+
+--
+
+- It would be useful to predict whether the bias was causing our estimate to be too high or low.
+
+- If it were causing our estimate to be too low, and given that it is already far enough above 0 to reject the null, we could still conclude statistical significance.
+
+---
+# OVB Direction
+
+&lt;img src="labs_files/ovb-direction.png" width="399" style="display: block; margin: auto;" /&gt;
+
+- Direction of OVB is similar to correlation between two variable
+
+- If Z causes X and Y to move in same direction, OVB is positive
+
+- IF Z causes X and Y to move in opposite directions, OVB is negative
+
+---
+# Revisiting correlations
+
+.pull-left[
+
+```r
+predicting_happiness %&gt;% 
+  select(-Id) %&gt;% 
+  cor() %&gt;% 
+  kable(digits = 2)
+```
+
+
+
+|    |  SWB|   ND|  PSS|
+|:---|----:|----:|----:|
+|SWB | 1.00| 0.13| 0.47|
+|ND  | 0.13| 1.00| 0.31|
+|PSS | 0.47| 0.31| 1.00|
+]
+
+.pull-right[
+
+- ND is positively correlated with SWB.
+- PSS is positively correlated with SWB.
+- PSS is positively correlated with ND.
+
+]
+
+
+Based on the correlations between these three variables, what direction is the OVB on `\(ND\)` for the biased model?
+
+---
+# OVB Direction
+
+- PSS affects SWB and ND according to our theoretical DAG 
+
+- PSS effect is the same direction on SWB and ND according to the correlations
+
+- We can predict this OVB will be positive
+
 - Knowing the direction of the OVB, can we make a valid conclusion concerning the effect of network diversity (ND) on happiness (SWB)?
 
 --
@@ -207,7 +294,11 @@ get_regression_table(biased) %&gt;%
 ---
 # Valid regression
 
-Estimate the valid model and provide the results.
+- Since we have the data for the omitted variable, let's confirm that this works the way we predicted it to
+
+- Estimate the valid model and provide the results.
+
+`$$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$`
 
 
 ```r
@@ -232,6 +323,12 @@ get_regression_table(valid) %&gt;%
 |ND        |   -0.050|     0.185|    -0.271|   0.787|   -0.415|    0.314|
 |PSS       |    0.316|     0.032|     9.892|   0.000|    0.253|    0.379|
 
+- Would our conclusion for the hypothesis test on ND have been different if PSS were included?
+
+--
+
+- Yes. In this case we would have failed to reject the null.
+
 ---
 # Computing OVB
 
@@ -239,7 +336,9 @@ get_regression_table(valid) %&gt;%
 
 `$$\beta^{biased}-\beta^{valid}$$`
 
-- What is the magnitude of the OVB on the estimate for ND between the two models? Does it comport with our prediction concerning the direction of the bias?
+- Calculate the magnitude of the OVB on the estimate for ND between the two models?
+
+- Is it in the direction we predicted?
 
 ---
 # Computing OVB
@@ -253,7 +352,7 @@ get_regression_table(valid) %&gt;%
 ## [1] 0.573
 ```
 
-- As we feared, the OVB was the culprit for ND being statistically significant. Eliminating OVB by including PSS renders ND statistically insignificant.
+- OVB is positive, just as we predicted.
 
 - You now understand bias. Congratulations!
     </textarea>

@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "RLab 9: Reporting Regression Results"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "October 28, 2020"
+date: "November 18, 2020"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -65,9 +65,9 @@ library(moderndive)
 
 - Governments want citizens to be happy. 
 
-- Happy citizens cost less, spend more, attract business, and do not overthrow their government overlords. 
+- Happy citizens cost less, spend more, attract new business, stay healthier, and do not overthrow their government overlords. 
 
-- Suppose we are government elites interested in whether citizens' social networks affect their happiness. Perhaps we can implement new policies or modify city design to foster better social networking and subdue the masses...for now.
+- Suppose we are government officials interested in whether citizens' social networks affect their happiness. Perhaps we have concerns about isolation during the pandemic.
 
 ---
 # Data
@@ -128,7 +128,13 @@ include_graphics('labs_files/happydag.png')
 
 --
 
-- Therefore, what is the correct regression model?
+- How many backdoor paths between ND and SWB? Is it open or closed?
+
+--
+
+- Therefore, what is the regression model needed to eliminate OVB?
+
+$$SWB_i=\beta_0+ \dots ?$$
 
 ---
 # Dueling Models
@@ -139,9 +145,101 @@ $$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$
 
 $$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$
 
+---
+# Biased regression
+
+$$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$
+
+- What are our null and alternative hypotheses?
+
 --
 
-Based on the correlations between these three variables, what direction is the OVB on $ND$ for the incorrect model?
+- $H_0:\beta_1=0$
+
+- $H_A: \beta_1 \neq 0$
+
+--
+
+What significance level do we want to use? 5% or 1%?
+
+---
+# Biased regression
+
+- Estimate the biased model and produce a basic regression table
+
+```{r, eval=FALSE}
+biased <- 
+```
+
+---
+# Biased regression results
+
+```{r}
+biased <- lm(SWB ~ ND, data = predicting_happiness)
+get_regression_table(biased) %>% 
+  kable()
+```
+
+--
+
+- What is the conclusion of our hypothesis test?
+
+--
+
+- Reject the null. $H_A: \beta_1 \neq 0$
+
+- In other words, our estimate of 0.523 is too far from 0 to be due to random noise. The probability of getting this result (or more extreme) if the null were true is 0.8%. 
+
+---
+# But OVB
+
+- But we know our estimate for ND is biased :(
+
+- Bias causes our estimate to be higher or lower than what it should be.
+
+- So we can't trust our estimate of 0.523. Maybe it should be closer to 0; enough so that we would fail to reject the null.
+
+--
+
+- It would be useful to predict whether the bias was causing our estimate to be too high or low.
+
+- If it were causing our estimate to be too low, and given that it is already far enough above 0 to reject the null, we could still conclude statistical significance.
+
+---
+# OVB Direction
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('labs_files/ovb-direction.png')
+```
+
+- Direction of OVB is similar to correlation between two variable
+
+- If Z causes X and Y to move in same direction, OVB is positive
+
+- IF Z causes X and Y to move in opposite directions, OVB is negative
+
+---
+# Revisiting correlations
+
+.pull-left[
+```{r}
+predicting_happiness %>% 
+  select(-Id) %>% 
+  cor() %>% 
+  kable(digits = 2)
+```
+]
+
+.pull-right[
+
+- ND is positively correlated with SWB.
+- PSS is positively correlated with SWB.
+- PSS is positively correlated with ND.
+
+]
+
+
+Based on the correlations between these three variables, what direction is the OVB on $ND$ for the biased model?
 
 ---
 # OVB Direction
@@ -152,24 +250,6 @@ Based on the correlations between these three variables, what direction is the O
 
 - We can predict this OVB will be positive
 
----
-# Biased regression
-
-- Estimate the biased model and provide the results
-
-```{r, eval=FALSE}
-biased <- 
-```
-
----
-# Biased regression
-
-```{r}
-biased <- lm(SWB ~ ND, data = predicting_happiness)
-get_regression_table(biased) %>% 
-  kable()
-```
-
 - Knowing the direction of the OVB, can we make a valid conclusion concerning the effect of network diversity (ND) on happiness (SWB)?
 
 --
@@ -179,7 +259,11 @@ get_regression_table(biased) %>%
 ---
 # Valid regression
 
-Estimate the valid model and provide the results.
+- Since we have the data for the omitted variable, let's confirm that this works the way we predicted it to
+
+- Estimate the valid model and provide the results.
+
+$$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$
 
 ```{r, eval=FALSE}
 valid <- 
@@ -194,6 +278,12 @@ get_regression_table(valid) %>%
   kable()
 ```
 
+- Would our conclusion for the hypothesis test on ND have been different if PSS were included?
+
+--
+
+- Yes. In this case we would have failed to reject the null.
+
 ---
 # Computing OVB
 
@@ -201,7 +291,9 @@ get_regression_table(valid) %>%
 
 $$\beta^{biased}-\beta^{valid}$$
 
-- What is the magnitude of the OVB on the estimate for ND between the two models? Does it comport with our prediction concerning the direction of the bias?
+- Calculate the magnitude of the OVB on the estimate for ND between the two models?
+
+- Is it in the direction we predicted?
 
 ---
 # Computing OVB
@@ -210,6 +302,6 @@ $$\beta^{biased}-\beta^{valid}$$
 0.523 - (-0.050)
 ```
 
-- As we feared, the OVB was the culprit for ND being statistically significant. Eliminating OVB by including PSS renders ND statistically insignificant.
+- OVB is positive, just as we predicted.
 
 - You now understand bias. Congratulations!
