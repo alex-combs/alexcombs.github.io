@@ -72,7 +72,7 @@ By the end of this lab, you will have learned how to...
 - Explore time series for patterns
 - Execute some simple forecasting models like naive, average, and (seasonal) trend
 - Execute exponential smoothing
-- Exucute a regression-adjusted forecast
+- Execute a regression-adjusted forecast
 - Evaluate and choose between forecast models
 
 ---
@@ -346,20 +346,20 @@ ggsubseriesplot(ts_sales2[,3])
 
 - Voting seems to be cyclical and sales are clearly seasonal and maybe a slight upward trend
 
-- We can be more scientific than using our eyeballs to detect patterns
+- We can be more scientific than using visualizations...
 
 ---
 # Autocorrelation
 
 - Correlation measures the linear association between two variables
 
-- Autocorrelation measures the linear association between a variable and past values of the same variable
+- **Autocorrelation** measures the linear association between a variable and past values of the same variable
 
 - If past values are correlated with future values, then the past informs the future
 
 --
 
-- Lag - term used to identify a past value
+- **Lag**: term used to refer to a past value
 
 - The 3rd lag for annual time series value for 2020 is 2017
 
@@ -397,14 +397,12 @@ ggAcf(usmelec)
 
 - If the residuals from our forecast are white noise, this means we have extracted all of the useful information from the past to predict the future
 
-- Cannot improve the forecast in to a significant degree
-
 ---
 # Autocorrelation
 
 - We can generate an autocorrelation plot for the `sales` variable. Add and run.
 
-```{r, fig.align='center', fig.height=6}
+```{r, fig.align='center', fig.height=4}
 ggAcf(ts_sales[,1])
 ```
 
@@ -412,8 +410,8 @@ ggAcf(ts_sales[,1])
 # Autocorrelation
 
 - We can formally (i.e. hypothesis test) test for white noise like so:
-  - Null is white noise
-  - Alternative is there is white noise
+  - Null hypothesis is the time series is white noise
+  - Alternative hypothesis is the time series is autocorrelated
 
 ```{r}
 Box.test(ts_sales[,1], lag = 4) #test based on fourth lag bc quarterly
@@ -446,7 +444,7 @@ Box.test(ts_voting, lag = 1)
 
 --
 
-4. Seasonal Naive - same as naive but predicts each season as equal its most recent season
+4. Seasonal Naive - same as naive but predicts each season as equal to its most recent season
 
 ---
 # Simple forecast models
@@ -529,7 +527,7 @@ summary(sales_snaive)
 
 - The difference between the observed value and our point forecast is the residual
 
-- We prefer the model is the best fit
+- We prefer the model with the best fit
 
 --
 
@@ -704,6 +702,10 @@ summary(fc_sales_reg)
 
 --
 
-- Exponential smoothing is most common; include trends and seasonality as needed
+- Exponential smoothing is one of the most common methods; include trends and seasonality as needed
 
 - Check residuals and accuracy to determine best model
+
+--
+
+- To learn more on forecasting with R: [https://otexts.com/fpp2/](https://otexts.com/fpp2/)
