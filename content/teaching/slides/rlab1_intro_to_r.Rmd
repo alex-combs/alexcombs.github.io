@@ -14,65 +14,108 @@ output:
 ---
 # Objectives
 
-By the end of this lab, you will have learned how to...
+By the end of this lab, you will learned how to...
 
 - open and navigate R
 - start a R project to organize your work
 - load data already formatted for R
 - load R packages
-- start 3 common types of editing documents
-- write and format prose in an R notebook and run code
-- export your work to HTML
+- use R markdown and run code
+- export your R markdown document to HTML
 
 ---
-class: inverse, middle, center
+# RLab Conventions
 
-# RLab1: Introduction to R and R Workflow
+- Bullets denote background, instructions, etc.
+
+- Block quote in bold like below denotes a prompt
+
+> **Do this thing in this block**
+
+- Example code is in blocks like below or this `in-line code`
+
+```{r, eval=FALSE}
+summary(cars)
+```
+
+---
+# RLab Process
+
+- Not recommended that you work ahead even if you are waiting for others to catch up
+
+- Highly likely that you will encounter errors; this is normal
+  - If so, **STOP ME** with your voice or a Zoom icon like raised hand or stop sign
+  - Be prepared to share your screen
+  - Troubleshooting can help you and others learn
+  - Observers are encouraged to offer suggestions
 
 ---
 # Starting R
 
-- You need to have R and RStudio installed on your computer
+- Once R and RStudio are installed on your computer
 
-- Launch RStudio
+> **Launch RStudio**
 
-- Let's understand what we're looking at
-
-- 3 Panes
-  - Console
-  - Environment
-  - Files (and other tabs)
+- Should see 3 Panes
+  - Console (left)
+  - Environment (top-right)
+  - Files and other tabs (bottom-right)
 
 ---
-
 # File Directory
 
-- Type `getwd()` into the console (bottom-left pane) and hit `Enter`
+> **Type `getwd()` into the console (bottom-left pane) and hit Enter**
+
+- Should now see a printout of the current file path; for example
+
+- "/Users/alexcombs/Documents/"
 
 - When you tell R to look for or save a file, this is the location R uses
+
+- We usually want to separate folder for each project/assignment to hold all of our data and documents
 
 ---
 # R Projects
 
-> R Projects are the best way to organize your work
+- R Projects are the best way to organize your work
 
-- Let's learn how to create an R Project
-
-- Our objective is to create a project called `RLAB1` in a file location of our choice
+- Creates a folder for R to work from during the current session
 
 --
 
-- `R Demo 1` on eLC walks you through it in case you forget how
+- I will now demonstrate how to start an R Project
+
+--
+
+> ** Now create a project called "rlab1" in a location of your choice**
+
+--
+
+- All of our R Labs will begin with this process
+
+- R Demo 1 on eLC demonstrates this process in case you forget how
 
 ---
-# Opening data already formatted for R
+# Loading data already formatted for R
 
-- Download the file titled `states1.RData` on eLC. Leave it wherever your computer saved it (probably your `Downloads` folder)
+- Certain software uses certain file extensions like `.xlsx` for Excel
 
-- Type `load('states1.RData')` in the console and hit `Enter`
-  - Remember to use quotes when telling R to load or save files
+- A data file that is already formatted for R has the extension `.RData`
 
 --
+
+> **Download the file titled "states1.RData" on eLC. Leave it wherever your computer saved it (probably your Downloads folder)**
+
+--
+
+> **Type `load('states1.RData')` in the console and hit `Enter`**
+
+- Remember you must use single or double quotes anytime you tell R to do something with a file
+
+---
+# Our first error
+
+- Should now see an error message like the one below
 
 ```{r, eval=FALSE}
 Error in load(states1.RData) : object 'states1.RData' not found
@@ -80,69 +123,99 @@ Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> loa
 Execution halted
 ```
 
+- Be sure to read error messages; R tries to tell you what went wrong
+
 --
 
 - Remember, R looks for files in your project folder
 
-- You can include the file path `load(folder/folder/states1.RData)`
+- R is saying it can't find the file we just told it to load
 
-- Or you can move the file to your project folder and the previous code should work
+> **Using your computer's file manager, move states1.RData to your project folder**
+
+> **Now try to execute the load**
 
 ---
-# Starting a document
+# Data in your R session
 
-- RStudio can output several types of files, such as
-  - PDF
-  - Word
-  - HTML for websites or files that open in your browser
+- The environment pane (top-right) will list all data and any other objects currently loaded
 
---
+- You should see `states1` in your environment pane
 
-- Any of the above start with editing one of several R documents
-  - Script - bare bones to run code
-  - RMarkdown - allows to make all sorts of things [video](https://rmarkdown.rstudio.com/lesson-1.html)
-  - Notebook - same as RMarkdown but interactive so we can run code and see results in real time.
+- You can click the dropdown arrow to see a list of variables
+
+- Or click on `states1` to see the data in spreadsheet format
+
+---
+# Starting an editable document
+
+- Two common documents 
+  - Script: minimalist place to save code
+  - R Markdown: allows you to fluidly combine prose and code to export to all sorts of things [video](https://rmarkdown.rstudio.com/lesson-1.html)
+
+- We will use R Markdown documents exclusively in this course
+
+- But let's start with editing a script seeing the difference between the two can be helpful
   
 ---
 
 # Scripts
 
-- Open a script
+- I will now demonstrate how to open a script
 
-- If all you need is to run some code without caring about a finished document, then use scripts
+--
+
+> **Open a script**
+
+--
+
+- Purpose of scripts is to save code without caring about a finished document
 
 - Scripts support two elements:
   - Code
-  - Comments (use a hashtag `#` so R knows what is a comment)
+  - Comments (requires hashtag `#` so R knows what is a comment)
   
 ```{r}
-# This is a comment. Below is an arbitrary formula.
+# This is a comment. Below is some arbitrary math.
 ((5+5)/2)^2
 ```
 
 ---
+# Using a script
+
+- R interprets each line of a script as a command to execute
+
+- To execute a line, click enter
+
+- I will now demonstrate executing code in a script
+
+--
+
+> **Type some arbitrary math in your script and execute**
+
+---
 # Objects
 
-- Objects are anything you tell R to temporarily save during a session, which can also be permanently saved if you tell R to do so. The environment pane keeps a list of your objects. 
+- Objects are anything you tell R to temporarily save during a session. A dataset, a number, a list of numbers, etc.
+
+- You can save any object to your computer or delete it when you close R. Deleting is fine as long as you saved the code that created the object(s).
 
 - You should already have an object `states1`
-
-- You can click on an object to see what it contains or use the drop down toggle (if it is a dataset)
 
 ---
 # Creating an object
 
-- Let's create another object using the code below
+> **Add `x <-` to the arbitrary math in your script like I did below. Execute.**
 
 ```{r}
 x <- ((5+5)/2)^2
 ```
 
-- The `<-` symbol is called the assignment operator. It tells R to save the result of the thing on the right side as the name on the left side.
+--
+
+- The `<-` symbol is called the **assignment operator**. It tells R to save the result of the thing on the right side as the name on the left side.
 
 - The keyboard shortcut for the assignment is `Alt-` on PC or `Option-` on Mac.
-
-- You can view all keyboard shortcuts via the Help menu
 
 ---
 # Why save an object?
@@ -151,19 +224,16 @@ x <- ((5+5)/2)^2
 
 - Suppose `x` is *super* interesting but your boss wants to know what `x` is squared.
 
-- You don't need to recreate `x`. You can just square `x`.
+- You don't need to recreate `x`. You can just square `x` like below.
 
 ```{r}
 x^2
 ```
 
-```{r}
-xsquared <- x^2
-```
+- This becomes very useful when working with multiple datasets
 
-```{r}
-xsquared
-```
+---
+
 
 ---
 # R Notebook
