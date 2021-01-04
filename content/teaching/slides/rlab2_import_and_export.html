@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-09-02" />
+    <script src="rlab2_import_and_export_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="rlab2_import_and_export_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="rlab2_import_and_export_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 2: Importing &amp; Exporting Data &amp; Documents
 ### Alex Combs
 ### UGA | SPIA | PADP
-### September 2, 2020
+### Last updated: January 04, 2021
 
 ---
 
@@ -23,286 +25,304 @@ class: center, middle, inverse, title-slide
 
 By the end of this lab, you will have learned how to...
 
-- use data included in a R package
-- import data of different common formats
-- import data from a url
-- control what the reader of your document actually sees
-- export work to Word and PDF
-- export data to a few common formats
+- Import data
 
----
-# Start a new project
-
-- Let's start a new project using a slightly different process than we learned last week
-- We will create a new project from an *existing* directory (a folder already on your computer)
-
---
-
-- Using the file directory on your computer
-  - Go to the parent folder that contains your RLab1 folder
-  - Create a new folder named RLab2
-
---
-
-- In RStudio
-  - Create new project
-  - Select Existing Directory
-  - Click Browse and select the RLab2 folder you just created
-  - Click Create Project
+  - included in a R package
+  - csv and xlsx
+  - directly from url
   
----
-# Start a R notebook
+- Export R Markdown
 
-- Use the dropdown menu in the upper-left of RStudio to start a notebook
-- Let's make some minimal changes to the YAML header
-  - Change the title to "RLab2: Import &amp; Export Data &amp; Docs"
-  - Change the output to `html_document`
+  - change YAML to print nicer tables
+  - to Word and PDF
+  - suppress code and/or results
+
+- Export data to csv
+
+
+
+---
+# New Rlab2 project
+
+&gt; **Start a new project named "rlab2". I recommend locating it in the same parent file your rlab1 folder is in.**
+  
+&gt; **Start a R Markdown document**
+
+&gt; **Change the title in the YAML to "RLab2: Import &amp; Export"**
+
+&gt; **Keep the setup code chunk at the top but the rest of the template**
+
+---
+# Packages
+
+- I will now demonstrate loading the R packages we need for this lab.
+
+- Remember that a package will not load if it is not installed.
 
 --
 
-- Delete all of the content included in the template
+&gt; **In your setup code chunk, load the following packages.**
+
+
+```r
+library(tidyverse)
+library(readxl)
+library(gapminder)
+library(fivethirtyeight)
+library(data.table)
+```
 
 ---
-# Loading RData file review
+class: inverse, middle, center
 
-- We learned how to load data files already formatted for R
+# Data imports
 
-- Load the "states1.RData" file from the previous lab
+---
+# Review
 
---
+- Learned last week how to load RData files
 
-If file is in your RLab2 project folder:
+&gt; **Load the "states1.RData" file from the previous lab**
+
+- You can copy-and-paste from rlab1 to rlab2 folder, then
 
 
 ```r
 load("states1.RData")
 ```
 
-If you want to keep file in RLab1 folder:
+- Or, if you want to keep file in rlab1:
 
 
 ```r
-load("../RLab1/states1.RData")
+load("../rlab1/states1.RData")
 ```
 
-The `..` tells R to look in whatever your parent directory containing RLab1
+- The `..` is a shortcut so you don't have to type the entire file directory.
 
 ---
-# Using data included in a R package
+# Data in R
 
-- R loads with some play data sets that are useful for learning. For example, run the following code
-
-
-```r
-mtcars
-```
-
---
-
-- Many R packages include data
-- Try loading the following packages.
+- R loads with some example datasets already built in
 
 
 ```r
-library(gapminder)
-library(fivethirtyeight)
+# head() prints out the top 6 rows of a dataset
+head(mtcars)
 ```
+
+
+|                  |  mpg| cyl| disp|  hp| drat|    wt|  qsec| vs| am| gear| carb|
+|:-----------------|----:|---:|----:|---:|----:|-----:|-----:|--:|--:|----:|----:|
+|Mazda RX4         | 21.0|   6|  160| 110| 3.90| 2.620| 16.46|  0|  1|    4|    4|
+|Mazda RX4 Wag     | 21.0|   6|  160| 110| 3.90| 2.875| 17.02|  0|  1|    4|    4|
+|Datsun 710        | 22.8|   4|  108|  93| 3.85| 2.320| 18.61|  1|  1|    4|    1|
+|Hornet 4 Drive    | 21.4|   6|  258| 110| 3.08| 3.215| 19.44|  1|  0|    3|    1|
+|Hornet Sportabout | 18.7|   8|  360| 175| 3.15| 3.440| 17.02|  0|  0|    3|    2|
+|Valiant           | 18.1|   6|  225| 105| 2.76| 3.460| 20.22|  1|  0|    3|    1|
 
 ---
-# Using data included in a R package
+# Data in R Packages
 
-- You probably got an error that the packages are not installed.
+- Many R packages, like `gapminder` and `fivethirtyeight` include datasets
 
---
+- We can browse these datasets by going to the "Packages" tab in the bottom-right pane of RStudio
 
-- Run the following code in your console. 
-
-
-```r
-install.packages("gapminder")
-install.packages("fivethirtyeight")
-# OR
-install.packages(c("gapminder", "fivethirtyeight"))
-```
-
---
-- Remember why not to install in your notebook?
-
-- Now rerun the code that *loads* these packages
+- I will demonstrate
 
 ---
-# Using data included in a R package
+# Data in R Packages
 
-- Run the following code
-
-
-```r
-gapminder
-```
-
-- This dataset is too large for knitting document
-
---
-
-- Add the following to the above code
+&gt; **Add and run the following code chunk**
 
 
 ```r
+# n=4 changes default of first six rows to first 4
 head(gapminder, n=4)
 ```
 
----
-# Using data included in a R package
 
-- Save as object by changing to below; latter option prints object too
+|country     |continent | year| lifeExp|      pop| gdpPercap|
+|:-----------|:---------|----:|-------:|--------:|---------:|
+|Afghanistan |Asia      | 1952|  28.801|  8425333|  779.4453|
+|Afghanistan |Asia      | 1957|  30.332|  9240934|  820.8530|
+|Afghanistan |Asia      | 1962|  31.997| 10267083|  853.1007|
+|Afghanistan |Asia      | 1967|  34.020| 11537966|  836.1971|
+
+---
+# Data in R Packages
+
+&gt; **Change the code so it saves as an object named `gap_preview` like so and run again**
 
 
 ```r
-babygap &lt;- head(gapminder, n=4)
-
-(babygap &lt;- head(gapminder, n=4))
+gap_preview &lt;- head(gapminder, n=4)
 ```
 
-- Let's also add another object from `fivethirtyeight` data
+--
+
+- Note that you now have a new object in the environment and R does not print the table
+
+- If you want R to print `gap_preview`, you can wrap the line in parentheses like so
+
+- Or type `gap_preview` on a separate line
+
+
+```r
+(gap_preview &lt;- head(gapminder, n=4))
+
+gap_preview
+```
+
+---
+# Data in R Packages
+
+- There is a dataset named `hate_crimes` loaded from the the `fivethirtyeight` package.
+
+- We can use it directly, but suppose we want to copy it as a local object. Then,
 
 
 ```r
 hc &lt;- hate_crimes
 ```
 
-- Then print the object in a separate code chunk
+&gt; **Use the code above to copy `hate_crimes` to your environment**
+
+&gt; **Add a code chunk that prints the first six rows of the `hc` dataset.**
+
+---
+class: inverse, middle, center
+
+# Let's pause learning data imports to learn how to print tables.
+
+---
+# Printing tables
+
+- We have made two tables that will print to our output with the commands:
 
 
 ```r
-hc
+(gap_preview &lt;- head(gapminder, n=4))
+head(hc, n=4)
 ```
 
+&gt; **Knit to HTML and view the output**
+
+- Note that both tables are readable but neither looks good
+
+- There is enough horizontal space for all `gapminder` variables to display but not for all `hc` variables
+
+- Common to knit often to check how the output looks. We can make this output look better.
+
 ---
-class: inverse, middle, center
+# YAML df_print: kable
 
-# Let's pause learning data imports and learn how to control what gets exported for our audience to read
+- We can change how all tables print within the YAML
 
+&gt; **Change your YAML to the following:**
+
+
+```r
 ---
-# WYSIWYG
+title: "RLab2: Import &amp; Export"
+author: "Alex Combs"
+date: "12/26/2020"
+*output:
+* html_document:
+*   df_print: kable
+---
+```
 
-- What you see is what you get
-- This is how software like Word and Excel work
+&gt; **Knit to HTML to see what this did**
 
 --
 
-- R is not WYSIWYG
-- You can control what you see in your notebook and what it exports for others to read
+- The `gapminder` table looks good but notice that the `hc` table runs off the page.
+
+---
+# YAML df_print: paged
+
+&gt; **Change your YAML to the following:**
+
+
+```r
+---
+title: "RLab2: Import &amp; Export"
+author: "Alex Combs"
+date: "12/26/2020"
+output:
+  html_document:
+*   df_print: paged
+---
+```
+
+--
+
+- Now we can interact with the `hc` table to view multiple pages of variables
+
+- This paged option only works for HTML. Must make table fit the page of a Word doc or PDF.
+
+---
+# YAML themes
+
+- Several [themes](https://bootswatch.com/3/) available to change the appearance of your HTML output
+
+&gt; **Add the highlighted lines to your YAML, then knit to HTML**
+
+
+```r
+---
+title: "RLab2: Import &amp; Export"
+author: "Alex Combs"
+date: "12/26/2020"
+output:
+  html_document:
+*   theme: spacelab
+*   highlight: tango
+    df_print: paged
+---
+```
+
+- More info on formatting HTML [here](https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style)
 
 ---
 class: inverse, middle, center
 
-# For example, throughout this presentation I have been showing you code but no results. In fact, R didn't even execute the code I've been showing you.
+# Next, let's review the code chunk options from R Demo 2 and learn a few more.
 
 ---
-# Common motivations for controlling what exports
+# Code chunk options
 
-- Run code but don't show code or tell results
-  - I need to load some packages and/or data but my audience doesn't need anything related to that
-  - Suppress all code and output
-  
-- Run code and tell results but don't show code
-  - I want to present some results to my audience but not show them the code used to produce it
-  - Suppress code
-  
-- You will encounter these two many times
 
----
-# Common motivations for controlling what exports
+```r
+{r, options go here}
+```
 
-- Run code and show code but don't tell results
-  - I want to explain to my audience the code I used but they don't need to see the results that I need for something to work later
-  - Suppress results
-  
-- Show code but don't run code
-  - I want to teach my audience some code but I don't need to run it for anything to work later
+- echo = TRUE/FALSE 
+  - Suppress the code from the output but show results
 
----
-# Run code but don't show or tell
-
-- Knit your current notebook to HTML; save as `rlab2_lastname`
-
---
-
-- Our document includes the entire mtcars data set. Rarely a good idea.
-
-- We still want to be able to look at and interact with the data in our notebook.
-
-- Change the very top line of the code chunk containing `mtcars` to:
+- include = TRUE/FALSE
+  - Suppress the code and the results from the output
 
 
 ```r
 {r, include=FALSE}
 ```
 
-- Knit to HTML again, there should be no sign of the mtcars data
-
 ---
-# Run code but don't show or tell
+# Code chunk options
 
-- We usually don't need to show the code used to load data and packages or any of the output loading produces
+- Suppose we wanted to explore the `gapminder` data but don't want to show the code or the table to show in the output.
 
-- Suppress the code and output for the code chunks that loaded `states1` data as well as the `gapminder` and `fivethirtyeight` packages
-
-- Knit to HTML again
-
----
-# Run code and tell results but don't show
-
-- We have the first four rows of the `gapminder` data set. A nice preview of data for our reader.
-
-- They don't need to see the code that produced it.
-
-- Change the top line of the code chunk to:
-
-
-```r
-{r, echo=FALSE}
-```
-
-- Knit to HTML again, notice the code is gone but the table remains
-
----
-# Run and show code but don't tell results
-
-- Instead, suppose we wanted to run the code, explain the code to our audience, but didn't want to provide the table.
-
-- Change the top line from `echo=FALSE` to:
-
-
-```r
-{r, results='hide'}
-```
-
-- Knit to HTML. Note that we see the code but not the table.
-
-- Change back to `echo=FALSE`
-
----
-# Show code but don't run code at all
-
-- We have the hate_crimes data set printed in our document. No good.
-
-- Suppose we simply wanted to provide this code for instruction but didn't want to run it.
-
-- Change the top line of the code chunk containing `hc &lt;- hate_crimes` to:
-
-
-```r
-{r, eval=FALSE}
-```
-
-- Do not change the code chunk containing `hc`
-
-- Knit to HTML
+&gt; **Add the code chunk option that will achieve this.**
 
 --
 
-- What did we do wrong?
+- Now, suppose we want to suppress the code that generated the `hc` table but keep the table.
+
+&gt; **Add the code chunk option that will achieve this.**
+
+&gt; **Knit to HTML again to check the output**
 
 ---
 # Output options recap
@@ -310,161 +330,182 @@ class: inverse, middle, center
 ![](labs_files/output_options.png)
 
 ---
-class: inverse, center, middle
+class: inverse, middle, center
 
 # Back to data imports
 
 ---
-# Importing common data files into R
+# Importing CSV and Excel
 
-- Data rarely come formatted for R as a RData file
+- Two very common data file types are
 
-- Two very common file types are
   - Comma separated files (CSV)
   - Excel files (XLS or XLSX)
 
 --
   
-- Consider
-  - Do I want to create a RData file that I can load in my notebook, discarding the original file?
-  - Do I want to keep the original file and import into R using code that runs each time I knit my notebook?
-  - Do the original data update frequently?
+- Considerations:
+
+  - Will others need to replicate my analysis in the future?
+  - Do I want to create a RData file and discard the original file, or
+  - Keep the orignial file and import with each knit?
+  - Do the data update frequently?
+
+---
+# Import CSV files
+
+&gt; **Download "ncbirths.csv" available on eLC and add it to your "rlab2" project folder**
+
+&gt; **Open it using whatever spreadsheet software you prefer.**
+
+- Some notable features when importing:
+  - Variable names are in the top row
+  - Variable names are concise and lowercase
+  - Missing values denoted by "NA"
+
+- This dataset is already in good shape, so its import needs minimal work
+
+---
+# Import CSV
+
+- To import CSV, we should use `read_csv` which is part of the `tidyverse` package.
+
+- Generic syntax:
+
+
+```r
+any_name &lt;- read_csv("filename.csv")
+```
+
+- Tells R to import the `"filename.csv"`, naming it whatever we type on the left side
+
+- Remember:
+  - Quotes (single or double) around the file
+  - Include the file extension .csv
+
+&gt; **Add a code chunk to your Rmd and import `ncbirths`**
+
+---
+# Import CSV
+
+- Should see a long printout where R tells you how it stored each variable
+
+- Should also see a new object in the environment
+
+--
+
+- `read_csv()` has several options that can help us import files less neatly organized csv files
+
+- To see options of any function, go to its `help` documentation on the "Help" tab in the bottom-right pane
+
+- Start typing the function in the search bar. If you loaded the package that contains the function, it should auto-complete.
+
+---
+# read_csv() options
+
+- A few helpful options:
+  - col_names = list names for variables
+  - col_types = specify what type to store each variable
+  - na = specify what symbols are used to denote missing
+  - skip = number of rows to skip from the top when importing
+
+
+```r
+ncbirths &lt;- read_csv("ncbirths.csv", 
+                     col_names = c("age_f", "age_m"),
+                     col_types = "iifififinffff",
+                     skip = 1)
+```
+
+--
+
+- The above code uses options to:
+  - Name first two variables
+  - Store all variables as integers or factors
+  - Skip the first row because no longer using it
+
+---
+# Import Excel
+
+- To import Excel files, we should use the `read_xlsx` or `read_xls` functions in the `readxl` package.
+
+- Generic syntax:
+
+
+```r
+anyname &lt;- read_xlsx("filename.xlsx")
+```
+
+- Remember
+  - Quotes around the file name
+  - File extension .xlsx or .xls needs to match the function `read_xlsx()` or `read_xls()`
   
-
 ---
-# Creating a RData file to load
+# Import Excel
 
-- In the menu bar, go to File -&gt; Import Dataset -&gt; File type
-  - If CSV file, choose Text (readr)
+&gt; **Download "ga_schdist_raw.xlsx" from eLC and add to your "rlab2" project folder.**
 
-- To save any dataset as a .RData file
-
-
-```r
-save(name_of_dataset_in_environment, file = "filename.RData")
-```
-
-- Then we can load this dataset as needed like we've done before 
-
-
-```r
-load("filename.RData")
-```
-
-- Let's try this with a new file available on eLC called `ncbirths.csv`
-
----
-# Import from original file using code
-
-- Maybe I don't want to create a .RData file
-
-- To import CSV, we need to load `tidyverse`
-
-
-```r
-library(tidyverse)
-```
-
-- To import Excel, we need to load `readxl`
-
-
-```r
-library(readxl)
-```
-
-- Suppress this code and any output
-
----
-# Import original file using code
-
-- If we plan to use `ncbirths` in our notebook, we have to include the import in our notebook.
-
-- To import CSV, we use the following code
-
-
-```r
-name_for_new_object &lt;- read_csv("filename.csv")
-```
-
-- Try this with `ncbirths.csv`. Suppress code and output.
-
----
-# Import from original file using code
-
-- Common to find data that is not neatly organized
-
-- Importing with code can avoid modifying the original file. 
-
-- We want to make the import as self-contained as possible.
+&gt; **Open "ga_schdist_raw.xlsx" using your preferred spreadsheet software.**
 
 --
 
-- To see what kind of options we can use, let's check out the help file
+- Notable features:
+  - Variable names start on 7th row
+  - Variable names are messy
+  - Several rows we should not import starting after row 230
 
-- Go to the Help tab in your Files pane and search for read_excel
+- We need to use options for this file. Let's check out what options `read_xlsx` has.
 
 ---
-# Import from original file using code
+# Import Excel
 
-- Let's try to import a file that is poorly formatted, ga_schdist_raw.xlsx
+- The `range` option allows us to specify the cells we want to import
 
-- First, open it in Excel to see what we are dealing with
+- We could import "A7:I230" but that includes variable names that we would want to change later anyway.
 
---
+- Instead, we can import "A8:I230" and specify the names using `col_names`.
 
-- A useful approach is to tell R the range of cells to import
+---
+# Import Excel
 
-- The following code defines the range of cells; the first row is read as variable names by default
+&gt; **Add and run the following code**
 
-- Add to your notebook. Suppress code and output.
+
 
 
 ```r
 ga_schdist_raw &lt;- read_xlsx("ga_schdist_raw.xlsx", 
-                            range = "A7:I231")
+                            range = "A8:I230",
+                            col_names = c("district",
+                                           "state",
+                                           "charter",
+                                           "enroll",
+                                           "lep", "sped",
+                                           "frpl",
+                                           "white",
+                                           "expenditures"))
 ```
 
-(We shouldn't import row 231 but doing so deliberately to show something else later)
-
----
-# Checking our import
-
-- We can click on the object `ga_schdist_raw` to see it in spreadsheet format
-
-- Another quick way to examine a dataset is `glimpse`. Run the following code:
-
-
-```r
-glimpse(ga_schdist_raw)
-```
-
-- These data are a bit of a mess. We could include `col_types` and `col_names` in the import, but we will won't here so we can use it for RLab3.
-
-- Save these data as an .RData file to use next week. Suppress code and output.
+- Now anyone using the same data file can run this code to get a clean import
 
 ---
 # Import from URL
 
-- What if the data I use changes/updates often? I don't want to have to download a new version every time.
+-  If data updates frequently, we don't want to download a new version every time.
 
-- What if the data I use is publicly available in a central location and is really large? I don't want to have to save it to my computer.
-
---
+- If a large dataset is publicly available, we don't want to save it to our computer.
 
 - Lots of data are saved to the web and accessible via a url. We can import directly from the url.
 
-- We need another package to import via url
+--
+
+- We can use the `fread` function from the `data.table` package
+
+- General syntax:
 
 
 ```r
-library(data.table)
-```
-
-- Which allows us to use the function:
-
-
-```r
-name_for_new_object &lt;- fread('url')
+anyname &lt;- fread('url')
 ```
 
 ---
@@ -476,59 +517,38 @@ name_for_new_object &lt;- fread('url')
 
 [Data repository](https://github.com/nytimes/covid-19-data)
 
-- The url for the raw state-level data is [here](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv)
+- The url for the raw state-level data is [here](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv)
 
-- We can import these data from the web by running the following code:
+--
+
+&gt; **Use the `fread()` function to import NYT's state-level coronavirus data**
 
 
-```r
-covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us.csv')
-```
-
-- Add `eval=FALSE` to the above chunk so it doesn't run every time we knit
 
 ---
 class: inverse, center, middle
 
-# Exporting to documents other than HTML (Word and PDF)
+# Exporting to Word and PDF
 
 ---
 # Knit to Word
 
-- First, let's add a few headers for organization
+- If Word is installed on your computer, knitting to Word should just work
 
-  - Above the `babygap` code chunk, add "Gapminder Data"
-  - Above `ga_schdist_raw` import, add "Georgia School Data"
+&gt; **In the Knit dropdown menu, select "Knit to Word"**
 
---
+- Formatting likely an issue
 
-- If Word is on your computer, knitting to Word should just work
-
-- In the Knit dropdown menu, select 'Knit to Word'
-
-- Formatting will probably be an issue; change font and spacing in Word after you get the main content on the page from R
-
----
-# Nicer Table
-
-- Let's make that gapminder table look better
-
-- Add second-level header "Nicer Table" and add another code chunk
-
-
-```r
-kable(babygap)
-```
-
-
-- If you get an error, you forgot to do something we learned last week
+- I recommend changing the formatting from inside Word after you finish the main content using R
 
 ---
 # Knit to PDF
 
-- In order to knit to PDF, your computer needs a copy of LaTeX
+- In order to knit to PDF, your computer needs a copy of a program called LaTeX
 
-- You can install a light version of LaTeX within RStudio. Run the following code **in your console**.
+- You can install a light version of LaTeX within RStudio. 
+
+&gt; **Run the following code in your console**
 
 
 ```r
@@ -539,21 +559,31 @@ tinytex::install_tinytex() # hit Enter, this will take a few minutes
 # if you ever need to uninstall TinyTeX, run tinytex::uninstall_tinytex()
 ```
 
-- Try to Knit to PDF. If it works, there is nothing else you need to know or do. You will be able to knit to PDF moving forward.
+---
+# Knit to PDF
 
-- You should have a PDF document in your project folder.
+&gt; **Knit your document to PDF using the Knit dropdown menu**
+
+- You should now have a PDF document in your project folder you can open.
+
+- There are packages you can download that offer templates that will format your PDFs into research papers or reports so you don't have to learn LaTeX formatting.
+
+- If interested, check out
+  - [rticles](https://github.com/rstudio/rticles)
+  - `install.packages("stevetemplates")`
 
 ---
 class: inverse, center, middle
 
-# Finally, let's learn how to export data in R to CSV
+# Exporting data to CSV
 
 ---
 # Export data to CSV
 
-- We may want to export an object to csv for non-R-users to open
+- We may want to export an object in our environment to CSV for non-R-users to use
 
-- To export to csv:
+- Generic syntax:
+
 
 ```r
 write_csv(name_of_object, 'name_for_new_file.csv')
@@ -561,7 +591,7 @@ write_csv(name_of_object, 'name_for_new_file.csv')
 
 --
 
-- Export the `babygap` object to a csv file. Suppress code and output.
+&gt; **Export the `gap_preview` object to a csv file.**
 
 ---
 # Recap
@@ -576,7 +606,7 @@ write_csv(name_of_object, 'name_for_new_file.csv')
 
   - Export analysis to HTML, Work, PDF
 
-  - Control/format what your reader sees in a way that is actually useful
+  - Format what your reader sees
 
   - Export any new data to .csv for anyone else to use with other software
 
@@ -584,20 +614,17 @@ write_csv(name_of_object, 'name_for_new_file.csv')
 
 - This pretty much covers everything you need to realistically use R
 
-- Now we proceed to actually working with data and conducting analysis
-
 ---
 # Upload to eLC
 
-- Knit to HTML
-
-- Upload your notebook (.Rmd) and output (.html) to the RLabs assignment dropbox on eLC.
+- Upload your Rmd to the RLabs assignment dropbox on eLC.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="macros.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
+"highlightLines": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
@@ -664,7 +691,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

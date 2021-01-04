@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "RLab 1: Intro to R"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "August 26, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -233,39 +233,69 @@ x^2
 - This becomes very useful when working with multiple datasets
 
 ---
+# Cleaning our environment
 
+- By default, R keeps all the objects in our environment
+
+- Over time, this becomes too much
+
+--
+
+- I will now demonstrate two options to clean our environment
+  - Manually
+  - Automatically via settings
+
+--
+
+> **I recommend you change your settings to this.**
 
 ---
-# R Notebook
+# R Markdown
 
-- We will usually use notebooks in this class
+> **Close your script. Your choice whether to save it or not.**
 
-- Start a notebook--the template is informative
+--
 
-- The R Markdown cheatsheet is more informative
-  - Go to Help->Cheatsheets->R Markdown Cheat Sheet
-  
-- Let's add a few generic headers to the template just to make some changes
+- I will now demonstrate how to start a R Markdown (.Rmd) document.
+
+--
+
+> **Start a .Rmd document.**
+
+- Let's review the template. It is informative.
 
 ---
-# Knitting a notebook
+# Knit
 
-- Knit the template to HTML 
-  - Keyboard shortcut: `Cmd+Shift+K`
-  - Or click on the `Knit` button at the top of your notebook (might display as `Preview` at first)
+- Knit refers to taking the combination of prose and code and knitting it into a HTML, PDF, Word doc, etc.
 
-- Name the notebook `test` when R asks you to save it
+- Should see a knit buttom at the top of the editor pane. Clicking it will knit your document.
 
-- You should see two new files in your `files` pane (bottom-right) titled `test.Rmd` and `test.html`
+  - Keyboard shortcut is `Cmd+Shift+K`
 
-- Click on `test.html` and select `open in browser`
+> **Knit your Rmd document. Name it "test"**
+
+--
+
+- Should see some new files in your file pane
+
+- Let's compare the export to the Rmd document to learn some of how markdown works
+
+---
+# Cheatsheets
+
+- The R Markdown cheatsheet is also informative
+
+> **Go to Help->Cheatsheets->R Markdown Cheat Sheet**
 
 ---
 # YAML header
 
 - The YAML header tells R how to format the output
 
-- Change the YAML to the following
+- We will learn additions later
+
+> **Change the YAML to the following:**
 
 ```{r, eval=FALSE}
 ---
@@ -275,104 +305,134 @@ output: html_document
 ---
 ```
 
-- Knit to HTML again
+> **Knit to HTML again**
 
 ---
 class: inverse, middle, center
 
-# Let's create our first RLab notebook and upload to eLC
+# Let's create our first RLab and upload to eLC
 
 ---
-# RLAB1 Notebook
+# Starting RLab1
 
-- Download the file `RLab1_Profile` on eLC and add to your `RLab1` project folder
+- I will now demonstrate adding another file to our project folder
 
-- Rename the file `FirstName_LastName_Profile`
+--
 
-- Complete the instructions in the `RLab1_Profile` until you reach the competencies section
+> **Download the file "RLab1_Profile" from eLC and add to your "RLab1" project folder**
 
----
-# Competencies
+> **Rename the file "FirstName_LastName_Profile"**
 
-The National Association of Schools of Public Affairs and Administration (NASSPA) promotes six competencies in methods. Rate yourself on these competencies using the following scale:
-
-1. Not familiar enough with the topic to rate myself
-2. I have some competency but need improvement to achieve professional goals
-3. Do not need improvement to achieve professional goals
-4. Not to brag, but I'm basically an expert
+> **Complete the instructions in the "RLab1_Profile" until you reach the section titled "Some of my R skills"**
 
 ---
 # Adding code chunks
 
-- Add a code chunk that executes some basic arithmetic
+- Unlike a script, we must tell RStudio when to interpret code using a **code chunk**
 
-- Save the result to an object called `math`
+- To add a code chunk, use the keyboard shortcut `Cmd+Opt+I`
+
+- I will now demonstrate
+
+--
+
+> **Add a code chunk** 
+
+> **Inside the code chunk, write some arbitrary math**
+
+> **Assign the result to an object named `math`**
+
+---
+# Running a code chunk
+
+- Several options to run code
+
+- I will now demonstrate
+
+- Simplest option is the keyboard shortcut `Cmd+Enter`
 
 ---
 # Packages
 
-R loads with a lot of base functionality, but some things we want to do requires us to install or load additional packages into our R session. A package is simply a set of functions that augments the base functionality of R.
+- Many functions we want to use require packages.
 
-> Very important: Your notebook won't knit if you use code that requires a package that you haven't loaded inside of your notebook.
+- Your Rmd won't knit if you use code that requires a package that you haven't loaded **inside** of your Rmd.
 
 --
 
-- Try this code:
+> **Add another code chunk to your Rmd.**
+
+> **Add the below code to it and run**
 
 ```{r, eval=FALSE}
-kable(states1)
+glimpse(states1)
 ```
 
+--
+
 ```{r, eval=FALSE}
-Error in kable(states1) : could not find function "kable"
+Error in glimpse(states1) : could not find function "glimpse"
 ```
+
+- This is because we haven't loaded the package to which `glimpse` belongs.
+
+---
+# Installing packages
+
+- To load a package, it has to be installed on your computer. You only need to install a package once.
+
+- If you haven't already, let's install the `tidyverse` package to our copy of R.
+
+> **Run the following code in your console**
+
+```{r, eval=FALSE}
+install.packages("tidyverse")
+```
+
+--
+
+- **Never** install packages inside of your Rmd. This causes R to install every time you knit. Only install in your console.
 
 ---
 # Loading packages
 
-To load a package, it has to be installed on your computer. You only need to install a package once.
+- Once installed, now we can load a package whenever we need it. 
 
-- Let's install the `knitr` package that contains the `kable` function
+> **Add another code chunk to the bottom of your Rmd.**
 
-- Execute the following code in your **console**
-
-```{r, eval=FALSE}
-install.packages("knitr")
-```
-
-- Once installed, now we can load a package. Add this code to your notebook.
-
-```{r}
-library(knitr)
-```
-
----
-# Printing a table
-
-- Add another code chunk
-
-- Load the `states1` data
+> **Add this code to it and run.**
 
 ```{r, eval=FALSE}
-load("states1.RData")
+library(tidyverse)
 ```
-
-- Now try knitting to HTML
 
 ---
 # Knitting in order
 
-> Your notebook knits in the order of your code chunks. If you use a function on data that you load **below** the function, it's the same as not having the data loaded.
+> **Now try running the `glimpse(states1)` code from before.**
 
-> If a code chunk depends on another chunk, then the latter needs to be done before the former.
+- The result of the code should now be visible inside of your Rmd.
 
 --
 
-- Copy-and-paste the `load` chunk above the `kable` chunk.
+> **Now knit your Rmd.**
 
-- Knit to HTML again. Does it work?
+--
+
+Error?! Let's investigate.
+
+---
+# Knitting in order
+
+- R knits in the order of your code chunks. If you use a function that requires a package but you load the package afterwards, then R won't recognize the function when you knit.
+
+--
+
+> **Copy-and-paste the `library(tidyverse)` chunk above the `glimpse(states1)` chunk**
+
+> **Knit to HTML again.**
 
 ---
 # Upload to eLC
 
-- Upload your notebook (.Rmd file) and output (.html file) to the RLabs assignment dropbox on eLC
+- Upload your Rmd file to the RLabs assignment dropbox on eLC.

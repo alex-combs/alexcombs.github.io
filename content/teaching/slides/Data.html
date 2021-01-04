@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-09-02" />
+    <script src="Data_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="Data_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="Data_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,30 +17,44 @@ class: center, middle, inverse, title-slide
 ## Data
 ### Alex Combs
 ### UGA | SPIA | PADP
-### September 2, 2020
+### Last updated: January 04, 2021
 
 ---
 
 # Outline
 
-- Identify types of variables &amp; data structures
+- Identify the unit of analysis
 
-- RLab2:  Import data &amp; export useful documents
+- Identify types of variables
+  - Categorical: Nominal &amp; Ordinal
+  - Numerical: Discrete &amp; Continuous
+
+- Identify types of data structures
+  - Cross-sectional
+  - Pooled cross-sectional
+  - Time series
+  - Panel
 
 ---
-# Essentials of data
+# Rectangular data
 
-- Rectangular data is comprised of
+- Rectangular data consists of
 
-  1. Unit of analysis
-  2. Variables
-  
+  - Unit of analysis
+  - Variables
+
+--
+
 - **Unit of analysis**:  the subject (person, place, or thing) generating the data
+
+- Each row is a record/observation of the unit of analysis
+
+--
 
 - **Variable**:  a characteristic observed on unit of analysis
 
 ---
-# Rectangular Data
+# Rectangular data
 
 
 
@@ -69,16 +85,14 @@ class: center, middle, inverse, title-slide
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Each row is an **observation**
-- Each column is a **variable**
+- Each row is (or should be) an **observation**
 
----
-class: inverse, middle, center
-
-# The unit of analysis uniquely identifies each row in a data set. Let's practice applying this.
+- Each column is (or should be) a **variable**
 
 ---
 # Unit of analysis
+
+- The unit of analysis uniquely identifies each row in a data set. Let's practice.
 
 - What is the unit of analysis?
 
@@ -174,13 +188,19 @@ class: inverse, middle, center
 &lt;/table&gt;
 
 ---
-# Variables
+class: inverse, middle, center
 
-- Suppose we are asked to investigate the homeless population in Athens-Clarke County
+# Suppose we want to investigate homelessness in Athens-Clarke County. We need to collect data.
 
-- If the unit of analysis is `year`, what variables might we want to collect?
+---
+class: inverse, middle, center
 
-- If the unit of analysis is `people`, what variables might we want to collect?
+# If the unit of analysis for our data is **year**, what variables might we collect?
+
+---
+class: inverse, middle, center
+
+# If the unit of analysis is **people**, what variables might we collect?
 
 ---
 # Types of variables
@@ -188,19 +208,18 @@ class: inverse, middle, center
 ![](lectures_files/variables.png)
 
 ---
-class: inverse, middle, center
+# Qualitative vs. quantitative
 
-# A **qualitative** or **categorical** variable is a variable that is naturally expressed in words with no intrinsic numerical value
+- A **qualitative** or **categorical** variable is a variable that is naturally expressed in words with no intrinsic numerical value
+
+--
+
+- A **quantitative** or **numerical** variable is a variable that has intrinsic numerical meaning
 
 ---
 class: inverse, middle, center
 
-# A **quantitative** or **numerical** variable is a variable that has intrinsic numerical meaning
-
----
-class: inverse, middle, center
-
-# Which of our variables for describing the homeless population are qualitative or quantitative?
+# Which of our variables for our investigation of homelessness are qualitative or quantitative?
 
 ---
 # Types of qualitative variables
@@ -231,16 +250,18 @@ class: inverse, middle, center
 # Which of our quantitative variables are discrete or continuous?
 
 ---
-background-image: url("lectures_files/racing.jpg")
+background-image: url(lectures_files/racing.jpg)
 
-# Recap on variable types
+# Recap of variable types
 
 ---
 # Variables and information
 
 - Variables measure a characteristic of the unit of analysis
-- Types of variables provide different amounts of information
-- Nominal &lt; Ordinal &lt; Discrete &lt; Continuous
+
+- Each variable has some amount of information encoded into it
+
+&lt;img src="lectures_files/varinfo.png" width="2035" height="50%" /&gt;
 
 ---
 # Types (scales) of continuous variables
@@ -253,37 +274,32 @@ background-image: url("lectures_files/racing.jpg")
   - Can make a continuous variables out of categorical variables
   - Simplify multidimensional measures into one measure
   - Example:  [Global Multidimensional Poverty Index](http://hdr.undp.org/en/2018-MPI)
----
-class: inverse, center, middle
-
-# Why should we care about variable types? Because types of variables inform what kind of visualization and statistical analysis to use. This will come up multiple times over the semester. For example, [look](https://coggle.it/diagram/Vxlydu1akQFeqo6-/t/inference).
 
 ---
-# Other possible confusion
+# Why should we care?
+
+- Types of variables inform what kind of visualization and statistical analysis to use. 
+
+- For [example](https://coggle.it/diagram/Vxlydu1akQFeqo6-/t/inference).
+
+---
+# Potential confusions
 
 - Qualitative data does NOT imply qualitative analysis
 
 --
 
-- An infinite range of values does not mean a variable is continuous, and a finite range does not mean a variable is discrete
-- It's not about range at all, it's about divisibility
+- Possible range of a values does not differentiate between discrete and continuous
 
---
+  - Continuous variable can range between 0-1
+  - Discrete variable can range from 0 to infinity
 
-- The count of homeless people vs. the proportion of homeless people
+- It's about divisibility
 
 ---
 class:  inverse, center, middle
 
-# Let's now turn our attention to types of data sets
-
----
-# Types of data set structures
-
-1. Cross-sectional 
-2. Pooled cross-sectional
-3. Time series
-4. Panel/longitudinal
+# Data structures
 
 ---
 # Cross-sectional
@@ -403,6 +419,7 @@ class:  inverse, center, middle
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+
 - Multiple cross-sections combined
 - Different subjects observed in each cross-section
 
@@ -480,11 +497,11 @@ class:  inverse, center, middle
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Unit of analysis?
 - One subject across time
+- Unit of analysis?
 
 ---
-# Panel or longitudinal data
+# Panel/longitudinal data
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -549,34 +566,29 @@ class:  inverse, center, middle
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+- Same subjects observed across time
 - Unit of analysis?
-- Same subjects observed across time 
 
 ---
 # Recap on data set structures
 
-- Phenomena can be measured `between` or `within` units and/or `between` or `within` time periods
-
-&lt;br&gt;
-
-- Cross-sectional measures `between` units and `within` time
+- Characteristics can be measured `between` or `within` units and/or `between` or `within` time periods
 
 --
 
-- Pooled cross-sectional measures `between` units and `within` time (sort of)
+- Cross-sectional measures `between` units and `within` a time period
 
 --
 
-- Time series measures `within` unit and `between` time 
+- Pooled cross-sectional measures `between` units and `within` a time period (sort of)
 
 --
 
-- Panel measures `between` units **AND** `between` time
+- Time series measures `within` a unit and `between` time periods
 
----
-class: inverse, center, middle
+--
 
-# Just as variable types inform visualizations and analysis, so too do data set structures.
+- Panel measures `between` units and `between` time periods
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
