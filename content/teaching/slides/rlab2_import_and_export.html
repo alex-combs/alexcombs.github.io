@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 2: Importing &amp; Exporting Data &amp; Documents
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: January 04, 2021
+### Last updated: January 08, 2021
 
 ---
 
@@ -50,7 +50,7 @@ By the end of this lab, you will have learned how to...
 
 &gt; **Change the title in the YAML to "RLab2: Import &amp; Export"**
 
-&gt; **Keep the setup code chunk at the top but the rest of the template**
+&gt; **Keep the setup code chunk at the top but delete the rest of the template**
 
 ---
 # Packages
@@ -226,10 +226,10 @@ head(hc, n=4)
 ---
 title: "RLab2: Import &amp; Export"
 author: "Alex Combs"
-date: "12/26/2020"
-*output:
-* html_document:
-*   df_print: kable
+date: "1/21/2021"
+*output: #no space after colon
+* html_document: #tab indent
+*   df_print: kable #tab indent
 ---
 ```
 
@@ -249,7 +249,7 @@ date: "12/26/2020"
 ---
 title: "RLab2: Import &amp; Export"
 author: "Alex Combs"
-date: "12/26/2020"
+date: "1/21/2021"
 output:
   html_document:
 *   df_print: paged
@@ -274,7 +274,7 @@ output:
 ---
 title: "RLab2: Import &amp; Export"
 author: "Alex Combs"
-date: "12/26/2020"
+date: "1/21/2021"
 output:
   html_document:
 *   theme: spacelab
@@ -312,7 +312,7 @@ class: inverse, middle, center
 ---
 # Code chunk options
 
-- Suppose we wanted to explore the `gapminder` data but don't want to show the code or the table to show in the output.
+- Suppose we wanted to explore the `gapminder` data like we have already done but don't want the code or the table to show in the output.
 
 &gt; **Add the code chunk option that will achieve this.**
 
@@ -358,7 +358,7 @@ class: inverse, middle, center
 
 &gt; **Open it using whatever spreadsheet software you prefer.**
 
-- Some notable features when importing:
+- Some notable features for this import:
   - Variable names are in the top row
   - Variable names are concise and lowercase
   - Missing values denoted by "NA"
@@ -449,7 +449,7 @@ anyname &lt;- read_xlsx("filename.xlsx")
 
 --
 
-- Notable features:
+- Notable features for this import:
   - Variable names start on 7th row
   - Variable names are messy
   - Several rows we should not import starting after row 230
@@ -612,7 +612,7 @@ write_csv(name_of_object, 'name_for_new_file.csv')
 
 --
 
-- This pretty much covers everything you need to realistically use R
+- This pretty much covers the full procedure of using R in the real world, now just need to add analytical skills
 
 ---
 # Upload to eLC

@@ -189,11 +189,11 @@ class: inverse, center, middle
 ---
 # Balancing Concepts and R
 
-- Operating R is primary focus at first, then we will turn more to concepts
+- Operating R is initial focus
 
-- Statistical concepts initially easy, then increase in difficulty
+- Statistical concepts relatively simple at first, then complexity increases around Week 6
 
-- Initial struggles are part of the process; do not worry
+- Struggling with R is part of the process; do not worry
 
 ---
 
@@ -224,7 +224,7 @@ class: inverse, center, middle
 ---
 # R Chapters
 
-- Provides weekly R practice
+- Provide weekly R practice
 
 - Designed to take about an hour or point of diminishing returns
 
@@ -243,7 +243,7 @@ class: inverse, center, middle
 
 - If you attend and participate, you receive credit
 
-- If you choose not to attend, you may upload your lab by the end of the day for credit
+- If you choose not to attend, you may upload your lab by noon Friday for credit
 
 ---
 # Problem Sets
@@ -253,9 +253,9 @@ class: inverse, center, middle
 - Graded on 100 point scale
 
 - Designed to take about 10-20 hours
-  - **Do not** try to complete in one sitting
+  - Trying to complete in one sitting is not recommended
   - Each week will prepare you to answer certain questions
-  - We will have covered all material relevant to the problem set by the week prior to its due date
+  - We will have covered all material relevant to the problem set no later than the week prior to its due date
 
 - Can work in groups of at most 3
 
@@ -266,7 +266,7 @@ class: inverse, center, middle
 
 - Graded on 100 point scale
 
-- Focuses entirely on concepts and interpretation of analysis
+- Focus on concepts and interpretation of analysis
 
 - No use of R
 
@@ -289,8 +289,12 @@ class: inverse, center, middle
 - Attendance not required; no explanation needed unless pertains to missing a deadline
 
 - Link to schedule office hours is on syllabus (Zoom only)
+  - T & W 4-7PM
+  - F 10AM-12PM
 
-- I am responsive to emails
+- I am responsive to email but consider using discussion boards instead
 
-- Check discussion boards and consider using them instead of email
+---
+class: inverse, center, middle
 
+# Questions?

@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-09-09" />
+    <script src="measurement_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="measurement_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="measurement_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Measurement Validity &amp; Reliability
 ### Alex Combs
 ### UGA | SPIA | PADP
-### September 9, 2020
+### Last updated: January 08, 2021
 
 ---
 
@@ -40,16 +42,21 @@ class: inverse, middle, center
 ---
 # Measurement
 
-- **Measurement Validity**: Does the variable accurately represent what it claims to represent? Are the values accurate representations of the intended concept/phenomenon?
+- **Measurement Validity**: Does the variable measure the concept/phenomenon it is intended or claims to measure? Are the recorded values of the variable accurate measures of the true values of the variable?
 
 --
 
-- **Measurement Reliability**: Does the way the variable is measured generate the same value given the same reality? Given two real and identical conditions, will my data contain identical values?
+- **Measurement Reliability**: Provided no change in a subject’s condition/reality, does the way the variable is measured generate the same value? Given identical conditions/realities between multiple subjects, does the measure generate identical values?
 
 ---
 # Measurement
 
 ![](lectures_files/measure_lines.png)
+
+---
+class: inverse, middle, center
+
+# In your groups, settle on a variable and discuss its measurement validity and reliability. Be ready to discuss with class.
 
 ---
 # Why does this matter?
@@ -58,15 +65,15 @@ class: inverse, middle, center
 
 - If data have a weak or no relationship with the thing you are trying to study, you have no foundation upon which to continue your work.
 
-- Sometimes flawed data is the best we got, and understanding its flaws can help mitigate mistakes in interpretations and decisions.
+- Sometimes flawed data is all we have, and understanding its flaws can help mitigate mistakes in interpretations and decisions.
 
 ---
 class: inverse, middle, center
 
-# Speaking of flawed data, we must also consider **missing** data
+# Missing data
 
 ---
-# Missingness
+# Missing Data
 
 - Two types
   - Explicit
@@ -97,13 +104,13 @@ class: inverse, middle, center
    &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.4 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 65.554 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.6 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
   &lt;/tr&gt;
@@ -111,30 +118,23 @@ class: inverse, middle, center
    &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 72.390 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72.4 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 190010647 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9065.801 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9065.8 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
 --
 
-- Conceptual/theoretical concerns
+- Conceptual concerns
   - Do not assume data are missing at random
-  - Ask yourself why data are missing and if missingness is influenced by a factor that is relevant to your work
+  - Ask yourself why data are missing and if it is influenced by a factor that is relevant to your analysis
 
 --
 - Technical concern
-  - When summarizing data, account for missing values
+  - When describing data, account for missing values
   - Incorrect to say we have 3 countries with a mean life expectancy of 68.972
-
----
-# Explicit examples
-
-- Missing income from a survey of SPIA MPA alumni
-- Missing financial aid data in a college student data set
-- Missing sales tax rates in state finance data
 
 ---
 # Implicitly missing
@@ -155,67 +155,58 @@ class: inverse, middle, center
    &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 73.275 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 73.3 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 36203463 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10967.282 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10967.3 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 74.340 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 74.3 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 38331121 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8797.641 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8797.6 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 75.320 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.3 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 12779.380 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.4 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 62.050 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62.0 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 7693188 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3326.143 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3326.1 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 65.554 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.6 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3822.137 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3822.1 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Typical in panel data where units seem to enter and exit the data
+- Typical in panel data where units enter and exit the data
 - Same concerns apply
-
----
-# Implicit examples
-
-- Drug trials
-- Panels of sub-state government jurisdictions
-- Time series of a smaller unit of time aggregated up to a larger unit of time (monthly data aggregated to annual)
-
----
-# Recap
-
-- Missingness is also a measurement issue
-- Almost never missing at random; reason may or may not be critical to your work; you don't know if you don't think about it
 
 ---
 # Precision
 
 - Measurement validity involves accuracy. 
-- Measurement reliability involves precision. 
-- But another definition of precision concerns the exactness of our measurement, which most associate with accuracy.
+
+- Measurement reliability involves a version of precision.
+
+--
+
+- Another version of precision involves the exactness of a measurement, which many may associate with accuracy.
 
 ---
 background-image: url(lectures_files/ruler.jpg)
@@ -241,70 +232,56 @@ background-image: url(lectures_files/ruler.jpg)
    &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1952 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 28.801 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 28.8 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 8425333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 779.4453 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 779.4 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1957 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 30.332 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30.3 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 9240934 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 820.8530 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 820.9 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 31.997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 32.0 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 10267083 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 853.1007 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1967 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 34.020 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 11537966 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 836.1971 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1972 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 36.088 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 13079460 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 739.9811 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1977 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 38.438 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 14880372 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 786.1134 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 853.1 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Life expectancy is reported to the nearest thousandth decimal place.
-- This means *true* life expectancy is some value that would round to the the nearest thousandth.
+- Life expectancy is reported to the nearest tenth decimal place.
+
+- But the underlying value for life expectancy could have been anything that rounds to the tenth decimal we see in the data.
+
+--
+
 - What was the possible life expectancy in Afghanistan in 1952?
 
+--
+
+- What if five deaths at 28, 29, 29, 29, 29?
+
 ---
-# Why does this matter
+# Why does this matter?
 
 - 14.38% of all statistics are lies
 
 --
 
-- Precision can be used to convince people that dubious facts are true
+- Precision can be used to mislead people that information is accurate; a cognitive bias known as precision bias
 
 --
 
-- Do not report numbers that are more precise than the underlying data
-- There may be legitimate reasons to round to fewer decimal places than underlying data, but understand you are decreasing precision
+- Be careful reporting numbers that are more precise than the underlying data
+
+- May be legitimate reasons to round to fewer decimal places than underlying data, but understand you are decreasing precision
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Measurement Validity & Reliability"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "September 9, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -33,16 +33,21 @@ class: inverse, middle, center
 ---
 # Measurement
 
-- **Measurement Validity**: Does the variable accurately represent what it claims to represent? Are the values accurate representations of the intended concept/phenomenon?
+- **Measurement Validity**: Does the variable measure the concept/phenomenon it is intended or claims to measure? Are the recorded values of the variable accurate measures of the true values of the variable?
 
 --
 
-- **Measurement Reliability**: Does the way the variable is measured generate the same value given the same reality? Given two real and identical conditions, will my data contain identical values?
+- **Measurement Reliability**: Provided no change in a subject’s condition/reality, does the way the variable is measured generate the same value? Given identical conditions/realities between multiple subjects, does the measure generate identical values?
 
 ---
 # Measurement
 
 ![](lectures_files/measure_lines.png)
+
+---
+class: inverse, middle, center
+
+# In your groups, settle on a variable and discuss its measurement validity and reliability. Be ready to discuss with class.
 
 ---
 # Why does this matter?
@@ -51,15 +56,15 @@ class: inverse, middle, center
 
 - If data have a weak or no relationship with the thing you are trying to study, you have no foundation upon which to continue your work.
 
-- Sometimes flawed data is the best we got, and understanding its flaws can help mitigate mistakes in interpretations and decisions.
+- Sometimes flawed data is all we have, and understanding its flaws can help mitigate mistakes in interpretations and decisions.
 
 ---
 class: inverse, middle, center
 
-# Speaking of flawed data, we must also consider **missing** data
+# Missing data
 
 ---
-# Missingness
+# Missing Data
 
 - Two types
   - Explicit
@@ -84,26 +89,19 @@ crossgap <- gapminder %>%
 crossgap[1,4] <- NA
 crossgap[2,6] <- NA
 
-kable(crossgap, format = 'html')
+kable(crossgap, format = 'html', digits = 1)
 ```
 
 --
 
-- Conceptual/theoretical concerns
+- Conceptual concerns
   - Do not assume data are missing at random
-  - Ask yourself why data are missing and if missingness is influenced by a factor that is relevant to your work
+  - Ask yourself why data are missing and if it is influenced by a factor that is relevant to your analysis
 
 --
 - Technical concern
-  - When summarizing data, account for missing values
+  - When describing data, account for missing values
   - Incorrect to say we have 3 countries with a mean life expectancy of `r mean(crossgap$lifeExp, na.rm=TRUE)`
-
----
-# Explicit examples
-
-- Missing income from a survey of SPIA MPA alumni
-- Missing financial aid data in a college student data set
-- Missing sales tax rates in state finance data
 
 ---
 # Implicitly missing
@@ -113,31 +111,22 @@ gapminder %>%
   filter(continent == 'Americas', year >= 1997) %>% 
   head(n=6) %>%
   filter(country!='Bolivia' | year!=2002) %>% 
-  kable(format = 'html')
+  kable(format = 'html', digits = 1)
 ```
 
-- Typical in panel data where units seem to enter and exit the data
+- Typical in panel data where units enter and exit the data
 - Same concerns apply
-
----
-# Implicit examples
-
-- Drug trials
-- Panels of sub-state government jurisdictions
-- Time series of a smaller unit of time aggregated up to a larger unit of time (monthly data aggregated to annual)
-
----
-# Recap
-
-- Missingness is also a measurement issue
-- Almost never missing at random; reason may or may not be critical to your work; you don't know if you don't think about it
 
 ---
 # Precision
 
 - Measurement validity involves accuracy. 
-- Measurement reliability involves precision. 
-- But another definition of precision concerns the exactness of our measurement, which most associate with accuracy.
+
+- Measurement reliability involves a version of precision.
+
+--
+
+- Another version of precision involves the exactness of a measurement, which many may associate with accuracy.
 
 ---
 background-image: url(lectures_files/ruler.jpg)
@@ -148,25 +137,34 @@ background-image: url(lectures_files/ruler.jpg)
 # Precision
 
 ```{r, echo=FALSE}
-head(gapminder, n=6) %>% 
-  kable(format = 'html')
+head(gapminder, n=3) %>% 
+  kable(format = 'html', digits = 1)
 ```
 
-- Life expectancy is reported to the nearest thousandth decimal place.
-- This means *true* life expectancy is some value that would round to the the nearest thousandth.
+- Life expectancy is reported to the nearest tenth decimal place.
+
+- But the underlying value for life expectancy could have been anything that rounds to the tenth decimal we see in the data.
+
+--
+
 - What was the possible life expectancy in Afghanistan in 1952?
 
+--
+
+- What if five deaths at 28, 29, 29, 29, 29?
+
 ---
-# Why does this matter
+# Why does this matter?
 
 - 14.38% of all statistics are lies
 
 --
 
-- Precision can be used to convince people that dubious facts are true
+- Precision can be used to mislead people that information is accurate; a cognitive bias known as precision bias
 
 --
 
-- Do not report numbers that are more precise than the underlying data
-- There may be legitimate reasons to round to fewer decimal places than underlying data, but understand you are decreasing precision
+- Be careful reporting numbers that are more precise than the underlying data
+
+- May be legitimate reasons to round to fewer decimal places than underlying data, but understand you are decreasing precision
 
