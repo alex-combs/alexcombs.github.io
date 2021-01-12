@@ -49,6 +49,8 @@ summary(cars)
   - Troubleshooting can help you and others learn
   - Observers are encouraged to offer suggestions
 
+- Feel free to write your own notes inside your Rmd document
+
 ---
 # Starting R
 
@@ -319,11 +321,11 @@ class: inverse, middle, center
 
 --
 
-> **Download the file "RLab1_Profile" from eLC and add to your "RLab1" project folder**
+> **Download the file "rlab1_profile" from eLC and add to your "rlab1" project folder**
 
-> **Rename the file "FirstName_LastName_Profile"**
+> **Rename the file "firstname_lastname_profile"**
 
-> **Complete the instructions in the "RLab1_Profile" until you reach the section titled "Some of my R skills"**
+> **Complete the instructions in the "rlab1_profile" until you reach the section titled "Some of my R skills"**
 
 ---
 # Adding code chunks
