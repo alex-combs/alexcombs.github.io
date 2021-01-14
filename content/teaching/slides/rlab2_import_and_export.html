@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 2: Importing &amp; Exporting Data &amp; Documents
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: January 08, 2021
+### Last updated: January 12, 2021
 
 ---
 
@@ -50,7 +50,7 @@ By the end of this lab, you will have learned how to...
 
 &gt; **Change the title in the YAML to "RLab2: Import &amp; Export"**
 
-&gt; **Keep the setup code chunk at the top but delete the rest of the template**
+&gt; **Keep the setup code chunk at the top but delete the rest of the template.**
 
 ---
 # Packages
@@ -82,7 +82,7 @@ class: inverse, middle, center
 
 - Learned last week how to load RData files
 
-&gt; **Load the "states1.RData" file from the previous lab**
+&gt; **In your setup code chunk, load the "states1.RData" file from the previous lab**
 
 - You can copy-and-paste from rlab1 to rlab2 folder, then
 
@@ -133,7 +133,7 @@ head(mtcars)
 ---
 # Data in R Packages
 
-&gt; **Add and run the following code chunk**
+&gt; **In a new code chunk, add and run the following**
 
 
 ```r
@@ -163,9 +163,7 @@ gap_preview &lt;- head(gapminder, n=4)
 
 - Note that you now have a new object in the environment and R does not print the table
 
-- If you want R to print `gap_preview`, you can wrap the line in parentheses like so
-
-- Or type `gap_preview` on a separate line
+- If you want R to print `gap_preview`, you can wrap the line in parentheses or type `gap_preview` on a separate line
 
 
 ```r
@@ -173,6 +171,8 @@ gap_preview &lt;- head(gapminder, n=4)
 
 gap_preview
 ```
+
+&gt; **Use one of the options to print first 4 rows of `gapminder'.**
 
 ---
 # Data in R Packages
@@ -186,9 +186,9 @@ gap_preview
 hc &lt;- hate_crimes
 ```
 
-&gt; **Use the code above to copy `hate_crimes` to your environment**
+&gt; **In the same code chunk, use the code above to copy `hate_crimes` to your environment**
 
-&gt; **Add a code chunk that prints the first six rows of the `hc` dataset.**
+&gt; **Print the first six rows of the `hc` dataset.**
 
 ---
 class: inverse, middle, center

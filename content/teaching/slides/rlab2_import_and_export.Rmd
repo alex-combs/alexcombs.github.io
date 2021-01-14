@@ -49,7 +49,7 @@ library(data.table)
 
 > **Change the title in the YAML to "RLab2: Import & Export"**
 
-> **Keep the setup code chunk at the top but delete the rest of the template**
+> **Keep the setup code chunk at the top but delete the rest of the template.**
 
 ---
 # Packages
@@ -80,7 +80,7 @@ class: inverse, middle, center
 
 - Learned last week how to load RData files
 
-> **Load the "states1.RData" file from the previous lab**
+> **In your setup code chunk, load the "states1.RData" file from the previous lab**
 
 - You can copy-and-paste from rlab1 to rlab2 folder, then
 
@@ -123,7 +123,7 @@ head(mtcars) %>%
 ---
 # Data in R Packages
 
-> **Add and run the following code chunk**
+> **In a new code chunk, add and run the following**
 
 ```{r, eval=FALSE}
 # n=4 changes default of first six rows to first 4
@@ -148,15 +148,15 @@ gap_preview <- head(gapminder, n=4)
 
 - Note that you now have a new object in the environment and R does not print the table
 
-- If you want R to print `gap_preview`, you can wrap the line in parentheses like so
-
-- Or type `gap_preview` on a separate line
+- If you want R to print `gap_preview`, you can wrap the line in parentheses or type `gap_preview` on a separate line
 
 ```{r, eval=FALSE}
 (gap_preview <- head(gapminder, n=4))
 
 gap_preview
 ```
+
+> **Use one of the options to print first 4 rows of `gapminder'.**
 
 ---
 # Data in R Packages
@@ -169,9 +169,9 @@ gap_preview
 hc <- hate_crimes
 ```
 
-> **Use the code above to copy `hate_crimes` to your environment**
+> **In the same code chunk, use the code above to copy `hate_crimes` to your environment**
 
-> **Add a code chunk that prints the first six rows of the `hc` dataset.**
+> **Print the first six rows of the `hc` dataset.**
 
 ---
 class: inverse, middle, center
