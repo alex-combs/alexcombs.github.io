@@ -144,7 +144,7 @@ head(gapminder, n=4) %>%
 gap_preview <- head(gapminder, n=4)
 ```
 
---
+---
 
 - Note that you now have a new object in the environment and R does not print the table
 
@@ -156,7 +156,7 @@ gap_preview <- head(gapminder, n=4)
 gap_preview
 ```
 
-> **Use one of the options to print first 4 rows of `gapminder'.**
+> **Use one of the options to print first 4 rows of `gapminder`.**
 
 ---
 # Data in R Packages

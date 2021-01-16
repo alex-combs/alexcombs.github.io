@@ -26,6 +26,8 @@ output:
   - Time series
   - Panel
 
+- Review of R Chapter
+
 ---
 # Rectangular data
 
@@ -68,7 +70,9 @@ kable(generic, format = 'html')
 
 - The unit of analysis uniquely identifies each row in a data set. Let's practice.
 
-- What is the unit of analysis?
+--
+
+- What is the likely unit of analysis based on the variable names?
 
 ```{r, echo=FALSE}
 generic <- tibble(ID = c("Unit of Analysis", "Unit", "Unit"),
@@ -80,7 +84,7 @@ kable(generic, format = 'html')
 ---
 # Unit of analysis
 
-- What is the unit of analysis?
+- What is the likely unit of analysis based on the variable names?
 
 ```{r, echo=FALSE}
 generic <- tibble(ID = c("Unit of Analysis", "Unit", "Unit"),
@@ -92,7 +96,7 @@ kable(generic, format = 'html')
 ---
 # Unit of analysis
 
-- What is the unit of analysis?
+- What is the likely unit of analysis based on the variable names?
 
 ```{r, echo=FALSE}
 generic <- tibble(Year = c(2017, 2018, 2019),
@@ -109,12 +113,7 @@ class: inverse, middle, center
 ---
 class: inverse, middle, center
 
-# If the unit of analysis for our data is **year**, what variables might we collect?
-
----
-class: inverse, middle, center
-
-# If the unit of analysis is **people**, what variables might we collect?
+# With your group, develop a list of variables we might want to collect if the unit of analysis is **year**. Then develop another list of variables if the unit of analysis is **individuals**.
 
 ---
 # Types of variables
@@ -133,7 +132,7 @@ class: inverse, middle, center
 ---
 class: inverse, middle, center
 
-# Which of our variables for our investigation of homelessness are qualitative or quantitative?
+# In your group, identify which of your variables are qualitative and which are quantitative?
 
 ---
 # Types of qualitative variables
@@ -145,23 +144,18 @@ class: inverse, middle, center
 - **Ordinal** variables take on values that can be ranked relative to each other but the difference between rankings has no numerical value
 
 ---
-class: inverse, middle, center
-
-# Which of our qualitative variables are nominal or ordinal?
-
----
 # Types of quantitative variables
 .center[
 ![:scale 40%](lectures_files/quantitative.png) ]
 
-- **Discrete** variables take on numeric values that are **countable**, usually integers (e.g. 0, 1, 2, ...)
+- **Discrete** variables take on numeric values that are **countable**, integers (e.g. 0, 1, 2, ...)
 
 - **Continuous** variables take on potentially any value. For example, a percentage ranges between 0 and 100 but can take on infinite values between that range (e.g. 50, 50.4, 50.44, 50.444, ...) even though we round to a finite set of values.  
 
 ---
 class: inverse, middle, center
 
-# Which of our quantitative variables are discrete or continuous?
+# In your group, identify which of your qualitative variables are nominal or ordinal. Identify which of your quantitative variables are discrete or continuous?
 
 ---
 background-image: url(lectures_files/racing.jpg)
@@ -201,7 +195,7 @@ include_graphics("lectures_files/varinfo.png")
 ---
 # Potential confusions
 
-- Qualitative data does NOT imply qualitative analysis
+- Qualitative data does not necessarily imply qualitative analysis
 
 --
 
@@ -269,24 +263,3 @@ gapminder %>%
 
 - Same subjects observed across time
 - Unit of analysis?
-
----
-# Recap on data set structures
-
-- Characteristics can be measured `between` or `within` units and/or `between` or `within` time periods
-
---
-
-- Cross-sectional measures `between` units and `within` a time period
-
---
-
-- Pooled cross-sectional measures `between` units and `within` a time period (sort of)
-
---
-
-- Time series measures `within` a unit and `between` time periods
-
---
-
-- Panel measures `between` units and `between` time periods
