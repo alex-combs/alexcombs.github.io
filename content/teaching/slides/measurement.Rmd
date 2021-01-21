@@ -26,11 +26,6 @@ output:
 ![](lectures_files/credible.png)
 
 ---
-class: inverse, middle, center
-
-# All data is a measured representation of reality.
-
----
 # Measurement
 
 - **Measurement Validity**: Does the variable measure the concept/phenomenon it is intended or claims to measure? Are the recorded values of the variable accurate measures of the true values of the variable?
@@ -47,7 +42,7 @@ class: inverse, middle, center
 ---
 class: inverse, middle, center
 
-# In your groups, settle on a variable and discuss its measurement validity and reliability. Be ready to discuss with class.
+# In your groups, pick a variable and discuss its measurement validity and reliability. Be ready to discuss with class.
 
 ---
 # Why does this matter?

@@ -96,7 +96,7 @@ kable(generic, format = 'html')
 ---
 # Unit of analysis
 
-- What is the likely unit of analysis based on the variable names?
+- What is the unit of analysis based on the variable names?
 
 ```{r, echo=FALSE}
 generic <- tibble(Year = c(2017, 2018, 2019),
@@ -113,7 +113,7 @@ class: inverse, middle, center
 ---
 class: inverse, middle, center
 
-# With your group, develop a list of variables we might want to collect if the unit of analysis is **year**. Then develop another list of variables if the unit of analysis is **individuals**.
+# With your group, develop a list of variables we might want to collect if the unit of analysis is **years**. Then develop a second list of variables if the unit of analysis is **individuals**.
 
 ---
 # Types of variables
@@ -180,7 +180,7 @@ include_graphics("lectures_files/varinfo.png")
 
 - **Ratio** variables (or the ratio scale) are continuous variables with a meaningful zero
 
-- **Index** variables are continuous variables constructed from multiple variables
+- **Index** variables are constructed from multiple variables
   - Can make a continuous variables out of categorical variables
   - Simplify multidimensional measures into one measure
   - Example:  [Global Multidimensional Poverty Index](http://hdr.undp.org/en/2018-MPI)
@@ -193,23 +193,9 @@ include_graphics("lectures_files/varinfo.png")
 - For [example](https://coggle.it/diagram/Vxlydu1akQFeqo6-/t/inference).
 
 ---
-# Potential confusions
-
-- Qualitative data does not necessarily imply qualitative analysis
-
---
-
-- Possible range of a values does not differentiate between discrete and continuous
-
-  - Continuous variable can range between 0-1
-  - Discrete variable can range from 0 to infinity
-
-- It's about divisibility
-
----
 class:  inverse, center, middle
 
-# Data structures
+# Dataset structures
 
 ---
 # Cross-sectional

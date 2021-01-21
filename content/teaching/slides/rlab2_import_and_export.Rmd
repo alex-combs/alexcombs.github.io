@@ -33,8 +33,8 @@ By the end of this lab, you will have learned how to...
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(readxl)
-library(gapminder)
+library(readxl) 
+library(gapminder) 
 library(knitr)
 library(fivethirtyeight)
 library(data.table)
@@ -63,11 +63,11 @@ library(data.table)
 > **In your setup code chunk, load the following packages.**
 
 ```{r, eval=FALSE}
-library(tidyverse)
-library(readxl)
-library(gapminder)
-library(fivethirtyeight)
-library(data.table)
+library(tidyverse) #includes function for importing CSV
+library(readxl) #for importing Excel files
+library(data.table) #for importing from URL
+library(gapminder) #example data
+library(fivethirtyeight) #example data
 ```
 
 ---
@@ -267,7 +267,7 @@ output:
 ---
 class: inverse, middle, center
 
-# Next, let's review the code chunk options from R Demo 2 and learn a few more.
+# Next, let's review code chunk options.
 
 ---
 # Code chunk options
@@ -302,7 +302,7 @@ class: inverse, middle, center
 > **Knit to HTML again to check the output**
 
 ---
-# Output options recap
+# Output options overview
 
 ![](labs_files/output_options.png)
 
@@ -325,7 +325,7 @@ class: inverse, middle, center
 
   - Will others need to replicate my analysis in the future?
   - Do I want to create a RData file and discard the original file, or
-  - Keep the orignial file and import with each knit?
+  - Keep the original file and import with each knit?
   - Do the data update frequently?
 
 ---
@@ -511,6 +511,8 @@ anyname <- fread('url')
 covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
 ```
 
+> **Set eval=FALSE so the data does not load every time we knit.**
+
 ---
 class: inverse, center, middle
 
@@ -596,7 +598,8 @@ write_csv(name_of_object, 'name_for_new_file.csv')
 
 --
 
-- This pretty much covers the full procedure of using R in the real world, now just need to add analytical skills
+- This covers the general procedure of realistically using R 
+- Now just need to add analytical skills
 
 ---
 # Upload to eLC

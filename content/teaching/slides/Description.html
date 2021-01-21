@@ -5,6 +5,9 @@
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
     <meta name="date" content="2020-09-16" />
+    <script src="Description_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="Description_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="Description_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -43,7 +46,7 @@ class: center, middle, inverse, title-slide
 ---
 # Descriptive vs. inferential
 
-- Suppose we survey 100 PADP alumni 2 years after completing their MPA
+- Suppose we survey 100 SPIA alumni 2 years after completing their MPA to examine employment and earnings outcomes.
 
 .pull-left[
 **Descriptive**
@@ -69,11 +72,15 @@ class: center, middle, inverse, title-slide
 
 - **Population:** all members of a specified group pertaining to a research question
 
+  - A population can be any size based on our research question
+
 - **Sample:** a subset of that population
+
+--
 
 - We can describe a sample or a population
 
-- Inference involves describing a sample to guess about a population
+- Inference uses a sample to make educated, scientific guesses about an unobserved population
 
 ---
 # Parameter vs. statistic
@@ -81,21 +88,21 @@ class: center, middle, inverse, title-slide
 - **Parameter:** a measure pertaining to a population
 
 - **Statistic:** a measure pertaining to a sample
-  - In inference, often referred to as an **estimate** because it is being used to estimate a population parameter
+
+  - In inference, a statistic is often referred to as an **estimate** because it is being used to estimate a population parameter
 
 --
 
-- Thinking back to that survey of PADP alumni...
-  - What statistic could we report from the survey of PADP alumni?
+- Thinking back to that survey of SPIA MPA alumni...
+  - What is one statistic we might report?
   - When might that statistic be referred to as an estimate?
-  - What parameter might we be estimating?
 
 ---
 # Practice
 
-Suppose you are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, indicating a college degree may provide a better return on investment for women in Georgia than women in other states. You find this dubious. 
+Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states for some reason. Suppose we find this dubious and want to investigate for ourselves. 
 
-The national average is publicly available. You take a sample of 100 college-educated women in Georgia and compute their average salary.
+The national average is publicly available. You take a sample of 100 college-educated women in Georgia and record the income of each.
 
 - What is the unit of analysis in your dataset?
 - What is the variable in your dataset?
@@ -124,7 +131,7 @@ class: inverse, middle, center
 ---
 class: inverse, center, middle
 
-# Descriptive statistics reports key measures of distributions.
+# Descriptive statistics reports important characteristics of distributions.
 
 ---
 # Measures of center
@@ -319,7 +326,7 @@ median(ncbirths$weeks)
 
 - Measures of center are our way of communicating the *typical* value of a distribution.
 
-- Some measures are better representations of typical than others depending on the situation.
+- Some measures are better representations of typical than others depending on the data.
 
 ![](lectures_files/center.png)
 
@@ -404,14 +411,21 @@ class: inverse, center, middle
 
 - [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/)
 
-- When presented with a percentage or rate, think carefully about what the denominator is and whether it is measured validly and reliably
+- When given a percentage or rate, think carefully about the denominator 
+  - How large is it
+  - Is it measured validly and reliably
 
 - [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
 
 ---
 class: inverse, middle, center
 
-# Measures of center tell us one point within the distribution. They give us no sense of by how much and how frequently values deviate above and below the center.
+# Measures of spread
+
+---
+class: inverse, middle, center
+
+# Measures of center tell us one point inside the distribution. They give us no sense by how much and how frequently values deviate above and below the center.
 
 ---
 # Measures of spread
@@ -430,8 +444,6 @@ class: inverse, middle, center
 - Subtract mean from each value, square the deviation, add up deviation, divide by count of values minus 1
 
 
-
-&lt;br&gt;
 
 .pull-left[
 &lt;table&gt;
@@ -508,7 +520,9 @@ var(xvar$variable)
 # Standard deviation (SD)
 
 - Variance is very important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
+
 - If our original variable were dollars, the variance says that on average variable deviates from the mean by 10 squared dollars
+
 - Standard deviation is the square root of variance, returns us to the original unit of the variable
 
 
@@ -520,15 +534,32 @@ sqrt(10)
 ## [1] 3.162278
 ```
 
+- On average, `variable` deviates from its mean by 3.2 units
+
+---
+# Standard deviation (SD)
+
+
 ```r
-sd(xvar$variable)
+var(ncbirths$weeks)
 ```
 
 ```
-## [1] 3.162278
+## [1] 7.583423
 ```
 
-- On average, variable deviates from its mean of 6 dollars by 3.2 dollars
+- On average, weeks pregnant deviates from the average by 7.6 squared weeks. Huh?
+
+
+```r
+sd(ncbirths$weeks)
+```
+
+```
+## [1] 2.753802
+```
+
+- On average, weeks pregnant deviates from the average by almost 3 weeks.
 
 ---
 # Interquartile range (IQR)
@@ -627,7 +658,7 @@ IQR(xextreme$variable)
 # SD vs. IQR
 
 .pull-left[
-![](Description_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -758,7 +789,7 @@ What is the association between the weight a mother gains during pregnancy and t
 ]
 
 .pull-right[
-![](Description_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -797,7 +828,7 @@ What is the association between the weight a mother gains during pregnancy and t
 --
 
 .pull-right[
-![](Description_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -871,7 +902,7 @@ class: inverse, middle, center
 # Describing categorical variables
 
 .pull-left[
-![](Description_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -1060,6 +1091,8 @@ summary(ncbirths)
 ##                    
 ## 
 ```
+
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

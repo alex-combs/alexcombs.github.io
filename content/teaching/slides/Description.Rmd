@@ -40,7 +40,7 @@ ncbirths <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTm2WZwNBo
 ---
 # Descriptive vs. inferential
 
-- Suppose we survey 100 PADP alumni 2 years after completing their MPA
+- Suppose we survey 100 SPIA alumni 2 years after completing their MPA to examine employment and earnings outcomes.
 
 .pull-left[
 **Descriptive**
@@ -66,11 +66,15 @@ ncbirths <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTm2WZwNBo
 
 - **Population:** all members of a specified group pertaining to a research question
 
+  - A population can be any size based on our research question
+
 - **Sample:** a subset of that population
+
+--
 
 - We can describe a sample or a population
 
-- Inference involves describing a sample to guess about a population
+- Inference uses a sample to make educated, scientific guesses about an unobserved population
 
 ---
 # Parameter vs. statistic
@@ -78,21 +82,21 @@ ncbirths <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTm2WZwNBo
 - **Parameter:** a measure pertaining to a population
 
 - **Statistic:** a measure pertaining to a sample
-  - In inference, often referred to as an **estimate** because it is being used to estimate a population parameter
+
+  - In inference, a statistic is often referred to as an **estimate** because it is being used to estimate a population parameter
 
 --
 
-- Thinking back to that survey of PADP alumni...
-  - What statistic could we report from the survey of PADP alumni?
+- Thinking back to that survey of SPIA MPA alumni...
+  - What is one statistic we might report?
   - When might that statistic be referred to as an estimate?
-  - What parameter might we be estimating?
 
 ---
 # Practice
 
-Suppose you are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, indicating a college degree may provide a better return on investment for women in Georgia than women in other states. You find this dubious. 
+Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states for some reason. Suppose we find this dubious and want to investigate for ourselves. 
 
-The national average is publicly available. You take a sample of 100 college-educated women in Georgia and compute their average salary.
+The national average is publicly available. You take a sample of 100 college-educated women in Georgia and record the income of each.
 
 - What is the unit of analysis in your dataset?
 - What is the variable in your dataset?
@@ -131,7 +135,7 @@ ggplot(ncbirths, aes(x = weeks, fill = habit)) +
 ---
 class: inverse, center, middle
 
-# Descriptive statistics reports key measures of distributions.
+# Descriptive statistics reports important characteristics of distributions.
 
 ---
 # Measures of center
@@ -225,7 +229,7 @@ kable(x, format = 'html')
 
 - Measures of center are our way of communicating the *typical* value of a distribution.
 
-- Some measures are better representations of typical than others depending on the situation.
+- Some measures are better representations of typical than others depending on the data.
 
 ![](lectures_files/center.png)
 
@@ -300,14 +304,21 @@ class: inverse, center, middle
 
 - [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/)
 
-- When presented with a percentage or rate, think carefully about what the denominator is and whether it is measured validly and reliably
+- When given a percentage or rate, think carefully about the denominator 
+  - How large is it
+  - Is it measured validly and reliably
 
 - [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
 
 ---
 class: inverse, middle, center
 
-# Measures of center tell us one point within the distribution. They give us no sense of by how much and how frequently values deviate above and below the center.
+# Measures of spread
+
+---
+class: inverse, middle, center
+
+# Measures of center tell us one point inside the distribution. They give us no sense by how much and how frequently values deviate above and below the center.
 
 ---
 # Measures of spread
@@ -330,8 +341,6 @@ xvar <- x %>%
   mutate(deviation = variable - mean(variable), squared_dev = deviation^2)
 ```
 
-<br>
-
 .pull-left[
 ```{r, echo=FALSE}
 kable(xvar, format = 'html')
@@ -349,15 +358,31 @@ var(xvar$variable)
 # Standard deviation (SD)
 
 - Variance is very important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
+
 - If our original variable were dollars, the variance says that on average variable deviates from the mean by 10 squared dollars
+
 - Standard deviation is the square root of variance, returns us to the original unit of the variable
 
 ```{r}
 sqrt(10)
-sd(xvar$variable)
 ```
 
-- On average, variable deviates from its mean of 6 dollars by 3.2 dollars
+- On average, `variable` deviates from its mean by 3.2 units
+
+---
+# Standard deviation (SD)
+
+```{r}
+var(ncbirths$weeks)
+```
+
+- On average, weeks pregnant deviates from the average by 7.6 squared weeks. Huh?
+
+```{r}
+sd(ncbirths$weeks)
+```
+
+- On average, weeks pregnant deviates from the average by almost 3 weeks.
 
 ---
 # Interquartile range (IQR)
