@@ -21,11 +21,9 @@ output:
   
   - Other 20% spent on actual analysis
 
-- Learning analysis is not very useful if you can't realistically prepare data
+- Learning statistics is not as useful if you can't prepare data
 
---
-
-- Wrangling is a pain. Software like R can save you a lot of time.
+- Software like R can save you a lot of time.
 
 ---
 # Outline
@@ -77,7 +75,7 @@ output:
 ---
 # Setup
 
-- Virtually all wrangling can/should be done with the tidyverse package developed by Hadley Wickham
+- Virtually all wrangling can/should be done with the tidyverse package
 
 > **Inside the setup code chunk, load the tidyverse package.**
 
@@ -85,7 +83,7 @@ output:
 
 --
 
-> **Also load the following packages:**
+> **In same setup code chunk, load these additional packages:**
 
 ```{r, eval=FALSE}
 library(readxl)
@@ -96,11 +94,13 @@ library(gapminder)
 ---
 # Download & load data
 
-> **Download the `state_finance_16.RData` and `ga_schdist_raw.RData` files from eLC and add to your project folder**
+> **Download the `state_finance_16.RData`, `SGF_2016_00A1_with_ann.csv`,  `ga_schdist_raw.RData`, and `ga_schdist_raw.xlsx` files from eLC and add to your project folder**
 
-> **Inside your setup code chunk, load both datasets into R.**
+> **Inside your setup code chunk, try to load both `.RData` files into R.**
 
-> **Click on the datasets in your environment pane to view the data.**
+> **If it worked, click on the datasets in your environment pane to view the data.**
+
+> **If .RData files do not play nicely, I will soon show code to import the original CSV and XLSX files.**
 
 ---
 # Renaming variables

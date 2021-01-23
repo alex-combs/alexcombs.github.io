@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 3: Data Wrangling
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: January 11, 2021
+### Last updated: January 23, 2021
 
 ---
 
@@ -29,11 +29,9 @@ class: center, middle, inverse, title-slide
   
   - Other 20% spent on actual analysis
 
-- Learning analysis is not very useful if you can't realistically prepare data
+- Learning statistics is not as useful if you can't prepare data
 
---
-
-- Wrangling is a pain. Software like R can save you a lot of time.
+- Software like R can save you a lot of time.
 
 ---
 # Outline
@@ -79,7 +77,7 @@ output:
 ---
 # Setup
 
-- Virtually all wrangling can/should be done with the tidyverse package developed by Hadley Wickham
+- Virtually all wrangling can/should be done with the tidyverse package
 
 &gt; **Inside the setup code chunk, load the tidyverse package.**
 
@@ -87,7 +85,7 @@ output:
 
 --
 
-&gt; **Also load the following packages:**
+&gt; **In same setup code chunk, load these additional packages:**
 
 
 ```r
@@ -99,11 +97,13 @@ library(gapminder)
 ---
 # Download &amp; load data
 
-&gt; **Download the `state_finance_16.RData` and `ga_schdist_raw.RData` files from eLC and add to your project folder**
+&gt; **Download the `state_finance_16.RData`, `SGF_2016_00A1_with_ann.csv`,  `ga_schdist_raw.RData`, and `ga_schdist_raw.xlsx` files from eLC and add to your project folder**
 
-&gt; **Inside your setup code chunk, load both datasets into R.**
+&gt; **Inside your setup code chunk, try to load both `.RData` files into R.**
 
-&gt; **Click on the datasets in your environment pane to view the data.**
+&gt; **If it worked, click on the datasets in your environment pane to view the data.**
+
+&gt; **If .RData files do not play nicely, I will soon show code to import the original CSV and XLSX files.**
 
 ---
 # Renaming variables
@@ -317,9 +317,9 @@ class: inverse, middle, center
 - Brief review of each verb then practice using `gapminder`
 
 
-|country |continent | year| lifeExp|     pop| gdpPercap|
-|:-------|:---------|----:|-------:|-------:|---------:|
-|Hungary |Europe    | 1957|    66.4| 9839000|    6040.2|
+|country    |continent | year| lifeExp|      pop| gdpPercap|
+|:----------|:---------|----:|-------:|--------:|---------:|
+|Mozambique |Africa    | 1977|    42.5| 11127868|     502.3|
 
 - Continent &amp; year
 
