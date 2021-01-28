@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "RLab 4: Tidying Data"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "September 16, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -22,51 +22,38 @@ By the end of this lab, you will have learned how to...
 - Separate a variable into multiple variables
 - Unite multiple variables to one variable
 
----
-# Start a new project
-
-- Using the file directory on your computer
-  - Go to the parent folder that contains your RLabs folders
-  - Create a new folder named RLab4
-
---
-
-- In RStudio
-  - Create new project
-  - Select Existing Directory
-  - Click Browse and select the RLab4 folder you just created
-  - Click Create Project
-  
----
-# Start a R notebook
-
-- Use the dropdown menu in the upper-left of RStudio to start a notebook
-
-- Change YAML
-
-```{r, eval=FALSE}
----
-title: "RLab 4: Tidying Data"
-author: "Your Name"
-output: 
-  html_document:
-    theme: spacelab
-    df_print: paged
----
-```
-
-- Delete all of the content included in the template
-
----
-# Packages
-
-- Load the `tidyverse` package, suppressing the code and output
-
-```{r, include=FALSE}
+```{r setup, include=FALSE}
 library(tidyverse)
 library(knitr)
 library(gapminder)
 ```
+
+---
+# Setup
+
+> **Start a new project named "rlab4".**
+  
+> **Start a R Markdown document**
+
+> **Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
+
+> **Change YAML to:**
+
+```{r, eval=FALSE}
+---
+title: "RLab4: Tidying Data"
+author: "Alex Combs" # Your name
+date: "2/4/2021"
+output:
+  html_document:
+    df_print: paged
+---
+```
+
+---
+# Packages
+
+> **In the top "setup" code chunk, load the `tidyverse` package**
 
 ---
 # Tidy data
@@ -82,14 +69,18 @@ Tidy data satisfy three rules:
 ---
 # Tidy data
 
-- Let's revisit the state finance data from RLab3
+- Let's revisit the state finance data
 
-- Insert a header "Untidy State Finance Data"
+> **Insert a heading "Untidy State Finance Data"**
 
-- `load` the `stf_f_select.RData` file in your notebook, suppressing the code and and output
+> **Load the `st_fin_16_wrangled.csv` from the in-class activity. Suppress any output R may print.**
+
+- Correct version is available on eLC for download in case you do not trust your copy.
+
+- You can load these data in your setup code chunk or a new code chunk.
 
 ```{r, include=FALSE}
-load('labs_files/stf_f_select.RData')
+st_fin_16_wrangled <- read_csv('labs_files/st_fin_16_wrangled.csv')
 ```
 
 ---
@@ -97,10 +88,10 @@ load('labs_files/stf_f_select.RData')
 
 - Let's show readers a sample of the data
 
-- Provide the first 4 rows, suppressing the code
+> **In a new code chunk, provide the first 4 rows of `st_fin_16_wrangled`.**
 
 ```{r, echo=FALSE}
-stf_f_select %>% 
+st_fin_16_wrangled %>% 
   head(n = 4) %>% 
   kable()
 ```
@@ -114,7 +105,7 @@ class: inverse, center, middle
 # Untidy Data
 
 ```{r, echo=FALSE}
-stf_f_select %>% 
+st_fin_16_wrangled %>% 
   head(n=4) %>% 
   kable()
 ```
@@ -140,10 +131,10 @@ stf_f_select %>%
 
 --
 
-- Is `stf_f_select` in long or wide format?
+- Is `st_fin_16_wrangled` in long or wide format?
 
 ```{r, echo=FALSE}
-stf_f_select %>% 
+st_fin_16_wrangled %>% 
   head(n=4) %>% 
   kable()
 ```
@@ -172,7 +163,7 @@ kable(uspop, format = 'html')
 ---
 # Tidy State Finance Data
 
-- Our goal is to tidy `stf_f_select`
+- Our goal is to tidy `st_fin_16_wrangled`
 
 - It is long when it should be wide
 
@@ -180,7 +171,7 @@ kable(uspop, format = 'html')
 
 - To achieve this, we can use the `pivot_wider` function
 
-- General syntax
+- General syntax:
 
 ```{r, eval=FALSE}
 new_data <- current_data %>% 
@@ -192,32 +183,25 @@ new_data <- current_data %>%
 # Tidy State Finance Data
 
 ```{r, echo=FALSE}
-stf_f_select %>% 
+st_fin_16_wrangled %>% 
   head(n=2) %>% 
   kable()
 ```
 
-- Insert a header "Tidy State Finance Data"
+> **Insert a heading "Tidy State Finance Data"**
 
-- Let's start a code chunk that creates a new dataset `stf_tidy`
+> **Start a code chunk that creates a new dataset `st_fin_16_tidy`**
 
 ```{r, eval=FALSE}
-stf_tidy <- stf_f_select %>% 
-```
-
-- Next, add a line that drops `finance_source` since it is redundant
-
-```{r, include=FALSE, eval=FALSE}
-stf_tidy <- stf_f_select %>% 
-  select(-finance_source) %>% 
+st_fin_16_tidy <- st_fin_16_wrangled %>% 
 ```
 
 ---
 # Tidy State Finance Data
 
 ```{r, echo=FALSE}
-stf_f_select %>% 
-  head(n=4) %>% 
+st_fin_16_wrangled %>% 
+  head(n=2) %>% 
   kable()
 ```
 
@@ -229,29 +213,56 @@ new_data <- current_data %>%
 
 - Which column contains the names of the new variables we want?
 - Which column contains the values for the new variables?
-- Add `pivot_wider` to your code chunk according to answers.
+> **Add `pivot_wider` to your code chunk according to answers.**
 
 ---
 # Tidy State Finance Data
 
 ```{r}
-stf_tidy <- stf_f_select %>% 
-  select(-finance_source) %>% 
-  pivot_wider(names_from = finance_type,
+st_fin_16_tidy <- st_fin_16_wrangled %>% 
+  pivot_wider(names_from = finance_source,
               values_from = amount_1000)
 ```
 
-- Execute your code and examine the new dataset to see if/how it worked
+> **Execute your code and examine the new dataset to see if/how it worked.**
 
 ---
 # Tidy State Finance Data
 
-- Provide the reader with top 4 rows of the new dataset, suppress code
+> **Provide the reader with top 4 rows of the new dataset.**
 
 ```{r, echo=FALSE}
-stf_tidy %>% 
+st_fin_16_tidy %>% 
   head() %>% 
   kable()
+```
+
+
+---
+# Changing variable names
+
+- The variable names in our `st_fin_16_tidy` are not ideal.
+
+> **Change "Total Revenue" to `revenue` and "Total Expenditure" to `expenditure`.**
+
+```{r, echo=FALSE}
+st_fin_16_tidy <- st_fin_16_tidy %>% 
+  rename('revenue' = 'Total Revenue', 
+         'expenditure' = 'Total Expenditure')
+```
+
+---
+# Summarize by Group
+
+- Recall in the wrangling activity you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
+
+> **Now create a new variable that computes the surplus for each state. Provide a table that lists surplus in descending order for all states.**
+
+```{r, include=FALSE}
+st_fin_16_tidy %>% 
+  mutate(surplus = revenue - expenditure) %>% 
+  select(state, surplus) %>% 
+  arrange(desc(surplus))
 ```
 
 ---
@@ -278,18 +289,18 @@ kable(uspop_tidy)
 ---
 # Untidy Enrollment Data
 
-- Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder
+> **Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder.**
 
-- Open this file using whatever spreadsheet software is on your computer
+> **Open this file using whatever spreadsheet software is on your computer, or watch me view it on Excel.**
 
 ---
 # Untidy Enrollment Data
 
-- Insert a header "Untidy Enrollment Data"
+> **Insert a heading "Untidy Enrollment Data"**
 
-- Import `ky_private_school_enrollment.csv`, suppressing code and output
+> **Import `ky_private_school_enrollment.csv`, suppressing code and output**
 
-- Name the new dataset `ky_priv_enroll_wide`
+> **Name the new dataset `ky_priv_enroll_wide`**
 
 ```{r, include=FALSE}
 ky_priv_enroll_wide <- read_csv('labs_files/ky_private_school_enrollment.csv')
@@ -298,7 +309,7 @@ ky_priv_enroll_wide <- read_csv('labs_files/ky_private_school_enrollment.csv')
 ---
 # Untidy Enrollment Data
 
-- Provide the reader the first 3 rows of these data, suppressing the code
+> **Provide the reader the first 3 rows of these data, suppressing the code**
 
 ```{r, echo=FALSE}
 head(ky_priv_enroll_wide, n=3) %>% 
@@ -320,7 +331,7 @@ uspop_tidy <- uspop %>%
                values_to = 'population')
 ```
 
-- Create a new dataset called `ky_priv_enroll` that is in long format
+> **Create a new dataset called `ky_priv_enroll` that is in long format**
 
 ```{r, include=FALSE}
 ky_priv_enroll <- ky_priv_enroll_wide %>% 
@@ -345,7 +356,7 @@ class: inverse, center, middle
 
 - We should `separate` city_county into city and county
 
-- Overwrite the `ky_priv_enroll` with `city_county` separated, suppressing code and output
+> **Overwrite the `ky_priv_enroll` with `city_county` separated.**
 
 --
 
@@ -356,9 +367,9 @@ ky_priv_enroll <- ky_priv_enroll %>%
 
 --
 
-- Finally, provide the reader the first 6 rows of these tidy data, suppressing the code
+> **Finally, provide the reader the first 6 rows of these tidy data**
 
-- Knit to HTML and check that the output looks correct
+> **Knit to HTML and check that the output looks correct**
 
 ---
 # Uniting variables
@@ -366,6 +377,6 @@ ky_priv_enroll <- ky_priv_enroll %>%
 ![](labs_files/unite.png)
 
 ---
-# Submit Lab
+# Upload Lab
 
-- Upload your notebook and .html file to eLC
+- Upload your .Rmd file to eLC

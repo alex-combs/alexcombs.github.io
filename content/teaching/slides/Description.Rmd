@@ -135,7 +135,7 @@ ggplot(ncbirths, aes(x = weeks, fill = habit)) +
 ---
 class: inverse, center, middle
 
-# Descriptive statistics reports important characteristics of distributions.
+# Descriptive statistics report important characteristics of distributions.
 
 ---
 # Measures of center
@@ -670,6 +670,10 @@ prop.table(mytable, 2) %>%
 - Place the outcome in the columns
 
 - Use row percentages
+
+--
+
+- **Be careful using contingency tables to make inferences**
 
 ---
 # Quick Summary Stats

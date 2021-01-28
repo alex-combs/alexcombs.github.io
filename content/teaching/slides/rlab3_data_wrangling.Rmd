@@ -53,19 +53,16 @@ load('labs_files/ga_schdist_raw.RData')
 ---
 # Setup
 
-> **Start a new project named "rlab3". I recommend locating it in the same parent file for your rlab 1 & 2 folders.**
+> **Start a new project named "rlab3".**
   
-> **Start a R Markdown document**
-
-> **Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
+> **Start a R Markdown document. Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
 
 > **Change YAML to:**
 
 ```{r, eval=FALSE}
 ---
 title: "RLab3: Data Wrangling"
-author: "Alex Combs" # Your name
-date: "1/28/2021"
+author: "Your Name"
 output:
   html_document:
     df_print: paged
@@ -75,9 +72,9 @@ output:
 ---
 # Setup
 
-- Virtually all wrangling can/should be done with the tidyverse package
+- Virtually all wrangling can/should be done with the `tidyverse` package
 
-> **Inside the setup code chunk, load the tidyverse package.**
+> **Inside the setup code chunk, load the `tidyverse` package.**
 
 - Note that because the setup code chunk has `include=FALSE` the code *and* output will be suppressed from our export document.
 
@@ -87,7 +84,7 @@ output:
 
 ```{r, eval=FALSE}
 library(readxl)
-library(knitr)
+library(knitr) # probably need to install this first
 library(gapminder)
 ```
 
@@ -96,11 +93,11 @@ library(gapminder)
 
 > **Download the `state_finance_16.RData`, `SGF_2016_00A1_with_ann.csv`,  `ga_schdist_raw.RData`, and `ga_schdist_raw.xlsx` files from eLC and add to your project folder**
 
-> **Inside your setup code chunk, try to load both `.RData` files into R.**
+> **Inside your setup code chunk, load both `.RData` files into R.**
 
 > **If it worked, click on the datasets in your environment pane to view the data.**
 
-> **If .RData files do not play nicely, I will soon show code to import the original CSV and XLSX files.**
+- If .RData files do not play nicely, I will soon show code to import the CSV and XLSX files.
 
 ---
 # Renaming variables
@@ -109,7 +106,7 @@ library(gapminder)
 
 --
 
-- Variable names should be as short as possible and most consider snake_case_format to be best
+- Variable names should be as short as possible and most prefer `snake_case_format`
 
 - The names for `state_finance_16` aren't bad because I wrangled them via the import
 
@@ -172,48 +169,40 @@ st_fin <- rename(state_finance_16, 'id' = 'id2')
 
 --
 
-> **Start a new line inside the code chunk with `rename` and use `glimpse` on the `st_fin` dataset. Add the option that suppresses code and output.**
+> **Start a new line inside this code chunk and use `glimpse` on the `st_fin` dataset. Add the option that suppresses code and output.**
 
 ---
 # Renaming many variables
 
-> **Inside the `rawdata` code chunk, show the reader the original `ga_schdist_raw` data using `glimpse`.**
+> **Inside the `rawdata` code chunk, show the reader the original `ga_schdist_raw` data using `glimpse`. This will only work if you were able to load the `.RData` file.**
 
 > **Knit to HTML so we can see what our document looks like so far.**
 
-- The `ga_schdist_raw` has many variables in need of a new name.
+- The `ga_schdist_raw` data has many variables needing renamed.
 
 ---
 # Renaming many variables
 
 - There is a way to efficiently rename many variables after import, but I recommend renaming via import.
 
-> **Download the `ga_schdist_raw.xlsx` file from eLC and add to your project folder.**
-
 > **In a new code chunk, copy & paste below code and run**
 
 ```{r, eval=FALSE}
 ga_schdist_raw <- read_xlsx("ga_schdist_raw.xlsx", 
                             range = "A8:I231",
-                            col_names = c("district",
-                                           "state",
-                                           "charter",
-                                           "enroll",
-                                           "lep", "sped",
-                                           "frpl",
+                            col_names = c("district", "state",
+                                           "charter", "enroll",
+                                           "lep", "sped", "frpl",
                                            "white",
                                            "expenditures"))
 ```
 
 ```{r, include=FALSE}
 ga_schdist_raw <- read_xlsx("labs_files/ga_schdist_raw.xlsx", 
-                            range = "A8:I230",
-                            col_names =  c("district",
-                                           "state",
-                                           "charter",
-                                           "enroll",
-                                           "lep", "sped",
-                                           "frpl",
+                            range = "A8:I231",
+                            col_names = c("district", "state",
+                                           "charter", "enroll",
+                                           "lep", "sped", "frpl",
                                            "white",
                                            "expenditures"))
 #save(ga_schdist_raw, file = 'ga_schdist_raw.RData')
@@ -257,16 +246,17 @@ as.numeric()
 as.character() #text
 as.integer()
 as.factor() #categorical
+as.logical() # converts binary (dummy) variables to True/False
 ```
 
 ---
 # Converting variable types
 
-- From glimpsing the data, we see that `st_fin$state` is stored as a character variable
+- From glimpsing the data, we see that `st_fin$state` is stored as a character/text variable
 
 - Suppose we want R to recognize it as a categorical variable
 
-> **In the code chunk where we created `st_fin`, overwrite `st_fin$state` from text to categorical.**
+> **In the code chunk where we created `st_fin`, start a new line and convert `st_fin$state` from text to categorical.**
 
 --
 
@@ -279,9 +269,9 @@ st_fin$state <- as.factor(st_fin$state)
 ---
 # Skill check
 
-- Let's create a copy of `ga_schdist_raw` that we will manipulate moving forward.
+- Let's create a copy of `ga_schdist_raw` that we will wrangle moving forward.
 
-> **In a new code chunk, copy&paste below code and run.**
+> **In a new code chunk, copy&paste below code and run. Use option to suppress any output.**
 
 ```{r}
 ga_schdist <- ga_schdist_raw
@@ -291,7 +281,7 @@ ga_schdist <- ga_schdist_raw
 
 - Several variables in `ga_schdist` stored as text need converted to numeric
 
-- **In the code chunk you just created, identify which variables should be numeric and convert them. This gets repetitive...copy&paste is your friend.**
+> **In the code chunk you just created, identify which variables should be numeric and convert them. This gets repetitive...copy&paste is your friend.**
 
 ---
 # Answer
@@ -303,6 +293,15 @@ ga_schdist$sped <- as.numeric(ga_schdist$sped)
 ga_schdist$frpl <- as.numeric(ga_schdist$frpl)
 ga_schdist$white <- as.numeric(ga_schdist$white)
 ga_schdist$expenditures <- as.numeric(ga_schdist$expenditures)
+```
+
+--
+
+- There are more efficient ways to do this, but we won't need to convert more than a few variables at a time in this course.
+
+```{r, eval=FALSE}
+ga_schdist <- mutate(ga_schdist, 
+                     across(c('enroll':'expenditures'), as.numeric))
 ```
 
 ---
@@ -524,7 +523,7 @@ dataset <- mutate(dataset, new_var = whatever)
 
 - If `new_var` is the name of an existing variable, `mutate` will overwrite it according to your equation
 
-- Otherwise, `mutate` will add a new variable to the new or existing dataset
+- Otherwise, `mutate` will add a new variable
 
 ---
 # Mutate examples

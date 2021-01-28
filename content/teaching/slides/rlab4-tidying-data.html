@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-09-16" />
+    <script src="rlab4-tidying-data_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="rlab4-tidying-data_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="rlab4-tidying-data_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 4: Tidying Data
 ### Alex Combs
 ### UGA | SPIA | PADP
-### September 16, 2020
+### Last updated: January 27, 2021
 
 ---
 
@@ -28,48 +30,35 @@ By the end of this lab, you will have learned how to...
 - Separate a variable into multiple variables
 - Unite multiple variables to one variable
 
+
+
 ---
-# Start a new project
+# Setup
 
-- Using the file directory on your computer
-  - Go to the parent folder that contains your RLabs folders
-  - Create a new folder named RLab4
-
---
-
-- In RStudio
-  - Create new project
-  - Select Existing Directory
-  - Click Browse and select the RLab4 folder you just created
-  - Click Create Project
+&gt; **Start a new project named "rlab4".**
   
----
-# Start a R notebook
+&gt; **Start a R Markdown document**
 
-- Use the dropdown menu in the upper-left of RStudio to start a notebook
+&gt; **Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
 
-- Change YAML
+&gt; **Change YAML to:**
 
 
 ```r
 ---
-title: "RLab 4: Tidying Data"
-author: "Your Name"
-output: 
+title: "RLab4: Tidying Data"
+author: "Alex Combs" # Your name
+date: "2/4/2021"
+output:
   html_document:
-    theme: spacelab
     df_print: paged
 ---
 ```
 
-- Delete all of the content included in the template
-
 ---
 # Packages
 
-- Load the `tidyverse` package, suppressing the code and output
-
-
+&gt; **In the top "setup" code chunk, load the `tidyverse` package**
 
 ---
 # Tidy data
@@ -85,11 +74,15 @@ Tidy data satisfy three rules:
 ---
 # Tidy data
 
-- Let's revisit the state finance data from RLab3
+- Let's revisit the state finance data
 
-- Insert a header "Untidy State Finance Data"
+&gt; **Insert a heading "Untidy State Finance Data"**
 
-- `load` the `stf_f_select.RData` file in your notebook, suppressing the code and and output
+&gt; **Load the `st_fin_16_wrangled.csv` from the in-class activity. Suppress any output R may print.**
+
+- Correct version is available on eLC for download in case you do not trust your copy.
+
+- You can load these data in your setup code chunk or a new code chunk.
 
 
 
@@ -98,15 +91,15 @@ Tidy data satisfy three rules:
 
 - Let's show readers a sample of the data
 
-- Provide the first 4 rows, suppressing the code
+&gt; **In a new code chunk, provide the first 4 rows of `st_fin_16_wrangled`.**
 
 
-|id |state   | year|finance_type |finance_source    | amount_1000|
-|:--|:-------|----:|:------------|:-----------------|-----------:|
-|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
-|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
-|02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
-|02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
+|id |state   | year|finance_source    | amount_1000|
+|:--|:-------|----:|:-----------------|-----------:|
+|01 |Alabama | 2016|Total Revenue     |    30133184|
+|01 |Alabama | 2016|Total Expenditure |    30211453|
+|02 |Alaska  | 2016|Total Revenue     |     8071732|
+|02 |Alaska  | 2016|Total Expenditure |    12436184|
 
 ---
 class: inverse, center, middle
@@ -117,12 +110,12 @@ class: inverse, center, middle
 # Untidy Data
 
 
-|id |state   | year|finance_type |finance_source    | amount_1000|
-|:--|:-------|----:|:------------|:-----------------|-----------:|
-|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
-|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
-|02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
-|02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
+|id |state   | year|finance_source    | amount_1000|
+|:--|:-------|----:|:-----------------|-----------:|
+|01 |Alabama | 2016|Total Revenue     |    30133184|
+|01 |Alabama | 2016|Total Expenditure |    30211453|
+|02 |Alaska  | 2016|Total Revenue     |     8071732|
+|02 |Alaska  | 2016|Total Expenditure |    12436184|
 
 - What is the unit of analysis?
 
@@ -145,15 +138,15 @@ class: inverse, center, middle
 
 --
 
-- Is `stf_f_select` in long or wide format?
+- Is `st_fin_16_wrangled` in long or wide format?
 
 
-|id |state   | year|finance_type |finance_source    | amount_1000|
-|:--|:-------|----:|:------------|:-----------------|-----------:|
-|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
-|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
-|02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
-|02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
+|id |state   | year|finance_source    | amount_1000|
+|:--|:-------|----:|:-----------------|-----------:|
+|01 |Alabama | 2016|Total Revenue     |    30133184|
+|01 |Alabama | 2016|Total Expenditure |    30211453|
+|02 |Alaska  | 2016|Total Revenue     |     8071732|
+|02 |Alaska  | 2016|Total Expenditure |    12436184|
 
 ---
 # Long vs. Wide Data
@@ -188,7 +181,7 @@ class: inverse, center, middle
 ---
 # Tidy State Finance Data
 
-- Our goal is to tidy `stf_f_select`
+- Our goal is to tidy `st_fin_16_wrangled`
 
 - It is long when it should be wide
 
@@ -196,7 +189,7 @@ class: inverse, center, middle
 
 - To achieve this, we can use the `pivot_wider` function
 
-- General syntax
+- General syntax:
 
 
 ```r
@@ -209,34 +202,28 @@ new_data &lt;- current_data %&gt;%
 # Tidy State Finance Data
 
 
-|id |state   | year|finance_type |finance_source    | amount_1000|
-|:--|:-------|----:|:------------|:-----------------|-----------:|
-|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
-|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
+|id |state   | year|finance_source    | amount_1000|
+|:--|:-------|----:|:-----------------|-----------:|
+|01 |Alabama | 2016|Total Revenue     |    30133184|
+|01 |Alabama | 2016|Total Expenditure |    30211453|
 
-- Insert a header "Tidy State Finance Data"
+&gt; **Insert a heading "Tidy State Finance Data"**
 
-- Let's start a code chunk that creates a new dataset `stf_tidy`
+&gt; **Start a code chunk that creates a new dataset `st_fin_16_tidy`**
 
 
 ```r
-stf_tidy &lt;- stf_f_select %&gt;% 
+st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;% 
 ```
-
-- Next, add a line that drops `finance_source` since it is redundant
-
-
 
 ---
 # Tidy State Finance Data
 
 
-|id |state   | year|finance_type |finance_source    | amount_1000|
-|:--|:-------|----:|:------------|:-----------------|-----------:|
-|01 |Alabama | 2016|Revenue      |Total Revenue     |    30133184|
-|01 |Alabama | 2016|Expenditure  |Total Expenditure |    30211453|
-|02 |Alaska  | 2016|Revenue      |Total Revenue     |     8071732|
-|02 |Alaska  | 2016|Expenditure  |Total Expenditure |    12436184|
+|id |state   | year|finance_source    | amount_1000|
+|:--|:-------|----:|:-----------------|-----------:|
+|01 |Alabama | 2016|Total Revenue     |    30133184|
+|01 |Alabama | 2016|Total Expenditure |    30211453|
 
 
 ```r
@@ -247,35 +234,53 @@ new_data &lt;- current_data %&gt;%
 
 - Which column contains the names of the new variables we want?
 - Which column contains the values for the new variables?
-- Add `pivot_wider` to your code chunk according to answers.
+&gt; **Add `pivot_wider` to your code chunk according to answers.**
 
 ---
 # Tidy State Finance Data
 
 
 ```r
-stf_tidy &lt;- stf_f_select %&gt;% 
-  select(-finance_source) %&gt;% 
-  pivot_wider(names_from = finance_type,
+st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;% 
+  pivot_wider(names_from = finance_source,
               values_from = amount_1000)
 ```
 
-- Execute your code and examine the new dataset to see if/how it worked
+&gt; **Execute your code and examine the new dataset to see if/how it worked.**
 
 ---
 # Tidy State Finance Data
 
-- Provide the reader with top 4 rows of the new dataset, suppress code
+&gt; **Provide the reader with top 4 rows of the new dataset.**
 
 
-|id |state      | year|   Revenue| Expenditure|
-|:--|:----------|----:|---------:|-----------:|
-|01 |Alabama    | 2016|  30133184|    30211453|
-|02 |Alaska     | 2016|   8071732|    12436184|
-|04 |Arizona    | 2016|  38232376|    42085094|
-|05 |Arkansas   | 2016|  21439227|    22910901|
-|06 |California | 2016| 322332341|   326837836|
-|08 |Colorado   | 2016|  31399864|    34596327|
+|id |state      | year| Total Revenue| Total Expenditure|
+|:--|:----------|----:|-------------:|-----------------:|
+|01 |Alabama    | 2016|      30133184|          30211453|
+|02 |Alaska     | 2016|       8071732|          12436184|
+|04 |Arizona    | 2016|      38232376|          42085094|
+|05 |Arkansas   | 2016|      21439227|          22910901|
+|06 |California | 2016|     322332341|         326837836|
+|08 |Colorado   | 2016|      31399864|          34596327|
+
+
+---
+# Changing variable names
+
+- The variable names in our `st_fin_16_tidy` are not ideal.
+
+&gt; **Change "Total Revenue" to `revenue` and "Total Expenditure" to `expenditure`.**
+
+
+
+---
+# Summarize by Group
+
+- Recall in the wrangling activity you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
+
+&gt; **Now create a new variable that computes the surplus for each state. Provide a table that lists surplus in descending order for all states.**
+
+
 
 ---
 # Wide to Long
@@ -320,25 +325,25 @@ uspop_tidy &lt;- uspop %&gt;%
 ---
 # Untidy Enrollment Data
 
-- Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder
+&gt; **Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder.**
 
-- Open this file using whatever spreadsheet software is on your computer
-
----
-# Untidy Enrollment Data
-
-- Insert a header "Untidy Enrollment Data"
-
-- Import `ky_private_school_enrollment.csv`, suppressing code and output
-
-- Name the new dataset `ky_priv_enroll_wide`
-
-
+&gt; **Open this file using whatever spreadsheet software is on your computer, or watch me view it on Excel.**
 
 ---
 # Untidy Enrollment Data
 
-- Provide the reader the first 3 rows of these data, suppressing the code
+&gt; **Insert a heading "Untidy Enrollment Data"**
+
+&gt; **Import `ky_private_school_enrollment.csv`, suppressing code and output**
+
+&gt; **Name the new dataset `ky_priv_enroll_wide`**
+
+
+
+---
+# Untidy Enrollment Data
+
+&gt; **Provide the reader the first 3 rows of these data, suppressing the code**
 
 
 |ncesid  |school_name                |state    | county_fips|city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
@@ -363,7 +368,7 @@ uspop_tidy &lt;- uspop %&gt;%
                values_to = 'population')
 ```
 
-- Create a new dataset called `ky_priv_enroll` that is in long format
+&gt; **Create a new dataset called `ky_priv_enroll` that is in long format**
 
 
 
@@ -382,7 +387,7 @@ class: inverse, center, middle
 
 - We should `separate` city_county into city and county
 
-- Overwrite the `ky_priv_enroll` with `city_county` separated, suppressing code and output
+&gt; **Overwrite the `ky_priv_enroll` with `city_county` separated.**
 
 --
 
@@ -394,9 +399,9 @@ ky_priv_enroll &lt;- ky_priv_enroll %&gt;%
 
 --
 
-- Finally, provide the reader the first 6 rows of these tidy data, suppressing the code
+&gt; **Finally, provide the reader the first 6 rows of these tidy data**
 
-- Knit to HTML and check that the output looks correct
+&gt; **Knit to HTML and check that the output looks correct**
 
 ---
 # Uniting variables
@@ -404,9 +409,9 @@ ky_priv_enroll &lt;- ky_priv_enroll %&gt;%
 ![](labs_files/unite.png)
 
 ---
-# Submit Lab
+# Upload Lab
 
-- Upload your notebook and .html file to eLC
+- Upload your .Rmd file to eLC
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
