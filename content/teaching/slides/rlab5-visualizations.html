@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-09-23" />
+    <script src="rlab5-visualizations_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="rlab5-visualizations_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="rlab5-visualizations_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,55 +17,43 @@ class: center, middle, inverse, title-slide
 ## RLab 5: Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### September 23, 2020
+### Last updated: January 31, 2021
 
 ---
 
 # Objectives
 
-- Create an appropriate graph according to your intended message and available data
+- Create graphs that are appropriate based on data and intended message
+
+
+
 
 ---
-# Start a new project
-- Using the file directory on your computer
-  - Go to the parent folder that contains your RLabs folders
-  - Create a new folder named RLab5
+# Setup
 
---
-
-- In RStudio
-  - Create new project
-  - Select Existing Directory
-  - Click Browse and select the RLab5 folder you just created
-  - Click Create Project
+&gt; **Start a new project named "rlab5".**
   
----
-# Start a R notebook
+&gt; **Start a R Markdown document**
 
-- Use the dropdown menu in the upper-left of RStudio to start a notebook
+&gt; **Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
 
-- Change YAML
+&gt; **Change YAML to:**
 
 
 ```r
 ---
-title: "RLab 5: Visualizations"
+title: "RLab5: Data Viz"
 author: "Your Name"
-output: 
+output:
   html_document:
-    theme: spacelab
     df_print: paged
 ---
 ```
 
-- Delete all of the content included in the template
-
 ---
-# Packages
+# Setup
 
-- Load the following packages, suppressing the code and output.
-
---
+&gt; **In the top "setup" code chunk, load the following packages.**
 
 
 ```r
@@ -76,214 +66,226 @@ library(lubridate)
 ---
 # County COVID Data
 
-- Let's load the latest COVID data for every U.S. county from the New York Times
+- Let's examine the latest COVID data for every U.S. county
 
-- These data include *cumulative* counts of COVID cases and deaths every day since January 21, 2020
+&gt; **Add and run the following code**
 
 
 ```r
 covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
 ```
 
+- These data include *cumulative* counts (not daily) of COVID cases and deaths
+
 ---
 # Some Wrangling
 
-- Let's focus on Georgia
-- Use one or more wrangling verbs to create a new dataset called `covid_ga` with only counties in Georgia
 
---
+```
+## Rows: 982,177
+## Columns: 6
+## $ date   &lt;chr&gt; "2020-01-21", "2020-01-22", "2020-01-23", "2020-01-24", "2020-…
+## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "O…
+## $ state  &lt;chr&gt; "Washington", "Washington", "Washington", "Illinois", "Washing…
+## $ fips   &lt;int&gt; 53061, 53061, 53061, 17031, 53061, 6059, 17031, 53061, 4013, 6…
+## $ cases  &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
+## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+```
+
+- Let's focus on Georgia
+
+&gt; **Use one or more wrangling verbs to create a new dataset called `covid_ga` that contains only counties in Georgia**
 
 
 
 ---
 # Variable Type Conversions
 
-- Let's convert `date` from character to date format by telling R that `date` is ordered by year, month, date (ymd)
 
-- Let's save the most recent date with data and name it `today`
+```
+## Rows: 50,009
+## Columns: 6
+## $ date   &lt;chr&gt; "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-…
+## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
+## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgi…
+## $ fips   &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13135,…
+## $ cases  &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1, 5,…
+## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+```
+
+- We need to tell R to recognize `date` as dates instead of text
+
+&gt; **Add and run following code that tells R `date` is organized as `y`ear-`m`onth-`d`ay.**
 
 
 ```r
 covid_ga$date &lt;- ymd(covid_ga$date)
-
-today &lt;- '2020-09-22'
-```
-
---
-
-- Convert `county` from character to factor
-
---
-
-
-```r
-covid_ga$county &lt;- as.factor(covid_ga$county)
 ```
 
 ---
-# Daily Counts
-
-- It will be useful to have the count of new cases and deaths for each day, not cumulative counts
+# Variable type conversions
 
 
-```r
-covid_ga &lt;- covid_ga %&gt;% # take covid_ga
-  group_by(county) %&gt;% # and for each county
-  arrange(date) %&gt;% # sort date in ascending order
-  mutate(day_cases = cases - lag(cases), 
-         day_deaths = deaths - lag(deaths)) %&gt;% # subtract yesterday from each day
-  ungroup() # stop grouping by county
 ```
+## Rows: 50,009
+## Columns: 6
+## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 2…
+## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
+## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgi…
+## $ fips   &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13135,…
+## $ cases  &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1, 5,…
+## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+```
+
+&gt; **Convert `county` from character to factor**
+
 
 
 ---
-# Summary Stats
+# Quick Summary
 
-- Use the `summary` function to get a quick sense of the data. Suppress code and output.
-
---
+&gt; **Use `summary` to get a quick look at summary stats. Suppress output.**
 
 
 
 --
 
-- Note the minimum values for `day_cases` and `day_deaths`. How can this be?
+- Note the latest date with data is yesterday. We will want to focus on the most recent counts, so let's save yesterday's date for easy reference.
 
---
-
-- According to NYT, this can occur when corrections are made or when a state moves cases from one county to another. Good to know!
-
----
-# 5 Counties
-
-- Let's create one more dataset that includes five GA counties of our choice. Suppress code and output.
+&gt; **Add and run following code.**
 
 
 ```r
-ga_counties &lt;- c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')
-
-covid_ga_five &lt;- covid_ga %&gt;% 
-  filter(county %in% ga_counties)
+yesterday &lt;- '2021-01-29'
 ```
 
----
-# Summary Table 
-
-- Let's provide the reader a summary table for our 5 counties, suppressing the code.
-
-
-```r
-sum.covid_ga &lt;- tableby(county ~ cases + deaths + day_cases + day_deaths, 
-                        data = covid_ga_five,
-                        digits = 0,
-                        test = FALSE)
-
-labels(sum.covid_ga) &lt;- c(cases = 'Total Cases', deaths = 'Total Deaths',
-                          day_cases = 'Daily Cases', day_deaths = 'Daily Deaths')
-```
-
-
-```r
-summary(sum.covid_ga) # remember to add results='asis' inside curly brackets
-```
-
-- Knit to HTML
+- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data
 
 ---
 # Viz 1
 
-- Suppose we are asked for the distribution of total county cases for the most recent available date.
+- Suppose we are asked for the distribution of cumulative county cases for the most recent available date.
+
 - What kind of graph should we use?
 
 --
 
 - A histogram
-- Generate a histogram for cases during the most recent date
-- Remember to include only `today` observations
-- Suppress code and any messages
-- Generate another histogram for deaths during the most recent date
+
+--
+
+&gt; **Generate a histogram for cumulative cases during the most recent date. Suppress the message that R prints.**
 
 ---
-# Viz 1 &amp; 2
-
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Viz 1 &amp; 2
+# Viz 1
 
 &lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Viz 3
+# Viz 2
 
-- Suppose we are asked for the distribution of total county deaths during the most recent date that includes visual markers along key points of the distribution
-- Which graph should we use?
+&gt; **Generate another histogram for cumulative deaths during the most recent date.**
 
 --
-
-- A box-and-whiskers plot
-- Generate a box plot for county deaths during the most recent date. Suppress the code.
-
----
-# Viz 3
 
 &lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Viz 4
+# Viz 3
 
-- Rather than total cases or deaths for all counties as of the most recent date, let's focus on the distribution of daily counts for a single county.
+- Suppose we are asked for the distribution of cumulative county deaths during the most recent date that includes visual markers along key points of the distribution
 
-- Generate a box plot for Clarke county daily cases during all available dates
+- Which graph should we use?
+
+--
+
+- A box plot
+
+--
+
+&gt; **Generate a box plot for deaths during the most recent date.**
 
 ---
-# Viz 4
+# Viz 3
 
 &lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Viz 5
+# Five Counties
 
-- Let's compare counties now.
-- Suppose we are asked to compare total cases as of the most recent day in the data across our 5 counties
+- Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
+
+&gt; **Create a new dataset named `covid_ga_5` that contains only the above couties.**
+
+
+
+
+
+---
+# Viz 4
+
+- Suppose we are asked to compare cumulative cases as of the most recent day in the data across our 5 counties.
+
 - What kind of visualization could/should we use?
 
 --
 
-- Bar graphs are made using `geom_bar` or `geom_col`. Which should we use?
+- Bar graph. But both `geom_bar` or `geom_col` make bar graphs. Which should we use?
 
 --
 
-- Cases and deaths are already aggregated. Therefore, we should use `geom_col`.
-- Generate a bar graph for total cases during the most recent date across our 5 counties
+- Counts are already aggregated. Therefore, we should use `geom_col`.
+
+&gt; **Generate a bar graph for cumulative cases during the most recent date across our 5 counties. Make another for deaths.**
+
+---
+# Viz 4
+
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 5
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Viz 6 &amp; 7
+# Viz 6
 
-- Suppose we want to show the trends in total cases and deaths for our 5 counties
+- Suppose we want to compare these counties by the percent of total cases among them instead of absolute counts.
+
+&gt; **Add and run following code.**
+
+
+```r
+covid_ga_5 %&gt;% 
+  filter(date == yesterday) %&gt;% 
+  ggplot(aes(x = county, 
+             y = (cases/sum(cases))*100)) +
+  geom_col()
+```
+
+---
+# Viz 7 &amp; 8
+
+- Suppose we want to compare the trends in cases and deaths for our 5 counties over the time span of our data.
+
 - Which graph should we use?
 
 --
 
 - Line graph
-- Generate a line graph over the time span in the data for our 5 counties.
-- Give each county its own line.
-- Suppress the code.
+
+&gt; **Generate a line graph over the time span in the data for our 5 counties. Give each county its own line.**
 
 ---
-# Viz 6 &amp; 7
+# Viz 6
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Viz 6 &amp; 7
+# Viz 7
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # What's the Problem?
@@ -297,12 +299,13 @@ summary(sum.covid_ga) # remember to add results='asis' inside curly brackets
 --
 
 - Therefore, we need to compute rates; cases and/or deaths *per* some standard number of people.
-- Which means we need more data to add to these data. We'll learn how next week.
+
+- We need more data to add to these data. We'll learn how to combine datasets in the next lab.
 
 ---
-# Submit lab
+# Upload lab
 
-- Upload your notebook and output to eLC.
+- Upload your Rmd to eLC.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

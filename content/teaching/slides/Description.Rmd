@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Data Description"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "September 16, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -19,6 +19,10 @@ output:
 - Identify population, sample, parameter, and statistic
 
 - Distributions and their description
+
+- Describing categorical variables with frequency tables
+
+- Deceptive descriptions
 
 ```{r, include=FALSE}
 library(tidyverse)
@@ -94,12 +98,12 @@ ncbirths <- read_csv("https://docs.google.com/spreadsheets/d/e/2PACX-1vTm2WZwNBo
 ---
 # Practice
 
-Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states for some reason. Suppose we find this dubious and want to investigate for ourselves. 
+Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states. Suppose we find this dubious and set out to investigate average salary in Georgia for ourselves. 
 
-The national average is publicly available. You take a sample of 100 college-educated women in Georgia and record the income of each.
+You take a sample of 100 college-educated women in Georgia and record the income of each.
 
 - What is the unit of analysis in your dataset?
-- What is the variable in your dataset?
+- What are the variables in your dataset?
 - What is the population and sample for this study?
 - What is the parameter and statistic/estimate for this study?
 
@@ -113,11 +117,14 @@ class: inverse, middle, center
 
 - A distribution shows the (possible) values for a variable and how often they occur.
 
-```{r, echo=FALSE, fig.align='center', fig.height=6.5}
+- Let's look at weeks pregnancy for live births in North Carolina. Lots of data on births and deaths from [NCHS Vital Statistics](https://www.cdc.gov/nchs/nvss/index.htm)
+
+```{r, echo=FALSE, fig.align='center', fig.height=5}
 ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
   labs(title = 'Weeks of pregnancy in North Carolina') +
-  theme_light()
+  theme_light() +
+  theme(axis.text=element_text(size=16))
 ```
 
 ---
@@ -128,8 +135,10 @@ ggplot(ncbirths, aes(x = weeks)) +
 ```{r, echo=FALSE, fig.align='center'}
 ggplot(ncbirths, aes(x = weeks, fill = habit)) +
   geom_density(alpha = 0.4, bw = 0.6) +
-  labs(title = 'Weeks of pregnancy in North Carolina') +
-  theme_minimal()
+  labs(title = 'Weeks of pregnancy in North Carolina', 
+       fill = 'Smoker') +
+  theme_minimal() +
+  theme(axis.text=element_text(size=16))
 ```
 
 ---
@@ -220,8 +229,6 @@ kable(x, format = 'html')
 
 - Variable has no mode. One more of any of the 5 values would make that value the mode.
 
-- Realistically, you will never need to compute mode. More important is whether a distribution has multiple modes (i.e. peaks).
-
 ]
 
 ---
@@ -229,86 +236,67 @@ kable(x, format = 'html')
 
 - Measures of center are our way of communicating the *typical* value of a distribution.
 
-- Some measures are better representations of typical than others depending on the data.
+- Which measure best conveys the typical value depends on the data.
 
 ![](lectures_files/center.png)
 
 ---
 # Mean vs. median vs. mode
 
-- Mean is sensitive to extreme values, median and mode are not
+- Mean is sensitive to extreme values
+
+- Median and mode are not sensitive to extreme values
+
 - Median is better to use when a distribution is skewed
+
 - Mode is rarely used for continuous variables, usually used for the frequency of categorical variables
 
---
+---
+# Mean vs. median vs. mode
 
 - Which measure of center is best for describing typical weeks pregnant?
 
---
-
-- Which measure of center is best for describing typical income?
-
----
-class: inverse, center, middle
-
-# Let's consider a few deceptive uses of description
-
----
-# Deceptive description
-
-- **Politician A:** The economy is awful! Thirty states had falling incomes last year.
-
-- **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
-
----
-# Deceptive description
-
-- Suppose PADP has only 5 classes with no student in more than 1 class
-
-- 4 classes have 5 students
-
-- 1 class has 100 students
-
----
-# Deceptive description
-
-- Average class size
-```{r}
-(100 + 5 + 5 + 5 + 5)/5
+.pull-left[
+```{r, echo=FALSE, fig.align='center'}
+ggplot(ncbirths, aes(x = weeks)) +
+  geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
+  labs(title = 'Weeks of pregnancy in North Carolina') +
+  theme_light() +
+  theme(axis.text=element_text(size=16))
 ```
+]
 
-  - Average class size is touted as being only 24. Put that on our website!
-
---
-  
-- What about class size experienced by average student
-  - Survey all 120 students about class size
-  - 100 would answer 100
-  - 20 would answer 5
-
+.pull-right[
 ```{r}
-(100*100+20*5)/120
+mean(ncbirths$weeks)
+median(ncbirths$weeks)
 ```
+]
 
 ---
-# Deceptive description
+# Mean vs. median vs. mode
 
-- An expensive new drug increases the median life expectancy among patients by only two weeks. 
+- Which measure of center is best for describing typical GDP per capita?
 
-- Insurance won't cover such an expensive drug for such small gains in life expectancy.
+.pull-left[
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+library(gapminder)
+gapminder %>% 
+  filter(year==2007) %>% 
+  ggplot(aes(x = gdpPercap)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'GDP Per Capita') +
+  theme_light() +
+  theme(axis.text=element_text(size=16))
+```
+]
 
-- What may be wrong with this rationale?
-
----
-# Deceptive descriptions
-
-- [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/)
-
-- When given a percentage or rate, think carefully about the denominator 
-  - How large is it
-  - Is it measured validly and reliably
-
-- [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
+.pull-right[
+```{r}
+mean(gapminder$gdpPercap)
+median(gapminder$gdpPercap)
+```
+]
 
 ---
 class: inverse, middle, center
@@ -357,7 +345,7 @@ var(xvar$variable)
 ---
 # Standard deviation (SD)
 
-- Variance is very important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
+- Variance is important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
 
 - If our original variable were dollars, the variance says that on average variable deviates from the mean by 10 squared dollars
 
@@ -389,7 +377,7 @@ sd(ncbirths$weeks)
 
 - Divide the distribution into 4 equal parts 
 - The value of each divider line is called a quartile
-- IQR is the difference between 1st and 3rd quartiles
+- IQR is the difference between 1st and 3rd quartiles; 50% of values
 
 ```{r}
 quantile(x$variable, c(.25, .75))
@@ -426,7 +414,8 @@ IQR(xextreme$variable)
 ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
   labs(title = 'Weeks of pregnancy in North Carolina') +
-  theme_light()
+  theme_light() +
+  theme(axis.text=element_text(size=16))
 ```
 ]
 
@@ -435,6 +424,30 @@ ggplot(ncbirths, aes(x = weeks)) +
 var(ncbirths$weeks)
 sd(ncbirths$weeks)
 IQR(ncbirths$weeks)
+```
+]
+
+---
+# SD vs. IQR
+
+.pull-left[
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+library(gapminder)
+gapminder %>% 
+  filter(year==2007) %>% 
+  ggplot(aes(x = gdpPercap)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'GDP Per Capita') +
+  theme_light() +
+  theme(axis.text=element_text(size=16))
+```
+]
+
+.pull-right[
+```{r}
+var(gapminder$gdpPercap)
+sd(gapminder$gdpPercap)
+IQR(gapminder$gdpPercap)
 ```
 ]
 
@@ -461,18 +474,23 @@ class: inverse, middle, center
 # When deciding between mean and median, standard deviation and IQR, consider whether extreme values are distractions or an important part of the story
 
 ---
-# Measures of association
+class: inverse, middle, center
 
-- Instead of describing the distribution of one variable, now describing conditional probabilities
-
-- What does the distribution of one variable look like *given* a value within another variable's distribution
-
-- Requires at least two variables: an explanatory variable (x) and a response variable (y)
+# Measures of Association
 
 ---
 # Measures of association
 
-What is the association between the weight a mother gains during pregnancy and the weight of the child?
+- Instead of describing the distribution of one variable, now describing conditional distributions
+
+- What does the distribution of one variable look like *given* a value within another variable's distribution
+
+- Requires at least two variables: usually some explanatory variable (x) and a response variable (y)
+
+---
+# Measures of association
+
+Suppose we want to investigate the association between the weight a mother gains during pregnancy and the weight of the child?
 
 .pull-left[
 ```{r, echo=FALSE}
@@ -487,7 +505,8 @@ ncbirths %>%
 ```{r, echo=FALSE}
 ggplot(ncbirths, aes(x = gained, y = weight)) +
   geom_point() +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text=element_text(size=16))
 ```
 ]
 
@@ -500,67 +519,30 @@ ggplot(ncbirths, aes(x = gained, y = weight)) +
 
 - **Strength:** how much do the variables move together in tandem
 
-- **Magnitude:** when one variable increases or decreases, by how much does the other variable increase or decrease
+- **Magnitude:** when one variable increases, for instance, one unit, by how much does the other variable increase or decrease
 
 ---
 # Measures of association
 
-- **Covariance:** measures direction of association between between two variables
+- **Covariance:** measures **direction** of association between between two variables
 
-- **Correlation:** measures direction and strength of association between two variables
+- **Correlation coefficient:** measures **direction** and **strength** of association between two variables
 
-- **Regression coefficient:** measures the direction and magnitude of association between an explanatory variable and an outcome variable
-
-- **Coefficient of determination ($R^2$):** measures the strength of association between a set of one or more explanatory variables and an outcome variable
+- **Regression coefficient:** measures the **direction** and **magnitude** of association between an explanatory variable and an outcome variable
 
 ---
-# Covariance
-
-.pull-left[
-- If covariance is positive, then y tends to be above its mean when x is above its mean
-
-- If covariance is negative, then y tends to be below its mean when x is above its mean
-
-- If covariance is zero, no tendency
-]
-
---
-
-.pull-right[
-```{r, echo=FALSE}
-ggplot(ncbirths, aes(x = gained, y = weight)) +
-  geom_point() +
-  geom_hline(yintercept = 7.2, color = 'red', size = 2, linetype = 'dashed') +
-  geom_vline(xintercept = 30.8, color = 'blue', size = 2, linetype = 'dashed') +
-  theme_minimal()
-```
-]
-
----
-# Covariance
-
-```{r}
-cov(ncbirths$gained, ncbirths$weight)
-```
-
-- This confirms the association between weight gained by mother and baby weight is positive
-
-- But covariance is like variance, it is a very important component to statistical inference but not useful for description
-
-- Why describe only the direction when correlation can give us direction and strength?
-
----
-# Correlation
+# Correlation coefficient
 
 - Ranges between -1 and 1
 
-- The closer to -1 or 1, the stronger the association, with 0 indicating no association
+- Positive or negative value tells us the direction
 
-- General rule of thumb:
-  - 0.8: very strong correlation
+- The closer to -1 or 1, the stronger the association in that direction, with 0 indicating no association
+
+- No definitive scale; rule of thumb:
+  - 0.8: very strong
   - 0.6: moderately strong
-  - 0.4: correlated
-  - 0.2: weakly correlated
+  - 0.2: weak
 
 ```{r}
 cor(ncbirths$gained, ncbirths$weight)
@@ -578,20 +560,20 @@ cor(ncbirths$gained, ncbirths$weight)
 ---
 # Spurious correlation
 
-
 - For example, crime is strongly correlated with ice cream sales.
 
 --
 
-- Many such examples
+- Many such examples.
 
 ![](lectures_files/butter_divorce.png)
 
+- And more [here](https://www.tylervigen.com/spurious-correlations)
 
 ---
 class: inverse, middle, center
 
-# Regression is simply an extension of correlation, it has the same weaknesses as correlation.
+# Describing categorical variables
 
 ---
 # Describing categorical variables
@@ -599,7 +581,9 @@ class: inverse, middle, center
 .pull-left[
 ```{r, echo=FALSE}
 ggplot(ncbirths, aes(x = premie)) +
-  geom_bar()
+  geom_bar(fill = 'steelblue') +
+  theme_minimal() +
+  theme(axis.text=element_text(size=16))
 ```
 ]
 
@@ -615,29 +599,31 @@ ggplot(ncbirths, aes(x = premie)) +
 ---
 # Frequency Table
 
+- Tabulates  count or proportion for each level of a categorical variable
+
 ```{r}
-(premie_table <- table(ncbirths$premie)) %>% 
-  kable()
+(premie.table <- table(ncbirths$premie)) %>% 
+  kable(col.names = c('Term', 'Count'))
 ```
 
 ```{r}
-prop.table(premie_table) %>% 
-  kable()
+prop.table(premie.table) %>% kable(digits = 2, col.names = c('Term', 'Proportion'))
 ```
+]
 
 ---
-# Contingency Table
+# Contingency Table or Cross-tab
 
 ```{r}
 (mytable <- table(ncbirths$habit, ncbirths$premie)) %>% 
   kable()
 ```
 
-- Typically want to report the table above using proportions or percentages
+- Tabulates the intersections between levels of two categorical variables
 
-- Important to consider which variable your question conditions on
+- Common to use proportions or percentages
 
-- The frequency of an outcome *conditional on* a treatment
+- Important whether you use row or column percentages
 
 ---
 # Contingency Table
@@ -646,9 +632,12 @@ prop.table(premie_table) %>%
 prop.table(mytable, 1) %>% 
   kable(digits = 2)
 ```
-- This table reports row proportions
 
-- Conditional on smoking status, the relative frequency of full term and premature
+- This table reports row proportions; note each row sums to 1
+
+- This table conveys the relative frequency of term levels conditional on smoking status level
+
+- "Among non-smoking mothers, 87% carried full-term and 13% had premature births."
 
 ---
 # Contingency Table
@@ -658,9 +647,11 @@ prop.table(mytable, 2) %>%
   kable(digits = 2)
 ```
 
-- This table reports column proportions
+- This table reports column proportions; note each column sums to 1
 
 - Conditional on term status, the relative frequency of smoking
+
+- "Among full-term births, 90% came from non-smoking mothers and 10% came from smoking mothers."
 
 ---
 # Contingency Table
@@ -673,21 +664,119 @@ prop.table(mytable, 2) %>%
 
 --
 
-- **Be careful using contingency tables to make inferences**
+- **Be careful using contingency tables to make conclusions. Do not generalize from a sample. Consider the numerator and denominator.**
 
 ---
-# Quick Summary Stats
+class: inverse, center, middle
+
+# Let's consider some cases of possible deception
+
+---
+# Deceptive description
+
+- **Politician A:** The economy is awful! Thirty states had falling incomes last year.
+
+- **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
+
+---
+# Deceptive description
+
+- Suppose PADP has only 5 classes with no student in more than 1 class
+
+- 4 classes have 5 students
+
+- 1 class has 100 students
+
+---
+# Deceptive description
+
+- Average class size
+```{r}
+(100 + 5 + 5 + 5 + 5)/5
+```
+
+  - Average class size is only 24. Put that on a website!
+
+--
+  
+- What about class size experienced by average student
+  - Survey all 120 students about class size
+  - 100 would answer 100
+  - 20 would answer 5
 
 ```{r}
-summary(ncbirths)
+(100*100+20*5)/120
 ```
 
 ---
-# Quick Summary Stats
+# Deceptive description
 
-```{r}
-ncbirths$premie <- as.factor(ncbirths$premie)
-summary(ncbirths)
+- An expensive new drug increases the median life expectancy among patients by only two weeks. 
+
+- Insurance won't cover such an expensive drug for such small gains in life expectancy.
+
+- What may be wrong with this rationale?
+
+---
+# Deceptive descriptions
+
+- [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/)
+
+- When given a percentage or rate, think carefully about the denominator 
+  - How large is it
+  - Is it measured validly and reliably
+
+- [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
+
+---
+# Fatal police encounters
+
+```{r, include=FALSE}
+load('lectures_files/fatal_encounters.RData')
+load('lectures_files/fatal_shot.RData')
 ```
 
+```{r}
+glimpse(fatal_encounters)
+```
+
+- Data from [Fatal Encounters](https://fatalencounters.org)
+
+---
+# Fatal police encounters
+
+```{r}
+levels(fatal_encounters$cause)
+```
+
+---
+# Fatal police encounters
+
+```{r, eval=FALSE}
+fatal_shot_2019 <- fatal_encounters %>% 
+  select(year, race_imputed, cause) %>% 
+  filter(cause == 'Gunshot' & year == 2019) %>% 
+  glimpse()
+```
+
+```{r, echo=FALSE}
+fatal_shot_2019 <- fatal_encounters %>% 
+  select(year, race_imputed, cause) %>% 
+  filter(cause == 'Gunshot' & year == 2019)
+
+fatal_shot_2019$cause <- fct_drop(fatal_shot_2019$cause)
+fatal_shot_2019$race_imputed <- fct_drop(fatal_shot_2019$race_imputed)
+
+fatal_shot_2019 %>% 
+  glimpse()
+```
+
+---
+# Fatal police encounters
+
+```{r}
+fatal.table <- table(fatal_shot_2019$race_imputed,
+                      fatal_shot_2019$cause)
+kable(fatal.table)
+```
 

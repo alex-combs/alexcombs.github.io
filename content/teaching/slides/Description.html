@@ -4,7 +4,6 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-09-16" />
     <script src="Description_files/header-attrs-2.5/header-attrs.js"></script>
     <link href="Description_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
     <script src="Description_files/anchor-sections-1.0/anchor-sections.js"></script>
@@ -18,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Data Description
 ### Alex Combs
 ### UGA | SPIA | PADP
-### September 16, 2020
+### Last updated: January 31, 2021
 
 ---
 
@@ -29,6 +28,10 @@ class: center, middle, inverse, title-slide
 - Identify population, sample, parameter, and statistic
 
 - Distributions and their description
+
+- Describing categorical variables with frequency tables
+
+- Deceptive descriptions
 
 
 
@@ -100,12 +103,12 @@ class: center, middle, inverse, title-slide
 ---
 # Practice
 
-Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states for some reason. Suppose we find this dubious and want to investigate for ourselves. 
+Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states. Suppose we find this dubious and set out to investigate average salary in Georgia for ourselves. 
 
-The national average is publicly available. You take a sample of 100 college-educated women in Georgia and record the income of each.
+You take a sample of 100 college-educated women in Georgia and record the income of each.
 
 - What is the unit of analysis in your dataset?
-- What is the variable in your dataset?
+- What are the variables in your dataset?
 - What is the population and sample for this study?
 - What is the parameter and statistic/estimate for this study?
 
@@ -118,6 +121,8 @@ class: inverse, middle, center
 # Distribution
 
 - A distribution shows the (possible) values for a variable and how often they occur.
+
+- Let's look at weeks pregnancy for live births in North Carolina. Lots of data on births and deaths from [NCHS Vital Statistics](https://www.cdc.gov/nchs/nvss/index.htm)
 
 &lt;img src="Description_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -317,8 +322,6 @@ median(ncbirths$weeks)
 
 - Variable has no mode. One more of any of the 5 values would make that value the mode.
 
-- Realistically, you will never need to compute mode. More important is whether a distribution has multiple modes (i.e. peaks).
-
 ]
 
 ---
@@ -326,96 +329,76 @@ median(ncbirths$weeks)
 
 - Measures of center are our way of communicating the *typical* value of a distribution.
 
-- Some measures are better representations of typical than others depending on the data.
+- Which measure best conveys the typical value depends on the data.
 
 ![](lectures_files/center.png)
 
 ---
 # Mean vs. median vs. mode
 
-- Mean is sensitive to extreme values, median and mode are not
+- Mean is sensitive to extreme values
+
+- Median and mode are not sensitive to extreme values
+
 - Median is better to use when a distribution is skewed
+
 - Mode is rarely used for continuous variables, usually used for the frequency of categorical variables
 
---
+---
+# Mean vs. median vs. mode
 
 - Which measure of center is best for describing typical weeks pregnant?
 
---
+.pull-left[
+&lt;img src="Description_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+]
 
-- Which measure of center is best for describing typical income?
-
----
-class: inverse, center, middle
-
-# Let's consider a few deceptive uses of description
-
----
-# Deceptive description
-
-- **Politician A:** The economy is awful! Thirty states had falling incomes last year.
-
-- **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
-
----
-# Deceptive description
-
-- Suppose PADP has only 5 classes with no student in more than 1 class
-
-- 4 classes have 5 students
-
-- 1 class has 100 students
-
----
-# Deceptive description
-
-- Average class size
+.pull-right[
 
 ```r
-(100 + 5 + 5 + 5 + 5)/5
+mean(ncbirths$weeks)
 ```
 
 ```
-## [1] 24
+## [1] 38.4675
 ```
-
-  - Average class size is touted as being only 24. Put that on our website!
-
---
-  
-- What about class size experienced by average student
-  - Survey all 120 students about class size
-  - 100 would answer 100
-  - 20 would answer 5
-
 
 ```r
-(100*100+20*5)/120
+median(ncbirths$weeks)
 ```
 
 ```
-## [1] 84.16667
+## [1] 39
 ```
+]
 
 ---
-# Deceptive description
+# Mean vs. median vs. mode
 
-- An expensive new drug increases the median life expectancy among patients by only two weeks. 
+- Which measure of center is best for describing typical GDP per capita?
 
-- Insurance won't cover such an expensive drug for such small gains in life expectancy.
+.pull-left[
+&lt;img src="Description_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+]
 
-- What may be wrong with this rationale?
+.pull-right[
 
----
-# Deceptive descriptions
+```r
+mean(gapminder$gdpPercap)
+```
 
-- [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/)
+```
+## [1] 7215.327
+```
 
-- When given a percentage or rate, think carefully about the denominator 
-  - How large is it
-  - Is it measured validly and reliably
+```r
+median(gapminder$gdpPercap)
+```
 
-- [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
+```
+## [1] 3531.847
+```
+]
 
 ---
 class: inverse, middle, center
@@ -519,7 +502,7 @@ var(xvar$variable)
 ---
 # Standard deviation (SD)
 
-- Variance is very important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
+- Variance is important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
 
 - If our original variable were dollars, the variance says that on average variable deviates from the mean by 10 squared dollars
 
@@ -566,7 +549,7 @@ sd(ncbirths$weeks)
 
 - Divide the distribution into 4 equal parts 
 - The value of each divider line is called a quartile
-- IQR is the difference between 1st and 3rd quartiles
+- IQR is the difference between 1st and 3rd quartiles; 50% of values
 
 
 ```r
@@ -658,7 +641,7 @@ IQR(xextreme$variable)
 # SD vs. IQR
 
 .pull-left[
-![](Description_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -685,6 +668,40 @@ IQR(ncbirths$weeks)
 
 ```
 ## [1] 2
+```
+]
+
+---
+# SD vs. IQR
+
+.pull-left[
+&lt;img src="Description_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+```r
+var(gapminder$gdpPercap)
+```
+
+```
+## [1] 97169410
+```
+
+```r
+sd(gapminder$gdpPercap)
+```
+
+```
+## [1] 9857.455
+```
+
+```r
+IQR(gapminder$gdpPercap)
+```
+
+```
+## [1] 8123.402
 ```
 ]
 
@@ -730,18 +747,23 @@ class: inverse, middle, center
 # When deciding between mean and median, standard deviation and IQR, consider whether extreme values are distractions or an important part of the story
 
 ---
-# Measures of association
+class: inverse, middle, center
 
-- Instead of describing the distribution of one variable, now describing conditional probabilities
-
-- What does the distribution of one variable look like *given* a value within another variable's distribution
-
-- Requires at least two variables: an explanatory variable (x) and a response variable (y)
+# Measures of Association
 
 ---
 # Measures of association
 
-What is the association between the weight a mother gains during pregnancy and the weight of the child?
+- Instead of describing the distribution of one variable, now describing conditional distributions
+
+- What does the distribution of one variable look like *given* a value within another variable's distribution
+
+- Requires at least two variables: usually some explanatory variable (x) and a response variable (y)
+
+---
+# Measures of association
+
+Suppose we want to investigate the association between the weight a mother gains during pregnancy and the weight of the child?
 
 .pull-left[
 &lt;table&gt;
@@ -789,7 +811,7 @@ What is the association between the weight a mother gains during pregnancy and t
 ]
 
 .pull-right[
-![](Description_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
 ]
 
 ---
@@ -801,66 +823,30 @@ What is the association between the weight a mother gains during pregnancy and t
 
 - **Strength:** how much do the variables move together in tandem
 
-- **Magnitude:** when one variable increases or decreases, by how much does the other variable increase or decrease
+- **Magnitude:** when one variable increases, for instance, one unit, by how much does the other variable increase or decrease
 
 ---
 # Measures of association
 
-- **Covariance:** measures direction of association between between two variables
+- **Covariance:** measures **direction** of association between between two variables
 
-- **Correlation:** measures direction and strength of association between two variables
+- **Correlation coefficient:** measures **direction** and **strength** of association between two variables
 
-- **Regression coefficient:** measures the direction and magnitude of association between an explanatory variable and an outcome variable
-
-- **Coefficient of determination ($R^2$):** measures the strength of association between a set of one or more explanatory variables and an outcome variable
+- **Regression coefficient:** measures the **direction** and **magnitude** of association between an explanatory variable and an outcome variable
 
 ---
-# Covariance
-
-.pull-left[
-- If covariance is positive, then y tends to be above its mean when x is above its mean
-
-- If covariance is negative, then y tends to be below its mean when x is above its mean
-
-- If covariance is zero, no tendency
-]
-
---
-
-.pull-right[
-![](Description_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
-]
-
----
-# Covariance
-
-
-```r
-cov(ncbirths$gained, ncbirths$weight)
-```
-
-```
-## [1] 3.364736
-```
-
-- This confirms the association between weight gained by mother and baby weight is positive
-
-- But covariance is like variance, it is a very important component to statistical inference but not useful for description
-
-- Why describe only the direction when correlation can give us direction and strength?
-
----
-# Correlation
+# Correlation coefficient
 
 - Ranges between -1 and 1
 
-- The closer to -1 or 1, the stronger the association, with 0 indicating no association
+- Positive or negative value tells us the direction
 
-- General rule of thumb:
-  - 0.8: very strong correlation
+- The closer to -1 or 1, the stronger the association in that direction, with 0 indicating no association
+
+- No definitive scale; rule of thumb:
+  - 0.8: very strong
   - 0.6: moderately strong
-  - 0.4: correlated
-  - 0.2: weakly correlated
+  - 0.2: weak
 
 
 ```r
@@ -883,26 +869,26 @@ cor(ncbirths$gained, ncbirths$weight)
 ---
 # Spurious correlation
 
-
 - For example, crime is strongly correlated with ice cream sales.
 
 --
 
-- Many such examples
+- Many such examples.
 
 ![](lectures_files/butter_divorce.png)
 
+- And more [here](https://www.tylervigen.com/spurious-correlations)
 
 ---
 class: inverse, middle, center
 
-# Regression is simply an extension of correlation, it has the same weaknesses as correlation.
+# Describing categorical variables
 
 ---
 # Describing categorical variables
 
 .pull-left[
-![](Description_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -917,34 +903,36 @@ class: inverse, middle, center
 ---
 # Frequency Table
 
+- Tabulates  count or proportion for each level of a categorical variable
+
 
 ```r
-(premie_table &lt;- table(ncbirths$premie)) %&gt;% 
-  kable()
+(premie.table &lt;- table(ncbirths$premie)) %&gt;% 
+  kable(col.names = c('Term', 'Count'))
 ```
 
 
 
-|Var1      | Freq|
-|:---------|----:|
-|full term |  694|
-|premie    |  106|
+|Term      | Count|
+|:---------|-----:|
+|full term |   694|
+|premie    |   106|
 
 
 ```r
-prop.table(premie_table) %&gt;% 
-  kable()
+prop.table(premie.table) %&gt;% kable(digits = 2, col.names = c('Term', 'Proportion'))
 ```
 
 
 
-|Var1      |   Freq|
-|:---------|------:|
-|full term | 0.8675|
-|premie    | 0.1325|
+|Term      | Proportion|
+|:---------|----------:|
+|full term |       0.87|
+|premie    |       0.13|
+]
 
 ---
-# Contingency Table
+# Contingency Table or Cross-tab
 
 
 ```r
@@ -959,11 +947,11 @@ prop.table(premie_table) %&gt;%
 |nonsmoker |       625|     91|
 |smoker    |        69|     15|
 
-- Typically want to report the table above using proportions or percentages
+- Tabulates the intersections between levels of two categorical variables
 
-- Important to consider which variable your question conditions on
+- Common to use proportions or percentages
 
-- The frequency of an outcome *conditional on* a treatment
+- Important whether you use row or column percentages
 
 ---
 # Contingency Table
@@ -980,9 +968,12 @@ prop.table(mytable, 1) %&gt;%
 |:---------|---------:|------:|
 |nonsmoker |      0.87|   0.13|
 |smoker    |      0.82|   0.18|
-- This table reports row proportions
 
-- Conditional on smoking status, the relative frequency of full term and premature
+- This table reports row proportions; note each row sums to 1
+
+- This table conveys the relative frequency of term levels conditional on smoking status level
+
+- "Among non-smoking mothers, 87% carried full-term and 13% had premature births."
 
 ---
 # Contingency Table
@@ -1000,9 +991,11 @@ prop.table(mytable, 2) %&gt;%
 |nonsmoker |       0.9|   0.86|
 |smoker    |       0.1|   0.14|
 
-- This table reports column proportions
+- This table reports column proportions; note each column sums to 1
 
 - Conditional on term status, the relative frequency of smoking
+
+- "Among full-term births, 90% came from non-smoking mothers and 10% came from smoking mothers."
 
 ---
 # Contingency Table
@@ -1015,87 +1008,165 @@ prop.table(mytable, 2) %&gt;%
 
 --
 
-- **Be careful using contingency tables to make inferences**
+- **Be careful using contingency tables to make conclusions. Do not generalize from a sample. Consider the numerator and denominator.**
 
 ---
-# Quick Summary Stats
+class: inverse, center, middle
+
+# Let's consider some cases of possible deception
+
+---
+# Deceptive description
+
+- **Politician A:** The economy is awful! Thirty states had falling incomes last year.
+
+- **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
+
+---
+# Deceptive description
+
+- Suppose PADP has only 5 classes with no student in more than 1 class
+
+- 4 classes have 5 students
+
+- 1 class has 100 students
+
+---
+# Deceptive description
+
+- Average class size
+
+```r
+(100 + 5 + 5 + 5 + 5)/5
+```
+
+```
+## [1] 24
+```
+
+  - Average class size is only 24. Put that on a website!
+
+--
+  
+- What about class size experienced by average student
+  - Survey all 120 students about class size
+  - 100 would answer 100
+  - 20 would answer 5
 
 
 ```r
-summary(ncbirths)
+(100*100+20*5)/120
 ```
 
 ```
-##       fage            mage          mature              weeks      
-##  Min.   :14.00   Min.   :15.00   Length:800         Min.   :20.00  
-##  1st Qu.:25.00   1st Qu.:22.00   Class :character   1st Qu.:38.00  
-##  Median :30.00   Median :28.00   Mode  :character   Median :39.00  
-##  Mean   :30.24   Mean   :27.61                      Mean   :38.47  
-##  3rd Qu.:35.00   3rd Qu.:33.00                      3rd Qu.:40.00  
-##  Max.   :55.00   Max.   :50.00                      Max.   :45.00  
-##     premie              visits        marital              gained     
-##  Length:800         Min.   : 0.00   Length:800         Min.   : 0.00  
-##  Class :character   1st Qu.:10.00   Class :character   1st Qu.:21.75  
-##  Mode  :character   Median :12.00   Mode  :character   Median :30.00  
-##                     Mean   :12.44                      Mean   :30.77  
-##                     3rd Qu.:15.00                      3rd Qu.:39.00  
-##                     Max.   :30.00                      Max.   :85.00  
-##      weight       lowbirthweight        gender             habit          
-##  Min.   : 1.000   Length:800         Length:800         Length:800        
-##  1st Qu.: 6.545   Class :character   Class :character   Class :character  
-##  Median : 7.380   Mode  :character   Mode  :character   Mode  :character  
-##  Mean   : 7.209                                                           
-##  3rd Qu.: 8.130                                                           
-##  Max.   :11.630                                                           
-##    whitemom        
-##  Length:800        
-##  Class :character  
-##  Mode  :character  
-##                    
-##                    
-## 
+## [1] 84.16667
 ```
 
 ---
-# Quick Summary Stats
+# Deceptive description
+
+- An expensive new drug increases the median life expectancy among patients by only two weeks. 
+
+- Insurance won't cover such an expensive drug for such small gains in life expectancy.
+
+- What may be wrong with this rationale?
+
+---
+# Deceptive descriptions
+
+- [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/)
+
+- When given a percentage or rate, think carefully about the denominator 
+  - How large is it
+  - Is it measured validly and reliably
+
+- [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
+
+---
+# Fatal police encounters
+
+
 
 
 ```r
-ncbirths$premie &lt;- as.factor(ncbirths$premie)
-summary(ncbirths)
+glimpse(fatal_encounters)
 ```
 
 ```
-##       fage            mage          mature              weeks      
-##  Min.   :14.00   Min.   :15.00   Length:800         Min.   :20.00  
-##  1st Qu.:25.00   1st Qu.:22.00   Class :character   1st Qu.:38.00  
-##  Median :30.00   Median :28.00   Mode  :character   Median :39.00  
-##  Mean   :30.24   Mean   :27.61                      Mean   :38.47  
-##  3rd Qu.:35.00   3rd Qu.:33.00                      3rd Qu.:40.00  
-##  Max.   :55.00   Max.   :50.00                      Max.   :45.00  
-##        premie        visits        marital              gained     
-##  full term:694   Min.   : 0.00   Length:800         Min.   : 0.00  
-##  premie   :106   1st Qu.:10.00   Class :character   1st Qu.:21.75  
-##                  Median :12.00   Mode  :character   Median :30.00  
-##                  Mean   :12.44                      Mean   :30.77  
-##                  3rd Qu.:15.00                      3rd Qu.:39.00  
-##                  Max.   :30.00                      Max.   :85.00  
-##      weight       lowbirthweight        gender             habit          
-##  Min.   : 1.000   Length:800         Length:800         Length:800        
-##  1st Qu.: 6.545   Class :character   Class :character   Class :character  
-##  Median : 7.380   Mode  :character   Mode  :character   Mode  :character  
-##  Mean   : 7.209                                                           
-##  3rd Qu.: 8.130                                                           
-##  Max.   :11.630                                                           
-##    whitemom        
-##  Length:800        
-##  Class :character  
-##  Mode  :character  
-##                    
-##                    
-## 
+## Rows: 29,529
+## Columns: 8
+## $ id           &lt;chr&gt; "25746", "25747", "25748", "25749", "1", "2", "28711", "…
+## $ age          &lt;int&gt; 17, 21, 19, 23, 24, 53, 25, 35, 30, 29, 42, 41, 55, 45, …
+## $ gender       &lt;fct&gt; Male, Male, Male, Male, Female, Male, Male, Male, Male, …
+## $ race         &lt;fct&gt; European-American/White, African-American/Black, African…
+## $ race_imputed &lt;fct&gt; European-American/White, African-American/Black, African…
+## $ year         &lt;dbl&gt; 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 20…
+## $ state        &lt;fct&gt; CA, MI, MI, NM, CA, GA, GA, GA, NC, NC, MD, MD, PA, AL, …
+## $ cause        &lt;fct&gt; Vehicle, Vehicle, Vehicle, Vehicle, Vehicle, Gunshot, Ve…
 ```
 
+- Data from [Fatal Encounters](https://fatalencounters.org)
+
+---
+# Fatal police encounters
+
+
+```r
+levels(fatal_encounters$cause)
+```
+
+```
+##  [1] "Vehicle"                           "Gunshot"                          
+##  [3] "Beaten/Bludgeoned with instrument" "Stabbed"                          
+##  [5] "Asphyxiated/Restrained"            "Drowned"                          
+##  [7] "Drug overdose"                     "Fell from a height"               
+##  [9] "Undetermined"                      "Chemical agent/Pepper spray"      
+## [11] "Medical emergency"                 "Other"                            
+## [13] "Burned/Smoke inhalation"           "Tasered"                          
+## [15] "Pursuit"
+```
+
+---
+# Fatal police encounters
+
+
+```r
+fatal_shot_2019 &lt;- fatal_encounters %&gt;% 
+  select(year, race_imputed, cause) %&gt;% 
+  filter(cause == 'Gunshot' &amp; year == 2019) %&gt;% 
+  glimpse()
+```
+
+
+```
+## Rows: 1,346
+## Columns: 3
+## $ year         &lt;dbl&gt; 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 20…
+## $ race_imputed &lt;fct&gt; European-American/White, African-American/Black, African…
+## $ cause        &lt;fct&gt; Gunshot, Gunshot, Gunshot, Gunshot, Gunshot, Gunshot, Gu…
+```
+
+---
+# Fatal police encounters
+
+
+```r
+fatal.table &lt;- table(fatal_shot_2019$race_imputed,
+                      fatal_shot_2019$cause)
+kable(fatal.table)
+```
+
+
+
+|                        | Gunshot|
+|:-----------------------|-------:|
+|European-American/White |     645|
+|African-American/Black  |     329|
+|Hispanic/Latino         |     219|
+|Race unspecified        |      98|
+|Asian/Pacific Islander  |      35|
+|Native American/Alaskan |      14|
+|Middle Eastern          |       4|
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

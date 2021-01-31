@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 4: Tidying Data
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: January 27, 2021
+### Last updated: January 29, 2021
 
 ---
 
@@ -47,8 +47,7 @@ By the end of this lab, you will have learned how to...
 ```r
 ---
 title: "RLab4: Tidying Data"
-author: "Alex Combs" # Your name
-date: "2/4/2021"
+author: "Your Name"
 output:
   html_document:
     df_print: paged
@@ -246,7 +245,7 @@ st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;%
               values_from = amount_1000)
 ```
 
-&gt; **Execute your code and examine the new dataset to see if/how it worked.**
+&gt; **Run your code and examine the new dataset to see if/how it worked.**
 
 ---
 # Tidy State Finance Data
@@ -254,14 +253,12 @@ st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;%
 &gt; **Provide the reader with top 4 rows of the new dataset.**
 
 
-|id |state      | year| Total Revenue| Total Expenditure|
-|:--|:----------|----:|-------------:|-----------------:|
-|01 |Alabama    | 2016|      30133184|          30211453|
-|02 |Alaska     | 2016|       8071732|          12436184|
-|04 |Arizona    | 2016|      38232376|          42085094|
-|05 |Arkansas   | 2016|      21439227|          22910901|
-|06 |California | 2016|     322332341|         326837836|
-|08 |Colorado   | 2016|      31399864|          34596327|
+|id |state    | year| Total Revenue| Total Expenditure|
+|:--|:--------|----:|-------------:|-----------------:|
+|01 |Alabama  | 2016|      30133184|          30211453|
+|02 |Alaska   | 2016|       8071732|          12436184|
+|04 |Arizona  | 2016|      38232376|          42085094|
+|05 |Arkansas | 2016|      21439227|          22910901|
 
 
 ---
@@ -278,9 +275,14 @@ st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;%
 
 - Recall in the wrangling activity you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
 
-&gt; **Now create a new variable that computes the surplus for each state. Provide a table that lists surplus in descending order for all states.**
+&gt; **Now create a new variable that computes the surplus (revenue - expenditure) for each state. Provide a table that lists surplus in descending order for three states with highest surplus.**
 
 
+|state          | surplus|
+|:--------------|-------:|
+|Nevada         | 1493406|
+|North Carolina | 1359546|
+|Hawaii         | 1227346|
 
 ---
 # Wide to Long

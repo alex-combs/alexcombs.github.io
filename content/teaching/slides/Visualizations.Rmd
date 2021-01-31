@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Data Visualization"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "September 23, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -30,7 +30,7 @@ output:
 ---
 # An exploratory graph
 
-```{r, include=FALSE}
+```{r, include=FALSE, message=FALSE}
 library(tidyverse)
 library(gapminder)
 
@@ -40,7 +40,7 @@ gm_americas <- gapminder %>%
 ```
 
 .center[
-```{r, echo=FALSE}
+```{r, echo=FALSE, message=FALSE}
 ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
   geom_point() +
   geom_smooth(method = "lm", se = FALSE)
@@ -91,13 +91,6 @@ class: inverse, middle, center
 5. Maximize data-to-ink ratio
 
 ---
-# The best data viz ever?
-
-.center[
-![](lectures_files/napolean.png)
-]
-
----
 # Qualities of bad viz
 
 1. Bad taste, unnecessary ink
@@ -115,6 +108,8 @@ class: inverse, middle, center
 
 ---
 # Maximize data-to-ink?
+
+- Six ways to show a distribution with varying data-to-ink ratios
 
 .center[
 ![](lectures_files/boxplots.png)
@@ -136,7 +131,7 @@ class: inverse, middle, center
 ![:scale 85%](lectures_files/bettercrisis.png)
 ]
 
-- Previous graph hid the decade of birth and focused on the percentage of people who gave a rating or 10
+- Previous graph focused on the percentage of people who gave a rating of 10, "essential"
 
 ---
 # Bad perception
@@ -145,21 +140,7 @@ class: inverse, middle, center
 ![](lectures_files/3dgraph.png)
 ]
 
----
-# Bad perception
-
-.center[
-![](lectures_files/badstackbars.png)
-]
-
-- Difficult to compare floating middle groups
-
----
-# Bad perception
-
-.center[
-![](lectures_files/badaspect.png)
-]
+- Don't use 3-D
 
 ---
 # Bad perception
@@ -167,6 +148,9 @@ class: inverse, middle, center
 .center[
 ![](lectures_files/lawaxes.png)
 ]
+
+- Be aware of how axes change the perception of scale.
+
 ---
 # Bad perception
 
@@ -178,13 +162,6 @@ class: inverse, middle, center
 class: inverse, middle, center
 
 # Human vision has evolved to have certain strengths and weaknesses
-
----
-# Contrast
-
-.center[
-![:scale 65%](lectures_files/grideffect.png)
-]
 
 ---
 # Decoding numerical visualization

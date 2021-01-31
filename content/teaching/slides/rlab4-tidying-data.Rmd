@@ -42,8 +42,7 @@ library(gapminder)
 ```{r, eval=FALSE}
 ---
 title: "RLab4: Tidying Data"
-author: "Alex Combs" # Your name
-date: "2/4/2021"
+author: "Your Name"
 output:
   html_document:
     df_print: paged
@@ -224,7 +223,7 @@ st_fin_16_tidy <- st_fin_16_wrangled %>%
               values_from = amount_1000)
 ```
 
-> **Execute your code and examine the new dataset to see if/how it worked.**
+> **Run your code and examine the new dataset to see if/how it worked.**
 
 ---
 # Tidy State Finance Data
@@ -233,7 +232,7 @@ st_fin_16_tidy <- st_fin_16_wrangled %>%
 
 ```{r, echo=FALSE}
 st_fin_16_tidy %>% 
-  head() %>% 
+  head(n=4) %>% 
   kable()
 ```
 
@@ -256,13 +255,15 @@ st_fin_16_tidy <- st_fin_16_tidy %>%
 
 - Recall in the wrangling activity you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
 
-> **Now create a new variable that computes the surplus for each state. Provide a table that lists surplus in descending order for all states.**
+> **Now create a new variable that computes the surplus (revenue - expenditure) for each state. Provide a table that lists surplus in descending order for three states with highest surplus.**
 
-```{r, include=FALSE}
+```{r, echo=FALSE}
 st_fin_16_tidy %>% 
   mutate(surplus = revenue - expenditure) %>% 
   select(state, surplus) %>% 
-  arrange(desc(surplus))
+  arrange(desc(surplus)) %>% 
+  head(n=3) %>% 
+  kable()
 ```
 
 ---
