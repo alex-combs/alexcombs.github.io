@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "RLab 6: Combining Data"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "September 30, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -15,21 +15,41 @@ output:
 ---
 # Objectives
 
-By the end of this lab, you will have learned how to...
+-Most common combining data scenarios
 
-- Handle the most common scenarios involving the combination of multiple datasets
   - Append
   - Right/left join
 
 ---
-# Start a new project
-- Using the file directory on your computer
-  - Go to the parent folder that contains your RLab folders
-  - Create a new folder named RLab6
+# Setup
+
+> **Either start a new project, "rlab6", or continue using your "rlab5" project.**
   
-- In RStudio start a new project that links to the existing folder RLab6
-  - Copy and paste your `RLab5_lastname` notebook to your RLab6 folder
-  - Rename the copy of your RLab5 notebook `RLab6_lastname`
+> **If starting a new project, copy and paste your "rlab5_lastname" Rmd to "rlab6". Rename Rmd "rlab6.1_lastname"**
+
+> **Change YAML to:**
+
+```{r, eval=FALSE}
+---
+title: "RLab6.1: Joining Data"
+author: "Your Name"
+output:
+  html_document:
+    df_print: paged
+---
+```
+
+---
+# Setup
+
+> **Should already have the following packages ready to load:**
+
+```{r, message=FALSE}
+library(data.table)
+library(tidyverse)
+library(arsenal)
+library(lubridate)
+```
 
 ```{r, include=FALSE}
 library(data.table)
@@ -44,26 +64,36 @@ covid_ga <- covid %>%
 
 covid_ga$date <- ymd(covid_ga$date)
 
-today <- '2020-09-29'
+yesterday <- '2020-01-29'
 
 covid_ga$county <- as.factor(covid_ga$county)
 ```
 
 ---
-# Start a script
+# Start another Rmd
 
-- Before updating your `RLab6_lastname.Rmd`, start a script (not a notebook)
+> **Start another Rmd**
 
-- We will use this script to practice appending different data unrelated to the covid data from last week
+- We will use this Rmd to practice appending data unrelated to the COVID data from last week. Therefore, we want to keep these two documents separate.
 
-- Therefore, we want to keep these two documents separate
+> **Change YAML; keep setup chunk; delete the rest.**
+
+```{r, eval=FALSE}
+---
+title: "RLab6.2: Appending Data"
+author: "Your Name"
+output:
+  html_document:
+    df_print: paged
+---
+```
 
 ---
 # Download & Import Data
 
-- Download the `st_fin_2014.csv`, `st_fin_2015.csv`, and `st_fin_2016.csv` files from eLC and add them to your project folder.
+> **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, and `st_fin_2016.csv` files from eLC and add them to your project folder.**
 
-- Import them into R.
+> **Import the three files in the append Rmd**
 
 ```{r, eval=FALSE}
 st_fin_14 <- 
@@ -86,7 +116,7 @@ st_fin_16 <- read_csv("labs_files/st_fin_2016.csv")
 ---
 # Append
 
-- Combining observations among two or more datasets with **identical** layout. 
+- Stacking observations among two or more datasets with **identical** layout. 
 
 - Example: Adding multiple time periods together of the same data that is released annually.
 
@@ -154,14 +184,14 @@ gapminder97_07 <- bind_rows(gapminder97, gapminder02, gapminder07)
 glimpse(gapminder97_07)
 ```
 
-Note that there are now 426 rows in the new dataset (3 x 142)
+- Note that there are now 426 rows in the new dataset (3 x 142)
 
 ---
 # Append Practice
 
 - You have three datasets with the same layout
 
-- Append them to create a new dataset `st_fin_14_16`
+> **Append them to create a new dataset `st_fin_14_16`**
 
 ```{r, include=FALSE}
 st_fin_14_16 <- bind_rows(st_fin_16, st_fin_15, st_fin_14)
@@ -170,7 +200,7 @@ st_fin_14_16 <- bind_rows(st_fin_16, st_fin_15, st_fin_14)
 ---
 # Append Practice
 
-- Take a `glimpse` of your new dataset to confirm it worked
+> **Use `glimpse` to confirm it worked**
 
 ```{r, eval=FALSE}
 glimpse(st_fin_14_16)
@@ -180,59 +210,93 @@ glimpse(st_fin_14_16)
 
 - Now we can explore things like changes in state finances over time if we wanted to
 
-- Save your script and close it...we're finished with these data
+> **Save your Rmd and close it...we're finished with these data**
 
 ---
-# Adding data to covid_ga
+# Appending multiple Excel sheets
 
-Now we're ready to work on `RLab6_lastname.Rmd`
+- Another common case is data stored in the same Excel workbook across multiple sheets
 
-Change YAML title
+- For example, `table8_history_2004-2017.xlsx` containing state expenditures on higher ed grants from [NASSGAP](https://www.nassgapsurvey.com)
 
-```{r, eval=FALSE}
 ---
-title: "RLab 6: Combining Data"
+# Appending multiple Excel sheets
+
+```{r, eval=FALSE}
+library(readxl)
+library(plyr)
+```
+
+- First, store the name of every sheet
+
+```{r, eval=FALSE}
+nassgap_sheets <- excel_sheets("table8_history_2004-2017.xlsx")
+```
+
 ---
-```
+# Appending multiple Excel sheets
 
-Find the code where you defined today as 
-
-```{r, eval=FALSE}
-today <- '2020-09-22'
-```
-
-and update it to
+- Second, remove any names of sheets I don't want, such as the sheet containing the sum for all years, sheet 15.
 
 ```{r, eval=FALSE}
-today <- '2020-09-29'
+nassgap_sheets <- nassgap_sheets[1:14]
 ```
+
+---
+# Appending multiple Excel sheets
+
+- Third, use `lapply` to repeatedly run `read_excel` on each sheet.
+
+```{r, eval=FALSE}
+nassgap_sheets_all <- lapply(nassgap_sheets, function(x) read_excel("table8_history_2004-2017.xlsx", 
+            sheet = x,
+            range = "A2:F54",
+            col_names = c("state", 
+                          "need", 
+                          "mixed", 
+                          "merit", 
+                          "special", 
+                          "uncategorized")))
+```
+
+---
+# Appending multiple Excel sheets
+
+- Fourth and final step, use `rbind.fill` to unpack the list of datasets in `nassgap_sheets_all` into a single dataset
+
+```{r, eval=FALSE}
+state_grants_04_17 <- rbind.fill(nassgap_sheets_all)
+```
+
+---
+class: inverse, middle, center
+
+# Left joining data
 
 ---
 # Where to add code
 
-- We are about to add data to the `covid_ga` data from last week in order to make fair comparisons across counties
+- Now we're ready to work on `RLab6.1_lastname.Rmd`
 
-- Therefore, we will be adding code chunks that add these data *before* we start creating new variables and running any analyses
+- We are about to add data to the `covid_ga` data from last week in order to make comparisons across counties
 
-- Where is the correct place to start adding the code chunks in our `RLab6_lastname.Rmd` notebook?
-
---
-
-- Before/above the code chunk that created daily counts
+- Therefore, we need to add code chunks that add these data *before* we start making graphs
 
 ---
 # Left (and Right) Joins
 
 - A left join (aka merge) is used when we want to add variables from a new dataset (y) to our main dataset (x), matching across common units of analysis (key)
+
 - Keeps ALL of the observations in our main dataset
+
 - Observations in our new dataset that don't match with the main dataset aren't added
 
-![:scale 75%](labs_files/left_join.png)
+![:scale 60%](labs_files/left_join.png)
 
 ---
 # The Key to Joins/Merges
 
-- The `key` is the variable or set of variables that uniquely identify each observation/row that is shared across the datasets you want to join.
+- The **key** is the variable or set of variables that uniquely identifies each observation/row that is shared across the datasets you want to join.
 
 - If you can identify the unit of analysis in both datasets, you have identified the key to use for joins
 
@@ -244,8 +308,8 @@ today <- '2020-09-29'
 - If a single variable is the key and named the same across datasets
 
 ```{r, eval=FALSE}
-new_dataset <- name_of_x_dataset %>% 
-  left_join(name_of_y_dataset, 
+new_dataset <- name_of_left_dataset %>% 
+  left_join(name_of_right_dataset, 
             by = "name_of_key")
 ```
 
@@ -254,8 +318,8 @@ new_dataset <- name_of_x_dataset %>%
 -  If multiple variables of the same name are the key
 
 ```{r, eval=FALSE}
-new_dataset <- name_of_x_dataset %>% 
-  left_join(name_of_y_dataset, 
+new_dataset <- name_of_left_dataset %>% 
+  left_join(name_of_right_dataset, 
             by = c("name_of_key1", "name_of_key2", ...))
 ```
 
@@ -265,9 +329,9 @@ new_dataset <- name_of_x_dataset %>%
 - If one variable is the key and named differently across datasets
 
 ```{r, eval=FALSE}
-new_dataset <- name_of_x_dataset %>% 
-  left_join(name_of_y_dataset, 
-            by = c("key_in_x_data" = "key_in_y_data"))
+new_dataset <- name_of_left_dataset %>% 
+  left_join(name_of_right_dataset, 
+            by = c("key_in_left_data" = "key_in_right_data"))
 ```
 
 --
@@ -275,9 +339,9 @@ new_dataset <- name_of_x_dataset %>%
 - If multiple variables are the key and at least one is named differently
 
 ```{r, eval=FALSE}
-new_dataset <- name_of_x_dataset %>% 
-  left_join(name_of_y_dataset, 
-            by = c("key_in_x_data" = "key_in_y_data",
+new_dataset <- name_of_left_dataset %>% 
+  left_join(name_of_right_dataset, 
+            by = c("key_in_left_data" = "key_in_right_data",
                    "common_key", ...))
 ```
 
@@ -287,10 +351,10 @@ new_dataset <- name_of_x_dataset %>%
 - Suppose I want to join several datasets to a main dataset
 
 ```{r, eval=FALSE}
-new_dataset <- name_of_x_dataset %>% 
-  left_join(y1_dataset, by = "name_of_key") %>% 
-  left_join(y2_dataset, by = c("key_in_x" = "key_in_y2")) %>% 
-  left_join(y3_dataset, by = "name_of_key")
+new_dataset <- name_of_left_dataset %>% 
+  left_join(right1_dataset, by = "name_of_key") %>% 
+  left_join(right2_dataset, by = c("key_in_left" = "key_in_right2")) %>% 
+  left_join(right3_dataset, by = "name_of_key")
 ```
 
 ---
@@ -317,7 +381,7 @@ gap_pop_US <- gapminder %>%
 glimpse(gap_pop_US)
 ```
 
-- Note that there are only 12 observations, not 426 as in `gapminder97_07`
+- Note that there are only 12 observations in `gap_pop_US`, not 426 as in `gapminder97_07`
 
 ---
 # Left Join Example
@@ -354,7 +418,7 @@ summary(sum.gap_pop_97_07)
 ---
 # Left Join Practice
 
-- Download `ga_county_pop.csv`, add it to your project folder, and import into R
+> **Download `ga_county_pop.csv`, add it to your project folder, and import**
 
 ```{r, eval=FALSE}
 ga_county_pop <- 
@@ -377,7 +441,7 @@ glimpse(ga_county_pop)
 
 --
 
-- `county` (not ideal to match using names but it's what we got)
+- `county` (not ideal to match using text but it's what we got)
 
 ---
 # Variable Type Mismatch
@@ -386,51 +450,53 @@ glimpse(ga_county_pop)
 
 - `county` is stored as a factor in `covid_ga` and character in `ga_county_pop`
 
-- Convert `county` to factor in `ga_county_pop`
+> **Convert `county` to factor in `ga_county_pop`**
 
 ```{r, include=FALSE}
 ga_county_pop$county <- as.factor(ga_county_pop$county)
 ```
 
-- Now we are ready to join `ga_county_pop` to `covid_ga`. Give it a shot. Overwrite `covid_ga` instead of creating a new dataset.
-
 ---
 # Left Join Practice
+
+> **Now we are ready to join `ga_county_pop` to `covid_ga`. Give it a shot. Overwrite `covid_ga` instead of creating a new dataset.**
 
 ```{r, include=FALSE}
 covid_ga <- covid_ga %>% 
   left_join(ga_county_pop, by = 'county')
 ```
 
-- Take a `glimpse` of our updated dataset
+> **Use `glimpse` on our updated dataset**
 
 ```{r}
 glimpse(covid_ga)
 ```
-
-
 
 ---
 # Recap
 
 - In one chunk of code, we had R merge each county's population to all of the rows for that county in our COVID data
 
-- We are now ready to compute normalized rates and visualize fair comparisons
+- We are now ready to compute normalized rates and visualize comparisons
 
-- We will pick this up next week along with generating graphs for an audience
+- We will continue this project in the next lab
 
-- Upload your notebook to eLC
+- Upload your Rmd to eLC
+
+---
+# Other types of joins
+
+- Inner join keeps only observations where the key matches
+
+![:scale 65%](labs_files/inner_join.png)
+
+- Replace `left_join` with `inner_join` in any of the examples
 
 ---
 # Other types of joins
 
-![:scale 75%](labs_files/inner_join.png)
-
-- Just replace `left_join` with `inner_join` in any of the examples
-
----
-# Other types of joins
+- Full join keeps all observations in both datasets regardless of match
 
 ![](labs_files/full_join.png)
 
-- Just replace `left_join` with `full_join` in any of the examples
+- Replace `left_join` with `full_join` in any of the examples

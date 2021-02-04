@@ -17,13 +17,15 @@ class: center, middle, inverse, title-slide
 ## RLab 5: Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: January 31, 2021
+### Last updated: February 02, 2021
 
 ---
 
 # Objectives
 
 - Create graphs that are appropriate based on data and intended message
+
+- Make some basic improvements to default graphs
 
 
 
@@ -82,7 +84,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 982,177
+## Rows: 988,671
 ## Columns: 6
 ## $ date   &lt;chr&gt; "2020-01-21", "2020-01-22", "2020-01-23", "2020-01-24", "2020-…
 ## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "O…
@@ -103,7 +105,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 50,009
+## Rows: 50,329
 ## Columns: 6
 ## $ date   &lt;chr&gt; "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
@@ -127,7 +129,7 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```
-## Rows: 50,009
+## Rows: 50,329
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 2…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
@@ -215,7 +217,7 @@ yesterday &lt;- '2021-01-29'
 
 - Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
 
-&gt; **Create a new dataset named `covid_ga_5` that contains only the above couties.**
+&gt; **Create a new dataset named `covid_ga_5` that contains only the above counties.**
 
 
 
@@ -278,12 +280,12 @@ covid_ga_5 %&gt;%
 &gt; **Generate a line graph over the time span in the data for our 5 counties. Give each county its own line.**
 
 ---
-# Viz 6
+# Viz 7
 
 &lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Viz 7
+# Viz 8
 
 &lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -303,6 +305,106 @@ covid_ga_5 %&gt;%
 - We need more data to add to these data. We'll learn how to combine datasets in the next lab.
 
 ---
+class: inverse, center, middle
+
+# Let's cover some ways to make basic improvements to our graphs.
+
+---
+# Basic improvements
+
+- Titles and axes labels
+- Themes
+- Text size
+
+---
+# Saving a graph as an object
+
+
+```r
+*viz1 &lt;- covid_ga %&gt;%
+  filter(date == yesterday) %&gt;% 
+  ggplot(aes(x = cases)) +
+  geom_histogram()
+```
+
+- We can save a graph just like we would a dataset to use for later
+
+---
+# Titles and axes labels
+
+- Titles and all axis labels are controlled by `labs`
+
+
+```r
+viz1 +
+* labs(title = 'Distribution of COVID cases as of yesterday',
+*      x = '',
+*      y = 'Number of cases')
+```
+
+---
+# Titles and axes labels
+
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Themes
+
+- R comes with numerous default themes to change the look of graphs
+
+
+```r
+theme_classic()
+theme_minimal()
+theme_void()
+theme_bw()
+# and more
+```
+
+---
+# Themes
+
+
+```r
+viz1 +
+  labs(title = 'Distribution of COVID cases as of yesterday',
+       x = '',
+       y = 'Number of cases') +
+* theme_minimal()
+```
+
+---
+# Themes
+
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Text size
+
+- After using `theme_whatever`, we can control any of the "ink" via `theme()`
+
+
+```r
+viz1 +
+  labs(title = 'Distribution of COVID cases as of yesterday',
+       x = '',
+       y = 'Number of cases') +
+  theme_minimal() +
+* theme(axis.text=element_text(size=16),
+*       title = element_text(size=16))
+```
+
+---
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Skill Check
+
+&gt; **Use labels, themes, and text size to improve viz 7**
+
+
+
+---
 # Upload lab
 
 - Upload your Rmd to eLC.
@@ -313,7 +415,7 @@ covid_ga_5 %&gt;%
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "countIncrementalSlides": false,
-"highlightlines": true
+"highlightLines": true
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -379,7 +481,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

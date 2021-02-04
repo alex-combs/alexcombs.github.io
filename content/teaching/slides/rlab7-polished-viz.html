@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-09-23" />
+    <script src="rlab7-polished-viz_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="rlab7-polished-viz_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="rlab7-polished-viz_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,109 +17,112 @@ class: center, middle, inverse, title-slide
 ## RLab 7: Professional Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### September 23, 2020
+### Last updated: February 02, 2021
 
 ---
 
 # Objectives
 
-By the end of this lab, you will have learned how to...
-
 - Fancify graphs to share with an audience  
 
 ---
-# Start a new project
-- Using the file directory on your computer
-  - Go to the parent folder that contains your RLab folders
-  - Create a new folder named RLab7
+# Setup
+
+&gt; **Either start a new project, "rlab7", or continue using your "rlab5/6" project.**
   
-- In RStudio start a new project that links to the existing folder RLab7
-  - Copy and paste your `RLab6_lastname` notebook to your RLab7 folder
-  - Rename the copy of your RLab6 notebook `RLab7_lastname`
+&gt; **If starting a new project again, copy and paste your "rlab6_lastname" Rmd to "rlab7". Rename Rmd "rlab7_lastname"**
 
-
-  
----
-# Start New Notebook
-
-- Change YAML title
+&gt; **Change YAML to:**
 
 
 ```r
 ---
-title: "RLab 7: Polished Visualizations"
+title: "RLab7: Professional Viz"
+author: "Your Name"
+output:
+  html_document:
+    df_print: paged
 ---
 ```
 
-- Change `today` to most recent date with data
+---
+# Setup
+
+&gt; **Should already have the following packages ready to load:**
+
+
+```r
+library(data.table)
+library(tidyverse)
+library(arsenal)
+library(lubridate)
+```
+
+
+  
+&gt; **Find `yesterday` and update it accordingly**
 
 ---
 # Rerun Code
 
-- Run the code to up to the point where we get the `covid_ga` dataset that includes county population
-
-- Also run code that creates `day_cases` and `day_deaths`
+&gt; **Run your code up to the point where you have the `covid_ga` dataset that now includes county population.**
 
 ---
 # Adjusting for Population
 
-- We realized that it is not right to compare counts of COVID cases and/or deaths across counties of different size populations
+- We realized that it is not informative to compare counts of COVID cases and/or deaths across counties of different size populations
 
 --
 
-- We need to compute counts *per* capita or some standard number of people, such as 100,000
+- We need to compute counts **per capita** or some standard number of people, such as 100,000
 
-- Let's create four new variables, `cases_rate`, `deaths_rate`, `day_cases_rate`, and `day_deaths_rate`, using per 100,000 people.
+- And create two **normalized** variables, `cases_rate`, `deaths_rate`.
 
 ---
 # Adjusting for Population
 
-- Before trying in R, think through and describe the steps we need to take to obtain cases or deaths per 100,000 given our data in `covid_ga`.
+- Before trying in R, think through and describe to yourself the steps needed to obtain cases and deaths per 100,000 given our data in `covid_ga`.
 
 --
 
-- We need to create a new variable for population in 100,000s by dividing population by 100,000
+- We need to create a new variable for population in 100,000s. How? 
 
 --
 
-- Then, create the rate variables by dividing cases and deaths by this new measure of population in 100,000s
+By dividing population by 100,000. Then, we need to create cases and deaths per 100,000. How?
+
+--
+
+By dividing cases and deaths by this new measure of population in 100,000s
 
 ---
 # Adjusting for Population
 
-- Now that we know the plan, try executing it in R, overwriting the `covid_ga` dataset
+&gt; **Now that we know the plan, try executing it in R, overwriting the `covid_ga` dataset**
+
+--
 
 
 ```r
-covid_ga &lt;- ___ %&gt;% 
-  mutate(pop100thou = ___) %&gt;% 
-  mutate(cases_rate = ___, 
-         deaths_rate = ___,
-         day_cases_rate = ___, 
-         day_deaths_rate = ___)
+covid_ga &lt;- covid_ga %&gt;% 
+  mutate(pop100thou = population/100000) %&gt;% 
+  mutate(cases_rate = cases/pop100thou, 
+         deaths_rate = deaths/pop100thou)
 ```
-
-
 
 ---
 # Selected Counties
 
-- Now we are ready to recreate the dataset that includes only the five counties we selected from before, which will now have all the changes we made to `covid_ga`
+- Now rerun the code that created `covid_ga_5`
 
 
-```r
-ga_counties &lt;- c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')
-
-covid_ga_five &lt;- covid_ga %&gt;% 
-  filter(county %in% ga_counties)
-```
 
 ---
 # Common Viz Adjustments
 
 - Non-data ink
-  - Labels (title and axes)
-  - Themes
+  - ~~Labels (title and axes)~~
+  - ~~Themes~~
   - Axes &amp; scales (tick marks, commas, dollars, log scale)
 
 --
@@ -130,12 +135,12 @@ covid_ga_five &lt;- covid_ga %&gt;%
 ---
 # Viz 1
 
-- Let's improve this graph by adding a title and labels as well as change the theme to one of R's default themes
+&gt; **Improve Viz1 by adding a title and labels as well as change the theme to one of R's default themes**
 
 
 ```r
 covid_ga %&gt;% 
-  filter(date == today) %&gt;% 
+  filter(date == yesterday) %&gt;% 
   ggplot(aes(x = cases)) +
   geom_histogram()
 ```
@@ -143,94 +148,125 @@ covid_ga %&gt;%
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 1
+# Viz 1 - Labels and Themes
 
 
 ```r
 covid_ga %&gt;% 
-  filter(date == today) %&gt;% 
+  filter(date == yesterday) %&gt;% 
   ggplot(aes(x = cases)) +
   geom_histogram() +
-  labs(title = 'Total County Cases Today',
+  labs(title = 'Total COVID Cases as of Yesterday',
        x = 'Total Cases',
        y = 'Counties') +
   theme_minimal()
 ```
-
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 1
-
-- Let's fix the skew using log scale
-
-
-```r
-covid_ga %&gt;% 
-  filter(date == today) %&gt;% 
-  ggplot(aes(x = cases)) +
-  geom_histogram() +
-  labs(title = 'Total County Cases Today',
-       x = 'Total Cases',
-       y = 'Counties') +
-  scale_x_log10() +
-  theme_minimal()
-```
+# Viz 1 - Labels and Themes
 
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 1
+# Viz 1 - Log scale
 
-- Let's change the color and outline of the bins of the histogram
+- The right skew makes bunches most counties within an interval that is difficult to distinguish.
+
+&gt; **Correct the skew by converting the x axis to log scale**
 
 
 ```r
 covid_ga %&gt;% 
-  filter(date == today) %&gt;% 
+  filter(date == yesterday) %&gt;% 
   ggplot(aes(x = cases)) +
-  geom_histogram(fill = 'steelblue', color = 'white') +
-  labs(title = 'Total County Cases Today',
+  geom_histogram() +
+  labs(title = 'Total County Cases yesterday',
+       x = 'Total Cases',
+       y = 'Counties') +
+* scale_x_log10() +
+  theme_minimal()
+```
+
+---
+# Viz 1 - Log scale
+
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+
+---
+# Viz 1 - Fill and outline
+
+&gt; **Change the `fill` color and outline `color` of the histogram
+
+
+```r
+covid_ga %&gt;% 
+  filter(date == yesterday) %&gt;% 
+  ggplot(aes(x = cases)) +
+* geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'Total County Cases yesterday',
        x = 'Total Cases',
        y = 'Counties') +
   scale_x_log10() +
   theme_minimal()
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+---
+# Viz 1 - Fill and outline
+
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 1: Adding Comma Separator
+# Viz 1 - Adding Comma Separator
+
+&gt; **Install the `scales` function in your console. Use the code below to display x axis in comma format.**
 
 
 ```r
-library(scales)
+install.packages('scales')
 ```
 
 
 ```r
 covid_ga %&gt;% 
-  filter(date == today) %&gt;% 
+  filter(date == yesterday) %&gt;% 
   ggplot(aes(x = cases)) +
   geom_histogram(fill = 'steelblue', color = 'white') +
-  labs(title = 'Total County Cases Today',
+  labs(title = 'Total County Cases yesterday',
        x = 'Total Cases',
        y = 'Counties') +
-  scale_x_log10(labels = comma) +
+* scale_x_log10(labels = scales::label_comma()) +
   theme_minimal()
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+---
+# Viz 1 - Adding Comma Separator
+
+
+```
+## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.
+```
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 2
 
-- On your own, make the same adjustments for the histogram of total county deaths
+&gt; **On your own, make similar adjustments to the histogram of total county deaths**
 
 ---
 # Viz 2
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 3
@@ -239,256 +275,234 @@ covid_ga %&gt;%
 
 ```r
 covid_ga %&gt;% 
-  filter(date == today) %&gt;%
+  filter(date == yesterday) %&gt;%
   ggplot(aes(x = deaths)) +
   geom_boxplot()
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
-- Common issue with box plots is that one axis doesn't mean anything.
+- Y axis isn't easily interpretable.
 - In this case, we should remove the tick marks, line, and text for the y axis
 ]
 
 ---
 # Viz 3: Remove axis elements
 
+&gt; **Add below code to remove parts of graph**
+
 
 ```r
 covid_ga %&gt;% 
-  filter(date == today) %&gt;%
+  filter(date == yesterday) %&gt;%
   ggplot(aes(x = deaths)) +
   geom_boxplot() +
-  theme(axis.ticks.y = element_blank(),
-        axis.line.y = element_blank(),
-        axis.text.y = element_blank())
+* theme(axis.ticks.y = element_blank(),
+*       axis.line.y = element_blank(),
+*       axis.text.y = element_blank())
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
-
 ---
-# Viz 3: Change background and color
-
-
-```r
-covid_ga %&gt;% 
-  filter(date == today) %&gt;%
-  ggplot(aes(x = deaths)) +
-  geom_boxplot(fill = 'steelblue') +
-  theme_classic() +
-  theme(axis.ticks.y = element_blank(),
-        axis.line.y = element_blank(),
-        axis.text.y = element_blank())
-```
-
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
-
----
-# Viz 3: Title, subtitle, and axis label
-
-
-```r
-covid_ga %&gt;% 
-  filter(date == today) %&gt;%
-  ggplot(aes(x = deaths)) +
-  geom_boxplot(fill = 'steelblue') +
-  labs(title = 'Total County COVID Deaths as of Today',
-       subtitle = 'October 6, 2020', x = 'Total Deaths') +
-  theme_classic() +
-  theme(axis.ticks.y = element_blank(),
-        axis.line.y = element_blank(),
-        axis.text.y = element_blank())
-```
-
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
-
----
-# Viz 4
-
-- Make the same adjustments to this box plot
-
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
-
----
-# Viz 4
-
-
-```r
-covid_ga %&gt;% 
-  filter(county == 'Clarke') %&gt;%
-  ggplot(aes(x = cases)) +
-  geom_boxplot(fill = 'steelblue') +
-  labs(title = 'Daily COVID Cases for Clarke County',
-       subtitle = 'January 21 - September 30', x = 'Cases') +
-  theme_classic() +
-  theme(axis.ticks.y = element_blank(),
-        axis.line.y = element_blank(),
-        axis.text.y = element_blank())
-```
-
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
-
----
-# Viz 5
-
-- Generate a bar graph for cases *per 100,000* during the most recent date across our 5 counties
-
----
-# Viz 5
-
-
-```r
-covid_ga_five %&gt;% 
-  filter(date == today) %&gt;% 
-  ggplot(aes(x = county, y = cases_rate)) +
-  geom_col()
-```
+# Viz 3: Remove axis elements
 
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 5: Reorder bars
+# Viz 3: Change theme and fill color
 
-- Let's reorder to descending
-
-
-```r
-covid_ga_five %&gt;% 
-  filter(date == today) %&gt;% 
-  ggplot(aes(x = reorder(county, -cases_rate), y = cases_rate)) +
-  geom_col()
-```
+&gt; **On your own, change the theme and fill color of the box plot. Add a title, subtitle that specifies the date, and improve the axis label.**
 
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 5: Other Adjustments
+# Knit
 
-
-```r
-covid_ga_five %&gt;% 
-  filter(date == today) %&gt;% 
-  ggplot(aes(x = reorder(county, -cases_rate), y = cases_rate)) +
-  geom_col(fill = 'red', color = 'white') +
-  scale_y_continuous(labels = comma) +
-  labs(title = 'COVID Cases Per 100,000 Today',
-       x = 'County',
-       y = 'Cases per 100,000') +
-  theme_minimal()
-```
-
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+- Let's knit to see what how the export looks
 
 ---
-# Viz 6
+# Viz 3: Change figure size
 
-- First, let's change this graph to use cases per 100,000 people
+- Figure size is controlled via code chunk options
+
+&gt; **Add the following code chunks and knit again.**
 
 
 ```r
-covid_ga_five %&gt;% 
-  ggplot(aes(x = date, y = cases_rate, color = county)) +
-  geom_line()
+{r, echo=FALSE, fig.width=5, fig.height=2}
 ```
+
 
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 6: Change line type and size
+# Viz 4
 
+&gt; **Update the bar graph comparing the our 5 chosen counties using cases per 100,000**
 
-```r
-covid_ga_five %&gt;% 
-  ggplot(aes(x = date, y = cases_rate, color = county)) +
-  geom_line(linetype = 'dashed', size = 4)
-```
+--
 
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 6: Readjust
+# Viz 4: Reorder bars
 
-- Those changes aren't improvements, let's stick with the defaults
+- Generally preferable to have bars in ascending or descending order
 
-- Let's change the title of the legend and other labels as well as the theme
-
-- Let's save this graph as an object
+&gt; **Add the following code**
 
 
 ```r
-covid_ga_linegraph &lt;- covid_ga_five %&gt;% 
-  ggplot(aes(x = date, y = cases_rate, color = county)) +
-  geom_line() +
-  labs(color = 'County', x = '',
-       y = 'Cases per 100,000 population') +
-  theme_minimal()
+covid_ga_5 %&gt;% 
+  filter(date == yesterday) %&gt;% 
+* ggplot(aes(x = reorder(county, -cases_rate), y = cases_rate)) +
+  geom_col()
 ```
 
 ---
-# Calling our saved object
-
-
-```r
-covid_ga_linegraph
-```
+# Viz 4: Reorder bars
 
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 
-- We now have a base graph we like that we can tweak
-
 ---
-# Improving Dates Along Axis
+# Viz 4: Other Adjustments
 
-
-```r
-covid_ga_linegraph +
-  scale_x_date(date_breaks = '1 month', 
-               labels = date_format('%b'))
-```
+&gt; **Use the adjustments we've learned thus far to improve this graph**
 
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 
 ---
-# Adding a Reference Line
+# Viz 7
+
+&gt; **Update our first line graph to use cases per 100,000 people**
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+---
+# Viz 7: Change line type and size
+
+&gt; **Add following code to change line type and line size**
+
+
+```r
+covid_ga_5 %&gt;% 
+  ggplot(aes(x = date, y = cases_rate, color = county)) +
+* geom_line(linetype = 'dashed', size = 2) +
+  labs(title = 'Total COVID Cases Among Selected Georgia Counties',
+       x = '',
+       y = 'Cases per 100,000',
+       color = 'County') +
+  theme_minimal() +
+  theme(axis.text=element_text(size=16),
+        title = element_text(size=16))
+```
+
+---
+# Viz 7: Change line type and size
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+# Viz 7: Readjust &amp; save as object
+
+- I don't think those were improvements. 
+
+&gt; **Return line types and size to default. Also make the text smaller.**
+
+&gt; **Save this graph as an object**
+
+
+```r
+*covid_ga_linegraph &lt;- covid_ga_5 %&gt;%
+  ggplot(aes(x = date, y = cases_rate, color = county)) +
+  geom_line() +
+  labs(title = 'Total COVID Cases Among Selected Georgia Counties',
+       x = '',
+       y = 'Cases per 100,000',
+       color = 'County') +
+  theme_minimal() +
+  theme(axis.text=element_text(size=12),
+        title = element_text(size=12))
+```
+
+---
+# Viz7: Printing our saved graph
+
+- Once we save the graph as an object, we can tell R to print simply by typing its name.
+
+
+```r
+covid_ga_linegraph #will print graph
+```
+
+- We now have a base graph we like that we can tweak
+
+---
+# Exporting a graph as a image file
+
+- Anytime we make a graph, R stores it in memory in case we want to export it.
+
+- Following code will save our last graph
+
+
+```r
+ggsave("covid_ga_trends.png", width = 7, height = 5, 
+       units = "in", dpi = "retina")
+```
+
+- Can export as .jpeg, .tiff, .eps, .pdf, and others
+
+---
+# Improving Dates Along Axis
+
+- Suppose we want the x axis to display the full name of every month without the year
+
+&gt; **In a new code chunk, copy and paste below code. Note that we are adding on to the saved graph**
 
 
 ```r
 covid_ga_linegraph +
   scale_x_date(date_breaks = '1 month', 
-               labels = date_format('%b')) +
-  geom_vline(xintercept = date('2020-08-15'), 
-             color = 'black', 
-             linetype = 'dashed')
+               labels = scales::date_format('%b'))
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+---
+# Improving Dates Along Axis
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
 
 ---
-# Viz 7
+# Adding Reference Lines
 
-- Make the same adjustments to the line graph displaying deaths per 100,000
+- Suppose we want to provide a visual marker for the beginning of UGA's Fall and Spring semesters.
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
-
----
-# Viz 7
+&gt; **Add following code**
 
 
 ```r
-covid_ga_five %&gt;% 
-  ggplot(aes(x = date, y = deaths_rate, color = county)) +
-  geom_line() +
-  labs(color = 'County', x = '',
-       y = 'Deaths per 100,000 population') +
-  theme_minimal() +
+covid_ga_linegraph +
   scale_x_date(date_breaks = '1 month', 
-               labels = date_format('%b')) +
-  geom_vline(xintercept = date('2020-08-15'), 
-             color = 'black', 
-             linetype = 'dashed')
+               labels = scales::date_format('%b')) +
+* geom_vline(xintercept = date('2020-08-15'),
+*            color = 'black',
+*            linetype = 'dashed') +
+* geom_vline(xintercept = date('2021-01-11'),
+*            color = 'black',
+*            linetype = 'dashed')
 ```
+
+---
+# Adding Reference Lines
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+
+---
+# Viz 8
+
+&gt; **Make similar adjustments to the line graph displaying deaths per 100,000**
+
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
 
 ---
 class: inverse, middle, center
@@ -501,7 +515,7 @@ class: inverse, middle, center
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "countIncrementalSlides": false,
-"highlightlines": true
+"highlightLines": true
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -567,7 +581,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

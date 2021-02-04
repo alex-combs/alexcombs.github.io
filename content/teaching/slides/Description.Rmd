@@ -245,7 +245,7 @@ kable(x, format = 'html')
 
 - Mean is sensitive to extreme values
 
-- Median and mode are not sensitive to extreme values
+- Median is not sensitive to extreme values
 
 - Median is better to use when a distribution is skewed
 
@@ -454,24 +454,27 @@ IQR(gapminder$gdpPercap)
 ---
 # Range
 
+.pull-left[
 - Answer to what is the greatest extent this variable changes?
 
 - Or what are the possible or plausible values of this variable?
 
 - Or how different are the most different values?
+]
 
---
-
+.pull-right[
 ```{r}
 range(x$variable)
 range(xextreme$variable)
 range(ncbirths$weeks)
+range(gapminder$gdpPercap)
 ```
+]
 
 ---
 class: inverse, middle, center
 
-# When deciding between mean and median, standard deviation and IQR, consider whether extreme values are distractions or an important part of the story
+# When deciding between mean and median, standard deviation and IQR, consider whether extreme values are distractions or an important part of the story. And, don't forget about effects of measurement validity and reliability.
 
 ---
 class: inverse, middle, center
@@ -602,8 +605,7 @@ ggplot(ncbirths, aes(x = premie)) +
 - Tabulates  count or proportion for each level of a categorical variable
 
 ```{r}
-(premie.table <- table(ncbirths$premie)) %>% 
-  kable(col.names = c('Term', 'Count'))
+(premie.table <- table(ncbirths$premie)) %>% kable(col.names = c('Term', 'Count'))
 ```
 
 ```{r}
@@ -664,7 +666,7 @@ prop.table(mytable, 2) %>%
 
 --
 
-- **Be careful using contingency tables to make conclusions. Do not generalize from a sample. Consider the numerator and denominator.**
+- **Be careful using contingency tables to make conclusions. Do not generalize from a sample without inferential tests. Consider the measurement and scope of the numerator and denominator.**
 
 ---
 class: inverse, center, middle
@@ -773,10 +775,64 @@ fatal_shot_2019 %>%
 
 ---
 # Fatal police encounters
-
-```{r}
+```{r, results='hide'}
 fatal.table <- table(fatal_shot_2019$race_imputed,
                       fatal_shot_2019$cause)
 kable(fatal.table)
 ```
+
+.pull-left[
+```{r, echo=FALSE}
+kable(fatal.table)
+```
+]
+
+.pull-right[
+- Note limitations of these data:
+  - Only includes gunshots
+  - No context of encounter
+  - Measurement issues
+  - No perspective of non-fatal encounters
+  
+- Could already start manipulating messages by ignoring these
+]
+
+---
+# Using different denominators
+
+.pull-left[
+```{r, echo=FALSE}
+kable(fatal.table)
+```
+]
+.pull-right[
+- Total gunshots = 1,346
+- Group 1: Your goal is to highlight bias against people of color. ([Hint](https://www.census.gov/quickfacts/fact/table/US/PST045219))
+- Group 2: Your goal is to downplay severity of police shootings in general ([Hint](https://www.census.gov/quickfacts/fact/table/US/PST045219))
+- Group 3: Your goal is to downplay bias against people of color. Two ways to do this. ([Hint for one](https://ucr.fbi.gov/crime-in-the-u.s/2017/crime-in-the-u.s.-2017/tables/table-43))
+]
+
+---
+# Data from 2019 Census and FBI UCR
+
+**US Pop = 328,239,523**
+
+White, not Hispanic/Latino 196,789,401 (60%)
+
+Black, not Hispanic/Latino: 40,596,040 (12%)
+
+Hispanic/Latino (any race): 60,481,746 (18%)
+
+**Total Arrests: 8,162,849**
+
+White, not Hispanic/Latino: 4,669,696 (57%)
+
+Black, not Hispanic/Latino: 2,155,046 (26%)
+
+Hispanic/Latino (any race): 1,190,671 (15%)
+
+Total Violent Crime: 404,236
+White, not Hispanic/Latino: 196,370 (49%)
+Black, not Hispanic/Latino: 147,192 (36%)
+Hispanic/Latino: 79,078 (20%)
 

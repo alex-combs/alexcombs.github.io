@@ -11,11 +11,13 @@ output:
       beforeInit: "macros.js"
       highlightStyle: github
       countIncrementalSlides: false
-      highlightlines: true
+      highlightLines: true
 ---
 # Objectives
 
 - Create graphs that are appropriate based on data and intended message
+
+- Make some basic improvements to default graphs
 
 ```{r, include=FALSE}
 library(knitr)
@@ -202,7 +204,7 @@ covid_ga %>%
 
 - Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
 
-> **Create a new dataset named `covid_ga_5` that contains only the above couties.**
+> **Create a new dataset named `covid_ga_5` that contains only the above counties.**
 
 ```{r, include=FALSE}
 covid_ga_5 <- covid_ga %>% 
@@ -281,7 +283,7 @@ covid_ga_5 %>%
 > **Generate a line graph over the time span in the data for our 5 counties. Give each county its own line.**
 
 ---
-# Viz 6
+# Viz 7
 
 ```{r, echo=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga_5 %>% 
@@ -290,7 +292,7 @@ covid_ga_5 %>%
 ```
 
 ---
-# Viz 7
+# Viz 8
 
 ```{r, echo=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga_5 %>% 
@@ -312,6 +314,131 @@ covid_ga_5 %>%
 - Therefore, we need to compute rates; cases and/or deaths *per* some standard number of people.
 
 - We need more data to add to these data. We'll learn how to combine datasets in the next lab.
+
+---
+class: inverse, center, middle
+
+# Let's cover some ways to make basic improvements to our graphs.
+
+---
+# Basic improvements
+
+- Titles and axes labels
+- Themes
+- Text size
+
+---
+# Saving a graph as an object
+
+```{r, results='hide', message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
+viz1 <- covid_ga %>% #<<
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = cases)) +
+  geom_histogram()
+```
+
+- We can save a graph just like we would a dataset to use for later
+
+---
+# Titles and axes labels
+
+- Titles and all axis labels are controlled by `labs`
+
+```{r, eval=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
+viz1 +
+  labs(title = 'Distribution of COVID cases as of yesterday', #<<
+       x = '',#<<
+       y = 'Number of cases')#<<
+```
+
+---
+# Titles and axes labels
+
+```{r, echo=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
+viz1 +
+  labs(title = 'Distribution of COVID cases as of yesterday',
+       x = '',
+       y = 'Number of cases')
+```
+
+---
+# Themes
+
+- R comes with numerous default themes to change the look of graphs
+
+```{r, eval=FALSE}
+theme_classic()
+theme_minimal()
+theme_void()
+theme_bw()
+# and more
+```
+
+---
+# Themes
+
+```{r, eval=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
+viz1 +
+  labs(title = 'Distribution of COVID cases as of yesterday',
+       x = '',
+       y = 'Number of cases') +
+  theme_minimal() #<<
+```
+
+---
+# Themes
+
+```{r, echo=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
+viz1 +
+  labs(title = 'Distribution of COVID cases as of yesterday',
+       x = '',
+       y = 'Number of cases') +
+  theme_minimal()
+```
+
+---
+# Text size
+
+- After using `theme_whatever`, we can control any of the "ink" via `theme()`
+
+```{r, eval=FALSE}
+viz1 +
+  labs(title = 'Distribution of COVID cases as of yesterday',
+       x = '',
+       y = 'Number of cases') +
+  theme_minimal() +
+  theme(axis.text=element_text(size=16), #<<
+        title = element_text(size=16)) #<<
+```
+
+---
+```{r, echo=FALSE, message=FALSE, fig.width=9, fig.height=7, fig.align='center'}
+viz1 +
+  labs(title = 'Distribution of COVID cases as of yesterday',
+       x = '',
+       y = 'Number of cases') +
+  theme_minimal() +
+  theme(axis.text=element_text(size=16),
+        title = element_text(size=16))
+```
+
+---
+# Skill Check
+
+> **Use labels, themes, and text size to improve viz 7**
+
+```{r, include=FALSE, fig.width=9, fig.height=7, fig.align='center'}
+covid_ga_5 %>% 
+  ggplot(aes(x = date, y = cases, color = county)) +
+  geom_line() +
+  labs(title = 'Total COVID Cases Among Selected Georgia Counties',
+       x = '',
+       y = 'Case Count',
+       color = 'County') +
+  theme_minimal() +
+  theme(axis.text=element_text(size=16),
+        title = element_text(size=16))
+```
 
 ---
 # Upload lab
