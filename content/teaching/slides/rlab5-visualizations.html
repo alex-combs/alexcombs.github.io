@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 5: Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: February 02, 2021
+### Last updated: February 05, 2021
 
 ---
 
@@ -61,7 +61,14 @@ output:
 ```r
 library(data.table)
 library(tidyverse)
-library(arsenal)
+```
+
+```
+## Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame'
+## when loading 'dplyr'
+```
+
+```r
 library(lubridate)
 ```
 
@@ -84,7 +91,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 988,671
+## Rows: 998,409
 ## Columns: 6
 ## $ date   &lt;chr&gt; "2020-01-21", "2020-01-22", "2020-01-23", "2020-01-24", "2020-…
 ## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "O…
@@ -105,7 +112,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 50,329
+## Rows: 50,809
 ## Columns: 6
 ## $ date   &lt;chr&gt; "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
@@ -129,7 +136,7 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```
-## Rows: 50,329
+## Rows: 50,809
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 2…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
@@ -312,12 +319,16 @@ class: inverse, center, middle
 ---
 # Basic improvements
 
-- Titles and axes labels
+- Titles and axis labels
 - Themes
 - Text size
 
 ---
 # Saving a graph as an object
+
+- We can save a graph just like we would a dataset to use for later
+
+&gt; **Even though you've already created `viz1`, copy, paste, and run below code to save the basic version of `viz1`.**
 
 
 ```r
@@ -327,12 +338,12 @@ class: inverse, center, middle
   geom_histogram()
 ```
 
-- We can save a graph just like we would a dataset to use for later
-
 ---
-# Titles and axes labels
+# Titles and axis labels
 
 - Titles and all axis labels are controlled by `labs`
+
+&gt; **In a new code chunk, add the labels below to your saved `viz1`. Run this code to see what it did.**
 
 
 ```r
@@ -364,6 +375,8 @@ theme_bw()
 ---
 # Themes
 
+&gt; **Add new line below to your current code and re-run to see what it did.**
+
 
 ```r
 viz1 +
@@ -382,6 +395,8 @@ viz1 +
 # Text size
 
 - After using `theme_whatever`, we can control any of the "ink" via `theme()`
+
+&gt; **Add new lines below to your current code and re-run to see what it did**
 
 
 ```r

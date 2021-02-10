@@ -53,7 +53,6 @@ output:
 ```{r, message=FALSE}
 library(data.table)
 library(tidyverse)
-library(arsenal)
 library(lubridate)
 ```
 
@@ -323,12 +322,16 @@ class: inverse, center, middle
 ---
 # Basic improvements
 
-- Titles and axes labels
+- Titles and axis labels
 - Themes
 - Text size
 
 ---
 # Saving a graph as an object
+
+- We can save a graph just like we would a dataset to use for later
+
+> **Even though you've already created `viz1`, copy, paste, and run below code to save the basic version of `viz1`.**
 
 ```{r, results='hide', message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 viz1 <- covid_ga %>% #<<
@@ -337,12 +340,12 @@ viz1 <- covid_ga %>% #<<
   geom_histogram()
 ```
 
-- We can save a graph just like we would a dataset to use for later
-
 ---
-# Titles and axes labels
+# Titles and axis labels
 
 - Titles and all axis labels are controlled by `labs`
+
+> **In a new code chunk, add the labels below to your saved `viz1`. Run this code to see what it did.**
 
 ```{r, eval=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 viz1 +
@@ -377,6 +380,8 @@ theme_bw()
 ---
 # Themes
 
+> **Add new line below to your current code and re-run to see what it did.**
+
 ```{r, eval=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 viz1 +
   labs(title = 'Distribution of COVID cases as of yesterday',
@@ -400,6 +405,8 @@ viz1 +
 # Text size
 
 - After using `theme_whatever`, we can control any of the "ink" via `theme()`
+
+> **Add new lines below to your current code and re-run to see what it did**
 
 ```{r, eval=FALSE}
 viz1 +
