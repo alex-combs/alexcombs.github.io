@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Data Visualization
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: January 31, 2021
+### Last updated: February 11, 2021
 
 ---
 
@@ -25,12 +25,12 @@ class: center, middle, inverse, title-slide
 
 - Principles of good and bad visualization
 
-- Qualities of human perception
+- Complementing human perception
 
 ---
 # Exploratory vs. explanatory
 
-- Like most applications in statistics, visualizations can either explore or explain
+- Like most applications within statistics, visualizations can either explore or explain
 
 .center[
 ![](lectures_files/twogoals.png)
@@ -41,14 +41,37 @@ class: center, middle, inverse, title-slide
 
 
 
-.center[
+.pull-left[
 ![](Visualizations_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
 ]
 
+.pull-right[
+
+```r
+ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+]
 ---
 # An explanatory graph
-.center[
-![](Visualizations_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+.pull-left[
+![](Visualizations_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+]
+.pull-right[
+
+```r
+ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(se = FALSE, linetype = "dashed", color = "gray", span = 1) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(title = "Life Expectancy and Wealth in the Americas",
+       subtitle = "2007",
+       y = "Life Expectancy",
+       x = "GDP Per Capita",
+       caption = "Source: Gapminder Dataset") +
+  theme_classic()
+```
 ]
 
 ---
@@ -62,32 +85,32 @@ class: center, middle, inverse, title-slide
 ---
 class: inverse, middle, center
 
-# Keep in mind while there are general guidelines to good visualization, there remains some subjectivity.
+# While there are general guidelines to good visualization, much is still subjective.
 
 ---
 # Qualities of good viz
 
-1. Properly chosen format and design
+- **Properly chosen format**
 
-2. Use words, numbers, and drawing together
+- Use words, numbers, and drawing together
 
-3. Display an accessible complexity of detail
+- Display an accessible complexity of detail
 
-4. Avoid content-free decoration--chart junk
+- Avoid content-free decoration--chart junk
 
-5. Maximize data-to-ink ratio
+- Maximize data-to-ink ratio
 
 ---
 # Qualities of bad viz
 
-1. Bad taste, unnecessary ink
+- Bad taste, unnecessary ink
 
-2. Bad data
+- Bad data
 
-3. Bad perspective
+- Bad perspective
 
 ---
-# Bad taste?
+# Bad taste? Unnecessary ink?
 
 .center[
 ![:scale 80%](lectures_files/monstrouscosts.png)
@@ -132,23 +155,27 @@ class: inverse, middle, center
 ---
 # Bad perception
 
+- Law school enrollment trend
+
 .center[
 ![](lectures_files/lawaxes.png)
 ]
 
-- Be aware of how axes change the perception of scale.
+- Consider how axes change the perception of scale.
 
 ---
-# Bad perception
+# Bad perception? Data-to-ink?
 
 .center[
 ![](lectures_files/showzero.png)
 ]
 
+- Depending on context, bar charts can lead people to think values inside the bars are more likely than values above.
+
 ---
 class: inverse, middle, center
 
-# Human vision has evolved to have certain strengths and weaknesses
+# Human vision has certain strengths and weaknesses
 
 ---
 # Decoding numerical visualization
@@ -156,6 +183,33 @@ class: inverse, middle, center
 .center[
 ![](lectures_files/encode1.png)
 ]
+
+- Why simple (i.e., one or two variables) bar graphs or scatterplots are typically better
+
+- Including additional information usually requires one of the less efficient methods toward the left
+
+---
+# Examples
+
+.center[
+![:scale 70%](lectures_files/badstackbars.png)
+]
+
+- Easily compare totals and bottom category, but other three are difficult to compare across bars.
+
+- Also difficult to compare within bars.
+
+- Dodged bar chart would be better.
+
+---
+# Examples
+
+&lt;img src="Visualizations_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Examples
+
+&lt;img src="Visualizations_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Decoding categorical visualization

@@ -16,12 +16,12 @@ output:
 
 - Principles of good and bad visualization
 
-- Qualities of human perception
+- Complementing human perception
 
 ---
 # Exploratory vs. explanatory
 
-- Like most applications in statistics, visualizations can either explore or explain
+- Like most applications within statistics, visualizations can either explore or explain
 
 .center[
 ![](lectures_files/twogoals.png)
@@ -35,11 +35,10 @@ library(tidyverse)
 library(gapminder)
 
 gm_americas <- gapminder %>% 
-  filter(continent == "Americas" & year == 2007) %>% 
-  select(country, lifeExp, gdpPercap)
+  filter(continent == "Americas" & year == 2007)
 ```
 
-.center[
+.pull-left[
 ```{r, echo=FALSE, message=FALSE}
 ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
   geom_point() +
@@ -47,15 +46,36 @@ ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
 ```
 ]
 
+.pull-right[
+```{r, eval=FALSE}
+ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE)
+```
+]
 ---
 # An explanatory graph
-.center[
+.pull-left[
 ```{r, echo=FALSE, message=FALSE}
 ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
   geom_point() +
   geom_smooth(se = FALSE, linetype = "dashed", color = "gray", span = 1) +
   scale_x_continuous(labels = scales::dollar) +
-  labs(title = "Life Expectancy and Wealth In the Americas",
+  labs(title = "Life Expectancy and Wealth in the Americas",
+       subtitle = "2007",
+       y = "Life Expectancy",
+       x = "GDP Per Capita",
+       caption = "Source: Gapminder Dataset") +
+  theme_classic()
+```
+]
+.pull-right[
+```{r, eval=FALSE}
+ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
+  geom_point() +
+  geom_smooth(se = FALSE, linetype = "dashed", color = "gray", span = 1) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(title = "Life Expectancy and Wealth in the Americas",
        subtitle = "2007",
        y = "Life Expectancy",
        x = "GDP Per Capita",
@@ -75,32 +95,32 @@ ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
 ---
 class: inverse, middle, center
 
-# Keep in mind while there are general guidelines to good visualization, there remains some subjectivity.
+# While there are general guidelines to good visualization, much is still subjective.
 
 ---
 # Qualities of good viz
 
-1. Properly chosen format and design
+- **Properly chosen format**
 
-2. Use words, numbers, and drawing together
+- Use words, numbers, and drawing together
 
-3. Display an accessible complexity of detail
+- Display an accessible complexity of detail
 
-4. Avoid content-free decoration--chart junk
+- Avoid content-free decoration--chart junk
 
-5. Maximize data-to-ink ratio
+- Maximize data-to-ink ratio
 
 ---
 # Qualities of bad viz
 
-1. Bad taste, unnecessary ink
+- Bad taste, unnecessary ink
 
-2. Bad data
+- Bad data
 
-3. Bad perspective
+- Bad perspective
 
 ---
-# Bad taste?
+# Bad taste? Unnecessary ink?
 
 .center[
 ![:scale 80%](lectures_files/monstrouscosts.png)
@@ -145,23 +165,27 @@ class: inverse, middle, center
 ---
 # Bad perception
 
+- Law school enrollment trend
+
 .center[
 ![](lectures_files/lawaxes.png)
 ]
 
-- Be aware of how axes change the perception of scale.
+- Consider how axes change the perception of scale.
 
 ---
-# Bad perception
+# Bad perception? Data-to-ink?
 
 .center[
 ![](lectures_files/showzero.png)
 ]
 
+- Depending on context, bar charts can lead people to think values inside the bars are more likely than values above.
+
 ---
 class: inverse, middle, center
 
-# Human vision has evolved to have certain strengths and weaknesses
+# Human vision has certain strengths and weaknesses
 
 ---
 # Decoding numerical visualization
@@ -169,6 +193,62 @@ class: inverse, middle, center
 .center[
 ![](lectures_files/encode1.png)
 ]
+
+- Why simple (i.e., one or two variables) bar graphs or scatterplots are typically better
+
+- Including additional information usually requires one of the less efficient methods toward the left
+
+---
+# Examples
+
+.center[
+![:scale 70%](lectures_files/badstackbars.png)
+]
+
+- Easily compare totals and bottom category, but other three are difficult to compare across bars.
+
+- Also difficult to compare within bars.
+
+- Dodged bar chart would be better.
+
+---
+# Examples
+
+```{r, echo=FALSE, message=FALSE, fig.height=8, fig.width=10, fig.align='center'}
+ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
+  ggrepel::geom_label_repel(aes(label = country)) +
+  geom_point(aes(x = gdpPercap, y = lifeExp, size = pop/1000000)) +
+  geom_smooth(se = FALSE, linetype = "dashed", color = "gray", span = 1) +
+  scale_x_continuous(labels = scales::dollar) +
+  labs(title = "Life Expectancy and Wealth in the Americas",
+       subtitle = "2007",
+       y = "Life Expectancy",
+       x = "GDP Per Capita",
+       size = "Population (millions)",
+       caption = "Source: Gapminder Dataset") +
+  theme_classic() +
+  theme(legend.position = 'right')
+```
+
+---
+# Examples
+
+```{r, echo=FALSE, message=FALSE, fig.height=8, fig.width=10, fig.align='center'}
+ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
+  ggrepel::geom_label_repel(aes(label = country)) +
+  geom_point(aes(x = gdpPercap, y = lifeExp, color = pop/1000000), size = 5) +
+  geom_smooth(se = FALSE, linetype = "dashed", color = "gray", span = 1) +
+  scale_x_continuous(labels = scales::dollar) +
+  scale_color_continuous(type = 'viridis') +
+  labs(title = "Life Expectancy and Wealth in the Americas",
+       subtitle = "2007",
+       y = "Life Expectancy",
+       x = "GDP Per Capita",
+       color = "Population (millions)",
+       caption = "Source: Gapminder Dataset") +
+  theme_classic() +
+  theme(legend.position = 'right')
+```
 
 ---
 # Decoding categorical visualization
