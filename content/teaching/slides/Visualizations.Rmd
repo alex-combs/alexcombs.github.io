@@ -284,3 +284,111 @@ ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
 ![:scale 40%](lectures_files/bluecirc5.png)
 ]
 
+---
+class: inverse, middle, center
+
+# Let's consider a few graphs you all made in R Chapter 5
+
+---
+# Number of counties by state
+
+```{r, include=FALSE}
+library(data.table)
+countyComplete <- fread('http://openintro.org/data/tab-delimited/county_complete.txt')
+```
+
+```{r, echo=FALSE, fig.height=7, fig.width=9}
+# Question 3
+print(ggplot(countyComplete, aes(x = "state", fill = state)) +
+  geom_bar(position = 'fill') +
+  labs(y = 'Count of county',
+       fill = 'county') +
+    ggtitle("Bar Chart"))
+```
+
+---
+# Number of counties by state
+
+```{r, echo=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(x = state)) +
+  geom_bar() +
+labs(y = 'Number of Counties')
+```
+
+---
+# Number of counties by state
+
+```{r, echo=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(y = state)) +
+  geom_bar()
+```
+
+---
+# Number of counties by state
+
+```{r, echo=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(y = state)) +
+  geom_bar(fill = 'steelblue') +
+  labs(y = 'Number of counties') +
+  theme_classic() +
+  theme(axis.line.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.x = element_blank())
+```
+
+---
+# Scatterplot
+
+```{r, echo=FALSE, warning=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(x = median_age_2017, y = pop2017)) +
+  geom_point()
+```
+
+---
+# Scatterplot
+
+```{r, echo=FALSE, warning=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(x = some_college_2016 , y = log(firms_2007))) +
+  geom_point()
+```
+
+---
+# Scatterplot
+
+```{r, echo=FALSE, warning=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(x = hs_grad_2017, y = median_household_income_2017)) +
+  geom_point()
+```
+
+---
+# Scatterplot
+
+```{r, echo=FALSE, warning=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(x = bachelors_2017 , y = foreign_spoken_at_home_2010)) +
+  geom_point()
+```
+
+---
+# Scatterplot
+
+```{r, echo=FALSE, warning=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(x = white_not_hispanic_2017, 
+                           y = speak_english_only_2017)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE, 
+              linetype = 'dashed', color = 'black')
+```
+
+---
+# Scatterplot
+
+```{r, echo=FALSE, warning=FALSE, fig.height=7, fig.width=9}
+ggplot(countyComplete, aes(x = no_move_in_one_plus_year_2010, y = foreign_born_2010)) +
+  geom_point(color = 'steelblue', size = 2) +
+  geom_smooth(method = 'lm', se = FALSE, 
+              linetype = 'dashed', color = 'black') +
+  scale_y_log10(label=scales::comma_format()) +
+  labs(y = 'Foreign Born',
+       x = 'No Move') +
+  theme_minimal()
+```
