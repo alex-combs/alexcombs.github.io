@@ -5,6 +5,9 @@
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
     <meta name="date" content="2020-10-07" />
+    <script src="Regression-with-Categories_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="Regression-with-Categories_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="Regression-with-Categories_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -63,8 +66,6 @@ glimpse(Salaries)
 
 - discipline coded as "A" for theoretical and "B" for applied
 
-- What do we want to include and what directions do we expect?
-
 ---
 # Example
 
@@ -107,7 +108,43 @@ ggplot(Salaries,
 ]
 
 ---
-# Example
+# Visualizing Parallel Slopes
+
+&lt;img src="Regression-with-Categories_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Parallel Slopes Model Implications
+
+`$$y = \beta_0 + \beta_1x + \beta_2 d + \epsilon$$`
+`$$y = b_0 + b_1x + b_2 d$$`
+- where `\(x\)` is continuous and `\(d\)` is a dummy variable = 0/1
+
+---
+# Parallel Slopes Model Implications
+
+`$$y = b_0 + b_1x + b_2 d$$`
+
+- Change in `\(y\)` due to a change in `\(x\)` is still `\(b_1\)`
+
+--
+
+- In cases where `\(d=0\)`, then
+
+`$$y = b_0 + b_1x$$`
+
+--
+
+- In cases where `\(d=1\)`, then
+
+`$$y = (b_0 + b_2) + b_1x$$`
+
+--
+
+- Regression line for `\(d=1\)` group will be above or below `\(d=0\)` group by `\(b2\)` units
+
+---
+# Example: Parallel Slopes
+
 `$$Salary=\beta_0+\beta_1YrsEmployed+\beta_2Male + \epsilon$$`
 
 ```r
@@ -160,14 +197,14 @@ get_regression_table(sal_mod)
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-
+`$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$`
 
 ---
 # Interpreting results
 
 `$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$`
 
-- What's the standard interpretation for the YrsEmployed coefficient?
+- Standard interpretation for the `YrsEmployed` coefficient:
 
 --
 
@@ -175,7 +212,7 @@ get_regression_table(sal_mod)
 
 --
 
-What's the standard interpretation for the Male coefficient?
+- Standard interpretation for the Male coefficient:
 
 --
 
@@ -183,6 +220,8 @@ What's the standard interpretation for the Male coefficient?
 
 ---
 # Interpreting results
+
+`$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$`
 
 - What is the predicted change in salary for a male professor three years later?
 
@@ -250,15 +289,29 @@ What's the standard interpretation for the Male coefficient?
 - Predicted value will **not** be the same because each group has a different intercept
 
 ---
-# Visualizing Parallel Slopes
-.center[
-![](Regression-with-Categories_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
-]
-
----
 class: inverse, middle, center
 
-# Why force the slopes to be parallel? Why not allow the effect of years employed differ between male and female professors?
+# Aren't required to force the slopes to be parallel? Could allow the effect of years employed differ between male and female professors?
+
+---
+# Interaction model implications
+
+`$$y = \beta_0 + \beta_1x + \beta_2d + \beta_3 xd + \epsilon$$`
+`$$y = b_0 + b_1x + b_2d + b_3 xd$$`
+
+--
+
+- For the `\(d=0\)` group:
+
+`$$y = b_0 + b_1x$$`
+
+--
+
+- For the `\(d=1\)` group:
+
+`$$y = (b_0 + b_2) + (b_1+b_3)x$$`
+
+- Intercept and slope *can* differ between groups
 
 ---
 # Visualizing Interaction Model
@@ -287,10 +340,13 @@ ggplot(Salaries,
 
 `$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Male + \beta_3YrsEmp*Male + \epsilon$$`
 
-- If Male = 1, then the marginal effect of years on salary is `\(\beta_1+\beta_3\)`
+- `\(\beta_3\)` tells us how the slopes compare
+  - For Male = 1, the marginal effect of years on salary is `\(\beta_1+\beta_3\)`
+  - For Male = 0 (female), it is `\(\beta_1\)`
 
-- `\(\beta_2\)` still tells us how the intercepts compare
-  - If Male = 1, intercept is `\(\beta_0+\beta_2\)`
+- `\(\beta_2\)` tells us how the intercepts compare
+  - For Male = 1, intercept is `\(\beta_0+\beta_2\)`
+  - For Male = 0, it is `\(\beta_0\)`
 
 ---
 # Running an interaction model
@@ -359,7 +415,7 @@ get_regression_table(sal_mod2)
 ---
 # Interpreting an interaction model
 
-`$$\hat{Salary}=82069+1637*YrsEmp+20129*Male - 932*YrsEmp*Male$$`
+`$$\hat{Sal}=82069+1637*YrsEmp+20129*Male - 932*YrsEmp*Male$$`
 
 - What is the predicted change in salary for a male professor given two more years of service?
 
@@ -390,6 +446,8 @@ get_regression_table(sal_mod2)
 ---
 # Interpreting an interaction model
 
+`$$\hat{Sal}=82069+1637*YrsEmp+20129*Male - 932*YrsEmp*Male$$`
+
 - What is the predicted salary for a female professor with 10 years of service?
 
 --
@@ -419,9 +477,14 @@ get_regression_table(sal_mod2)
 ```
 
 ---
+class: inverse, middle, center
+
 # Linear probability model (LPM)
 
-- Same regression model with a two-level (dummy) categorical variable for the response
+---
+# LPM
+
+- Regression model with a two-level (dummy) categorical variable for the response
 
 - For a binary outcome (did occur/did not occur), an LPM estimates the effect of our explanatory variables on the probability that the outcome occurs
 
@@ -577,6 +640,7 @@ get_regression_table(div_mod)
 ```
 ## [1] 0.83
 ```
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-09-30" />
+    <script src="Regression_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="Regression_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="Regression_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,42 +17,110 @@ class: center, middle, inverse, title-slide
 ## Simple &amp; Multiple Regression
 ### Alex Combs
 ### UGA | SPIA | PADP
-### September 30, 2020
+### Last updated: February 15, 2021
 
 ---
 
 # Outline
 
-- Understand the basic mechanics of regression and their relevance to making decisions
+
+
+- Understand the purpose of regression and its relevance to making decisions
 
 - Interpret regression coefficients
+
+- Assess goodness-of-fit for one model or between several competing models
 
 - Understand what it means to control for other variables
 
 ---
-# Basic idea
+# Correlation review
+
+.center[
+![:scale 60%](lectures_files/infmort_lifeExp.png)
+]
+
+- Correlation reports the direction and strength between two variables
+
+- Correlation between infant mortality rate and life expectancy is -0.9; very strong negative correlation
+
+---
+# Correlation coefficients
 
 
+```r
+select(States, -region) %&gt;% 
+  cor()
+```
 
+```
+##                pop       SATV       SATM    percent    dollars        pay
+## pop      1.0000000 -0.3381028 -0.2300418  0.2100687  0.1436745  0.3677244
+## SATV    -0.3381028  1.0000000  0.9620359 -0.8627954 -0.5268313 -0.5559238
+## SATM    -0.2300418  0.9620359  1.0000000 -0.8581495 -0.4844477 -0.4853306
+## percent  0.2100687 -0.8627954 -0.8581495  1.0000000  0.7111474  0.6630098
+## dollars  0.1436745 -0.5268313 -0.4844477  0.7111474  1.0000000  0.8476737
+## pay      0.3677244 -0.5559238 -0.4853306  0.6630098  0.8476737  1.0000000
+```
+
+---
+# Visualizing correlation
+
+
+```r
+ggplot(States, aes(x = dollars, y = SATM)) +
+  geom_point() +
+  labs(x = 'Public ed spending in $1000s per student',
+       y = 'Average SAT Math score')
+```
+
+&lt;img src="Regression_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Correlation conclusions
+
+&lt;img src="Regression_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
+
+- States that spend more on public education tend to have lower average SAT Math scores among its graduating high school students
+
+- The strength of the relationship is moderate at -0.48
+
+---
+# Basic purpose of regression
 
 .pull-left[
-![](Regression_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](Regression_files/figure-html/unnamed-chunk-5-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
 - Regression gives us direction, strength, and magnitude of association
-- Draws the **best** line through a set of paired x-y data points
+- Draws the line of **best fit** through a set of paired x-y data points
 - The slope of the line tells us the **average, predicted change in y given a change in x**
+- At any value along x-axis, regression line gives us the **predicted value of y**
 ]
 
 ---
-# Basic idea
+# Basic purpose of regression
 
 - Regression is a statistical method to
   - **Explain** the relationship between an outcome variable and one or more explanatory variables, and/or
-  - **Predict** the value of an outcome given a value(s) of one or more explanatory variables
+  - **Predict** the value of an outcome given the value(s) of one or more explanatory variables
 
 - Either way, regression is a way of modeling an outcome `\(y\)` as a function of explanatory `\(x\)`
+
+---
+# Adding a regression line
+
+
+```r
+ggplot(States, aes(x = dollars, y = SATM)) +
+  geom_point() +
+* geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = 'Public ed spending in $1000s per student',
+       y = 'Average SAT Math score')
+```
+
+&lt;img src="Regression_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Simple linear regression model
@@ -109,9 +179,11 @@ On average, a [one] [unit] [increase/decrease] in `\(x\)` [is associated with] a
 - Replace `\(y\)` with what `\(y\)` is
 
 ---
-# Example
+# Example: Population to sample models
 
-`$$GPA=\beta_0+\beta_1STUDYHOURS+\epsilon$$`
+- Suppose we want to model average SAT math scores, `SATM`, in a state as a function of its spending on public education in **1000s per student**, `dollars`
+
+`$$SATM=\beta_0+\beta_1Dollars+\epsilon$$`
 
 --
 
@@ -130,51 +202,66 @@ On average, a [one] [unit] [increase/decrease] in `\(x\)` [is associated with] a
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.578 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.085 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 42.315 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.409 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.748 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 560.374 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16.801 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33.353 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 526.610 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 594.137 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.303 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.763 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; dollars &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -12.169 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.139 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.876 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -18.478 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -5.860 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
 --
 
-`$$\hat{GPA}=3.578+0.001 \times STUDYHOURS$$`
+`$$\hat{SATM} = 560 - 12 \times Dollars$$`
+
+---
+# Example: Reporting results
+
+`$$\hat{SATM} = 560 - 12 \times Dollars$$`
+
+On average, a one thousand dollar increase in state spending on public education per student is associated with a 12 point decline in average SAT math scores.
 
 --
 
-On average, a one-hour increase in study hours per week is associated with a 0.001 point increase in GPA.
+Results suggest each additional thousand dollars spent on public education per student decreases average SAT math scores by 12 points, on average.
 
-Results indicate each additional hour students study per week increases GPA by 0.001 point, on average.
+--
 
-If students studied 10 more hours each week, GPA is predicted to increase 0.01 point, on average.
+If states increased spending by $5,000 per student, SAT math scores are predicted to decrease 60 points, on average.
+
+--
+
+If states spent nothing on public education, SAT math scores are predicted to be 560, on average.
 
 ---
 # Many ways to interpret
 
 - Regression results can be applied to countless scenarios
-- Any scenario boils down to providing either 
+- Any scenario involves either 
   - a predicted *change* in `\(y\)` given a *change* in `\(x\)` or 
-  - a predited *value* of `\(y\)` given a *value* of `\(x\)`
+  - a predicted *value* of `\(y\)` given a *value* of `\(x\)`
 
-- Any answer can be obtained by plugging the results into the equation, then plugging the scenario into the equation to solve
+--
+
+- Run regression, plug coefficients into equation, plug scenario into equation, then solve.
 
 ---
 # Predicted Change vs. Predicted Value
 
-`$$GPA=\beta_0+\beta_1SleepHours+\epsilon$$`
+- Now `SATM` as a function of the percent of graduating high school students who take the SAT, `percent`
+
+`$$SATM=\beta_0+\beta_1Percent+\epsilon$$`
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
@@ -190,133 +277,126 @@ If students studied 10 more hours each week, GPA is predicted to increase 0.01 p
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.46 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.318 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10.874 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.822 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.098 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 538.975 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.351 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 123.870 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 530.231 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 547.719 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; sleepnight &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.02 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.045 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.445 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.658 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.070 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.109 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; percent &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.232 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.105 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.701 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.444 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.021 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-`$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$`
+`$$\hat{SATM} = 539 - 1.2 \times Percent$$`
 
-- Now we can consider any hypothetical *change* in hours of sleep or specific *value* of hours of sleep and provide a predicted GPA.
+- Now we can consider any hypothetical *change* in percent or specific *value* of percent and provide a prediction for SAT math scores.
 
 ---
 # Change vs. value
-`$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$`
-
+`$$\hat{SATM} = 539 - 1.2 \times Percent$$`
 .pull-left[
-What if students slept 3 more hours than they currently do?
+What if percent taking SAT increased from 50% to 55%?
 
 ```r
-0.02*3
+-1.2*5
 ```
 
 ```
-## [1] 0.06
+## [1] -6
 ```
-GPA is predicted to **increase** by 0.06 points, on average.
+SAT math is predicted to **decrease** 6 points, on average.
 ]
 
 --
 
 .pull-right[
-What is the predicted GPA of a student who sleeps 8 hours?
+What is the predicted average SAT math score for a state where 75% of high school graduates take the SAT?
 
 ```r
-3.46 + 0.02*8
+539 - 1.2*75
 ```
 
 ```
-## [1] 3.62
+## [1] 449
 ```
 
-GPA is predicted to **equal** 3.62, on average.
+Average SAT math is predicted to **equal** 449, on average.
 ]
 
 ---
 # You practice
 
-`$$GPA=\beta_0+\beta_1NightsOut+\epsilon$$`
+`$$\hat{SATM} = 539 - 1.2 \times Percent$$`
 
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.504 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.106 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 33.011 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.291 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.717 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.045 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.046 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.998 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.323 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.046 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.137 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-- What is the predicted GPA for a student who goes out 7 nights a week?
-- What is the predicted GPA for a student who goes out 4 nights a week?
-- What is the predicted change in GPA given a student decreases their nights out by 3?
-
----
-class: inverse, center, middle
-
-# Given a table of regression results, you know the regression model that table implies, and you can answer infinite hypothetical scenarios. Complexity will build as we add to our toolbox, but this plug-and-chug process does not change.
+- What is the predicted average SAT math score in a state where 25% of its high school graduates take the SAT?
+- What is the predicted average SAT math score in a state where 100% of its high school graduates take the SAT?
+- What is the predicted change in average SAT math score in a state where the percent of high school graduates taking the SAT increases 75 percentage points?
 
 ---
 class: inverse, middle, center
 
-# So how does one run regression in R? It's very easy.
+# Make sure you understand the difference between a percent change and a percentage point change.
+
+---
+# Percent vs. percentage point change
+
+- Linear regression involves **unit changes** (for now)
+
+- A unit change of a variable expressed in percentages is a **percentage point** change
+
+- Increase from 25% to 100% is an increase of 75 percentage points
+
+---
+# Percent vs. percentage point change
+
+- Percent change conveys the percent of the old number it takes to get to the new number
+
+$$ \%\Delta = (\frac{New-Old}{Old}) \times 100$$
+- An increase from 25% to 100% is a 300% increase.
+
+
+```r
+((100-25)/25)*100
+```
+
+```
+## [1] 300
+```
+
+---
+class: inverse, middle, center
+
+# Running regressions in R
 
 ---
 # Running regression
 
-- What variables do I have to work with?
+- Explore data
 
 
 ```r
-glimpse(gpa)
+glimpse(States)
 ```
 
 ```
-## Rows: 55
-## Columns: 5
-## $ gpa        &lt;dbl&gt; 3.890, 3.900, 3.750, 3.600, 4.000, 3.150, 3.250, 3.925, 3.…
-## $ studyweek  &lt;int&gt; 50, 15, 15, 10, 25, 20, 15, 10, 12, 2, 10, 30, 30, 21, 10,…
-## $ sleepnight &lt;dbl&gt; 6.0, 6.0, 7.0, 6.0, 7.0, 7.0, 6.0, 8.0, 8.0, 8.0, 8.0, 6.0…
-## $ out        &lt;dbl&gt; 3.0, 1.0, 1.0, 4.0, 3.0, 3.0, 1.0, 3.0, 2.0, 4.0, 1.0, 2.0…
-## $ gender     &lt;fct&gt; female, female, female, male, female, male, female, female…
+## Rows: 51
+## Columns: 7
+## $ region  &lt;fct&gt; ESC, PAC, MTN, WSC, PAC, MTN, NE, SA, SA, SA, SA, PAC, MTN, E…
+## $ pop     &lt;int&gt; 4041, 550, 3665, 2351, 29760, 3294, 3287, 666, 607, 12938, 64…
+## $ SATV    &lt;int&gt; 470, 438, 445, 470, 419, 456, 430, 433, 409, 418, 401, 404, 4…
+## $ SATM    &lt;int&gt; 514, 476, 497, 511, 484, 513, 471, 470, 441, 466, 443, 481, 5…
+## $ percent &lt;int&gt; 8, 42, 25, 6, 45, 28, 74, 58, 68, 44, 57, 52, 17, 16, 54, 5, …
+## $ dollars &lt;dbl&gt; 3.648, 7.887, 4.231, 3.334, 4.826, 4.809, 7.914, 6.016, 8.210…
+## $ pay     &lt;int&gt; 27, 43, 30, 23, 39, 31, 43, 35, 39, 30, 29, 32, 25, 34, 32, 2…
 ```
 
 ---
@@ -324,215 +404,197 @@ glimpse(gpa)
 
 
 ```r
-gpa1 &lt;- lm(gpa ~ studyweek, data = gpa)
-gpa2 &lt;- lm(gpa ~ sleepnight, data = gpa)
-gpa3 &lt;- lm(gpa ~ out, data = gpa)
+summary(States)
+```
+
+```
+##      region        pop             SATV            SATM          percent     
+##  SA     : 9   Min.   :  454   Min.   :397.0   Min.   :437.0   Min.   : 4.00  
+##  MTN    : 8   1st Qu.: 1215   1st Qu.:422.5   1st Qu.:470.0   1st Qu.:11.50  
+##  WNC    : 7   Median : 3294   Median :443.0   Median :490.0   Median :25.00  
+##  NE     : 6   Mean   : 4877   Mean   :448.2   Mean   :497.4   Mean   :33.75  
+##  ENC    : 5   3rd Qu.: 5780   3rd Qu.:474.5   3rd Qu.:522.5   3rd Qu.:57.50  
+##  PAC    : 5   Max.   :29760   Max.   :511.0   Max.   :577.0   Max.   :74.00  
+##  (Other):11                                                                  
+##     dollars           pay       
+##  Min.   :2.993   Min.   :22.00  
+##  1st Qu.:4.354   1st Qu.:27.50  
+##  Median :5.045   Median :30.00  
+##  Mean   :5.175   Mean   :30.94  
+##  3rd Qu.:5.689   3rd Qu.:33.50  
+##  Max.   :9.159   Max.   :43.00  
+## 
+```
+
+---
+# Running regression
+
+
+```r
+satm_mod1 &lt;- lm(SATM ~ dollars, data = States)
+satm_mod2 &lt;- lm(SATM ~ percent, data = States)
 ```
 
 
 ```r
 library(moderndive)
-get_regression_table(gpa1)
+get_regression_table(satm_mod1)
 ```
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.578 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.085 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 42.315 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.409 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.748 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.303 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.763 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |  560.374|    16.801|    33.353|       0|  526.610|  594.137|
+|dollars   |  -12.169|     3.139|    -3.876|       0|  -18.478|   -5.860|
 
 ---
 # Running regression
 
-- The `get_regression_table` function requires the `moderndive` package
-- Alternatively, `summary` requires no package, but it's not as pretty
+- Alternative: `summary` available by default; not as pretty
 
 
 ```r
-summary(gpa1)
+summary(satm_mod1)
 ```
 
 ```
 ## 
 ## Call:
-## lm(formula = gpa ~ studyweek, data = gpa)
+## lm(formula = SATM ~ dollars, data = States)
 ## 
 ## Residuals:
-##      Min       1Q   Median       3Q      Max 
-## -0.71231 -0.18864  0.04784  0.22274  1.07573 
+##    Min     1Q Median     3Q    Max 
+## -70.72 -17.85  -1.98  16.48  75.51 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept) 3.578490   0.084568  42.315   &lt;2e-16 ***
-## studyweek   0.001127   0.003719   0.303    0.763    
+## (Intercept)  560.374     16.801  33.353  &lt; 2e-16 ***
+## dollars      -12.169      3.139  -3.876 0.000315 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.3385 on 53 degrees of freedom
-## Multiple R-squared:  0.001731,	Adjusted R-squared:  -0.0171 
-## F-statistic: 0.0919 on 1 and 53 DF,  p-value: 0.763
+## Residual standard error: 30.55 on 49 degrees of freedom
+## Multiple R-squared:  0.2347,	Adjusted R-squared:  0.2191 
+## F-statistic: 15.03 on 1 and 49 DF,  p-value: 0.0003155
 ```
 
 ---
 # Recap of population and sample regressions
 
+**Population Model**
+
 `$$y=\beta_0+\beta_1x+\epsilon$$`
 
-`$$GPA=\beta_0+\beta_1SleepHours+\epsilon$$`
+`$$SATM=\beta_0+\beta_1Dollars+\epsilon$$`
+
+**Sample Model**
 
 `$$\hat{y}=b_0+b_1x$$`
-`$$\hat{GPA} = 3.46 + 0.02 \times SleepHours$$`
+`$$\hat{SATM} = 560 - 12 \times Dollars$$`
 
 ---
 class: inverse, center, middle
 
-# What happened to that `\(\epsilon\)`?
+# What happens to that error term, `\(\epsilon\)`, when we move to the sample model?
 
 ---
 # The residual
 
 `$$e=y-\hat{y}$$`
 
-- The residual is the difference between the *observed* outcome and the *predicted* outcome from our regression model
+- The residual is the difference between the *observed* outcome `\(y\)` and the *predicted* outcome `\(\hat{y}\)` in our regression model
 
-- The residual is the sample analog of the error/noise population parameter
+- The residual is the sample statistic of the population parameter `\(\epsilon\)`
+
+
+
+
+&lt;img src="Regression_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# The residual
-
-![](Regression_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
-
----
-# The residual
+# How to examine residuals
 
 
 ```r
-get_regression_points(gpa1)
+get_regression_points(satm_mod1)
 ```
 
-.left-column[
 - Regression results for each observation
-- Shows observed data, the predicted outcome, and their difference
-]
 
-.right-column[
+- Shows observed data, predicted outcomes, and residuals
+
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gpa &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; studyweek &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gpa_hat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SATM &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; dollars &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SATM_hat &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; residual &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.890 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 50 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.635 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.255 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 514 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.648 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 515.980 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.980 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.900 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.305 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 476 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.887 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 464.395 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.605 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.750 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.155 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 497 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.231 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 508.886 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.886 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.600 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.010 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 511 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.334 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 519.802 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -8.802 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 25 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.607 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.393 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 484 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.826 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 501.645 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -17.645 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.150 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 20 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.601 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.451 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.250 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.345 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.925 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.335 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 513 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.809 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 501.852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.148 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-]
 
 ---
 class: inverse, center, middle
 
-# Regression draws the best line through observed x-y pairs. What does best mean?
+# Regression draws the line of best fit through observed x-y pairs. What does best fit mean?
 
 ---
 # Ordinary least squares (OLS)
 
-- Basic regression is also known as OLS
+- Standard regression is also known as OLS
 
-- Regression uses math you don't need to worry about to determine the intercept and slope(s) of a line that **minimizes the sum of squared residuals**
-
-- No other line could achieve a smaller sum of squared residuals (SSR)
+- Regression uses math you don't need to worry about to determine the intercept and slope of a line that **minimizes the sum of squared residuals (SSR)**
 
 ---
 # OLS
 
 .pull-left[
-![](Regression_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](Regression_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -540,59 +602,59 @@ class: inverse, center, middle
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gpa &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gpa_hat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SATM &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SATM_hat &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; residual &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.890 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.635 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.255 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 514 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 515.980 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.980 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.900 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.305 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 476 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 464.395 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.605 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.750 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.155 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 497 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 508.886 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.886 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.600 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.010 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 511 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 519.802 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -8.802 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.607 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.393 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 484 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 501.645 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -17.645 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.150 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.601 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.451 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 513 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 501.852 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.148 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 7 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.250 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.345 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 471 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 464.067 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.933 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.925 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.335 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 470 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 487.164 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -17.164 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -605,9 +667,9 @@ class: inverse, center, middle
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gpa &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; studyweek &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gpa_hat &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SATM &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; dollars &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; SATM_hat &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; residual &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; sq_resid &lt;/th&gt;
   &lt;/tr&gt;
@@ -615,61 +677,63 @@ class: inverse, center, middle
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.89 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 50 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.635 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.255 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.065025 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 514 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.648 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 515.980 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.980 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.9204 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.90 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.305 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.093025 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 476 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.887 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 464.395 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.605 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 134.6760 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.75 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.595 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.155 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.024025 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 497 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 4.231 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 508.886 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.886 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 141.2770 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
    &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.60 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.590 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.010 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.000100 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 511 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3.334 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 519.802 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -8.802 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 77.4752 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
 
 ```r
-sum(gpa1_points$sq_resid)
+sum(satm_mod1_points$sq_resid)
 ```
 
 ```
-## [1] 6.071274
+## [1] 45727.36
 ```
 
-- No other line will achieve less than 6.07 SSR
+- No other line will achieve a sum of squared residuals less than 45,727
 
 ---
 class: inverse, middle, center
 
-# Ok, that's what best means, but how good is the best?
+# But how good is the best?
 
 ---
 # Goodness-of-fit
 
 - Any outcome varies across observations (i.e. variance)
 
-- When we ask how good is our best regression line, one way to answer is the percent of total variance in the outcome accounted for with that line
+- When we ask how good is our best regression line, one way to answer is the **percent of total variation/variance in the outcome that is explained by our model**
+
+--
 
 - `\(R^2\)` (r-squared)
   - Ranges from 0 to 1
@@ -680,7 +744,7 @@ class: inverse, middle, center
 
 
 ```r
-get_regression_summaries(gpa1)
+get_regression_summaries(satm_mod1)
 ```
 
 &lt;table&gt;
@@ -688,89 +752,176 @@ get_regression_summaries(gpa1)
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; mse &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 0.002 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.017 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.1104002 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.3322653 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.338 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.235 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.219 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 29.94355 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30.549 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-The regression using study hours explains only 0.2% of total variation in GPA.
+The regression using dollars explains 24% of total variation in average SAT math scores.
 
 ---
 # Goodness of fit
 
 ```r
-get_regression_summaries(gpa2)
+get_regression_summaries(satm_mod2)
 ```
+
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
    &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; mse &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
    &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.015 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.1101803 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.3319343 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.338 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.736 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.731 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.57277 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.928 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-
-```r
-get_regression_summaries(gpa3)
-```
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; mse &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 0.018 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.1085521 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.3294724 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.336 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-- What percent of variation in GPA is explained by models 2 and 3?
+- What percent of variation in average SAT math scores is explained by model 2?
 
 --
 
-- Model 3 has the highest `\(R^2\)`, thus it is the *statistically* superior model
+- 74%
+
+--
+
+- Model 2 has the highest `\(R^2\)`, thus it is the *statistically* superior model
+
+---
+# Goodness of fit
+
+
+```r
+select(States, SATM, dollars, percent) %&gt;% 
+  cor()
+```
+
+```
+##               SATM    dollars    percent
+## SATM     1.0000000 -0.4844477 -0.8581495
+## dollars -0.4844477  1.0000000  0.7111474
+## percent -0.8581495  0.7111474  1.0000000
+```
+
+
+```r
+-0.48^2
+```
+
+```
+## [1] -0.2304
+```
+
+```r
+-0.86^2
+```
+
+```
+## [1] -0.7396
+```
+
+---
+# Goodness of fit
+
+.pull-left[
+&lt;img src="Regression_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="Regression_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Goodness of fit
+
+- `\(R^2\)` isn't very useful for a general audience and it has limited practical application for predictions.
+
+--
+
+- Root mean squared error (**RMSE**) answers the question: "How far off is our model, on average, from observed outcomes? If we predict an outcome, what is the typical range of inaccuracy?
+
+--
+
+- RMSE is the regression version of standard deviation; provides the average deviation from the regression line
+
+- The lower the RMSE the better our model is at fitting the data
+
+---
+# Goodness of fit
+Model 1 using dollars
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.235 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.219 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 29.94355 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 30.549 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+Model 2 using percent
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.736 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.731 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.57277 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.928 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+--
+
+- Model 1 predictions are off by about 30 points, on average.
+- Model 2 predictions are off by about 18 points, on average.
+- Model 2 is the *statistically* superior model.
 
 ---
 class: inverse, center, middle
 
-# Multiple regression simply adds more than one explanatory variable to the model
+# Multiple regression
 
 ---
 # Multiple regression
+
+- Multiple regression adds more than one explanatory variable to the model. 
+
+--
 
 **Population model**
 `$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$`
@@ -778,17 +929,47 @@ class: inverse, center, middle
 **Sample model**
 `$$\hat{y}=b_0+b_1x_1+b_2x_2+\dots+b_kx_k$$`
 
-- Nothing fundamentally different; just more explanatory variables
+--
+
+- This isolates the association between the outcome and each explanatory variable, holding all other variables constant.
 
 ---
 # Controlling for other factors
 
-- Each of the three previous regressions controlled for one factor we might suspect affects GPA
+- The two previous regressions each controlled for one variable we might theorize affects average state SAT math scores
 
-- With the model using study hours, there is any number of additional factors contained in the error term `\(\epsilon\)`
+--
 
-- Generally, if we can, we should include those additional factors in the same regression model
-  - Especially if one of those factors also affects study hours
+- There is any number of additional variables contained in the error term `\(\epsilon\)`
+
+--
+
+- Typically, if we can, we should include those additional variables in the same regression model
+
+- Especially if those variables affect the explanatory variables currently in our model
+
+---
+class: inverse, center, middle
+
+# Importance of theory or subject-matter expertise
+
+---
+# Making sense of our results
+
+- So far, states spending more on public education apparently tend to have lower SAT math scores; may seem counter-intuitive to some
+
+--
+
+- We also see that states with a higher percent of graduates taking the SAT tend to have lower SAT math scores
+
+--
+
+- What may be going on here?
+
+---
+# Making sense of our results
+
+&lt;img src="Regression_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Controlling for other factors
@@ -799,7 +980,7 @@ class: inverse, center, middle
 
 On average, a [one-unit] [increase/decrease] in `\(x_k\)` [is associated with] a `\(b_k\)` [unit] [increase/decrease] in `\(y\)`, [**holding other factors constant].**
 
-- Variations on above:
+- Variations on last part:
   - all else equal
   - controlling for other factors
   - *ceteris paribus*
@@ -807,15 +988,15 @@ On average, a [one-unit] [increase/decrease] in `\(x_k\)` [is associated with] a
 ---
 # Running multiple regression
 
-`$$GPA=\beta_0+\beta_1Study+\beta_2Sleep+\beta_3Out+\epsilon$$`
+`$$SATM=\beta_0+\beta_1Dollars+\beta_2Percent+\epsilon$$`
 
 
 ```r
-gpa4 &lt;- lm(gpa ~ studyweek + sleepnight + out, data = gpa)
+satm_mod3 &lt;- lm(SATM ~ dollars + percent, data = States)
 ```
 
 ```r
-get_regression_table(gpa4)
+get_regression_table(satm_mod3)
 ```
 &lt;table&gt;
  &lt;thead&gt;
@@ -832,42 +1013,35 @@ get_regression_table(gpa4)
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.435 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.348 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9.882 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 514.652 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.299 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49.969 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.737 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.133 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 493.944 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 535.360 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.369 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.713 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; dollars &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.395 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.482 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.577 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.013 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.405 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.384 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; sleepnight &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.049 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.131 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.896 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.093 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.106 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.044 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.050 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.873 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.387 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.057 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.144 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; percent &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.492 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.142 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10.519 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.777 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.207 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+
+`$$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$`
 
 ---
 # Interpreting results
@@ -887,54 +1061,47 @@ get_regression_table(gpa4)
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.435 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.348 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9.882 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 514.652 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.299 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49.969 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.737 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.133 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 493.944 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 535.360 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.369 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.713 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; dollars &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.395 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.482 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.577 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.013 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.405 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.384 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; sleepnight &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.049 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.131 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.896 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.093 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.106 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.044 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.050 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.873 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.387 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.057 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.144 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; percent &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.492 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.142 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10.519 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.777 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.207 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-Controlling for study hours and sleep, what is the predicted change in GPA if nights out increase by 3?
+`$$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$`
+
+- Controlling for the percent of graduates taking the SAT, what is the predicted change in SAT math scores if states increase public education spending by $5,000 per student?
 
 --
 
 
 ```r
-0.044*3
+6.4*5
 ```
 
 ```
-## [1] 0.132
+## [1] 32
 ```
 
 ---
@@ -955,63 +1122,169 @@ Controlling for study hours and sleep, what is the predicted change in GPA if ni
 &lt;tbody&gt;
   &lt;tr&gt;
    &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3.435 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.348 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9.882 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 514.652 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10.299 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 49.969 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2.737 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.133 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 493.944 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 535.360 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; studyweek &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.001 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.004 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.369 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.713 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.006 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.009 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; dollars &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 6.395 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.482 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2.577 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.013 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.405 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 11.384 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; sleepnight &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.049 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.131 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.896 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.093 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.106 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; out &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.044 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.050 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.873 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.387 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.057 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.144 &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; percent &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.492 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.142 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -10.519 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.777 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -1.207 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-What is the predicted GPA for a student who studies 20 hours per week, sleeps 8 hours per day, and goes out 2 nights a week?
+`$$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$`
+
+What is the predicted average SAT math score for a state that spends $5,000 per student, and has 50% of high school graduates take the SAT?
 
 --
 
 
 ```r
-3.435 + 0.001*20 + 0.007*8 + 0.044*2
+515 + 6.4*5 - 1.5*50
 ```
 
 ```
-## [1] 3.599
+## [1] 472
 ```
+
+---
+class: inverse, middle, center
+
+# Connecting results to policy decisions
+
+---
+# Policy Decision
+
+- We haven't covered enough material to know whether or how we should act on this information, but let's work with what we know so far
+
+  - Let's ignore matters of inference
+  
+  - Let's assume these results are causal
+
+--
+
+- That said, so far:
+
+  - Spending increases average SAT math scores among states, *controlling for percent of high school grads taking SAT*
+  
+  - But spending seems to increase the percent of SAT participation, which then decreases average SAT math scores
+
+- Let's examine the effect of spending on SAT math scores
+
+---
+# Spending and SAT participation
+
+
+```r
+satm_mod4 &lt;- lm(percent ~ dollars, data = States)
+```
+
+
+```r
+get_regression_table(satm_mod4)
+```
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; term &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; estimate &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; std_error &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; statistic &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; p_value &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lower_ci &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; upper_ci &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; intercept &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -30.64 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9.403 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -3.259 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -49.536 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; -11.744 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; dollars &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12.44 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1.757 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7.081 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.000 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8.910 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 15.971 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- A $1,000 increase in spending per pupil increases the percent of grads taking the SAT by 12.4 *percentage points*.
+
+---
+# Policy Decision
+
+- A $1,000 increase in spending per student:
+  
+  - Directly increases average SAT math scores 6.4 points
+  
+  - Directly increases participation 12.4 percentage points
+  
+  - Increase of 12.4 p.p. reduces average SAT math scores 14.9 points
+  
+- The total effect of a $1,000 increase on average SAT math scores is about -8.5 points.
+
+--
+
+- What should be our policy recommendation?
+
+---
+class: inverse, middle, center
+
+# Goodness-of-fit with multiple regression
 
 ---
 # Goodness-of-fit
 
+**Model 2 using only percent**
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:right;"&gt; r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; adj_r_squared &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; rmse &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; sigma &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:right;"&gt; 0.736 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.731 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.57277 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 17.928 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
-```r
-get_regression_summaries(gpa4)
-```
+**Model 3 using dollars and percent**
+
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
@@ -1024,40 +1297,39 @@ get_regression_summaries(gpa4)
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 0.021 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -0.036 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.1082517 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.3290162 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0.342 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.768 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 0.759 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 271.2768 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16.47048 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 16.977 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- `\(R^2\)` increases mechanically as you add more variables whether those variables improve the model or not
+- Based on `\(R^2\)`, model 3 appears to be the better model, however...
+
+---
+# Goodness of fit
+
+- `\(R^2\)` mechanically increases as you add more variables whether or not they improve the model
 
 - Therefore, we should not use `\(R^2\)` to compare models with different numbers of explanatory variables
 
-- Adjusted `\(R^2\)` accounts for this and penalizes for adding bad (i.e. statistically insignificant) variables
+--
 
----
-# Goodness-of-fit
+- Adjusted `\(R^2\)` accounts for this, adjusting based on how useful each additional variable is at explaining the outcome
 
-- `\(R^2\)` isn't very useful in assessing the predictive power of our regression model
+- Model 3 still has the higher adjusted `\(R^2\)` so it remains the statistically better model
 
-- Root mean squared error (RMSE) provides the average deviation of observed data from the regression line
-
-- RMSE answers the question: "How far off is our model, on average, from predicting observed outcomes?
-
-- The lower the RMSE the better our model is at fitting the data
-
-- `\(R^2\)`, Adjusted `\(R^2\)`, and RMSE will virtually always agree
+- And the RMSE agrees; virtually always the case
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="macros.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"highlightLines": true
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -1123,7 +1395,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {
@@ -1149,7 +1438,7 @@ slideshow._releaseMath(document);
 (function () {
   var script = document.createElement('script');
   script.type = 'text/javascript';
-  script.src  = 'https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_HTMLorMML';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
   if (location.protocol !== 'file:' && /^https?:/.test(script.src))
     script.src  = script.src.replace(/^https?:/, '');
   document.getElementsByTagName('head')[0].appendChild(script);
