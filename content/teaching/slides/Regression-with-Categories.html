@@ -4,7 +4,6 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-10-07" />
     <script src="Regression-with-Categories_files/header-attrs-2.5/header-attrs.js"></script>
     <link href="Regression-with-Categories_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
     <script src="Regression-with-Categories_files/anchor-sections-1.0/anchor-sections.js"></script>
@@ -18,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Regression with Categorical Variables
 ### Alex Combs
 ### UGA | SPIA | PADP
-### October 7, 2020
+### Last updated: February 21, 2021
 
 ---
 
@@ -95,7 +94,7 @@ ggplot(Salaries,
 ggplot(Salaries, 
        aes(x = yrs.service, 
            y = salary, 
-           color = sex)) +
+*          color = sex)) +
   geom_point(size = 4,
              alpha = 0.5) +
   theme_minimal() +
@@ -291,7 +290,7 @@ get_regression_table(sal_mod)
 ---
 class: inverse, middle, center
 
-# Aren't required to force the slopes to be parallel? Could allow the effect of years employed differ between male and female professors?
+# We aren't required to force the slopes to be parallel. Could allow the effect of years employed to differ between male and female professors.
 
 ---
 # Interaction model implications
@@ -311,7 +310,7 @@ class: inverse, middle, center
 
 `$$y = (b_0 + b_2) + (b_1+b_3)x$$`
 
-- Intercept and slope *can* differ between groups
+- Intercept *and* slope *can* differ between groups
 
 ---
 # Visualizing Interaction Model
@@ -322,9 +321,9 @@ class: inverse, middle, center
 ggplot(Salaries, 
        aes(x = yrs.service, 
            y = salary, 
-           color = sex)) +
+*          color = sex)) +
   geom_point(alpha = 0.6, size = 5) +
-  geom_smooth(method = 'lm', se = FALSE, size = 2) +
+* geom_smooth(method = 'lm', se = FALSE, size = 2) +
   theme(text = element_text(size = 20))
 ```
 ]
@@ -479,6 +478,11 @@ get_regression_table(sal_mod2)
 ---
 class: inverse, middle, center
 
+# Let's practice answering questions related to regression using explanatory categories and interactions. 
+
+---
+class: inverse, middle, center
+
 # Linear probability model (LPM)
 
 ---
@@ -538,7 +542,7 @@ class: inverse, middle, center
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Suppose we want to know how these the probability of divorce is associated with these variables
+- Suppose we want to know how these variables might affect the probability of divorce among married or previously so individuals
 
 ---
 # Running an LPM
@@ -647,6 +651,7 @@ get_regression_table(div_mod)
 <script src="macros.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
+"highlightLines": true,
 "countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
@@ -713,7 +718,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

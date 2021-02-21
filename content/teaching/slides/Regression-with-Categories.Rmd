@@ -3,13 +3,14 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Regression with Categorical Variables"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "October 7, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
     nature:
       beforeInit: "macros.js"
       highlightStyle: github
+      highlightLines: true
       countIncrementalSlides: false
 ---
 # Outline
@@ -82,7 +83,7 @@ ggplot(Salaries, aes(x = yrs.service, y = salary)) +
 ggplot(Salaries, 
        aes(x = yrs.service, 
            y = salary, 
-           color = sex)) +
+           color = sex)) + #<<
   geom_point(size = 4,
              alpha = 0.5) +
   theme_minimal() +
@@ -231,7 +232,7 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$
 ---
 class: inverse, middle, center
 
-# Aren't required to force the slopes to be parallel? Could allow the effect of years employed differ between male and female professors?
+# We aren't required to force the slopes to be parallel. Could allow the effect of years employed to differ between male and female professors.
 
 ---
 # Interaction model implications
@@ -251,7 +252,7 @@ $$y = b_0 + b_1x$$
 
 $$y = (b_0 + b_2) + (b_1+b_3)x$$
 
-- Intercept and slope *can* differ between groups
+- Intercept *and* slope *can* differ between groups
 
 ---
 # Visualizing Interaction Model
@@ -261,9 +262,9 @@ $$y = (b_0 + b_2) + (b_1+b_3)x$$
 ggplot(Salaries, 
        aes(x = yrs.service, 
            y = salary, 
-           color = sex)) +
+           color = sex)) + #<<
   geom_point(alpha = 0.6, size = 5) +
-  geom_smooth(method = 'lm', se = FALSE, size = 2) +
+  geom_smooth(method = 'lm', se = FALSE, size = 2) + #<<
   theme(text = element_text(size = 20))
 ```
 ]
@@ -354,6 +355,11 @@ $$\hat{Sal}=82069+1637*YrsEmp+20129*Male - 932*YrsEmp*Male$$
 ---
 class: inverse, middle, center
 
+# Let's practice answering questions related to regression using explanatory categories and interactions. 
+
+---
+class: inverse, middle, center
+
 # Linear probability model (LPM)
 
 ---
@@ -378,7 +384,7 @@ head(divorce, n=5) %>%
   kable(format = 'html')
 ```
 
-- Suppose we want to know how these the probability of divorce is associated with these variables
+- Suppose we want to know how these variables might affect the probability of divorce among married or previously so individuals
 
 ---
 # Running an LPM
