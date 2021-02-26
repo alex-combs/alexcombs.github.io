@@ -416,7 +416,7 @@ $$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$
 -0.18*1
 ```
 
-- All else equal, each child reduces the probability of divorce by 18%, on average.
+- All else equal, each child reduces the probability of divorce by 18 percentage points, on average.
 
 --
 
