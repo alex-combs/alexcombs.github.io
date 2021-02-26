@@ -117,13 +117,13 @@ ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
 # Parallel Slopes Model Implications
 
 $$y = \beta_0 + \beta_1x + \beta_2 d + \epsilon$$
-$$y = b_0 + b_1x + b_2 d$$
+$$\hat{y} = b_0 + b_1x + b_2 d$$
 - where $x$ is continuous and $d$ is a dummy variable = 0/1
 
 ---
 # Parallel Slopes Model Implications
 
-$$y = b_0 + b_1x + b_2 d$$
+$$\hat{y} = b_0 + b_1x + b_2 d$$
 
 - Change in $y$ due to a change in $x$ is still $b_1$
 
@@ -131,13 +131,13 @@ $$y = b_0 + b_1x + b_2 d$$
 
 - In cases where $d=0$, then
 
-$$y = b_0 + b_1x$$
+$$\hat{y} = b_0 + b_1x$$
 
 --
 
 - In cases where $d=1$, then
 
-$$y = (b_0 + b_2) + b_1x$$
+$$\hat{y} = (b_0 + b_2) + b_1x$$
 
 --
 
@@ -238,19 +238,19 @@ class: inverse, middle, center
 # Interaction model implications
 
 $$y = \beta_0 + \beta_1x + \beta_2d + \beta_3 xd + \epsilon$$
-$$y = b_0 + b_1x + b_2d + b_3 xd$$
+$$\hat{y} = b_0 + b_1x + b_2d + b_3 xd$$
 
 --
 
 - For the $d=0$ group:
 
-$$y = b_0 + b_1x$$
+$$\hat{y} = b_0 + b_1x$$
 
 --
 
 - For the $d=1$ group:
 
-$$y = (b_0 + b_2) + (b_1+b_3)x$$
+$$\hat{y} = (b_0 + b_2) + (b_1+b_3)x$$
 
 - Intercept *and* slope *can* differ between groups
 
