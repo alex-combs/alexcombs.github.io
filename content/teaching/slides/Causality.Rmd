@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Causality"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "October 28, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -22,9 +22,15 @@ set.seed(123)
 options(scipen = 999)
 ```
 
-- How to know if we can conclude that $x$ *causes* a change in $y$
+- Overview of research design and key components
+  - Counterfactual
+  - Internal validity
+  - External validity
+  - Experimental, quasi-experimental, non-experimental
 
-- How to know if our model has omitted variable bias and what can be done about it
+- Criteria to claim that $x$ *causes* a change in $y$
+
+- Systematic process to identify omitted variable bias (endogeneity) and what can be done about it
 
 ---
 # Potential outcomes
@@ -33,93 +39,109 @@ options(scipen = 999)
 
 --
 
-1. The outcome that we observe in the presence of the event
+- The outcome that we observe in the presence of the event
 
-2. The outcome that we would have observed had the event **not happened**
+- The outcome that we would have observed had the event *not happened*
 
 --
 
 - What would have happened in this alternate reality is referred to as the **counterfactual**
 
 ---
-# Counterfactual Key to Effect
+# Potential outcomes
 
-```{r, echo=FALSE, fig.align='center', dpi=125}
-include_graphics('lectures_files/prog-effect.png')
-```
+- Half of the data we need to *observe* causation is missing
 
----
-# Half of Causal Data is Missing
+- We observe the outcome for those who received some treatment
 
-```{r, echo=FALSE}
-include_graphics('lectures_files/counterfact.png')
-```
+- We observe the outcome for those who did not receive the treatment
 
-- For each member in either group, we do not observe their outcome had they been in the other group
+--
+
+- Can never observe the outcome among the treated had they not received it or the untreated as if they had
 
 ---
 # The challenge of counterfactual
 
-- So what can we do?
+- All we can do is compare outcomes between observed groups. This can take several forms.
 
-- Compare outcomes between observed groups
-  - Randomize treatment
-  - Use quasi-experimental model
-  - Control for the **right** variables and argue you have engineered virtual twins between treated and control as if randomized
+--
+
+- **Randomize** treatment so nothing else differs between treated and untreated groups
+
+--
+  
+- Use **quasi-experimental** design that leverages some aspect of the treatment to claim it is *as if* randomized
+
+--
+  
+- Control for the all the right variables between treated and untreated claiming nothing else differs between the two *as if* randomized
+
+---
+# Credible Analysis
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/credible.png')
+```
+
+---
+# Internal validity
+
+**Internal validity:** the credibility of the theoretical assumptions applied and the causal connection established between the cause (policy, program, treatment) and an effect
+
+- Does a change in $x$ cause a change in $y$?
 
 ---
 # Criteria for causation
 
-1. Correlation between $x$ and $y$ -- as $x$ changes, $y$ must also tend to change not due to random noise
+1. Correlation between $x$ and $y$ -- as $x$ changes, $y$ must also tend to change
 
 2. Temporal precedence -- $x$ must occur before $y$
 
-3. No plausible rival or alternative explanations -- no other variable $Z$ can influence the change in $y$ we attribute to $x$
+3. No plausible rival or alternative explanations -- no other variable $z$ can influence the change in $y$ we attribute to $x$
 
 ---
 # Correlation between X and Y
 
-- Easiest to satisfy
+- If you run a regression and the coefficient is statistically significant, you have established correlation that is unlikely random
 
-- If you run a regression and the coefficient is statistically significant, you have established correlation
-
-- Many things correlate that share no causal relationship
+- But many things correlate that share no causal relationship
 
 ---
 # Temporal Precedence
 
-- Fairly easy to establish when studying an acute event or intervention
+- Easiest for discrete event or intervention
+
   - Medicaid expansion on health outcomes
-  - Participation in job training on employment
+  
+  - Stimulus check on spending/saving
+  
+  - Job training program on employment outcomes
 
 --
   
-- More difficult when studying nebulous behaviors/facts
-  - Minutes of exercise on Body Mass Index (BMI)
-    - Do people have a high BMI because they don't exercise or do they not exercise because they already have a high BMI?
-  - Merit scholarship on degree completion
-    - Did scholarship increase motivation or did student already have motivation as evidenced by receiving scholarship?
+- More difficult with ongoing/continuous phenomena
+
+  - Mask wearing and COVID spread
   
-- Possible solution: Use values of $x$ measured prior to $y$
+  - Macroeconomics
+  
+- Possible solution: Use $x$ from previous periods to explain current $y$
 
 ---
 # No plausible alternative explanation
 
 - No other variable $z$ can influence the change in $y$ we attribute to $x$
 
+--
+
 - Employment rate among those who participated in a job training program is 75% compared to 40% among those who did not participate.
 
 --
 
-- Job training programs increase the likelihood of employment by 35 percentage points. 
+- Conclusion: Job training programs increase the likelihood of employment by 35 percentage points. 
+
 - Plausible alternatives?
-  
----
-# Key questions
-
-- When I run a regression, how do I know if I can conclude a one-unit change in $x$ **causes** a (value of coefficient) change in $y$?
-
-- Or do my results provide only a correlation/association between $x$ and $y$?
 
 ---
 class: inverse, center, middle
@@ -131,18 +153,16 @@ class: inverse, center, middle
 
 - Visual representation of causal pathways
 
-- Used to identify causal effects in **observational** data
+- Forces us to consider our assumptions
 
-- Requires you to consider your assumptions
-
-- Can incorporate existing theory and research as well as your own hypotheses
+- Allows for a systematic evaluation of causal model, especially using **observational**, **non-experimental** data
 
 ---
 # Regression and DAGS
 
 - Behind every regression is a DAG
 
-$$Happiness=\beta_0+\beta_1Age+\beta_2Age^2+\beta_3ln(Inc)+\epsilon$$
+$$Happiness=\beta_0+\beta_1Age+\beta_2Income+\epsilon$$
 
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('lectures_files/dag15.png')
@@ -154,10 +174,10 @@ include_graphics('lectures_files/dag15.png')
 .pull-left[
 
 - Solid arrow: effect is observable
-
 - Dashed arrow: effect is unobservable
+- Arrows claim correlation, at least
 
-- Two types of causal paths:
+- Two types of paths:
   - Direct $X \rightarrow Y$
   - Mediated (indirect) $X \rightarrow Z \rightarrow Y$
 
@@ -170,7 +190,6 @@ include_graphics('lectures_files/dag2.png')
 ```
 
 - No two-way arrows
-
 - No direct path from $Y$ back to $X$
 
 ]
@@ -179,26 +198,17 @@ include_graphics('lectures_files/dag2.png')
 # Our focus on DAGS
 
 - Backdoor paths
+
 - Adjusting for **confounding** and **colliding** variables
+
 - Translating regression to DAGS and vice versa
 
-- Further reading on DAGS: Pearl, J. (2018). [The Book of Why](https://www.amazon.com/dp/B07CYJ4G2L/ref=cm_sw_em_r_mt_dp_QlXEFb2CK71MS)
+- Further reading: Pearl, J. (2018). [The Book of Why](https://www.amazon.com/dp/B07CYJ4G2L/ref=cm_sw_em_r_mt_dp_QlXEFb2CK71MS)
 
 ---
-# Backdoor paths
+# Backdoor path
 
-- Any path from $X$ to $Y$ with an arrow pointing into $X$
-
-- Or an arrow from $X$ to another variable(s) that trace to $Y$
-
---
-
-- Our goal is to close all backdoor paths
-
----
-# Generic backdoor path
-
-```{r, echo=FALSE, fig.align='center'}
+```{r, echo=FALSE, fig.align='center', fig.height=5}
 include_graphics('lectures_files/dag3.png', dpi = 100)
 ```
 
@@ -209,11 +219,13 @@ include_graphics('lectures_files/dag3.png', dpi = 100)
 ---
 # Close the backdoor
 
-Two ways to close a backdoor path
+- Our goal is to close all backdoor paths between $X$ and $Y$
+
+- Three ways to close a backdoor path
 
 --
 
-1. Control for the **confounder**
+1. Control for the **confounder** in our regression
 
 ---
 # Close the backdoor
@@ -237,13 +249,52 @@ $$Y=\beta_0+\beta_1X+\beta_2Z+\epsilon$$
 ---
 # Close the backdoor
 
-Two ways to close a backdoor path
+- Three ways to close a backdoor path
 
 1. Control for the **confounder**
 
 --
 
-2. Identify a **collider** variable that closes the backdoor path
+2. Control for any variable along the backdoor path
+
+---
+# Close the backdoor
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/dag4.2.png', dpi = 100)
+```
+
+.center[
+$$X \rightarrow Y$$
+$$X \leftarrow Z \rightarrow K \rightarrow Y$$
+]
+
+.pull-left[
+$$Y=\beta_0+\beta_1X+\epsilon$$
+
+- Backdoor open; OVB
+]
+
+.pull-right[
+$$Y=\beta_0+\beta_1X+\beta_2K+\epsilon$$
+
+- Backdoor closed/blocked; no OVB
+]
+
+---
+# Close the backdoor
+
+- Three ways to close a backdoor path
+
+1. Control for the **confounder**
+
+--
+
+2. Control for any variable along the backdoor path
+
+--
+
+3. Identify a **collider** variable that closes the backdoor path
 
 ---
 # Collider variable
@@ -252,7 +303,7 @@ Two ways to close a backdoor path
 include_graphics('lectures_files/dag6.png', dpi = 100)
 ```
 
-- $Z$ is a **collider**
+- $Z$ is a **collider** in this case
 
 - Colliders close backdoors
 
@@ -272,7 +323,8 @@ $X \leftarrow Z \rightarrow K \leftarrow Y$
 .pull-left[
 $$Y=\beta_0+\beta_1X+\epsilon$$
 $$Y=\beta_0+\beta_1X+\beta_2Z+\epsilon$$
-- Either is fine; backdoor closed; no OVB
+$$Y=\beta_0+\beta_1X+\beta_2Z+\beta_3K+\epsilon$$
+- All are fine; backdoor closed
 ]
 
 .pull-right[
@@ -282,11 +334,6 @@ $$Y=\beta_0+\beta_1X+\beta_2K+\epsilon$$
 
 - **Controlling for a collider opens the backdoor it closed**
 ]
-
----
-class: inverse, center, middle
-
-# If we can demonstrate all backdoor paths are blocked along the way by either controlling for a confounder or identifying a collider, and only the path from $X$ to $Y$ remains, then we can claim we have satisfied the third criterion of causality.
 
 ---
 # The error term and OVB
@@ -301,7 +348,7 @@ $$Y=\beta_0+\beta_1X+\epsilon$$
 
 ]
 
-- If true model was left DAG, out estimate $b_1$ is *not* solely due to $X$, but rather unobserved factors contained in $\epsilon$
+- If true model was left DAG, our estimate $b_1$ is *not* solely due to $X$, but rather unobserved factors contained in $\epsilon$
 
 - Referred to as **endogeneity** or "X is endogenous"
 
@@ -309,7 +356,7 @@ $$Y=\beta_0+\beta_1X+\epsilon$$
 # Error term and OVB
 
 .center[
-$$Happiness=\beta_0+\beta_1Age+\beta_2Age^2+\beta_3ln(Inc)+\epsilon$$]
+$$Happiness=\beta_0+\beta_1Age+\beta_2Income+\epsilon$$]
 
 .pull-left[
 ```{r, echo=FALSE, fig.align='center'}
@@ -326,7 +373,18 @@ include_graphics('lectures_files/dag15.png')
 ---
 class: inverse, center, middle
 
-# Using DAGS starting from a research question
+# Using DAGS systematically
+
+---
+# Using DAGS
+
+1. Begin with the direct path between $X$ and $Y$ based on your research question
+
+2. Identify other factors that affect $X$ and/or $Y$, adding them to the DAG accordingly
+
+3. List all paths starting from $X$ to $Y$
+
+4. Identify any backdoor paths and determine how to close them
 
 ---
 # Using DAGS
@@ -341,7 +399,10 @@ $$Y=\beta_0+\beta_1C+\epsilon$$
 
 - Now we should think of all the factors that affect earnings and/or going to college
 
-- Suppose we identify three factors: parent's education $PE$, family income $I$, natural aptitude $A$
+- Suppose we identify three factors: 
+  - Parent's education $PE$ 
+  - Family income $I$ 
+  - Natural aptitude of parents/child $A$
 
 ---
 # Using DAGS
@@ -379,9 +440,7 @@ include_graphics('lectures_files/dag10.png', dpi = 150)
 
 --
 
-- Are there any colliders closing one or more backdoors? No.
-
-- We have three open backdoor paths; systematic non-causal correlations between $C$ and $Y$
+- Any colliders? No. We have three open backdoor paths. Systematic non-causal correlations between $C$ and $Y$
 
 ---
 # Using DAGS
@@ -404,22 +463,24 @@ $$Y=\beta_0+\beta_1C+\beta_2I+\epsilon$$
 - If we believe this DAG, then we now have the causal effect of college on earnings.
 
 ---
-# Assumptions
+# Assumptions & alternatives
 
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('lectures_files/dag10.png', dpi = 150)
 ```
 
-- There are at least two key assumptions this DAG makes
+- Two key assumptions this DAG makes
 
-1. Other than natural aptitude $A$, there are no other unobserved factors that affect $C$, thus avoiding **endogeneity**
+--
+
+1. Other than natural aptitude $A$, no other *unobserved* factors affect $C$
 
 --
 
 2. Natural aptitude does not directly affect earnings $Y$
 
 ---
-# Assumptions
+# Assumptions & alternatives
 
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('lectures_files/dag11.png', dpi = 150)
@@ -449,6 +510,11 @@ include_graphics('lectures_files/dag11.png', dpi = 150)
 ---
 class: inverse, center, middle
 
+# Let's practice using DAGs in groups
+
+---
+class: inverse, center, middle
+
 # Collider Bias Revisited
 
 ---
@@ -461,7 +527,7 @@ class: inverse, center, middle
 - Using a sample where observations are based on a collider variable
 
 ---
-# Collider bias (1) bad control
+# Collider bias: bad control
 
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('lectures_files/dag12.png', dpi = 150)
@@ -473,7 +539,7 @@ include_graphics('lectures_files/dag12.png', dpi = 150)
 
 $$CarAcc = \beta_0 + \beta_1Marijuana + \beta_2Seatbelt + \epsilon$$
 
-- Controlling for seatbelt usage introduces bias
+- Controlling for seatbelt usage would introduce bias
 
 
 ---
@@ -558,12 +624,12 @@ get_regression_table(biased) %>%
 ```
 ]
 
-- Coefficient for $X$ should be 50 because I engineered it to.
+- Coefficient for $X$ should be 50 because I made it so.
 
 - Because $X \rightarrow Z \leftarrow Y$, controlling for Z introduces serious bias
 
 ---
-# Collider bias (2) bad sample
+# Collider bias: bad sample
 
 - Suppose a nonprofit that works with at-risk youth wants to understand the effect of school absences on grades. It only has access to data on its own clients.
 
@@ -593,7 +659,7 @@ include_graphics('lectures_files/dag13.png', dpi = 150)
 
 .pull-right[
 
-- Will out estimate $b_1$ be unbiased?
+- Will our estimate $b_1$ be unbiased?
 
 - No. Because our sample is selected from $AtRisk$; same as controlling for it.
 
@@ -740,17 +806,25 @@ selection_bias %>%
 
 --
 
-- If so, internally valid. On to external validity.
+- If so, internally valid. Now we can consider **external validity**.
+
+---
+# External validity
+
+- **External validity (generalizability):** can results of research be applied beyond the groups or context being studied?
 
 --
 
-- To whom can I generalize my results? Are those in my sample systematically different than those in the population?
+- Are those in my sample systematically different than those in my intended population?
+
+- Probably, but if not, can generalize to population.
 
 --
 
 - If different, was my sample drawn from a collider?
-  - Yes? Then all backdoors are not closed. Start over.
-  - No? I can generalize to the subgroup my sample represents.
+
+  - Yes. Then all backdoors are not closed.
+  - No. Then may be able to generalize to the subgroup my sample represents.
 
 ---
 # Causal inference models
@@ -763,5 +837,5 @@ include_graphics('lectures_files/dag14.png', dpi = 150)
 
 - Random assignment is often difficult to achieve in social sciences
 
-- There are regression modeling techniques that achieve the same break from the error term without random assignment
+- There are quasi-experimental regression techniques that arguably achieve the same break from the error term as if random
   - Difference-in-differences, regression discontinuity, instrumental variables, synthetic control, fixed effects, propensity score matching

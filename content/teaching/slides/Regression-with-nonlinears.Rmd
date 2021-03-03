@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Regression with Nonlinear Variables"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "October 21, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -11,6 +11,7 @@ output:
       beforeInit: "macros.js"
       highlightStyle: github
       countIncrementalSlides: false
+      highlightLines: true
 ---
 # Outline
 
@@ -61,9 +62,17 @@ gapminder %>%
 
 $$y=\beta_0+\beta_1x_1+\beta_2x_1^2+\beta_3x_2+...+\beta_kx_{k-1}+\epsilon$$
 
-```{r, echo=FALSE}
-include_graphics('lectures_files/quadratic.png')
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/quadratic.png', dpi = 125)
 ```
+
+.pull-left[
+$b_1$ will be negative and $b_2$ will be positive
+]
+
+.pull-right[
+$b_1$ will be positive and $b_2$ will be negative
+]
 
 ---
 # Quadratic regression
@@ -176,12 +185,7 @@ $$\hat{Wage}=-22.7+1.25*Educ+1.35*Age-0.013*Age^2$$
 - The predicted wage is approximately 27.24 dollars
 
 ---
-class: inverse, center, middle
-
-# Let's practice some more using the R Chapter for this week.
-
----
-# Beware predicting large changes x
+# Beware predicting large changes in x
 
 - We computed the marginal effect of age on wage at 49 equals 0.08
 
@@ -207,6 +211,11 @@ class: inverse, center, middle
 ```
 
 - An increase of only 0.10, not 0.32...because not linear
+
+---
+class: inverse, center, middle
+
+# Time for some practice
 
 ---
 class: inverse, center, middle
@@ -255,7 +264,7 @@ log(-5)
 # Transform skewed data
 
 ```{r, fig.align='center', fig.height=6}
-ggplot(gapminder, aes(x = gdpPercap)) +
+ggplot(gapminder, aes(x = gdpPercap)) + #<<
   geom_histogram(bins = 50, fill = 'steelblue', color = 'white') +
   theme_minimal()
 ```
@@ -264,7 +273,7 @@ ggplot(gapminder, aes(x = gdpPercap)) +
 # Transform skewed data
 
 ```{r, fig.align='center', fig.height=6}
-ggplot(gapminder, aes(x = log10(gdpPercap))) +
+ggplot(gapminder, aes(x = log10(gdpPercap))) + #<<
   geom_histogram(bins = 50, fill = 'steelblue', color = 'white') +
   theme_minimal()
 ```
@@ -275,7 +284,7 @@ ggplot(gapminder, aes(x = log10(gdpPercap))) +
 ```{r, fig.align='center', fig.height=5}
 ggplot(gapminder, aes(x = gdpPercap)) +
   geom_histogram(bins = 50, fill = 'steelblue', color = 'white') +
-  scale_x_log10(labels = scales::dollar) +
+  scale_x_log10(labels = scales::dollar) + #<<
   theme_minimal()
 ```
 
@@ -297,7 +306,7 @@ gapminder %>%
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp)) +
   geom_point(color = 'steelblue', alpha = 0.4) +
-  scale_x_log10(labels = scales::dollar) +
+  scale_x_log10(labels = scales::dollar) + #<<
   labs(x = 'Log GDP per capita', y = 'Life expectancy') +
   theme_minimal()
 ```
@@ -309,9 +318,9 @@ gapminder %>%
 
 --
 
-- Using the natural log in regression quantifies percent changes
+- Using the natural log in regression quantifies **percent changes**
 
-- This is useful when the effect of $x$ on $y$ is not constant and depends on the starting value of $x$ or $y$
+- This is useful when the effect of $x$ on $y$ is not constant and depends on the starting value of $x$ and/or $y$
 
 --
 
@@ -328,8 +337,8 @@ class: inverse, center, middle
 $$ln(y)=\beta_0+\beta_1ln(x_1)+...+\beta_kx_k+\epsilon$$
 $$ln(\hat{y})=b_0+b_1ln(x_1)+...+b_kx_k$$
 
-```{r, echo=FALSE}
-include_graphics('lectures_files/log-log.png')
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/log-log.png', dpi = 150)
 ```
 
 ---
@@ -340,6 +349,23 @@ $$ln(\hat{y})=b_0+b_1ln(x_1)+...+b_kx_k$$
 - As $x_1$ increases 1%, y changes $b_1$%
 
 - This is how **elasticities** are estimated
+
+---
+# Elasticities
+
+- Who cares? Well, elasticities are useful because they are unit and scale independent. This often allows us to make better sense of relationships between variables.
+
+--
+
+- Suppose increasing the income tax rate 1 percentage point results in $100 Billion more in revenue. 
+
+- Wouldn't the result depend on the starting tax rate? Probably. Is that a lot in return for the increase? I don't know. Hard to compare percentage point changes relative to dollar changes.
+
+--
+
+- Instead, suppose we use a log-log model and find that a 1% increase in the income tax rate results in a 0.5% increase in tax revenues.
+
+- Now can be applied to any starting point for tax rates. Though positive, also tells us we get diminishing returns. Put simply, an eventual plateau in revenues.
 
 ---
 # In R
@@ -413,6 +439,8 @@ get_regression_table(lev_lev2) %>%
 
 - How do we interpret `gdpPercap_thou` and `pop_100mill`?
 
+- How do we interpret, say, `Europe`?
+
 ]
 
 ---
@@ -445,6 +473,8 @@ get_regression_table(log_log) %>%
 
 - How do we interpret `log(gdpPercap)` coefficient?
 
+- Life expectancy increases 0.1% per 1% increase in GDP per capita.
+
 - What about the `pop_100mill` and `continent` coefficients? Refer to the handout on eLC.
 
 ]
@@ -455,8 +485,8 @@ get_regression_table(log_log) %>%
 $$y=\beta_0+\beta_1ln(x_1)+...+\beta_kx_k+\epsilon$$
 $$\hat{y}=b_0+b_1ln(x_1)+...+b_kx_k$$
 
-```{r, echo=FALSE}
-include_graphics('lectures_files/level-log.png')
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/level-log.png', dpi = 150)
 ```
 
 ---
@@ -496,7 +526,9 @@ get_regression_table(lev_log) %>%
 
 - How do we interpret `log(gdpPercap)` coefficient?
 
-- What about the `pop_100mill` and `continent` coefficients?
+- Life expectancy increases 0.07 years per 1% increase in GDP per capita.
+
+- What about the `pop_100mill` and `continent` coefficients? Refer to handout on eLC.
 
 ]
 
@@ -506,8 +538,8 @@ get_regression_table(lev_log) %>%
 $$ln(y)=\beta_0+\beta_1x_1+...+\beta_kx_k+\epsilon$$
 $$ln(\hat{y})=b_0+b_1x_1+...+b_kx_k$$
 
-```{r, echo=FALSE}
-include_graphics('lectures_files/log-level.png')
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/log-level.png', dpi=150)
 ```
 
 ---
@@ -545,7 +577,9 @@ get_regression_table(log_lev) %>%
 
 .pull-right[
 
-- How do we interpret `gdpPercap_thou` and `pop100_mill` coefficient?
+- How do we interpret `gdpPercap_thou`?
+
+- Life expectancy increases 0.7% per $1 increase in GDP per capita.
 
 - What about the `continent` coefficients? Refer to handout on eLC.
 
@@ -554,7 +588,7 @@ get_regression_table(log_lev) %>%
 ---
 class: inverse, center, middle
 
-# Let's return to the R Chapter to practice log estimates
+# Time to practice once again
 
 ---
 # Predicting Value of Y
@@ -645,7 +679,7 @@ class: inverse, center, middle
 
 - Choose the model with highest $R^2$ or lowest RMSE
 
-- There's a catch: we can only compare models with the same response variable
+- However, we can only compare models with a response variable in the same units
 
 - Therefore, we can't compare models with level and log response without some extra work
 
@@ -708,11 +742,11 @@ sum.models <- tibble(Model = c('Level-level', 'Level-log', 'Log-level', 'Log-log
 kable(sum.models)
 ```
 
-- Results suggest level-log model is the best
+- Results suggest level-log model is the best. Could stop here is all we cared about was best model.
 
-- How far off is this model, on average, when predicting life expectancy?
+- But how far off is this model, on average, when predicting life expectancy?
 
-- We saw this on slide 48; **residual standard error**
+- We saw this on slide 53; **residual standard error** = 8.4, so about 8.4 years.
 
 ---
 # RMSE from log Y
@@ -723,12 +757,14 @@ kable(sum.models)
 
 ```{r}
 aug_log_log <- aug_log_log %>% 
-  mutate(lifeExp = exp(`log(lifeExp)`), 
+  mutate(lifeExp = exp(`log(lifeExp)`), #<<
          yhat = exp(.fitted)) %>% 
-  mutate(error = lifeExp - yhat)
+  mutate(error = lifeExp - yhat) #<<
   
 sqrt(mean(aug_log_log$error^2))
 ```
+
+- Need only to modify the name of the new and existing variables in highlighted lines
 
 - Log-log model is off by 7 years, on average
 
@@ -755,4 +791,4 @@ sum.models2 <- tibble(Model = c('Level-level', 'Level-log', 'Log-level', 'Log-lo
 kable(sum.models2)
 ```
 
-- Which model should we choose?
+- Unsurprisingly, $R^2$ and RMSE agree. We should choose the level-log model for best fit. Other reasons may lead us to choose a different model such as log-log.
