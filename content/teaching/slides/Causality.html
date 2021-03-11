@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Causation
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 03, 2021
+### Last updated: March 11, 2021
 
 ---
 
@@ -78,7 +78,7 @@ class: center, middle, inverse, title-slide
 
 --
   
-- Control for the all the right variables between treated and untreated claiming nothing else differs between the two *as if* randomized
+- **Non-experimental:** No special design element; controlling for all the right variables to claim there is no spurious correlation
 
 ---
 # Credible Analysis
@@ -558,12 +558,12 @@ collider_bias &lt;- collider_bias %&gt;%
 
 --
 
-- Creating a collider `\(Z\)` that is a function of `\(X\)` and `\(Y\)`. `\(Y\)` **is not** a function of `\(Z\)`.
+- Creating a collider `\(Z\)` that is a function of `\(X\)` and `\(Y\)`.
 
 
 ```r
 collider_bias &lt;- collider_bias %&gt;% 
-  mutate(Z = 50*X + Y + u)
+  mutate(Z = 50*X + 10*Y + u)
 ```
 
 ---
@@ -572,12 +572,12 @@ collider_bias &lt;- collider_bias %&gt;%
 - Now have the data we need to run two regressions
 
 
-|     k|     e|     u|  X|      Y|      Z|
-|-----:|-----:|-----:|--:|------:|------:|
-|  7.76| -0.68| -0.49|  0|  99.32|  98.83|
-|  9.08|  0.57|  1.13|  0| 100.57| 101.70|
-| 16.23| -0.70| -1.15|  1| 149.30| 198.15|
-| 10.28| -0.53|  1.48|  0|  99.47| 100.95|
+|  X|      Y|       Z|
+|--:|------:|-------:|
+|  0|  99.32|  992.72|
+|  0| 100.57| 1006.87|
+|  1| 149.30| 1541.81|
+|  0|  99.47|  996.14|
 
 `$$Y=\beta_0 + \beta_1X + \epsilon$$`
 
@@ -604,9 +604,9 @@ biased &lt;- lm(Y ~ X + Z, data = collider_bias)
 
 |term      | estimate|
 |:---------|--------:|
-|intercept |    49.32|
-|X         |    -0.70|
-|Z         |     0.51|
+|intercept |     0.99|
+|X         |    -4.45|
+|Z         |     0.10|
 ]
 
 - Coefficient for `\(X\)` should be 50 because I made it so.
@@ -729,7 +729,7 @@ biased &lt;- lm(Y ~ X + Z, data = collider_bias)
 
 --
 
-- Can I convincingly claim there is no OVB?
+- Is my theoretical claim credible? Can I claim there is no OVB?
 
 --
 
@@ -742,7 +742,7 @@ biased &lt;- lm(Y ~ X + Z, data = collider_bias)
 
 --
 
-- Are those in my sample systematically different than those in my intended population?
+- Are those in my sample systematically different than those in the population?
 
 - Probably, but if not, can generalize to population.
 
@@ -751,7 +751,7 @@ biased &lt;- lm(Y ~ X + Z, data = collider_bias)
 - If different, was my sample drawn from a collider?
 
   - Yes. Then all backdoors are not closed.
-  - No. Then may be able to generalize to the subgroup my sample represents.
+  - No. Then may be able to generalize to the subgroup my sample represents. (Example: effect of job training on participants instead of any unemployed person)
 
 ---
 # Causal inference models

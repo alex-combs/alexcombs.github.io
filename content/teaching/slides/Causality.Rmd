@@ -75,7 +75,7 @@ options(scipen = 999)
 
 --
   
-- Control for the all the right variables between treated and untreated claiming nothing else differs between the two *as if* randomized
+- **Non-experimental:** No special design element; controlling for all the right variables to claim there is no spurious correlation
 
 ---
 # Credible Analysis
@@ -579,11 +579,11 @@ collider_bias <- collider_bias %>%
 
 --
 
-- Creating a collider $Z$ that is a function of $X$ and $Y$. $Y$ **is not** a function of $Z$.
+- Creating a collider $Z$ that is a function of $X$ and $Y$.
 
 ```{r}
 collider_bias <- collider_bias %>% 
-  mutate(Z = 50*X + Y + u)
+  mutate(Z = 50*X + 10*Y + u)
 ```
 
 ---
@@ -592,7 +592,8 @@ collider_bias <- collider_bias %>%
 - Now have the data we need to run two regressions
 
 ```{r, echo=FALSE}
-head(collider_bias, n = 4) %>% 
+head(collider_bias, n = 4) %>%
+  select(X, Y, Z) %>% 
   kable(digits = 2)
 ```
 
@@ -802,7 +803,7 @@ selection_bias %>%
 
 --
 
-- Can I convincingly claim there is no OVB?
+- Is my theoretical claim credible? Can I claim there is no OVB?
 
 --
 
@@ -815,7 +816,7 @@ selection_bias %>%
 
 --
 
-- Are those in my sample systematically different than those in my intended population?
+- Are those in my sample systematically different than those in the population?
 
 - Probably, but if not, can generalize to population.
 
@@ -824,7 +825,7 @@ selection_bias %>%
 - If different, was my sample drawn from a collider?
 
   - Yes. Then all backdoors are not closed.
-  - No. Then may be able to generalize to the subgroup my sample represents.
+  - No. Then may be able to generalize to the subgroup my sample represents. (Example: effect of job training on participants instead of any unemployed person)
 
 ---
 # Causal inference models

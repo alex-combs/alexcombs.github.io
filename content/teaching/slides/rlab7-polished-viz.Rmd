@@ -41,10 +41,9 @@ output:
 
 > **Should already have the following packages ready to load:**
 
-```{r, message=FALSE}
-library(data.table)
+```{r, message=FALSE, warning=FALSE}
 library(tidyverse)
-library(arsenal)
+library(data.table)
 library(lubridate)
 ```
 
@@ -56,7 +55,7 @@ covid_ga <- covid %>%
 
 covid_ga$date <- ymd(covid_ga$date)
 
-yesterday <- '2021-01-29'
+yesterday <- '2021-03-04'
 
 covid_ga$county <- as.factor(covid_ga$county)
 
@@ -78,7 +77,7 @@ covid_ga <- covid_ga %>%
 ---
 # Adjusting for Population
 
-- We realized that it is not informative to compare counts of COVID cases and/or deaths across counties of different size populations
+- We realized that it is not as informative to compare counts of COVID cases and/or deaths across counties of different size populations
 
 --
 
@@ -97,16 +96,16 @@ covid_ga <- covid_ga %>%
 
 --
 
-By dividing population by 100,000. Then, we need to create cases and deaths per 100,000. How?
+- By dividing population by 100,000. Then, we need to create cases and deaths per 100,000. How?
 
 --
 
-By dividing cases and deaths by this new measure of population in 100,000s
+- By dividing cases and deaths by this new measure of population in 100,000s
 
 ---
 # Adjusting for Population
 
-> **Now that we know the plan, try executing it in R, overwriting the `covid_ga` dataset**
+> **Now that we know the plan, try executing it in R, overwriting the `covid_ga` dataset to add `cases_rate` and `deaths_rate`.**
 
 --
 
@@ -187,7 +186,7 @@ covid_ga %>%
 ---
 # Viz 1 - Log scale
 
-- The right skew makes bunches most counties within an interval that is difficult to distinguish.
+- The right skew bunches most counties within a small interval that is difficult to distinguish.
 
 > **Correct the skew by converting the x axis to log scale**
 
@@ -206,7 +205,7 @@ covid_ga %>%
 ---
 # Viz 1 - Log scale
 
-```{r, echo=FALSE, fig.width=9, fig.height=7}
+```{r, echo=FALSE, fig.width=9, fig.height=7, message=FALSE}
 covid_ga %>% 
   filter(date == yesterday) %>% 
   ggplot(aes(x = cases)) +
@@ -223,7 +222,7 @@ covid_ga %>%
 
 > **Change the `fill` color and outline `color` of the histogram
 
-```{r, eval=FALSE, fig.width=9, fig.height=7}
+```{r, eval=FALSE, fig.width=9, fig.height=7, message=FALSE}
 covid_ga %>% 
   filter(date == yesterday) %>% 
   ggplot(aes(x = cases)) +
@@ -238,7 +237,7 @@ covid_ga %>%
 ---
 # Viz 1 - Fill and outline
 
-```{r, echo=FALSE, fig.width=9, fig.height=7}
+```{r, echo=FALSE, fig.width=9, fig.height=7, message=FALSE}
 covid_ga %>% 
   filter(date == yesterday) %>% 
   ggplot(aes(x = cases)) +
@@ -253,13 +252,9 @@ covid_ga %>%
 ---
 # Viz 1 - Adding Comma Separator
 
-> **Install the `scales` function in your console. Use the code below to display x axis in comma format.**
+> **Use the code below to display x axis in comma format.**
 
-```{r, eval=FALSE}
-install.packages('scales')
-```
-
-```{r, eval=FALSE, fig.width=9, fig.height=7}
+```{r, eval=FALSE, fig.width=9, fig.height=7, message=FALSE}
 covid_ga %>% 
   filter(date == yesterday) %>% 
   ggplot(aes(x = cases)) +
@@ -274,7 +269,7 @@ covid_ga %>%
 ---
 # Viz 1 - Adding Comma Separator
 
-```{r, echo=FALSE, fig.width=9, fig.height=7}
+```{r, echo=FALSE, fig.width=9, fig.height=7, message=FALSE}
 covid_ga %>% 
   filter(date == yesterday) %>% 
   ggplot(aes(x = cases)) +
@@ -372,7 +367,7 @@ covid_ga %>%
 ---
 # Knit
 
-- Let's knit to see what how the export looks
+- Let's knit to see how the export looks
 
 ---
 # Viz 3: Change figure size
@@ -382,11 +377,11 @@ covid_ga %>%
 > **Add the following code chunks and knit again.**
 
 ```{r, eval=FALSE}
-{r, echo=FALSE, fig.width=5, fig.height=2}
+{r, echo=FALSE, fig.width=5, fig.height=3}
 ```
 
 
-```{r, echo=FALSE, fig.width=5, fig.height=2}
+```{r, echo=FALSE, fig.width=5, fig.height=3}
 covid_ga %>% 
   filter(date == yesterday) %>%
   ggplot(aes(x = deaths)) +
@@ -402,7 +397,7 @@ covid_ga %>%
 ---
 # Viz 4
 
-> **Update the bar graph comparing the our 5 chosen counties using cases per 100,000**
+> **Update the bar graph comparing our 5 chosen counties using cases per 100,000**
 
 --
 
@@ -635,4 +630,4 @@ covid_ga_5 %>%
 ---
 class: inverse, middle, center
 
-# Did bringing students, faculty, and staff back to UGA kill people?
+# Do these graph suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths?

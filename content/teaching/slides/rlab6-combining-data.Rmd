@@ -11,27 +11,27 @@ output:
       beforeInit: "macros.js"
       highlightStyle: github
       countIncrementalSlides: false
-      highlightlines: true
+      highlightLines: true
 ---
 # Objectives
 
--Most common combining data scenarios
+- Learn to perform most common combining data tasks
 
   - Append
-  - Right/left join
+  - Left join
 
 ---
 # Setup
 
 > **Either start a new project, "rlab6", or continue using your "rlab5" project.**
   
-> **If starting a new project, copy and paste your "rlab5_lastname" Rmd to "rlab6". Rename Rmd "rlab6.1_lastname"**
+> **If starting a new project, copy and paste or move your "rlab5_lastname" Rmd to "rlab6" folder. Rename Rmd "rlab6_lastname"**
 
 > **Change YAML to:**
 
 ```{r, eval=FALSE}
 ---
-title: "RLab6.1: Joining Data"
+title: "RLab6: Combining Data"
 author: "Your Name"
 output:
   html_document:
@@ -42,19 +42,17 @@ output:
 ---
 # Setup
 
-> **Should already have the following packages ready to load:**
+> **Reload the packages that should already be in your Rmd:**
 
-```{r, message=FALSE}
-library(data.table)
+```{r, eval=FALSE}
 library(tidyverse)
-library(arsenal)
+library(data.table)
 library(lubridate)
 ```
 
 ```{r, include=FALSE}
 library(data.table)
 library(tidyverse)
-library(arsenal)
 library(lubridate)
 
 covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
@@ -70,30 +68,13 @@ covid_ga$county <- as.factor(covid_ga$county)
 ```
 
 ---
-# Start another Rmd
-
-> **Start another Rmd**
-
-- We will use this Rmd to practice appending data unrelated to the COVID data from last week. Therefore, we want to keep these two documents separate.
-
-> **Change YAML; keep setup chunk; delete the rest.**
-
-```{r, eval=FALSE}
----
-title: "RLab6.2: Appending Data"
-author: "Your Name"
-output:
-  html_document:
-    df_print: paged
----
-```
-
----
 # Download & Import Data
 
 > **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, and `st_fin_2016.csv` files from eLC and add them to your project folder.**
 
-> **Import the three files in the append Rmd**
+> **Start a new code chunk anywhere in your Rmd. Set to `include=FALSE`. Name the code chunk `append`.**
+
+> **Import the three files**
 
 ```{r, eval=FALSE}
 st_fin_14 <- 
@@ -125,11 +106,11 @@ st_fin_16 <- read_csv("labs_files/st_fin_2016.csv")
 ---
 # Append
 
-- Appending is easy to do in something like Excel, but it can become very tedious if you need to append many datasets
+- Appending is simple to do in something like Excel but can become tedious if you need to append many datasets
 
-- And like always, Excel doesn't allow the process to be easily replicated for later use
+- And like always, Excel doesn't allow the process to be replicated for later use
 
-- R can append datasets with much less work involved
+- R can append datasets with much less effort
 
 ---
 # Append Example
@@ -150,7 +131,9 @@ gapminder97 <- gapminder %>%
   select(country, year, gdpPercap)
 ```
 
-- Suppose I need to append three datasets with same layout but different years
+- Suppose I need to append three datasets with same layout
+
+--
 
 ```{r}
 glimpse(gapminder07)
@@ -208,65 +191,7 @@ glimpse(st_fin_14_16)
 
 - You should have 150 observations (3 years X 50 states)
 
-- Now we can explore things like changes in state finances over time if we wanted to
-
-> **Save your Rmd and close it...we're finished with these data**
-
----
-# Appending multiple Excel sheets
-
-- Another common case is data stored in the same Excel workbook across multiple sheets
-
-- For example, `table8_history_2004-2017.xlsx` containing state expenditures on higher ed grants from [NASSGAP](https://www.nassgapsurvey.com)
-
----
-# Appending multiple Excel sheets
-
-```{r, eval=FALSE}
-library(readxl)
-library(plyr)
-```
-
-- First, store the name of every sheet
-
-```{r, eval=FALSE}
-nassgap_sheets <- excel_sheets("table8_history_2004-2017.xlsx")
-```
-
----
-# Appending multiple Excel sheets
-
-- Second, remove any names of sheets I don't want, such as the sheet containing the sum for all years, sheet 15.
-
-```{r, eval=FALSE}
-nassgap_sheets <- nassgap_sheets[1:14]
-```
-
----
-# Appending multiple Excel sheets
-
-- Third, use `lapply` to repeatedly run `read_excel` on each sheet.
-
-```{r, eval=FALSE}
-nassgap_sheets_all <- lapply(nassgap_sheets, function(x) read_excel("table8_history_2004-2017.xlsx", 
-            sheet = x,
-            range = "A2:F54",
-            col_names = c("state", 
-                          "need", 
-                          "mixed", 
-                          "merit", 
-                          "special", 
-                          "uncategorized")))
-```
-
----
-# Appending multiple Excel sheets
-
-- Fourth and final step, use `rbind.fill` to unpack the list of datasets in `nassgap_sheets_all` into a single dataset
-
-```{r, eval=FALSE}
-state_grants_04_17 <- rbind.fill(nassgap_sheets_all)
-```
+- Now we can explore things like changes in state finances over time
 
 ---
 class: inverse, middle, center
@@ -276,20 +201,20 @@ class: inverse, middle, center
 ---
 # Where to add code
 
-- Now we're ready to work on `RLab6.1_lastname.Rmd`
-
-- We are about to add data to the `covid_ga` data from last week in order to make comparisons across counties
+- Now we're ready to add data to the `covid_ga` data from last lab in order to make better comparisons across counties
 
 - Therefore, we need to add code chunks that add these data *before* we start making graphs
 
----
-# Left (and Right) Joins
+> **Find the point in your Rmd where you finished preparing `covid_ga` but hadn't yet started creating new variables. Run all code above that point.**
 
-- A left join (aka merge) is used when we want to add variables from a new dataset (y) to our main dataset (x), matching across common units of analysis (key)
+---
+# Left Joins
+
+- A left join is used when we want to add variables from a second dataset to our main dataset, matching observations based on a common set of variables called the **key**
 
 - Keeps ALL of the observations in our main dataset
 
-- Observations in our new dataset that don't match with the main dataset aren't added
+- Observations in the second dataset that don't match with the main dataset aren't added
 
 ![:scale 60%](labs_files/left_join.png)
 
@@ -320,7 +245,7 @@ new_dataset <- name_of_left_dataset %>%
 ```{r, eval=FALSE}
 new_dataset <- name_of_left_dataset %>% 
   left_join(name_of_right_dataset, 
-            by = c("name_of_key1", "name_of_key2", ...))
+            by = c("name_of_key1", "name_of_key2", ...)) #<<
 ```
 
 ---
@@ -331,7 +256,7 @@ new_dataset <- name_of_left_dataset %>%
 ```{r, eval=FALSE}
 new_dataset <- name_of_left_dataset %>% 
   left_join(name_of_right_dataset, 
-            by = c("key_in_left_data" = "key_in_right_data"))
+            by = c("key_in_left_data" = "key_in_right_data")) #<<
 ```
 
 --
@@ -341,14 +266,14 @@ new_dataset <- name_of_left_dataset %>%
 ```{r, eval=FALSE}
 new_dataset <- name_of_left_dataset %>% 
   left_join(name_of_right_dataset, 
-            by = c("key_in_left_data" = "key_in_right_data",
-                   "common_key", ...))
+            by = c("key_in_left_data" = "key_in_right_data", #<<
+                   "common_key", ...)) #<<
 ```
 
 ---
 # General Syntax to Left Joins
 
-- Suppose I want to join several datasets to a main dataset
+- Suppose I want to join several datasets to a main dataset. Some have same name for key and some don't.
 
 ```{r, eval=FALSE}
 new_dataset <- name_of_left_dataset %>% 
@@ -391,6 +316,7 @@ glimpse(gap_pop_US)
 --
 
 - `country` AND `year`
+- They are named the same across both datasets as well, so...
 
 --
 
@@ -398,22 +324,8 @@ glimpse(gap_pop_US)
 gap_pop_97_07 <- gapminder97_07 %>% 
   left_join(gap_pop_US, 
             by = c('country', 'year'))
+glimpse(gap_pop_97_07)
 ```
-
----
-# Left Join Example
-
-```{r, include=FALSE}
-library(arsenal)
-sum.gap_pop_97_07 <- tableby(~ gdpPercap + pop, 
-                   data = gap_pop_97_07, digits = 0)
-```
-
-```{r, results='asis'}
-summary(sum.gap_pop_97_07)
-```
-
-- Why are we missing 423 values for population?
 
 ---
 # Left Join Practice
@@ -441,7 +353,7 @@ glimpse(ga_county_pop)
 
 --
 
-- `county` (not ideal to match using text but it's what we got)
+- `county` (not ideal to match using text but it's all we have)
 
 ---
 # Variable Type Mismatch
@@ -481,7 +393,7 @@ glimpse(covid_ga)
 
 - We will continue this project in the next lab
 
-- Upload your Rmd to eLC
+> **Upload your Rmd to eLC**
 
 ---
 # Other types of joins

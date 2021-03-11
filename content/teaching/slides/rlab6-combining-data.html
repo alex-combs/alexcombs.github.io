@@ -17,30 +17,30 @@ class: center, middle, inverse, title-slide
 ## RLab 6: Combining Data
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: February 03, 2021
+### Last updated: March 11, 2021
 
 ---
 
 # Objectives
 
--Most common combining data scenarios
+- Learn to perform most common combining data tasks
 
   - Append
-  - Right/left join
+  - Left join
 
 ---
 # Setup
 
 &gt; **Either start a new project, "rlab6", or continue using your "rlab5" project.**
   
-&gt; **If starting a new project, copy and paste your "rlab5_lastname" Rmd to "rlab6". Rename Rmd "rlab6.1_lastname"**
+&gt; **If starting a new project, copy and paste or move your "rlab5_lastname" Rmd to "rlab6" folder. Rename Rmd "rlab6_lastname"**
 
 &gt; **Change YAML to:**
 
 
 ```r
 ---
-title: "RLab6.1: Joining Data"
+title: "RLab6: Combining Data"
 author: "Your Name"
 output:
   html_document:
@@ -51,52 +51,25 @@ output:
 ---
 # Setup
 
-&gt; **Should already have the following packages ready to load:**
+&gt; **Reload the packages that should already be in your Rmd:**
 
 
 ```r
-library(data.table)
 library(tidyverse)
-```
-
-```
-## Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame'
-## when loading 'dplyr'
-```
-
-```r
-library(arsenal)
+library(data.table)
 library(lubridate)
 ```
 
 
 
 ---
-# Start another Rmd
-
-&gt; **Start another Rmd**
-
-- We will use this Rmd to practice appending data unrelated to the COVID data from last week. Therefore, we want to keep these two documents separate.
-
-&gt; **Change YAML; keep setup chunk; delete the rest.**
-
-
-```r
----
-title: "RLab6.2: Appending Data"
-author: "Your Name"
-output:
-  html_document:
-    df_print: paged
----
-```
-
----
 # Download &amp; Import Data
 
 &gt; **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, and `st_fin_2016.csv` files from eLC and add them to your project folder.**
 
-&gt; **Import the three files in the append Rmd**
+&gt; **Start a new code chunk anywhere in your Rmd. Set to `include=FALSE`. Name the code chunk `append`.**
+
+&gt; **Import the three files**
 
 
 ```r
@@ -121,18 +94,20 @@ st_fin_16 &lt;-
 ---
 # Append
 
-- Appending is easy to do in something like Excel, but it can become very tedious if you need to append many datasets
+- Appending is simple to do in something like Excel but can become tedious if you need to append many datasets
 
-- And like always, Excel doesn't allow the process to be easily replicated for later use
+- And like always, Excel doesn't allow the process to be replicated for later use
 
-- R can append datasets with much less work involved
+- R can append datasets with much less effort
 
 ---
 # Append Example
 
 
 
-- Suppose I need to append three datasets with same layout but different years
+- Suppose I need to append three datasets with same layout
+
+--
 
 
 ```r
@@ -228,70 +203,7 @@ glimpse(st_fin_14_16)
 
 - You should have 150 observations (3 years X 50 states)
 
-- Now we can explore things like changes in state finances over time if we wanted to
-
-&gt; **Save your Rmd and close it...we're finished with these data**
-
----
-# Appending multiple Excel sheets
-
-- Another common case is data stored in the same Excel workbook across multiple sheets
-
-- For example, `table8_history_2004-2017.xlsx` containing state expenditures on higher ed grants from [NASSGAP](https://www.nassgapsurvey.com)
-
----
-# Appending multiple Excel sheets
-
-
-```r
-library(readxl)
-library(plyr)
-```
-
-- First, store the name of every sheet
-
-
-```r
-nassgap_sheets &lt;- excel_sheets("table8_history_2004-2017.xlsx")
-```
-
----
-# Appending multiple Excel sheets
-
-- Second, remove any names of sheets I don't want, such as the sheet containing the sum for all years, sheet 15.
-
-
-```r
-nassgap_sheets &lt;- nassgap_sheets[1:14]
-```
-
----
-# Appending multiple Excel sheets
-
-- Third, use `lapply` to repeatedly run `read_excel` on each sheet.
-
-
-```r
-nassgap_sheets_all &lt;- lapply(nassgap_sheets, function(x) read_excel("table8_history_2004-2017.xlsx", 
-            sheet = x,
-            range = "A2:F54",
-            col_names = c("state", 
-                          "need", 
-                          "mixed", 
-                          "merit", 
-                          "special", 
-                          "uncategorized")))
-```
-
----
-# Appending multiple Excel sheets
-
-- Fourth and final step, use `rbind.fill` to unpack the list of datasets in `nassgap_sheets_all` into a single dataset
-
-
-```r
-state_grants_04_17 &lt;- rbind.fill(nassgap_sheets_all)
-```
+- Now we can explore things like changes in state finances over time
 
 ---
 class: inverse, middle, center
@@ -301,20 +213,20 @@ class: inverse, middle, center
 ---
 # Where to add code
 
-- Now we're ready to work on `RLab6.1_lastname.Rmd`
-
-- We are about to add data to the `covid_ga` data from last week in order to make comparisons across counties
+- Now we're ready to add data to the `covid_ga` data from last lab in order to make better comparisons across counties
 
 - Therefore, we need to add code chunks that add these data *before* we start making graphs
 
----
-# Left (and Right) Joins
+&gt; **Find the point in your Rmd where you finished preparing `covid_ga` but hadn't yet started creating new variables. Run all code above that point.**
 
-- A left join (aka merge) is used when we want to add variables from a new dataset (y) to our main dataset (x), matching across common units of analysis (key)
+---
+# Left Joins
+
+- A left join is used when we want to add variables from a second dataset to our main dataset, matching observations based on a common set of variables called the **key**
 
 - Keeps ALL of the observations in our main dataset
 
-- Observations in our new dataset that don't match with the main dataset aren't added
+- Observations in the second dataset that don't match with the main dataset aren't added
 
 ![:scale 60%](labs_files/left_join.png)
 
@@ -347,7 +259,7 @@ new_dataset &lt;- name_of_left_dataset %&gt;%
 ```r
 new_dataset &lt;- name_of_left_dataset %&gt;% 
   left_join(name_of_right_dataset, 
-            by = c("name_of_key1", "name_of_key2", ...))
+*           by = c("name_of_key1", "name_of_key2", ...))
 ```
 
 ---
@@ -359,7 +271,7 @@ new_dataset &lt;- name_of_left_dataset %&gt;%
 ```r
 new_dataset &lt;- name_of_left_dataset %&gt;% 
   left_join(name_of_right_dataset, 
-            by = c("key_in_left_data" = "key_in_right_data"))
+*           by = c("key_in_left_data" = "key_in_right_data"))
 ```
 
 --
@@ -370,14 +282,14 @@ new_dataset &lt;- name_of_left_dataset %&gt;%
 ```r
 new_dataset &lt;- name_of_left_dataset %&gt;% 
   left_join(name_of_right_dataset, 
-            by = c("key_in_left_data" = "key_in_right_data",
-                   "common_key", ...))
+*           by = c("key_in_left_data" = "key_in_right_data",
+*                  "common_key", ...))
 ```
 
 ---
 # General Syntax to Left Joins
 
-- Suppose I want to join several datasets to a main dataset
+- Suppose I want to join several datasets to a main dataset. Some have same name for key and some don't.
 
 
 ```r
@@ -435,6 +347,7 @@ glimpse(gap_pop_US)
 --
 
 - `country` AND `year`
+- They are named the same across both datasets as well, so...
 
 --
 
@@ -443,31 +356,17 @@ glimpse(gap_pop_US)
 gap_pop_97_07 &lt;- gapminder97_07 %&gt;% 
   left_join(gap_pop_US, 
             by = c('country', 'year'))
+glimpse(gap_pop_97_07)
 ```
 
----
-# Left Join Example
-
-
-
-
-```r
-summary(sum.gap_pop_97_07)
 ```
-
-
-
-|                            |    Overall (N=426)    |
-|:---------------------------|:---------------------:|
-|**gdpPercap**               |                       |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) |     10229 (11473)     |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     |      241 - 49357      |
-|**pop**                     |                       |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;N-Miss    |          423          |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) | 287242411 (14119077)  |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     | 272911760 - 301139947 |
-
-- Why are we missing 423 values for population?
+## Rows: 426
+## Columns: 4
+## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
+## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997,…
+## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 2699…
+## $ pop       &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+```
 
 ---
 # Left Join Practice
@@ -502,7 +401,7 @@ glimpse(ga_county_pop)
 
 --
 
-- `county` (not ideal to match using text but it's what we got)
+- `county` (not ideal to match using text but it's all we have)
 
 ---
 # Variable Type Mismatch
@@ -530,7 +429,7 @@ glimpse(covid_ga)
 ```
 
 ```
-## Rows: 50,489
+## Rows: 56,249
 ## Columns: 7
 ## $ date       &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-0…
 ## $ county     &lt;fct&gt; Fulton, Fulton, Fulton, Fulton, Fulton, Polk, Cobb, Fulton…
@@ -550,7 +449,7 @@ glimpse(covid_ga)
 
 - We will continue this project in the next lab
 
-- Upload your Rmd to eLC
+&gt; **Upload your Rmd to eLC**
 
 ---
 # Other types of joins
@@ -576,7 +475,7 @@ glimpse(covid_ga)
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "countIncrementalSlides": false,
-"highlightlines": true
+"highlightLines": true
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -642,7 +541,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

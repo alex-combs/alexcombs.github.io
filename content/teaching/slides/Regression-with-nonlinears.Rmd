@@ -453,6 +453,8 @@ log_log <- lm(log(lifeExp) ~ log(gdpPercap) + pop_100mill + continent,
                data = gapminder2)
 ```
 
+- Using `gdpPercap` instead of `gdpPercap_thou` because to report a 1% change in thousands GDP per capita is confusing
+
 ---
 # Log-log Model in R
 
@@ -579,7 +581,7 @@ get_regression_table(log_lev) %>%
 
 - How do we interpret `gdpPercap_thou`?
 
-- Life expectancy increases 0.7% per $1 increase in GDP per capita.
+- Life expectancy increases 0.7% per $1,000 increase in GDP per capita.
 
 - What about the `continent` coefficients? Refer to handout on eLC.
 
