@@ -35,17 +35,31 @@ options(scipen = 999)
 
 - The relationship between $x$ and $y$ may not follow a straight line
 
+.pull-left[
 ```{r, echo=FALSE, message=FALSE, fig.align='center', fig.height=6}
 gapminder %>% 
   filter(year == 2007) %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp)) +
   geom_point(alpha = 0.5, color = 'steelblue', size = 2) +
   geom_smooth(method = 'lm', se = FALSE, color = 'blue') +
-  geom_smooth(span = 1, se = FALSE, color = 'red') +
+  geom_smooth(span = 1, se = FALSE, color = 'red') + #<<
   labs(y = 'Life Expectancy', x = 'GDP per Capita') +
   theme_minimal()
 ```
+]
 
+.pull-right[
+```{r, fig.show='hide', message=FALSE, fig.align='center', fig.height=6}
+gapminder %>% 
+  filter(year == 2007) %>% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(alpha = 0.5, color = 'steelblue', size = 2) +
+  geom_smooth(method = 'lm', se = FALSE, color = 'blue') +
+  geom_smooth(span = 1, se = FALSE, color = 'red') + #<<
+  labs(y = 'Life Expectancy', x = 'GDP per Capita') +
+  theme_minimal()
+```
+]
 
 ---
 # Common nonlinear variable regressions
@@ -75,6 +89,39 @@ $b_1$ will be positive and $b_2$ will be negative
 ]
 
 ---
+# Quadratic directions
+
+$$y= 100 + 10 \times x - 1 \times x^2$$
+
+```{r, include=FALSE}
+quad.dir <- tibble(
+  'x' = c(0,2,4,6,8,10,12,14),
+  'b1' = c(10,10,10,10,10,10,10,10),
+  'x*b1' = c(0,20,40,60,80,100,120,140),
+  'x^2' = c(0,4,16,36,64,100,144,196),
+  'b2' = c(-1,-1,-1,-1,-1,-1,-1,-1),
+  'x^2*b2' = c(0,-4,-16,-36,-64,-100,-144,-196),
+  'y' = c(100,116,124,124,116,100,76,44)
+)
+```
+
+.pull-left[
+```{r, echo=FALSE}
+kable(quad.dir)
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE}
+ggplot(quad.dir, aes(x, y)) +
+  geom_point()+
+  geom_path()+
+  scale_x_continuous(breaks = c(0,2,4,6,8,10,12,14)) +
+  theme_minimal() +
+  theme(axis.text = element_text(size=14))
+```
+]
+---
 # Quadratic regression
 
 $$y=\beta_0+\beta_1x_1+\beta_2x_1^2+\epsilon$$
@@ -85,11 +132,32 @@ $$y=\beta_0+\beta_1x_1+\beta_2x_1^2+\epsilon$$
 
 $$b_1+2b_2x_1$$
 
+- Depends on the value of $x$
+
 --
 
 - At what value of $x$ is $y$ at its maximum or minimum?
 
-$$\frac{-b_1}{2b_2}$$
+$$x = \frac{-b_1}{2b_2}$$
+
+---
+# Marginal and optimal
+
+$$y= 100 + 10 \times x - 1 \times x^2$$
+
+- What is the marginal effect of $x$ at $x=2$?
+
+```{r}
+10+(2*-1*2)
+```
+
+--
+
+- At what value of $x$ is $y$ at its maximum?
+
+```{r}
+-10/(2*-1)
+```
 
 ---
 class: inverse, center, middle
@@ -748,7 +816,7 @@ kable(sum.models)
 
 - But how far off is this model, on average, when predicting life expectancy?
 
-- We saw this on slide 53; **residual standard error** = 8.4, so about 8.4 years.
+- We saw this on slide 55; **residual standard error** = 8.4, so about 8.4 years.
 
 ---
 # RMSE from log Y

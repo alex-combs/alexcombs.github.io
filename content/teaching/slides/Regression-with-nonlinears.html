@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Regression with Nonlinear Variables
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 05, 2021
+### Last updated: March 18, 2021
 
 ---
 
@@ -36,8 +36,23 @@ class: center, middle, inverse, title-slide
 
 - The relationship between `\(x\)` and `\(y\)` may not follow a straight line
 
+.pull-left[
 &lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+]
 
+.pull-right[
+
+```r
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+  geom_point(alpha = 0.5, color = 'steelblue', size = 2) +
+  geom_smooth(method = 'lm', se = FALSE, color = 'blue') +
+* geom_smooth(span = 1, se = FALSE, color = 'red') +
+  labs(y = 'Life Expectancy', x = 'GDP per Capita') +
+  theme_minimal()
+```
+]
 
 ---
 # Common nonlinear variable regressions
@@ -65,6 +80,30 @@ class: center, middle, inverse, title-slide
 ]
 
 ---
+# Quadratic directions
+
+`$$y= 100 + 10 \times x - 1 \times x^2$$`
+
+
+
+.pull-left[
+
+|  x| b1| x*b1| x^2| b2| x^2*b2|   y|
+|--:|--:|----:|---:|--:|------:|---:|
+|  0| 10|    0|   0| -1|      0| 100|
+|  2| 10|   20|   4| -1|     -4| 116|
+|  4| 10|   40|  16| -1|    -16| 124|
+|  6| 10|   60|  36| -1|    -36| 124|
+|  8| 10|   80|  64| -1|    -64| 116|
+| 10| 10|  100| 100| -1|   -100| 100|
+| 12| 10|  120| 144| -1|   -144|  76|
+| 14| 10|  140| 196| -1|   -196|  44|
+]
+
+.pull-right[
+![](Regression-with-nonlinears_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+]
+---
 # Quadratic regression
 
 `$$y=\beta_0+\beta_1x_1+\beta_2x_1^2+\epsilon$$`
@@ -75,11 +114,42 @@ class: center, middle, inverse, title-slide
 
 `$$b_1+2b_2x_1$$`
 
+- Depends on the value of `\(x\)`
+
 --
 
 - At what value of `\(x\)` is `\(y\)` at its maximum or minimum?
 
-`$$\frac{-b_1}{2b_2}$$`
+`$$x = \frac{-b_1}{2b_2}$$`
+
+---
+# Marginal and optimal
+
+`$$y= 100 + 10 \times x - 1 \times x^2$$`
+
+- What is the marginal effect of `\(x\)` at `\(x=2\)`?
+
+
+```r
+10+(2*-1*2)
+```
+
+```
+## [1] 6
+```
+
+--
+
+- At what value of `\(x\)` is `\(y\)` at its maximum?
+
+
+```r
+-10/(2*-1)
+```
+
+```
+## [1] 5
+```
 
 ---
 class: inverse, center, middle
@@ -103,7 +173,7 @@ class: inverse, center, middle
 ---
 # Viz
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Quadratic regression
@@ -310,7 +380,7 @@ log(-5)
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Transform skewed data
@@ -322,7 +392,7 @@ log(-5)
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Transform skewed data
@@ -335,7 +405,7 @@ ggplot(gapminder, aes(x = gdpPercap)) +
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Transform skewed data
@@ -349,7 +419,7 @@ gapminder %&gt;%
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Transform skewed data
@@ -364,7 +434,7 @@ gapminder %&gt;%
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Report results in percent change
@@ -863,7 +933,7 @@ r_yyhat^2
 
 - But how far off is this model, on average, when predicting life expectancy?
 
-- We saw this on slide 53; **residual standard error** = 8.4, so about 8.4 years.
+- We saw this on slide 55; **residual standard error** = 8.4, so about 8.4 years.
 
 ---
 # RMSE from log Y

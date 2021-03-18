@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 7: Professional Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 05, 2021
+### Last updated: March 18, 2021
 
 ---
 
@@ -28,9 +28,9 @@ class: center, middle, inverse, title-slide
 ---
 # Setup
 
-&gt; **Either start a new project, "rlab7", or continue using your "rlab5/6" project.**
-  
-&gt; **If starting a new project again, copy and paste your "rlab6_lastname" Rmd to "rlab7". Rename Rmd "rlab7_lastname"**
+&gt; **Just re-open your "rlab6". No need to start a new project unless you really want to.**
+
+&gt; **If you need a working Rmd, download "rlab6_combs.Rmd" from eLC.**
 
 &gt; **Change YAML to:**
 
@@ -61,6 +61,12 @@ library(lubridate)
   
 &gt; **Find `yesterday` and update it accordingly**
 
+
+```r
+yesterday &lt;- '2021-03-17'
+```
+
+
 ---
 # Rerun Code
 
@@ -80,7 +86,7 @@ library(lubridate)
 ---
 # Adjusting for Population
 
-- Before trying in R, think through and describe to yourself the steps needed to obtain cases and deaths per 100,000 given our data in `covid_ga`.
+- Before trying in R, let's think through the steps needed to obtain cases and deaths per 100,000 given our data in `covid_ga`.
 
 --
 
@@ -88,7 +94,11 @@ library(lubridate)
 
 --
 
-- By dividing population by 100,000. Then, we need to create cases and deaths per 100,000. How?
+- By dividing population by 100,000. 
+
+--
+
+- Then, we need to create cases and deaths per 100,000. How?
 
 --
 
@@ -115,6 +125,12 @@ covid_ga &lt;- covid_ga %&gt;%
 - Now rerun the code that created `covid_ga_5`
 
 
+```r
+ga_counties &lt;- c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')
+
+covid_ga_5 &lt;- covid_ga %&gt;% 
+  filter(county %in% ga_counties)
+```
 
 ---
 # Common Viz Adjustments
@@ -144,7 +160,7 @@ covid_ga %&gt;%
   geom_histogram()
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 1 - Labels and Themes
@@ -155,16 +171,16 @@ covid_ga %&gt;%
   filter(date == yesterday) %&gt;% 
   ggplot(aes(x = cases)) +
   geom_histogram() +
-  labs(title = 'Total COVID Cases as of Yesterday',
-       x = 'Total Cases',
-       y = 'Counties') +
-  theme_minimal()
+* labs(title = 'Total COVID Cases as of Yesterday',
+*      x = 'Total Cases',
+*      y = 'Counties') +
+* theme_minimal()
 ```
 
 ---
 # Viz 1 - Labels and Themes
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 1 - Log scale
@@ -189,12 +205,12 @@ covid_ga %&gt;%
 ---
 # Viz 1 - Log scale
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 1 - Fill and outline
 
-&gt; **Change the `fill` color and outline `color` of the histogram
+&gt; **Change the `fill` color and outline `color` of the histogram**
 
 
 ```r
@@ -212,7 +228,7 @@ covid_ga %&gt;%
 ---
 # Viz 1 - Fill and outline
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 1 - Adding Comma Separator
@@ -235,7 +251,7 @@ covid_ga %&gt;%
 ---
 # Viz 1 - Adding Comma Separator
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 2
@@ -245,8 +261,24 @@ covid_ga %&gt;%
 ---
 # Viz 2
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+.pull-left[
 
+```r
+covid_ga %&gt;% 
+  filter(date == yesterday) %&gt;% 
+  ggplot(aes(x = deaths)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'Total County Deaths Yesterday',
+       x = 'Total Deaths',
+       y = 'Counties') +
+  scale_x_log10(labels = scales::comma_format()) +
+  theme_minimal()
+```
+]
+
+.pull-right[
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+]
 ---
 # Viz 3
 
@@ -259,7 +291,7 @@ covid_ga %&gt;%
   geom_boxplot()
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -286,14 +318,14 @@ covid_ga %&gt;%
 ---
 # Viz 3: Remove axis elements
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 3: Change theme and fill color
 
 &gt; **On your own, change the theme and fill color of the box plot. Add a title, subtitle that specifies the date, and improve the axis label.**
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
 # Knit
@@ -313,7 +345,7 @@ covid_ga %&gt;%
 ```
 
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 4
@@ -322,7 +354,7 @@ covid_ga %&gt;%
 
 --
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 4: Reorder bars
@@ -342,21 +374,21 @@ covid_ga_5 %&gt;%
 ---
 # Viz 4: Reorder bars
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 4: Other Adjustments
 
 &gt; **Use the adjustments we've learned thus far to improve this graph**
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 7
 
 &gt; **Update our first line graph to use cases per 100,000 people**
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 7: Change line type and size
@@ -380,7 +412,7 @@ covid_ga_5 %&gt;%
 ---
 # Viz 7: Change line type and size
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 7: Readjust &amp; save as object
@@ -395,14 +427,14 @@ covid_ga_5 %&gt;%
 ```r
 *covid_ga_linegraph &lt;- covid_ga_5 %&gt;%
   ggplot(aes(x = date, y = cases_rate, color = county)) +
-  geom_line() +
+* geom_line() +
   labs(title = 'Total COVID Cases Among Selected Georgia Counties',
        x = '',
        y = 'Cases per 100,000',
        color = 'County') +
   theme_minimal() +
-  theme(axis.text=element_text(size=12),
-        title = element_text(size=12))
+* theme(axis.text=element_text(size=12),
+*       title = element_text(size=12))
 ```
 
 ---
@@ -418,7 +450,7 @@ covid_ga_linegraph #will print graph
 - We now have a base graph we like that we can tweak
 
 ---
-# Exporting a graph as a image file
+# Exporting a graph as a separate file
 
 - Anytime we make a graph, R stores it in memory in case we want to export it.
 
@@ -443,13 +475,13 @@ ggsave("covid_ga_trends.png", width = 7, height = 5,
 ```r
 covid_ga_linegraph +
   scale_x_date(date_breaks = '1 month', 
-               labels = scales::date_format('%b'))
+               labels = scales::date_format('%b%y'))
 ```
 
 ---
 # Improving Dates Along Axis
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
 
 ---
 # Adding Reference Lines
@@ -462,7 +494,7 @@ covid_ga_linegraph +
 ```r
 covid_ga_linegraph +
   scale_x_date(date_breaks = '1 month', 
-               labels = scales::date_format('%b')) +
+               labels = scales::date_format('%b%y')) +
 * geom_vline(xintercept = date('2020-08-15'),
 *            color = 'black',
 *            linetype = 'dashed') +
@@ -474,19 +506,19 @@ covid_ga_linegraph +
 ---
 # Adding Reference Lines
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 8
 
 &gt; **Make similar adjustments to the line graph displaying deaths per 100,000**
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 
 ---
 class: inverse, middle, center
 
-# Do these graph suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths?
+# Do the last two graphs suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
