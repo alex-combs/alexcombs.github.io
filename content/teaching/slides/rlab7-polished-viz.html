@@ -119,6 +119,16 @@ covid_ga &lt;- covid_ga %&gt;%
          deaths_rate = deaths/pop100thou)
 ```
 
+Alternatively:
+
+
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  mutate(cases_rate = cases/(population/100000),
+         deaths_rate = deaths/(population/100000))
+```
+
+
 ---
 # Selected Counties
 
@@ -160,7 +170,7 @@ covid_ga %&gt;%
   geom_histogram()
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 1 - Labels and Themes
@@ -180,7 +190,7 @@ covid_ga %&gt;%
 ---
 # Viz 1 - Labels and Themes
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 1 - Log scale
@@ -205,7 +215,7 @@ covid_ga %&gt;%
 ---
 # Viz 1 - Log scale
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 1 - Fill and outline
@@ -228,7 +238,7 @@ covid_ga %&gt;%
 ---
 # Viz 1 - Fill and outline
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 1 - Adding Comma Separator
@@ -251,7 +261,7 @@ covid_ga %&gt;%
 ---
 # Viz 1 - Adding Comma Separator
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 2
@@ -277,7 +287,7 @@ covid_ga %&gt;%
 ]
 
 .pull-right[
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
 ]
 ---
 # Viz 3
@@ -291,7 +301,7 @@ covid_ga %&gt;%
   geom_boxplot()
 ```
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -318,14 +328,14 @@ covid_ga %&gt;%
 ---
 # Viz 3: Remove axis elements
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 3: Change theme and fill color
 
 &gt; **On your own, change the theme and fill color of the box plot. Add a title, subtitle that specifies the date, and improve the axis label.**
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
 
 ---
 # Knit
@@ -345,7 +355,7 @@ covid_ga %&gt;%
 ```
 
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 4
@@ -354,7 +364,7 @@ covid_ga %&gt;%
 
 --
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-24-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 4: Reorder bars
@@ -374,21 +384,21 @@ covid_ga_5 %&gt;%
 ---
 # Viz 4: Reorder bars
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 4: Other Adjustments
 
 &gt; **Use the adjustments we've learned thus far to improve this graph**
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 7
 
 &gt; **Update our first line graph to use cases per 100,000 people**
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 7: Change line type and size
@@ -412,7 +422,7 @@ covid_ga_5 %&gt;%
 ---
 # Viz 7: Change line type and size
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 7: Readjust &amp; save as object
@@ -447,7 +457,7 @@ covid_ga_5 %&gt;%
 covid_ga_linegraph #will print graph
 ```
 
-- We now have a base graph we like that we can tweak
+- We now have a base graph we like that we can make additional adjustments to
 
 ---
 # Exporting a graph as a separate file
@@ -467,7 +477,7 @@ ggsave("covid_ga_trends.png", width = 7, height = 5,
 ---
 # Improving Dates Along Axis
 
-- Suppose we want the x axis to display the full name of every month without the year
+- Suppose we want the x axis to display every month
 
 &gt; **In a new code chunk, copy and paste below code. Note that we are adding on to the saved graph**
 
@@ -481,7 +491,7 @@ covid_ga_linegraph +
 ---
 # Improving Dates Along Axis
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
 
 ---
 # Adding Reference Lines
@@ -506,19 +516,24 @@ covid_ga_linegraph +
 ---
 # Adding Reference Lines
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
+![](rlab7-polished-viz_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
 
 ---
 # Viz 8
 
 &gt; **Make similar adjustments to the line graph displaying deaths per 100,000**
 
-![](rlab7-polished-viz_files/figure-html/unnamed-chunk-38-1.png)&lt;!-- --&gt;
+
 
 ---
 class: inverse, middle, center
 
 # Do the last two graphs suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths?
+
+---
+# Upload Rmd
+
+&gt; **Knit and/or save your Rmd. Upload to eLC.**
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

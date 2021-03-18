@@ -125,6 +125,15 @@ covid_ga <- covid_ga %>%
          deaths_rate = deaths/pop100thou)
 ```
 
+Alternatively:
+
+```{r, eval=FALSE}
+covid_ga <- covid_ga %>% 
+  mutate(cases_rate = cases/(population/100000),
+         deaths_rate = deaths/(population/100000))
+```
+
+
 ---
 # Selected Counties
 
@@ -556,7 +565,7 @@ covid_ga_linegraph <- covid_ga_5 %>%#<<
 covid_ga_linegraph #will print graph
 ```
 
-- We now have a base graph we like that we can tweak
+- We now have a base graph we like that we can make additional adjustments to
 
 ---
 # Exporting a graph as a separate file
@@ -575,7 +584,7 @@ ggsave("covid_ga_trends.png", width = 7, height = 5,
 ---
 # Improving Dates Along Axis
 
-- Suppose we want the x axis to display the full name of every month without the year
+- Suppose we want the x axis to display every month
 
 > **In a new code chunk, copy and paste below code. Note that we are adding on to the saved graph**
 
@@ -633,7 +642,7 @@ covid_ga_linegraph +
 
 > **Make similar adjustments to the line graph displaying deaths per 100,000**
 
-```{r, echo=FALSE, fig.width=8, fig.height=6}
+```{r, include=FALSE, fig.width=8, fig.height=6}
 covid_ga_5 %>% 
   ggplot(aes(x = date, y = deaths_rate, color = county)) +
   geom_line() +
@@ -655,3 +664,8 @@ covid_ga_5 %>%
 class: inverse, middle, center
 
 # Do the last two graphs suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths?
+
+---
+# Upload Rmd
+
+> **Knit and/or save your Rmd. Upload to eLC.**
