@@ -291,23 +291,6 @@ class: inverse, center, middle
 # Log Transformations
 
 ---
-# Log transformation
-
-$$y=log_ax \leftrightarrow x=a^y$$
-
-- Log base $a$ of $x$ returns the exponent by which to raise $a$ to get $x$.
-
-- Common log bases include 10, 2, and $e$
-
-$$log_{10}10=1$$
-$$log_{10}100=2$$
-
-- In regression, we use the **natural log**, which is base $e$
-
-$$log_ex$$
-$$ln(x)$$
-
----
 # Why use log transformation
 
 - Transform skewed data to be more normal
@@ -816,7 +799,7 @@ kable(sum.models)
 
 - But how far off is this model, on average, when predicting life expectancy?
 
-- We saw this on slide 55; **residual standard error** = 8.4, so about 8.4 years.
+- We saw this on slide 54; **residual standard error** = 8.4, so about 8.4 years.
 
 ---
 # RMSE from log Y
