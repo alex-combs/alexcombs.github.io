@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-11-18" />
+    <script src="rlab9-ovb_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="rlab9-ovb_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="rlab9-ovb_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 9: Reporting Regression Results
 ### Alex Combs
 ### UGA | SPIA | PADP
-### November 18, 2020
+### Last updated: March 21, 2021
 
 ---
 
@@ -31,9 +33,9 @@ By the end of this lab, you will have learned how to...
 ---
 # Set-up
 
-- Start a new project and notebook
+&gt; **Start a new project and Rmd**
 
-- Change YAML
+&gt; **Change YAML**
 
 
 ```r
@@ -50,11 +52,11 @@ output:
 ---
 # Set-up
 
-- Download `predicting_happiness.RData` from eLC and `load` into RStudio
+&gt; **Download `predicting_happiness.RData` from eLC and `load` into RStudio**
 
 
 
-- Load following packages
+&gt; **Load following packages**
 
 
 ```r
@@ -103,40 +105,13 @@ head(predicting_happiness, n = 4) %&gt;%
 
 - Let's examine the correlations between the three numerical variables
 
-- Feed the three numerical variables to the `cor()` function and complete the following sentences
+&gt; **In a new code chunk, compute correlations between the three numerical variables using the `cor()` function.**
+
+&gt; **Outside of the code chunk, complete the following sentences:**
 
 - ND is _ correlated with SWB.
 - PSS is _ correlated with SWB.
 - PSS is _ correlated with ND.
-
----
-# Correlations
-
-.pull-left[
-
-```r
-predicting_happiness %&gt;% 
-  select(-Id) %&gt;% 
-  cor() %&gt;% 
-  kable(digits = 2)
-```
-
-
-
-|    |  SWB|   ND|  PSS|
-|:---|----:|----:|----:|
-|SWB | 1.00| 0.13| 0.47|
-|ND  | 0.13| 1.00| 0.31|
-|PSS | 0.47| 0.31| 1.00|
-]
-
-.pull-right[
-
-- ND is positively correlated with SWB.
-- PSS is positively correlated with SWB.
-- PSS is positively correlated with ND.
-
-]
 
 ---
 # DAG
@@ -160,7 +135,7 @@ predicting_happiness %&gt;%
 
 `$$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$`
 
-- But suppose we are only able to estimate the following model
+- But suppose we choose to estimate the following model instead
 
 `$$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$`
 
@@ -177,14 +152,10 @@ predicting_happiness %&gt;%
 
 - `\(H_A: \beta_1 \neq 0\)`
 
---
-
-What significance level do we want to use? 5% or 1%?
-
 ---
 # Biased regression
 
-- Estimate the biased model and produce a basic regression table
+&gt; **Estimate the biased model and produce a basic regression table**
 
 
 ```r
@@ -195,14 +166,6 @@ biased &lt;-
 # Biased regression results
 
 
-```r
-biased &lt;- lm(SWB ~ ND, data = predicting_happiness)
-get_regression_table(biased) %&gt;% 
-  kable()
-```
-
-
-
 |term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
 |:---------|--------:|---------:|---------:|-------:|--------:|--------:|
 |intercept |   20.995|     1.189|    17.651|   0.000|   18.656|   23.334|
@@ -210,7 +173,7 @@ get_regression_table(biased) %&gt;%
 
 --
 
-- What is the conclusion of our hypothesis test?
+- What is the conclusion of our hypothesis test at a 5% significance level?
 
 --
 
@@ -242,7 +205,7 @@ get_regression_table(biased) %&gt;%
 
 - If Z causes X and Y to move in same direction, OVB is positive
 
-- IF Z causes X and Y to move in opposite directions, OVB is negative
+- If Z causes X and Y to move in opposite directions, OVB is negative
 
 ---
 # Revisiting correlations
@@ -296,7 +259,7 @@ Based on the correlations between these three variables, what direction is the O
 
 - Since we have the data for the omitted variable, let's confirm that this works the way we predicted it to
 
-- Estimate the valid model and provide the results.
+&gt; **Estimate the valid model and provide the results**
 
 `$$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$`
 
@@ -309,14 +272,6 @@ valid &lt;-
 # Valid regression
 
 
-```r
-valid &lt;- lm(SWB ~ ND + PSS, data = predicting_happiness)
-get_regression_table(valid) %&gt;% 
-  kable()
-```
-
-
-
 |term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
 |:---------|--------:|---------:|---------:|-------:|--------:|--------:|
 |intercept |   -2.350|     2.589|    -0.908|   0.365|   -7.439|    2.740|
@@ -327,7 +282,7 @@ get_regression_table(valid) %&gt;%
 
 --
 
-- Yes. In this case we would have failed to reject the null.
+- Yes. In this case we would have failed to reject the null because p-value = 0.787
 
 ---
 # Computing OVB
@@ -336,7 +291,7 @@ get_regression_table(valid) %&gt;%
 
 `$$\beta^{biased}-\beta^{valid}$$`
 
-- Calculate the magnitude of the OVB on the estimate for ND between the two models?
+&gt; **Calculate the magnitude of the OVB on the estimate for ND between the two models**
 
 - Is it in the direction we predicted?
 
@@ -355,6 +310,13 @@ get_regression_table(valid) %&gt;%
 - OVB is positive, just as we predicted.
 
 - You now understand bias. Congratulations!
+
+&gt; **Knit and/or save your Rmd and upload Rmd to eLC**
+
+---
+# What is the story?
+
+- What is the story of our valid model?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

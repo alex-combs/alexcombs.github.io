@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Panel Data Analysis"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "December 9, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -11,6 +11,7 @@ output:
       beforeInit: "macros.js"
       highlightStyle: github
       countIncrementalSlides: false
+      highlightLines: true
 ---
 # Outline
 
@@ -20,6 +21,7 @@ library(gapminder)
 library(moderndive)
 library(plm)
 library(knitr)
+library(broom)
 load("lectures_files/statepanel.RData")
 
 statepanel <- statepanel %>% 
@@ -43,33 +45,43 @@ gapminder %>%
 - Variation across units AND time
 
 ---
-# Example
+# Revisiting Life Exp and GDP
 
-- Suppose we want to examine the effect of unemployment (rate) on homelessness
+- We have seen versions of the following regression many times
 
-- Suppose we have homelessness and unemployment data for 4 cities (N = 4) for 4 years (T=4), so we would have a total of 16 observations
-  - Not enough data for an actual analysis; just an example
-
-- Let's assume homelessness increases as unemployment increases
+```{r}
+gap_ols <- lm(log(lifeExp) ~ log(gdpPercap) + continent, data = gapminder)
+get_regression_table(gap_ols) %>% 
+  kable()
+```
 
 ---
-# Example
+# Revisiting Life Exp and GDP
 
-.pull-left[
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('lectures_files/panel-example.png')
+- But previous model treats `gapminder` as pooled cross-sectional instead of panel
+
+- Might there be unobserved, "fixed" characteristics of each country that effects GDP and life expectancy?
+
+- If so, we have OVB in our model.
+
+- This is what a fixed effects regression accounts for
+
+---
+# Revisiting Life Exp and GDP
+
+- Controlling for country and year fixed effects:
+
+```{r, echo=FALSE}
+gap_fe <- plm(log(lifeExp) ~ log(gdpPercap), data = gapminder, model = "within", effect = "twoways", index = c("country", "year"))
+
+tidy(gap_fe) %>% 
+  kable()
 ```
-]
 
-.pull-right[
-- Cities have same slope
 
-- Each has different intercept
-  - Each city's "effect"
-  - Inherent omitted differences
-]
+- GDP no longer rejects the null hypothesis
 
-- Key question is whether we think these omitted differences also affect unemployment. If so, we have omitted variable bias
+- No statistically significant evidence that GDP affects life expectancy
 
 ---
 # Enter fixed effects regression
@@ -368,9 +380,9 @@ $$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$
 # Adding time trends in FE
 
 ```{r}
-fe2_time <- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824 + factor(year),
-                data = statepanel,
-                index = c("state", "year"), model = "within")
+fe2_time <- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824,
+                data = statepanel, index = c("state", "year"), 
+                model = "within", effect = "twoways") #<<
 ```
 
 ```{r, echo=FALSE}

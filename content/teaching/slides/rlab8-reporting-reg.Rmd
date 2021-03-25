@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "RLab 8: Reporting Regression Results"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "October 21, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -11,30 +11,32 @@ output:
       beforeInit: "macros.js"
       highlightStyle: github
       countIncrementalSlides: false
-      highlightlines: true
+      highlightLines: true
 ---
 # Objectives
 
 By the end of this lab, you will have learned how to...
 
-- Report regression results via tables and graphs in a realistic and accurate manner
+- Report regression results via tables and graphs in a realistic and professional manner
 
 ```{r, include=FALSE}
 library(tidyverse)
 library(moderndive)
 library(knitr)
+library(fivethirtyeight)
 library(carData)
 library(stargazer) # for regression tables
 library(jtools) # for regression visualizations
 library(interactions) # for regression viz of interactions
+library(rockchalk)
 ```
 
 ---
 # Set-up
 
-- Start a new project and notebook
+> **Start a new project and Rmd**
 
-- Change YAML
+> **Change YAML**
 
 ```{r, eval=FALSE}
 ---
@@ -50,73 +52,58 @@ output:
 ---
 # Packages
 
+> **Load following packages**
+
 - Remember to set `include=FALSE`
 
 ```{r, eval=FALSE}
 library(tidyverse)
 library(moderndive)
 library(knitr)
+library(fivethirtyeight)
 library(carData)
-library(stargazer) # for regression tables
-library(jtools) # for regression visualizations
-library(interactions) # for regression viz of interactions
+library(stargazer) # for better regression tables
+library(jtools) # for better regression visualizations
+library(interactions) # for regression viz with interactions
 ```
 
 ---
-# Revisiting Professor Salaries
+# Revisiting PS2 Regression
 
-- In R Chapter 22 (interactions), you ran the following model.
+> **Add below code**
+
+```{r, warning=FALSE, message=FALSE}
+state_data <- hate_crimes %>%
+  mutate(share_white = 1 - share_non_white,
+         urbanization = if_else(share_pop_metro<=0.75, "low", "high")) %>% 
+  select(state, median_house_inc, share_pop_hs, 
+         share_white, share_white_poverty, share_vote_trump,
+         urbanization) %>%
+  filter(state != "District of Columbia") %>% 
+  mutate_at(vars(share_pop_hs, share_white, share_white_poverty, share_vote_trump), funs(.*100))
+```
+
+---
+# Revisiting PS2 Regression
+
+$$MedInc = \beta_0 + \beta_1 \%HS + \beta_2Urban + \epsilon$$
+
+> **Add and run following code**
 
 ```{r}
-sal_mod <- lm(salary ~ sex + yrs.service + sex*yrs.service, 
-              data = Salaries)
-```
-```{r, eval=FALSE}
-get_regression_table(sal_mod)
-```
-```{r, include=FALSE}
-get_regression_table(sal_mod) %>% 
-  kable()
-```
-
-- Add this code to your notebook
-
----
-# Revisiting Professor Salaries
-
-```{r, echo=FALSE, message=FALSE, fig.align='center', fig.height=6}
-ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
-  geom_point(alpha = 0.6, size = 5) +
-  geom_smooth(method = 'lm', se = FALSE, size = 2) +
-  theme_minimal() +
-  theme(text = element_text(size = 20))
-```
-
-- The data suggests we may want to model `yrs.service` using a quadratic
-
----
-# Quadratic Salary Model
-
-- Let's run a new model for `salary` that allows our regression to change direction once.
-
-$$Salary = \beta_0 + \beta_1Male + \beta_2YrsServe + \beta_3YrsServe^2 + \epsilon $$
-
--Add the following code.
-
-```{r}
-sal_mod2 <- lm(salary ~ sex + yrs.service + I(yrs.service^2),
-               data = Salaries)
+inc_mod <- lm(median_house_inc ~ share_pop_hs + urbanization, data = state_data)
 ```
 
 ---
 # Reporting Results
 
-- You are proud of your work and need to provide the results in a report or a presentation.
+- You are proud of your work and want to report your results.
 
-- Add following code. Knit to HTML.
+> **Add following code. Knit to HTML.**
 
 ```{r, eval=FALSE}
-get_regression_table(sal_mod2)
+get_regression_table(inc_mod) %>% 
+  kable()
 ```
 
 ---
@@ -125,12 +112,12 @@ get_regression_table(sal_mod2)
 - This table isn't great for an external audience
 
 ```{r, echo=FALSE}
-get_regression_table(sal_mod2) %>% 
+get_regression_table(inc_mod) %>% 
   kable()
 ```
 
 ---
-# Reporting results
+# Better Regression Tables
 
 - Regression results tables usually include:
   - estimate
@@ -140,101 +127,56 @@ get_regression_table(sal_mod2) %>%
   - number of observations
 
 - Sometimes goodness-of-fit measure like $R^2$  
-- Sometimes include confidence intervals
+- Sometimes include confidence intervals instead of standard error or t-stat
 
 ---
-# Option 1: kable
+# Better Regression Tables
 
-- Add heading "Kable"
-- Add this code and knit to HTML again
-
-```{r, eval=FALSE}
-regtable.colnames <- c('Variable', 'Estimate', 
-                       'SE', 'P-Value', 
-                       'Lower 95% CI', 'Upper 95% CI')
-
-get_regression_table(sal_mod2) %>% 
-  select(-statistic) %>% 
-  kable(col.names = regtable.colnames)
-```
-
----
-# Option 2: stargazer
-
-- Add heading "Stargazer"
-- Add this code. Include the chunk option `results='asis'`. Knit to HTML.
+> **Add below code. Include the chunk option `results='asis'`. Knit to HTML.**
 
 ```{r, eval=FALSE}
-stargazer(sal_mod2,
+stargazer(inc_mod,
           type="html",
           title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
-          keep.stat=c("n"), # reports only the number of observations
-          digits = 0, # no decimals
-          digits.extra = 3) #allows up to 3 decimals if rounding causes a 0
+          dep.var.labels=c("Median Household Income"),
+          covariate.labels=c("Percent High School", 
+                             "High Urbanization"),
+          keep.stat=c("n"), # number of observations
+          digits = 2) # limit to two decimals
 ```
 
 ---
-# Option 2: stargazer
+# Better Regression Tables
 
-- Change first line like so to include confidence intervals instead of standard errors.
-- Knit to HTML.
+> **Change options to include confidence intervals instead of standard errors and include goodness-of-fit. Knit to HTML.**
 
 ```{r, eval=FALSE}
-stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
+stargazer(inc_mod, 
+          ci=TRUE, ci.separator = " : ", #<<
           type="html",
           title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
-          keep.stat=c("n"),
-          digits = 0,
-          digits.extra = 3)
+          dep.var.labels=c("Median Household Income"),
+          covariate.labels=c("Percent High School", 
+                             "High Urbanization"),
+          keep.stat=c("n","rsq","ser"), #<<
+          digits.extra = 2)
 ```
 
 ---
-# Option 2: stargazer
+# Better Regression Tables
 
-- Add last line like so to generate a new document named `sal_mod2.htm` that you can open in Word. Knit to HTML.
+> **Add below code to generate a new document named `inc_mod.htm` that you can open in Word. Knit to HTML.**
 
 ```{r, eval=FALSE}
-stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
+stargazer(inc_mod, ci=TRUE, ci.separator = " : ",
           type="html",
           title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
-          keep.stat=c("n"),
-          digits = 0,
-          digits.extra = 3,
-          out = "sal_mod2.htm")
-```
-
----
-# Option 2: stargazer
-
-- Also plays nicely with PDF provided you installed `tinytex` back in RLab2
-
-```{r, eval=FALSE}
-# First
-install.packages('tinytex') # hit Enter
-# Next
-tinytex::install_tinytex() # hit Enter, this will take a few minutes
-# if you ever need to uninstall TinyTeX, run tinytex::uninstall_tinytex()
-```
-
----
-# Option 2: stargazer
-
-- Delete `type="html"` and table will be formatted for PDF export instead
-
-```{r, eval=FALSE}
-stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
-          title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
-          keep.stat=c("n"),
-          digits = 0,
-          digits.extra = 3)
+          dep.var.labels=c("Median Household Income"),
+          covariate.labels=c("Percent High School", 
+                             "High Urbanization"),
+          keep.stat=c("n","rsq","ser"),
+          digits.extra = 2,
+          out = "inc_mod.htm") #<<
 ```
 
 ---
@@ -243,113 +185,224 @@ class: inverse, center, middle
 # Tables aren't great for presentations. We want to use graphs instead.
 
 ---
-# Visualizing Regression Line
+# Visualizing Regression
 
 - We already know one option using `ggplot`
 
 .pull-left[
 ```{r, eval=FALSE}
-ggplot(Salaries, 
-       aes(x = yrs.service, 
-           y = salary, 
-           color = sex)) +
-  geom_point(alpha = 0.6, size = 5) +
-  geom_smooth(method = 'lm', se = FALSE, size = 2) +
-  theme_minimal() +
-  theme(text = element_text(size = 20))
+ggplot(state_data, 
+       aes(x = share_pop_hs, 
+           y = median_house_inc, 
+           color = urbanization)) +
+  geom_point() +
+  geom_parallel_slopes(se=FALSE) + #<<
+  theme_minimal()
 ```
 ]
 
 .pull-right[
 ```{r, echo=FALSE, message=FALSE, out.width='99%'}
-ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
-  geom_point(alpha = 0.6, size = 5) +
-  geom_smooth(method = 'lm', se = FALSE, size = 2) +
-  theme_minimal() +
-  theme(text = element_text(size = 20))
+ggplot(state_data, 
+       aes(x = share_pop_hs, 
+           y = median_house_inc, 
+           color = urbanization)) +
+  geom_point() +
+  geom_parallel_slopes(se=FALSE) + #<<
+  theme_minimal()
+```
+]
+
+---
+# Visualizing Regression
+
+.pull-left[
+```{r, eval=FALSE}
+ggplot(state_data, 
+       aes(x = share_pop_hs, 
+           y = median_house_inc, 
+           color = urbanization)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) + #<<
+  theme_minimal()
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE, out.width='99%'}
+ggplot(state_data, 
+       aes(x = share_pop_hs, 
+           y = median_house_inc, 
+           color = urbanization)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) +
+  theme_minimal()
 ```
 ]
 
 ---
 # Visualizing Regression Line
 
-- At most, `ggplot` can easily visualize regression models that include:
+- `ggplot` can visualize regression models that include:
   - **ONE** numerical explanatory variable
-  - **ONE** categorical explanatory variable (interacted with numerical or not)
-  
-- The quadratic is difficult to add
-- If we decided to control for one more variable, our graph would not be showing the relationship between salary and years of service **controlling for that other variable**
+  - **ONE** categorical explanatory variable (with or without interaction)
+
+--
+
+- If we controlled for one more variable, our `ggplot` graph would not show the relationship between income and percent high school **controlling for the other variable**
 
 ---
-# Visualizing Regression Line
+# Two numeric explanatory variables
 
-- `effect_plot` from the `jtools` package makes this very easy. Add code:
+- Neither regression line controls for the other explanatory variable
+
+.pull-left[
+```{r q8.1, message=FALSE, echo=FALSE, fig.align='center'}
+ggplot(data = state_data, 
+       aes(y = share_vote_trump, x = share_white)) + 
+  geom_point(color = 'springgreen4') + 
+  geom_smooth(method = "lm", se = FALSE, color = 'steelblue4') +
+  labs(x = "Percent of population white", 
+       y = "Percent of population voted for Trump", 
+       title = "White density and Trump support in the US") +
+  theme_minimal()
+```
+]
+
+.pull-right[
+```{r q8.2, message=FALSE, echo=FALSE, fig.align='center'}
+ggplot(data = state_data, 
+       aes(y = share_vote_trump, x = share_white_poverty)) + 
+  geom_point(color = 'springgreen4') + 
+  geom_smooth(method = "lm", se = FALSE, color = 'steelblue4') +
+  labs(x = "Percent of whites in poverty", 
+       y = "Percent of population voted for Trump", 
+       title = "White poverty and Trump support in the US") +
+  theme_minimal()
+```
+]
+
+---
+# Two numerical explanatory variables
+
+- Visualizing the full model requires a 3-D regression plane
+
+```{r, echo=FALSE, fig.align='center'}
+trump_mod <- lm(share_vote_trump ~ share_white + share_white_poverty,
+                data = state_data)
+
+plotPlane(model = trump_mod, plotx1 = "share_white", plotx2 = "share_white_poverty", x1lab = "%White", x2lab = "%WhitePov", ylab = "%Trump")
+```
+
+---
+# Revisiting Teacher Evals
+
+$$Eval = \beta_0 + \beta_1Beauty + \beta_2Age \\ +\beta_3Female + \beta_4Beauty \times Female + \epsilon$$
+```{r, include=FALSE}
+load("labs_files/teach_beauty.RData")
+```
+
+> **Download "teach_beauty" from eLC. Load the data and run the below code.**
+
+```{r}
+mod1 <- lm(course_eval ~ beauty, data = all_data)
+mod2 <- lm(course_eval ~ beauty + age + female, data = all_data)
+mod3 <- lm(course_eval ~ beauty + age + female + beauty*female, data = all_data)
+```
+
+---
+# Visualizing Regression
+
+```{r}
+get_regression_table(mod3) %>% 
+  kable()
+```
+
+- We can't visualize the relationship between evals and beauty controlling for age using `ggplot`
+
+---
+# Visualizing Regression
+
+- `effect_plot` from the `jtools` package can
+
+> **Add below code**
 
 ```{r, fig.align='center', fig.height=5}
-effect_plot(sal_mod2, pred = yrs.service, plot.points = TRUE)
+effect_plot(mod3, pred = beauty, plot.points = TRUE)
 ```
 
 ---
 # Visualizing Regression Line
 
-- If we want to include Male, `interact_plot` from `interactions` package is useful. 
-- Works the same had we interacted `sex` with `yrs.service`.
+- To include Female, `interact_plot` from `interactions` package 
+
+> **In a new code chunk, add below code**
 
 ```{r, fig.align='center', fig.height=5, warning=FALSE}
-interact_plot(sal_mod2, pred = yrs.service, modx = sex, plot.points = TRUE)
+interact_plot(mod3, pred = beauty, modx = female, plot.points = TRUE)
 ```
 
 ---
-# Visualizing regression estimates
+# Visualizing Coefficients
 
-- Very common to visualize the estimates instead of the regression line. 
+- Common to visualize the coefficients instead of using a table or regression lines. 
 
-- Add following code and knit to HTML.
+> **Add following code**
+
+.pull-left[
+```{r, eval=FALSE}
+plot_summs(mod3, 
+           coefs = c("Beauty" = "beauty", 
+                     "Age" = "age", 
+                     "Female" = "female",
+                     "Beauty X Female" = "beauty:female"))
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+plot_summs(mod3, 
+           coefs = c("Beauty" = "beauty", 
+                     "Age" = "age", 
+                     "Female" = "female",
+                     "Beauty X Female" = "beauty:female"))
+```
+]
+
+---
+# Multiple models in same table
+
+> Add below code in a new code chunk. Set `echo=FALSE` and `results='asis'`.
 
 ```{r, eval=FALSE}
-plot_summs(sal_mod2, 
-           coefs = c("Male" = "sexMale", 
-                     "Years Served" = "yrs.service", 
-                     "Years Served Sq." = "I(yrs.service^2)"))
-ggsave('sal_mod2_est.png') # saves most recent graph to separate file
-```
-
-```{r, echo=FALSE, message=FALSE, fig.align='center', fig.height=3.5}
-plot_summs(sal_mod2, 
-           coefs = c("Male" = "sexMale", 
-                     "Years Served" = "yrs.service", 
-                     "Years Served Sq." = "I(yrs.service^2)"))
+stargazer(mod1, mod2, mod3, #<<
+          ci = TRUE, ci.separator = " : ",
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Course evaluation score"),
+          covariate.labels=c("Professor beauty", 
+                             "Professor age", 
+                             "Professor female",
+                             "Beauty X Female"),
+          keep.stat=c("n","adj.rsq","ser"),
+          digits = 2,
+          notes = "95% confidence intervals in parentheses.",
+          notes.align = "l")
 ```
 
 ---
 # Multiple models
 
-- We have two models `sal_mod` and `sal_mod2` we may want to report together
-- Add code and knit to HTML
+> **Add below code in a new code chunk**
 
 ```{r, eval=FALSE}
-stargazer(sal_mod, sal_mod2, ci=TRUE, ci.separator = " : ",
-          type = "html",
-          title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served","Males X Years Served", "Years Served Sq."),
-          keep.stat=c("n"),
-          digits = 0,
-          digits.extra = 2)
+plot_summs(mod1, mod2, 
+           coefs = c("Beauty" = "beauty", 
+                     "Age" = "age", 
+                     "Female" = "female"))
 ```
 
----
-# Multiple Models
+> **Knit to HTML**
 
-- Add code. Knit to HTML.
+> **Upload your Rmd to eLC**
 
-```{r, eval=FALSE}
-plot_summs(sal_mod, sal_mod2, 
-           coefs = c("Male" = "sexMale", 
-                     "Years Served" = "yrs.service", 
-                     "Male X Years Served" = "sexMale:yrs.service",
-                     "Years Served^2" = "I(yrs.service^2)"))
-```
-
----
-# Save and upload to eLC

@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-12-09" />
+    <script src="panel_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="panel_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="panel_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Panel Data Analysis
 ### Alex Combs
 ### UGA | SPIA | PADP
-### December 9, 2020
+### Last updated: March 23, 2021
 
 ---
 
@@ -96,31 +98,53 @@ class: center, middle, inverse, title-slide
 - Variation across units AND time
 
 ---
-# Example
+# Revisiting Life Exp and GDP
 
-- Suppose we want to examine the effect of unemployment (rate) on homelessness
+- We have seen versions of the following regression many times
 
-- Suppose we have homelessness and unemployment data for 4 cities (N = 4) for 4 years (T=4), so we would have a total of 16 observations
-  - Not enough data for an actual analysis; just an example
 
-- Let's assume homelessness increases as unemployment increases
+```r
+gap_ols &lt;- lm(log(lifeExp) ~ log(gdpPercap) + continent, data = gapminder)
+get_regression_table(gap_ols) %&gt;% 
+  kable()
+```
+
+
+
+|term              | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:-----------------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept         |    3.062|     0.026|   117.692|       0|    3.011|    3.113|
+|log(gdpPercap)    |    0.112|     0.004|    31.843|       0|    0.105|    0.119|
+|continentAmericas |    0.133|     0.011|    12.519|       0|    0.112|    0.154|
+|continentAsia     |    0.110|     0.009|    12.037|       0|    0.092|    0.128|
+|continentEurope   |    0.166|     0.012|    14.357|       0|    0.143|    0.189|
+|continentOceania  |    0.152|     0.029|     5.187|       0|    0.095|    0.210|
 
 ---
-# Example
+# Revisiting Life Exp and GDP
 
-.pull-left[
-&lt;img src="lectures_files/panel-example.png" width="1024" style="display: block; margin: auto;" /&gt;
-]
+- But previous model treats `gapminder` as pooled cross-sectional instead of panel
 
-.pull-right[
-- Cities have same slope
+- Might there be unobserved, "fixed" characteristics of each country that effects GDP and life expectancy?
 
-- Each has different intercept
-  - Each city's "effect"
-  - Inherent omitted differences
-]
+- If so, we have OVB in our model.
 
-- Key question is whether we think these omitted differences also affect unemployment. If so, we have omitted variable bias
+- This is what a fixed effects regression accounts for
+
+---
+# Revisiting Life Exp and GDP
+
+- Controlling for country and year fixed effects:
+
+
+|term           |  estimate| std.error| statistic|   p.value|
+|:--------------|---------:|---------:|---------:|---------:|
+|log(gdpPercap) | 0.0021665| 0.0053537| 0.4046819| 0.6857672|
+
+
+- GDP no longer rejects the null hypothesis
+
+- No statistically significant evidence that GDP affects life expectancy
 
 ---
 # Enter fixed effects regression
@@ -194,21 +218,16 @@ class: center, middle, inverse, title-slide
 
 - Let's first look at trends over time
 
-&lt;img src="panel_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="panel_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Example
-&lt;img src="panel_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="panel_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Example
 
 - Now suppose we want to investigate the effect of average tuition on enrollment
-
-&lt;img src="panel_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Example
 
 &lt;img src="panel_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -216,6 +235,11 @@ class: center, middle, inverse, title-slide
 # Example
 
 &lt;img src="panel_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Example
+
+&lt;img src="panel_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Within and Between Variation
@@ -298,14 +322,14 @@ On average, a 1,000 dollar increase in states' average tuition is associated wit
 # Example
 
 
-|state         | year|region  | tuition| studentshare| unemp| pop1824| enroll_pct|
-|:-------------|----:|:-------|-------:|------------:|-----:|-------:|----------:|
-|Massachusetts | 1999|NE      |     5.3|         31.1|   3.2|  566828|       20.7|
-|Alabama       | 1999|South   |     4.6|         39.1|   4.7|  440752|       39.2|
-|Minnesota     | 2000|N Cntrl |     3.9|         27.4|   3.1|  473390|       34.1|
-|Montana       | 2013|West    |     6.0|         55.6|   5.4|  100368|       40.0|
-|West Virginia | 2001|West    |     3.7|         39.2|   5.0|  174409|       36.1|
-|Oregon        | 1995|West    |     4.3|         34.8|   4.9|  288121|       33.2|
+|state        | year|region  | tuition| studentshare| unemp| pop1824| enroll_pct|
+|:------------|----:|:-------|-------:|------------:|-----:|-------:|----------:|
+|Arkansas     | 1999|South   |     3.9|         32.9|   4.6|  260087|       31.0|
+|Wyoming      | 2011|West    |     2.0|         11.5|   5.8|   56730|       46.5|
+|Oregon       | 2013|West    |     7.1|         62.3|   7.8|  367608|       45.0|
+|Kansas       | 1991|N Cntrl |     2.7|         26.0|   4.4|  251314|       41.7|
+|Pennsylvania | 2003|NE      |     7.4|         49.1|   5.7| 1160469|       27.2|
+|North Dakota | 2003|NE      |     4.2|         39.8|   3.7|   81755|       42.4|
 
 
 ---
@@ -412,42 +436,18 @@ pFtest(fe2, standard_ols2)
 
 
 ```r
-fe2_time &lt;- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824 + factor(year),
-                data = statepanel,
-                index = c("state", "year"), model = "within")
+fe2_time &lt;- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824,
+                data = statepanel, index = c("state", "year"), 
+*               model = "within", effect = "twoways")
 ```
 
 
-|term             |   estimate| std.error|  statistic|   p.value|
-|:----------------|----------:|---------:|----------:|---------:|
-|tuition          | -1.2026960| 0.1427770| -8.4235964| 0.0000000|
-|studentshare     |  0.1674229| 0.0239535|  6.9894929| 0.0000000|
-|unemp            | -0.1221213| 0.0776197| -1.5733283| 0.1159203|
-|pop1824          | -0.0000037| 0.0000009| -4.3360937| 0.0000158|
-|factor(year)1992 |  0.9649398| 0.4376657|  2.2047417| 0.0276714|
-|factor(year)1993 |  1.2072950| 0.4386141|  2.7525219| 0.0060077|
-|factor(year)1994 |  1.1716700| 0.4457260|  2.6286779| 0.0086870|
-|factor(year)1995 |  1.0990534| 0.4522063|  2.4304247| 0.0152346|
-|factor(year)1996 |  1.3947738| 0.4560753|  3.0582094| 0.0022786|
-|factor(year)1997 |  1.0101145| 0.4644921|  2.1746645| 0.0298603|
-|factor(year)1998 |  0.7459474| 0.4763949|  1.5658172| 0.1176690|
-|factor(year)1999 |  0.8410190| 0.4824246|  1.7433168| 0.0815479|
-|factor(year)2000 |  0.5360310| 0.4874343|  1.0996990| 0.2716955|
-|factor(year)2001 |  0.3670312| 0.4729972|  0.7759691| 0.4379282|
-|factor(year)2002 |  0.9719954| 0.4580536|  2.1220122| 0.0340519|
-|factor(year)2003 |  1.7764011| 0.4681425|  3.7945737| 0.0001557|
-|factor(year)2004 |  1.9371415| 0.4871035|  3.9768580| 0.0000742|
-|factor(year)2005 |  2.3876419| 0.5022739|  4.7536647| 0.0000023|
-|factor(year)2006 |  2.5523922| 0.5161318|  4.9452336| 0.0000009|
-|factor(year)2007 |  2.9567011| 0.5197156|  5.6890750| 0.0000000|
-|factor(year)2008 |  3.7043158| 0.4968479|  7.4556337| 0.0000000|
-|factor(year)2009 |  5.0992817| 0.5165848|  9.8711414| 0.0000000|
-|factor(year)2010 |  7.2188352| 0.5296473| 13.6295147| 0.0000000|
-|factor(year)2011 |  7.6902227| 0.5366920| 14.3289299| 0.0000000|
-|factor(year)2012 |  7.0029446| 0.5689061| 12.3094916| 0.0000000|
-|factor(year)2013 |  6.0373303| 0.5861072| 10.3007277| 0.0000000|
-|factor(year)2014 |  5.3487621| 0.6026947|  8.8747448| 0.0000000|
-|factor(year)2015 |  4.6833658| 0.6194395|  7.5606512| 0.0000000|
+|term         |   estimate| std.error| statistic|   p.value|
+|:------------|----------:|---------:|---------:|---------:|
+|tuition      | -1.2026960| 0.1427770| -8.423596| 0.0000000|
+|studentshare |  0.1674229| 0.0239535|  6.989493| 0.0000000|
+|unemp        | -0.1221213| 0.0776197| -1.573328| 0.1159203|
+|pop1824      | -0.0000037| 0.0000009| -4.336094| 0.0000158|
 
 ---
 # Testing whether to include time trends
@@ -461,9 +461,9 @@ pFtest(fe2_time, fe2)
 
 ```
 ## 
-## 	F test for individual effects
+## 	F test for twoways effects
 ## 
-## data:  enroll_pct ~ tuition + studentshare + unemp + pop1824 + factor(year)
+## data:  enroll_pct ~ tuition + studentshare + unemp + pop1824
 ## F = 14.734, df1 = 24, df2 = 1140, p-value &lt; 2.2e-16
 ## alternative hypothesis: significant effects
 ```
@@ -482,7 +482,8 @@ pFtest(fe2_time, fe2)
 <script src="macros.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
-"countIncrementalSlides": false
+"countIncrementalSlides": false,
+"highlightLines": true
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -548,7 +549,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {

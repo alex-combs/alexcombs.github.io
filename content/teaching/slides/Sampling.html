@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-11-04" />
+    <script src="Sampling_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="Sampling_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="Sampling_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Sampling
 ### Alex Combs
 ### UGA | SPIA | PADP
-### November 4, 2020
+### Last updated: March 25, 2021
 
 ---
 
@@ -54,7 +56,7 @@ class: center, middle, inverse, title-slide
 
 - Our goal is to gain an intuitive understanding of `std_error`, `lower_ci`, and `upper_ci` columns; how they are derived and what they tell us. 
 
-- We need not be experts in the math but there are key lessons that can help us be better producers and consumers of statistics.
+- We need not be experts in the underlying math but know enough to be effective producers and/or consumers of statistics.
 
 ---
 # Inference
@@ -89,7 +91,7 @@ class: center, middle, inverse, title-slide
 ---
 # Steps in inference
 
-1. We take a random sample. Maybe not *truly* random but then we'll need to account/control for any variable that would cause bias.
+1. We take a random sample. Maybe not *truly* random but then we'd need to account/control for any variable that would cause bias.
 
 --
 
@@ -118,12 +120,11 @@ class: center, middle, inverse, title-slide
 
 --
 
-- As long as we did not over- or under-sample a characteristic correlated with salary (e.g. sex, race, age, etc.), we might be OK. If we did, we can control for those variables (assuming we recorded them) via sample weighting or multiple regression.
+- As long as we did not over- or under-sample a characteristic correlated with salary (e.g. sex, race, age, etc.), we should be OK. If we did, we can control for those variables via sample weighting or multiple regression.
 
 ---
 # Example Step 1
 
-.pull-left[
 
 ```r
 salaries &lt;- tibble(ID = c(1:2000), 
@@ -140,24 +141,29 @@ sal_sample &lt;- rep_sample_n(salaries,
 
 - Took sample of 50.
 
+---
+# The population
+
+.pull-left[
+
+**Population**
+
+&lt;img src="Sampling_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
 
-- Visualize distribution of sample.
+**Sample**
 
-![](Sampling_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](Sampling_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
 ]
-
----
-# The population
-
-&lt;img src="Sampling_files/figure-html/unnamed-chunk-9-1.png" height="90%" style="display: block; margin: auto;" /&gt;
 
 ---
 # The 68-95-99 rule
 
-&lt;img src="lectures_files/normdist.png" width="917" height="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="lectures_files/normdist.png" width="917" height="60%" style="display: block; margin: auto;" /&gt;
+
+- 95% of observations are 1.96 standard deviations from mean and 99% are 2.58 standard deviations from the mean
 
 ---
 # The population
@@ -201,13 +207,11 @@ mean(sal_sample$salary)
 
 - Suppose the data-generating process of an important phenomenon in the population, like education level, eviction, job loss, or addiction, was based on a six-sided die.
 
---
-
 - The outcome will be among integers 1 through 6 each with equal probability
 
-- What's the expected value of the population parameter?
-
 --
+
+- The expected value of the population parameter:
 
 `$$\frac{1+2+3+4+5+6}{6}=3.5$$`
 --
@@ -217,7 +221,7 @@ mean(sal_sample$salary)
 ---
 # Example Step 2
 
-- Unlike a die roll, we don't know the data-generating process of most phenomena, so we don't know the expected value of the outcome in the population unless we actually calculated it.
+- Unlike a die roll, we don't know the data-generating process of most phenomena, so we don't know the expected value of the outcome in the population unless we directly compute it.
 
 --
 
@@ -225,7 +229,7 @@ mean(sal_sample$salary)
 
 --
 
-- As long as our sample was taken randomly (or at least unbiasedly), then each observation in our sample is like rolling the die in terms of obtaining a random outcome.
+- As long as our sample was taken randomly (or at least unbiased), then each observation in our sample is like rolling the die once to obtain a value of a random outcome.
 
 --
 
@@ -269,7 +273,7 @@ mean(sal_sample3$salary)
 ---
 # Example Step 3
 
-- Highly unlikely our estimate *equals* the population parameter, so we shouldn't treat the estimate as if it does.
+- Highly unlikely our estimate *equals* the population parameter
 
 --
 
@@ -277,11 +281,11 @@ mean(sal_sample3$salary)
 
 --
 
-- Imagine if, instead of a distribution of salaries, we had a distribution of average salary estimates where each estimate is from a different sample of MPA graduates. This is called a **sampling distribution**.
+- Instead of a distribution of salaries, suppose we had a **distribution of estimates of average salary** where each estimate is from a different sample of MPA graduates. This is called a **sampling distribution**.
 
 --
 
-- The **central limit theorem** allows us to assume our estimate was drawn from a sampling distribution that is **distributed normally**.
+- The **central limit theorem** allows us to assume our one estimate was drawn from a sampling distribution that is **distributed normally**.
 
 ---
 # Sampling distribution
@@ -333,7 +337,7 @@ Table: Preview of data
 
 &lt;img src="Sampling_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 
-- Distribution of our 100 estimates.
+- Distribution of our 100 estimates of average salary.
 
 - The **CLT** demonstrates that sampling distributions approach normal *regardless of the underlying variable's distribution*.
 
@@ -388,7 +392,7 @@ mean(sal_sample$salary)
 
 --
 
-- We need the standard deviation of our sampling distribution
+- We need the **standard deviation of our sampling distribution**
 
 ---
 # Standard error
@@ -496,6 +500,17 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 --
 
 Or could construct a 99% CI expected to fail only 1 out of 100 times. But this produces a *wider* interval that is less precise and perhaps less useful. It's up to us to consider this trade-off.
+
+---
+# A look at 100 CIs
+
+
+
+
+
+&lt;img src="Sampling_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
+
+- As expected, 5 CIs fail. Our study could be any one of these.
 
 ---
 # Point estimate vs. CI
@@ -685,7 +700,7 @@ sd(sal_sample3$salary)/sqrt(250)
 
 - Even still, our sample could be one of the 5 out of 100 samples where our method of inference is expected to fail to capture `\(\beta_1\)`.
 
-- We could lower this likelihood of failure by reporting a 99% CI...
+- We could lower this frequency by reporting a 99% CI...
 
 ---
 # Back to the regression table
@@ -699,19 +714,19 @@ sd(sal_sample3$salary)/sqrt(250)
 
 
 ```r
-1993-2.54*262
+1993-2.58*262
 ```
 
 ```
-## [1] 1327.52
+## [1] 1317.04
 ```
 
 ```r
-1993+2.54*262
+1993+2.58*262
 ```
 
 ```
-## [1] 2658.48
+## [1] 2668.96
 ```
 
 ---

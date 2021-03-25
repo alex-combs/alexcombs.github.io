@@ -1,0 +1,646 @@
+---
+title: "PADP 7120 Data Applications in PA"
+subtitle: "Hypothesis Testing"
+author: "Alex Combs"
+institute: "UGA | SPIA | PADP"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
+output:
+  xaringan::moon_reader:
+    css: 'mypres.css'
+    nature:
+      beforeInit: "macros.js"
+      highlightStyle: github
+      countIncrementalSlides: false
+---
+# Outline
+
+```{r, include=FALSE}
+library(tidyverse)
+library(moderndive)
+library(fivethirtyeight)
+library(infer)
+library(knitr)
+set.seed(123)
+options(scipen = 999)
+
+state_trump <- hate_crimes %>%
+  mutate(share_white = 1 - share_non_white,
+         urbanization = if_else(share_pop_metro<=0.75, "low", "high")) %>% 
+  select(state, 
+         median_house_inc, 
+         share_pop_hs, 
+         share_white, 
+         share_white_poverty, 
+         share_vote_trump,
+         urbanization) %>%
+  filter(state != "District of Columbia") %>% 
+  mutate_at(vars(share_pop_hs, share_white, share_white_poverty,
+              share_vote_trump), funs(.*100)) %>% 
+  rename(med_inc = median_house_inc, hs = share_pop_hs, urban = urbanization)
+```
+
+- p-values (probability-values)
+- hypothesis testing
+- Comparing a sampling distribution to the null distribution
+- Reporting statistically significant results
+- Practical significance
+
+---
+# Regression table
+
+$$MedHHInc = \beta_0 + \beta_1HSDegree + \beta_2 Urbanization + \epsilon$$ 
+
+```{r, include=FALSE}
+inc_mod <- lm(med_inc ~ hs + urban, 
+              data = state_trump)
+```
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits = 0)
+```
+
+- Our goal is to gain an understanding of the `statistic` (less important) and `p_value` columns. 
+
+---
+class: inverse, center, middle
+
+# What is a p-value?
+
+---
+# p-value
+
+**p-value:** the probability of obtaining my result or more extreme in a world where the **null hypothesis** is actually true.
+
+The p-value is misunderstood and misused in research to an concerning extent. [Story1](https://www.vox.com/science-and-health/2017/7/31/16021654/p-values-statistical-significance-redefine-0005) [Story2](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained)
+
+---
+# Hypothesis test
+
+**Hypothesis test:** "Is my result so unlikely that I can conclude with a sufficient level of confidence that there is evidence in support of my hypothesis?"
+
+---
+# Structure of hypothesis test
+
+- Alternative hypothesis $H_A$
+  - Claims there is evidence for the phenomenon you are interested in testing.
+  - Often denoted as the parameter does not equal 0 
+  - $\theta \neq 0$
+
+--
+
+- Null hypothesis $H_0$
+  - Claims there is no such evidence; the mutually exclusive opposite of the alternative
+  - $\theta = 0$
+
+---
+# Example
+
+```{r, echo=FALSE}
+load('lectures_files/fatal_encounters.RData')
+load('lectures_files/fatal_shot.RData')
+
+fatal_shot_2019 <- fatal_encounters %>% 
+  select(year, race_imputed, cause) %>% 
+  filter(cause == 'Gunshot' & year == 2019)
+
+fatal_shot_2019 <- fatal_encounters %>% 
+  select(year, race_imputed, cause) %>% 
+  filter(cause == 'Gunshot' & year == 2019)
+
+fatal_shot_2019$cause <- fct_drop(fatal_shot_2019$cause)
+fatal_shot_2019$race_imputed <- fct_drop(fatal_shot_2019$race_imputed)
+
+fatal_shot_2019 <- fatal_shot_2019 %>% 
+  filter(race_imputed == "European-American/White" |
+           race_imputed == "African-American/Black")
+
+
+```
+
+---
+# Example
+
+```{r, echo=FALSE, fig.align='center'}
+ggplot(promotions, aes(x = gender, fill = decision)) +
+  geom_bar() +
+  labs(title = "Observed Promotions", 
+       x = "Gender of name on resume")
+```
+
+---
+# Example
+
+```{r, echo=FALSE, message=FALSE}
+promotions %>% 
+  group_by(gender, decision) %>% 
+  summarize(n = n()) %>% 
+  kable()
+```
+
+```{r}
+(m_promo <- 21/24)
+
+(f_promo <- 14/24)
+```
+
+---
+# Example
+
+- Descriptive:
+  - For our one sample, we have calculated the proportion of males promoted $p_M=0.88$ and proportion of females promoted $p_F=0.58$
+  - In this sample, the difference in proportion promoted is $p_M-p_F= 0.88-0.58=0.3$ or 30 percentage points.
+
+--
+
+- Inference:
+  - But this is just a sample of an unobserved population
+  - And/or the counterfactual is unobservable
+  - This sample provides us estimates of $P_M$, $P_F$, and $P_M-P_F$
+  - The question is whether $P_M-P_F=0.3$ something close enough to that, or does $P_M-P_F=0$?
+
+---
+# Example
+
+$H_A$: Males and females are not promoted in equal proportions. 
+
+- $P_M-P_F \neq 0$
+
+--
+
+$H_0$: Males and females are promoted in equal proportions.
+
+- $P_M-P_F=0$
+
+--
+
+- Some might state the $H_A$ as "Males are promoted in higher proportion than females."
+- $H_A: P_M-P_F>0$ and $H_0: P_M-P_F \leq 0$
+- This is a one-tailed test instead of a two-tailed test
+- I do not recommend one-tailed tests and won't be teaching them
+
+---
+# Hypothesis test conclusion
+
+Hypothesis tests result in one of two possible conclusions:
+
+1. Reject the null hypothesis that $\theta = 0$, 
+  - $\theta \neq 0$
+
+--
+
+2. Fail to reject the null hypothesis, 
+  - Could be that $\theta=0$ or $\theta \neq 0$. 
+  - We can't tell from our evidence.
+
+--
+
+It is never the case that we accept the null hypothesis that $\theta = 0$
+
+---
+# Example
+
+1. If results reject the null
+  - We found statistically significant evidence that $P_M-P_F \neq 0$
+  - Result of 0.3 is too improbable to be random noise
+
+--
+
+2. If results fail to reject the null
+  - We did not find statistically significant evidence that $P_M-P_F \neq 0$
+  - Result of 0.3 is not improbable enough; *could* be that $P_M-P_F = 0$
+
+--
+
+- Can **never** conclude males and females *are* promoted equally $P_M-P_F = 0$ from a hypothesis test.
+
+---
+# Hypothesis test conclusions
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/hypotest-tables.png')
+```
+
+---
+# Example
+
+- Suppose our estimate, $p_M-p_F=0.3$, of $P_M-P_F=?$ is so unlikely that we reject the null 
+
+- Conclude that males and females are not promoted in equal proportions $P_M-P_F \neq 0$.
+
+--
+
+- Our estimate is a scientific guess around which we construct a range of plausible values that capture the parameter (i.e. confidence interval)
+
+--
+
+- The parameter can fall *anywhere* inside our confidence interval
+
+- And our confidence interval could be 1 of the 5 out of 100 (assuming 95% CI) expected to fail to capture the parameter at all
+
+---
+# Example
+
+- We may reject the null, $P_M-P_F \neq 0$, because our 95% CI does **not** contain 0
+
+--
+
+- But our CI could be wrong and the true value is that $P_M-P_F = 0$
+  - Type I error
+  - False positive
+
+--
+
+- Or we may fail to reject the null because our 95% CI does include 0, 
+- Can't rule out with high enough confidence that $P_M-P_F \neq 0$
+
+--
+
+- But our CI could be wrong and the true value is that $P_M-P_F \neq 0$
+  - Type II error
+  - False negative
+
+---
+# Type I vs. II error
+
+- Is one necessarily worse than the other?
+
+- No. Depends entirely on the context or consequence of the conclusion.
+
+--
+
+- Dilemma: the more we choose to reduce the chance of a false positive, the more we increase the chance of a false negative
+
+- Have to balance the two based on the context
+
+- Research community tolerates false negatives much more than false positives
+
+---
+# Recap
+
+- Hypo test: "Is my result **so unlikely** that I can reject my null hypothesis with a **sufficient level of confidence**?"
+
+- p-value: the probability of obtaining our results or more extreme in a world where the null hypothesis is in fact true
+
+--
+
+- But we only have one sample of data and we don't know which world we are in (whether null true or not)
+
+- How do we estimate the probability of our result in a null world?
+
+---
+# Null distribution
+
+```{r, echo=FALSE, fig.align='center', out.height='66%'}
+include_graphics('lectures_files/nulldist.png')
+```
+
+- We estimate a null distribution, similar to the sampling distribution
+
+- Null distribution is centered at 0 as if null were actually true
+
+- Assuming null distribution is normal, we can then calculate the probability of our result
+
+---
+# Decision rule
+
+- Suppose we declare that if the probability of our estimate $p_M-p_F=0.3$ in a world where the null, $P_M-P_F = 0$, is true is less than 5%, then we will reject the null and conclude that $P_M-P_F \neq 0$.
+
+--
+
+- We have chosen a **significance level** of 5%, which is the same as choosing a **confidence level** of 95%.
+  - Sometimes denoted $\alpha = 0.05$ where $\alpha$ is significance level
+
+--
+
+- Therefore, if p-value is less than 0.05, we **reject** the null. If it is greater than or equal to 0.05, we **fail to reject** the null.
+
+--
+
+- If p-value $<\alpha$, reject $H_0$
+- If p-value $\geq \alpha$, fail to reject $H_0$
+
+---
+class: inverse, center, middle
+
+# How can we possibly estimate this null distribution with only one sample of data from a world where the null may or may not be true?
+
+---
+# Example
+
+- If the null were true, then promotions would be random with respect to gender
+  - On average, $P_M-P_F = 0$
+  - Promotions and gender would share no correlation
+
+--
+
+- If null were true, promotions between genders unlikely to be *exactly* equal because randomness
+
+- But would they be as different as what we see in our sample?
+
+```{r}
+(real_diff <- m_promo - f_promo)
+```
+
+---
+# Example
+
+- To simulate a world in which the null is true, we could randomly shuffle gender in our data
+
+```{r, echo=FALSE}
+promotions %>%
+  slice(c(36, 39, 40, 1, 2, 22)) %>% 
+  mutate(`shuffled gender` = sample(gender)) %>% 
+  select(-id) %>% 
+  mutate(`resume number` = 1:n()) %>% 
+  select(`resume number`, everything()) %>% 
+  kable()
+```
+
+---
+# Example
+
+```{r, echo=FALSE, fig.align='center'}
+ggplot(promotions_shuffled, aes(x = gender, fill = decision)) +
+  geom_bar() +
+  labs(title = "Randomly Shuffled Gender", 
+       x = "Gender of resume name")
+```
+
+---
+# Example
+
+```{r, echo=FALSE, message=FALSE}
+promotions_shuffled %>% 
+  group_by(gender, decision) %>% 
+  summarize(n = n()) %>% 
+  kable()
+```
+
+```{r}
+(m_promo_shuff <- 18/24)
+
+(f_promo_shuff <- 17/24)
+```
+
+---
+# Example
+
+- What if we repeated this random shuffling 1,000 times, calculating the difference in promotions between males and females each time?
+
+- Then we could plot the 1,000 values as a histogram, giving us a distribution of differences between males and females in a world where promotions are random with respect to gender
+
+- Then we would have a simulated null distribution
+
+---
+# Example null distribution
+
+```{r, echo=FALSE, fig.align='center'}
+null_distribution <- promotions %>% 
+  specify(formula = decision ~ gender, success = "promoted") %>% 
+  hypothesize(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") %>% 
+  calculate(stat = "diff in props", order = c("male", "female"))
+
+ggplot(null_distribution, aes(x=stat)) +
+  geom_histogram(bins = 10, color = 'white') +
+  labs(x = 'Difference in Promotion Proportions') +
+  theme_minimal()
+```
+
+---
+# Null distribution
+
+- The **LLN** tells us the center of the null distribution will settle around 0, and the **CLT** tells us that the null distribution will be normal just like the sampling distribution.
+
+- Therefore, we can calculate the percent of values expected to fall outside some chosen number of standard errors (a.k.a. standard deviations). That is, we can apply the **68-95-99 rule** to the null distribution.
+
+---
+# Example
+
+**Center of null distribution**
+```{r}
+mean(null_distribution$stat)
+```
+
+**Standard error of null distribution**
+```{r}
+sd(null_distribution$stat)/sqrt(1000)
+```
+
+---
+# Null distribution
+
+**95% CI of null distribution**
+```{r}
+-0.0022-1.96*0.0041
+-0.0022+1.96*0.0041
+```
+
+- 95% of differences between male and female promotions fall between -0.01 and 0.006
+
+- Our observed difference was 0.3! How likely is this result if the null were actually true?
+
+---
+# Example p-value
+
+.pull-left[
+```{r, echo=FALSE, fig.align='center'}
+visualize(null_distribution, bins = 10) + 
+  shade_p_value(obs_stat = real_diff, direction = "two-sided")
+```
+]
+
+.pull-right[
+
+```{r, echo=FALSE}
+null_distribution %>% 
+  get_p_value(obs_stat = real_diff, direction = "two-sided") %>% 
+  kable()
+```
+
+- The probability of obtaining +/- 0.3 or more extreme is 3%.
+
+- $0.03<0.05 \rightarrow$ reject the null $H_0$
+
+- Statistically significant evidence that males and females are not promoted equally.
+
+]
+
+---
+# Back to regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits = 3)
+```
+
+- Can we now explain the prior concepts with respect to this table?
+
+- What are the null and alternative hypotheses? What is the result of the test?
+
+- How many standard errors is are our estimates from the center of the null distribution?
+
+- What is the probability of obtaining our estimates or more extreme in a world where the null is true?
+
+---
+# Back to regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits = 3)
+```
+
+$H_0:$ $\beta_1 = 0$ Percent of population has no association/effect on median income
+
+$H_A:$ $\beta_1 \neq 0$ Percent of population has an association/effect on median income
+
+--
+
+Reject the null. Our estimate is 7.6 standard errors away from 0. Probability of this result or more extreme in a world where the null is true less than 0.05%.
+
+---
+# Back to regression table
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits = 3)
+```
+
+There is statistically significant evidence that educational attainment is positively associated with median income in states. On average, state median income increases approximately 1,993 dollars per 1 percentage point increase in the population with at least a high school degree, all else equal. With 95% confidence, a 1 p.p. increase in high school attainment is associated with an increase of median income between 1,465 and 2,521 dollars. 
+
+---
+# Example
+
+- Again, could simulate a null world where `hs` and `med_inc` are random; calculating 1,000 regression slopes/estimates
+
+```{r, echo=FALSE}
+null_distn_slopes <- state_trump %>% 
+  specify(response = med_inc, explanatory = hs) %>%
+  hypothesize(null = "independence") %>% 
+  generate(reps = 1000, type = "permute") %>% 
+  calculate(stat = "slope")
+
+null_distn_slopes %>% 
+  head() %>% 
+  kable(col.names = c('replicate', 'slope'))
+```
+
+---
+# Example
+
+```{r, echo=FALSE, fig.align='center'}
+ggplot(null_distn_slopes, aes(x=stat)) +
+  geom_histogram(bins = 15, color = "white") +
+  geom_vline(xintercept = 1993, 
+             color = "red", linetype = "dashed", size = 1.5) +
+  geom_vline(xintercept = 1465, 
+             color = "red", size = 1.5) +
+  geom_vline(xintercept = 2521, 
+             color = "red", size = 1.5) +
+  labs(title = "Null distribution for education and median income")
+```
+
+
+---
+class: inverse, center, middle
+
+# Statistical significance does not neccessarily determine whether our results warrant action. We must consider if our results have **practical significance**.
+
+---
+# Practical significance questions
+
+1. What is the typical change in the explanatory variable associated with the statistically significant estimate?
+
+--
+
+2. Is the predicted change in the outcome due to a typical change in the explanatory variable negligible or meaningful?
+
+--
+
+3a. If the explanatory variable is statistically significant, is its confidence interval so close to zero that using the upper or lower bound instead of the midpoint would make the predicted change in the outcome negligible? 
+
+3b. Or, if the explanatory variable is statistically insignificant, is its confidence interval so closely around zero that the entire range of plausible values of the parameter would lead to a negligible change in the outcome?
+  
+---
+# Example 1
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig1.png')
+```
+
+- Is the property tax result practically significant?
+
+--
+
+- Typical change (standard deviation) in property tax is $4
+
+- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
+
+- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200)...practically significant!
+
+---
+# Example 2
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig2.png')
+```
+
+- SD for property tax is now 0.04 instead of 4
+- Is the property tax result practically significant?
+
+--
+
+- Typical change in property tax is now $0.04
+
+- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
+
+- Confidence intervals do not change this conclusion.
+
+---
+# Example 3
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig3.png')
+```
+
+- SD of property tax back to 4 but CI has changed
+- Is the property tax result practically significant?
+
+--
+
+- Same as first example and would definitely be practically significant if not for the 95% CI being so close to 0.
+
+- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
+
+---
+# Example 4
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig4.png')
+```
+
+- Estimate and CI for property tax has changed
+- Is the property tax result practically significant?
+
+--
+
+- Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
+
+- Rare for statistical insignificance to have practical significance.
+
+---
+# Example 5
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig5.png')
+```
+
+- Estimate and CI has changed again
+- Is the property tax result practically significant?
+
+--
+
+- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
+
+- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.

@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "RLab 9: Reporting Regression Results"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "November 18, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -29,9 +29,9 @@ library(knitr)
 ---
 # Set-up
 
-- Start a new project and notebook
+> **Start a new project and Rmd**
 
-- Change YAML
+> **Change YAML**
 
 ```{r, eval=FALSE}
 ---
@@ -47,13 +47,13 @@ output:
 ---
 # Set-up
 
-- Download `predicting_happiness.RData` from eLC and `load` into RStudio
+> **Download `predicting_happiness.RData` from eLC and `load` into RStudio**
 
 ```{r, include=FALSE}
 load('labs_files/predicting_happiness.RData')
 ```
 
-- Load following packages
+> **Load following packages**
 
 ```{r, eval=FALSE}
 library(tidyverse)
@@ -91,31 +91,13 @@ head(predicting_happiness, n = 4) %>%
 
 - Let's examine the correlations between the three numerical variables
 
-- Feed the three numerical variables to the `cor()` function and complete the following sentences
+> **In a new code chunk, compute correlations between the three numerical variables using the `cor()` function.**
+
+> **Outside of the code chunk, complete the following sentences:**
 
 - ND is _ correlated with SWB.
 - PSS is _ correlated with SWB.
 - PSS is _ correlated with ND.
-
----
-# Correlations
-
-.pull-left[
-```{r}
-predicting_happiness %>% 
-  select(-Id) %>% 
-  cor() %>% 
-  kable(digits = 2)
-```
-]
-
-.pull-right[
-
-- ND is positively correlated with SWB.
-- PSS is positively correlated with SWB.
-- PSS is positively correlated with ND.
-
-]
 
 ---
 # DAG
@@ -141,7 +123,7 @@ $$SWB_i=\beta_0+ \dots ?$$
 
 $$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$
 
-- But suppose we are only able to estimate the following model
+- But suppose we choose to estimate the following model instead
 
 $$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$
 
@@ -158,14 +140,10 @@ $$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$
 
 - $H_A: \beta_1 \neq 0$
 
---
-
-What significance level do we want to use? 5% or 1%?
-
 ---
 # Biased regression
 
-- Estimate the biased model and produce a basic regression table
+> **Estimate the biased model and produce a basic regression table**
 
 ```{r, eval=FALSE}
 biased <- 
@@ -174,7 +152,7 @@ biased <-
 ---
 # Biased regression results
 
-```{r}
+```{r, echo=FALSE}
 biased <- lm(SWB ~ ND, data = predicting_happiness)
 get_regression_table(biased) %>% 
   kable()
@@ -182,7 +160,7 @@ get_regression_table(biased) %>%
 
 --
 
-- What is the conclusion of our hypothesis test?
+- What is the conclusion of our hypothesis test at a 5% significance level?
 
 --
 
@@ -216,7 +194,7 @@ include_graphics('labs_files/ovb-direction.png')
 
 - If Z causes X and Y to move in same direction, OVB is positive
 
-- IF Z causes X and Y to move in opposite directions, OVB is negative
+- If Z causes X and Y to move in opposite directions, OVB is negative
 
 ---
 # Revisiting correlations
@@ -261,7 +239,7 @@ Based on the correlations between these three variables, what direction is the O
 
 - Since we have the data for the omitted variable, let's confirm that this works the way we predicted it to
 
-- Estimate the valid model and provide the results.
+> **Estimate the valid model and provide the results**
 
 $$SWB_i=\beta_0+\beta_1ND_i+\beta_2PSS_i+\epsilon$$
 
@@ -272,7 +250,7 @@ valid <-
 ---
 # Valid regression
 
-```{r}
+```{r, echo=FALSE}
 valid <- lm(SWB ~ ND + PSS, data = predicting_happiness)
 get_regression_table(valid) %>% 
   kable()
@@ -282,7 +260,7 @@ get_regression_table(valid) %>%
 
 --
 
-- Yes. In this case we would have failed to reject the null.
+- Yes. In this case we would have failed to reject the null because p-value = 0.787
 
 ---
 # Computing OVB
@@ -291,7 +269,7 @@ get_regression_table(valid) %>%
 
 $$\beta^{biased}-\beta^{valid}$$
 
-- Calculate the magnitude of the OVB on the estimate for ND between the two models?
+> **Calculate the magnitude of the OVB on the estimate for ND between the two models**
 
 - Is it in the direction we predicted?
 
@@ -305,3 +283,10 @@ $$\beta^{biased}-\beta^{valid}$$
 - OVB is positive, just as we predicted.
 
 - You now understand bias. Congratulations!
+
+> **Knit and/or save your Rmd and upload Rmd to eLC**
+
+---
+# What is the story?
+
+- What is the story of our valid model?

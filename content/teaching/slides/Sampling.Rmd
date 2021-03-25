@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Sampling"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "November 4, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -72,7 +72,7 @@ get_regression_table(inc_mod) %>%
 
 - Our goal is to gain an intuitive understanding of `std_error`, `lower_ci`, and `upper_ci` columns; how they are derived and what they tell us. 
 
-- We need not be experts in the math but there are key lessons that can help us be better producers and consumers of statistics.
+- We need not be experts in the underlying math but know enough to be effective producers and/or consumers of statistics.
 
 ---
 # Inference
@@ -109,7 +109,7 @@ $$[\hat{\theta}-?, \hat{\theta}+?]$$
 ---
 # Steps in inference
 
-1. We take a random sample. Maybe not *truly* random but then we'll need to account/control for any variable that would cause bias.
+1. We take a random sample. Maybe not *truly* random but then we'd need to account/control for any variable that would cause bias.
 
 --
 
@@ -138,12 +138,11 @@ $$[\hat{\theta}-?, \hat{\theta}+?]$$
 
 --
 
-- As long as we did not over- or under-sample a characteristic correlated with salary (e.g. sex, race, age, etc.), we might be OK. If we did, we can control for those variables (assuming we recorded them) via sample weighting or multiple regression.
+- As long as we did not over- or under-sample a characteristic correlated with salary (e.g. sex, race, age, etc.), we should be OK. If we did, we can control for those variables via sample weighting or multiple regression.
 
 ---
 # Example Step 1
 
-.pull-left[
 ```{r}
 salaries <- tibble(ID = c(1:2000), 
                    salary = rnorm(2000, 80000, 7000))
@@ -158,11 +157,24 @@ sal_sample <- rep_sample_n(salaries,
 
 - Took sample of 50.
 
+---
+# The population
+
+.pull-left[
+
+**Population**
+
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+ggplot(salaries, aes(x = salary)) +
+  geom_histogram(bins = 100, fill = 'darkred', color = 'white') +
+  scale_x_continuous(labels = scales::dollar_format()) +
+  theme_minimal()
+```
 ]
 
 .pull-right[
 
-- Visualize distribution of sample.
+**Sample**
 
 ```{r, echo=FALSE, message=FALSE}
 sal_sample %>% 
@@ -174,21 +186,13 @@ sal_sample %>%
 ]
 
 ---
-# The population
-
-```{r, echo=FALSE, message=FALSE, fig.align='center', out.height='90%'}
-ggplot(salaries, aes(x = salary)) +
-  geom_histogram(bins = 100, fill = 'darkred', color = 'white') +
-  scale_x_continuous(labels = scales::dollar_format()) +
-  theme_minimal()
-```
-
----
 # The 68-95-99 rule
 
-```{r, echo=FALSE, fig.align='center', out.height='90%'}
+```{r, echo=FALSE, fig.align='center', out.height='60%'}
 include_graphics('lectures_files/normdist.png')
 ```
+
+- 95% of observations are 1.96 standard deviations from mean and 99% are 2.58 standard deviations from the mean
 
 ---
 # The population
@@ -233,13 +237,11 @@ mean(sal_sample$salary)
 
 - Suppose the data-generating process of an important phenomenon in the population, like education level, eviction, job loss, or addiction, was based on a six-sided die.
 
---
-
 - The outcome will be among integers 1 through 6 each with equal probability
 
-- What's the expected value of the population parameter?
-
 --
+
+- The expected value of the population parameter:
 
 $$\frac{1+2+3+4+5+6}{6}=3.5$$
 --
@@ -249,7 +251,7 @@ $$\frac{1+2+3+4+5+6}{6}=3.5$$
 ---
 # Example Step 2
 
-- Unlike a die roll, we don't know the data-generating process of most phenomena, so we don't know the expected value of the outcome in the population unless we actually calculated it.
+- Unlike a die roll, we don't know the data-generating process of most phenomena, so we don't know the expected value of the outcome in the population unless we directly compute it.
 
 --
 
@@ -257,7 +259,7 @@ $$\frac{1+2+3+4+5+6}{6}=3.5$$
 
 --
 
-- As long as our sample was taken randomly (or at least unbiasedly), then each observation in our sample is like rolling the die in terms of obtaining a random outcome.
+- As long as our sample was taken randomly (or at least unbiased), then each observation in our sample is like rolling the die once to obtain a value of a random outcome.
 
 --
 
@@ -289,7 +291,7 @@ mean(sal_sample3$salary)
 ---
 # Example Step 3
 
-- Highly unlikely our estimate *equals* the population parameter, so we shouldn't treat the estimate as if it does.
+- Highly unlikely our estimate *equals* the population parameter
 
 --
 
@@ -297,11 +299,11 @@ mean(sal_sample3$salary)
 
 --
 
-- Imagine if, instead of a distribution of salaries, we had a distribution of average salary estimates where each estimate is from a different sample of MPA graduates. This is called a **sampling distribution**.
+- Instead of a distribution of salaries, suppose we had a **distribution of estimates of average salary** where each estimate is from a different sample of MPA graduates. This is called a **sampling distribution**.
 
 --
 
-- The **central limit theorem** allows us to assume our estimate was drawn from a sampling distribution that is **distributed normally**.
+- The **central limit theorem** allows us to assume our one estimate was drawn from a sampling distribution that is **distributed normally**.
 
 ---
 # Sampling distribution
@@ -346,7 +348,7 @@ sal_dist_means %>%
   theme_minimal()
 ```
 
-- Distribution of our 100 estimates.
+- Distribution of our 100 estimates of average salary.
 
 - The **CLT** demonstrates that sampling distributions approach normal *regardless of the underlying variable's distribution*.
 
@@ -399,7 +401,7 @@ mean(sal_sample$salary)
 
 --
 
-- We need the standard deviation of our sampling distribution
+- We need the **standard deviation of our sampling distribution**
 
 ---
 # Standard error
@@ -494,6 +496,37 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 --
 
 Or could construct a 99% CI expected to fail only 1 out of 100 times. But this produces a *wider* interval that is less precise and perhaps less useful. It's up to us to consider this trade-off.
+
+---
+# A look at 100 CIs
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+sal_dist_means <- sal_100_samples %>% 
+  group_by(replicate) %>% 
+  summarize(sample_avg = mean(salary),
+            sample_sd = sd(salary))
+```
+
+```{r, include=FALSE}
+sal_dist_means <- sal_dist_means %>% 
+  mutate(st_error = sample_sd/sqrt(50)) %>% 
+  mutate(low_95ci = sample_avg - (1.96*st_error),
+         upper_95ci = sample_avg + (1.96*st_error))
+```
+
+```{r, echo=FALSE, fig.height=7, fig.width=11, fig.align='center'}
+ggplot(sal_dist_means, aes(x=as.factor(replicate))) + 
+  geom_linerange(aes(ymin = low_95ci, ymax = upper_95ci))+
+  geom_hline(yintercept = 80000, color = 'darkred') +
+  labs(title = "100 95% Confidence Intervals",
+       subtitle = "Parameter = 80,000",
+       y = "95% Confidence Interval") +
+  theme_minimal()+
+  theme(axis.title.x = element_blank(),
+        axis.text.x = element_blank())
+```
+
+- As expected, 5 CIs fail. Our study could be any one of these.
 
 ---
 # Point estimate vs. CI
@@ -625,7 +658,7 @@ get_regression_table(inc_mod) %>%
 
 - Even still, our sample could be one of the 5 out of 100 samples where our method of inference is expected to fail to capture $\beta_1$.
 
-- We could lower this likelihood of failure by reporting a 99% CI...
+- We could lower this frequency by reporting a 99% CI...
 
 ---
 # Back to the regression table
@@ -636,8 +669,8 @@ get_regression_table(inc_mod) %>%
 ```
 
 ```{r}
-1993-2.54*262
-1993+2.54*262
+1993-2.58*262
+1993+2.58*262
 ```
 
 ---

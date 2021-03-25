@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "RLab 10: Forecasting"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "December 2, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -11,7 +11,7 @@ output:
       beforeInit: "macros.js"
       highlightStyle: github
       countIncrementalSlides: false
-      highlightlines: true
+      highlightLines: true
 ---
 # Set-up
 
@@ -22,9 +22,9 @@ library(fpp2)
 library(knitr)
 ```
 
-- Start a new project and notebook
+> **Start a new project and Rmd**
 
-- Change YAML
+> **Change YAML**
 
 ```{r, eval=FALSE}
 ---
@@ -40,12 +40,7 @@ output:
 ---
 # Set-up
 
-- Download the following data available on eLC and add to your project folder
-
-```{r, eval=FALSE}
-load("sales.RData")
-load("voting.RData")
-```
+> **Download `sales` and `voting` from eLC and import**
 
 ```{r, include=FALSE}
 load("labs_files/sales.RData")
@@ -54,6 +49,8 @@ load("labs_files/voting.RData")
 
 ---
 # Packages
+
+> **Load following packages**
 
 - Remember to set `include=FALSE`
 
@@ -66,13 +63,11 @@ library(fpp2)
 ---
 # Learning objectives
 
-By the end of this lab, you will have learned how to...
-
 - Convert a dataset to a time series dataset in R
 - Explore time series for patterns
-- Execute some simple forecasting models like naive, average, and (seasonal) trend
-- Execute exponential smoothing
-- Execute a regression-adjusted forecast
+- Understand simple forecasting models like naive, average, and (seasonal) trend
+- Use exponential smoothing
+- Use regression-adjusted forecast
 - Evaluate and choose between forecast models
 
 ---
@@ -118,7 +113,7 @@ include_graphics('labs_files/tourismforecast.png')
 - Generic syntax:
 
 ```{r, eval=FALSE}
-ts_name <- ts(data_name[,-1], # tells R to skip the first row of names
+ts_name <- ts(data_name[,-1], # skips first row of variable names
               start = first_time_period,
               end = last_time_period, 
               frequency = unit_of_time_between_observations)
@@ -156,7 +151,7 @@ tail(quarterly, n = 2) %>% kable()
 
 ```{r, eval=FALSE}
 ts_quarterly <- ts(quarterly[,-1], start = 2016, end = 2020,
-                   frequency = 4)
+                   frequency = 4) #<<
 ```
 
 ---
@@ -177,7 +172,7 @@ tail(monthly, n = 2) %>% kable()
 
 ```{r, eval=FALSE}
 ts_monthly <- ts(monthly[,-1], start = 2016, end = 2020,
-                   frequency = 12)
+                   frequency = 12) #<<
 ```
 
 ---
@@ -198,7 +193,7 @@ tail(biennial, n = 2) %>% kable()
 
 ```{r, eval=FALSE}
 ts_biennial <- ts(biennial[,-1], start = 2000, end = 2020,
-                   frequency = 0.5)
+                   frequency = 0.5) #<<
 ```
 
 ---
@@ -216,7 +211,7 @@ freq.table %>%
 
 - `voting` contains national turnout for each U.S. presidential election from 1912 to 2016
 
-- Try to set `voting` as a TS object on your own
+> **Set `voting` as a TS object**
 
 ```{r, eval=FALSE}
 ts_voting <- 
@@ -232,9 +227,9 @@ ts_voting <- ts(voting[,-1], start = 1912, end = 2016,
 ---
 # Creating TS object
 
-- `sales` contains data for a social enterprise
+- `sales` contains quarterly data
 
-- Examine `sales` and try to convert to TS on your own
+> **Set `sales` as a TS object**
 
 ```{r, eval=FALSE}
 ts_sales <- 
@@ -264,6 +259,8 @@ ts_sales <- ts(sales[,-1], start = 1981, end = 2005,
 2. Seasonal - A periodic pattern that follows the calendar (e.g. quarter, month, day of the week)
 
 3. Cyclic - Data rises and falls not according to a fixed period (e.g. recessions)
+
+- Time series can exhibit any combination of the above patterns
   
 ---
 # Patterns
@@ -285,7 +282,7 @@ include_graphics('labs_files/patterns-colfinance.png')
 
 - With a TS object, line graphs can be made very quickly
 
-- Add and run following code
+> **Add and run following code**
 
 ```{r, fig.show='hide'}
 autoplot(ts_voting)
@@ -297,132 +294,124 @@ autoplot(ts_sales)
 
 - The sales data exhibits seasonality. There are useful ways to visualize seasonal patterns.
 
-- Add and run following code
+> **Add and run following code**
 
 ```{r, eval=FALSE}
-ggseasonplot(ts_sales[,1]) #tells R to run on first variable only, sales
+ggseasonplot(ts_sales[,1]) 
+#tells R to run on first variable only - sales
+```
+
+```{r, eval=FALSE}
+ggsubseriesplot(ts_sales[,1])
 ```
 
 ---
 # Exploratory plots
 
-- Suppose we want a subset of the years
+> **Use `autoplot` and `ggsubseriesplot` on `GDP` in `ts_sales`**
 
-- Following code creates a new ts object starting in year 2000. Add and run.
 
-```{r}
-ts_sales2 <- window(ts_sales, start = 2000)
-```
-
-- Run `ggseasonplot` on `sales` using `ts_sales2`
-
-```{r, eval=FALSE}
-ggseasonplot(ts_sales2[,1])
+```{r, include=FALSE}
+autoplot(ts_sales[,3])
+ggseasonplot(ts_sales[,3])
+ggsubseriesplot(ts_sales[,3])
 ```
 
 ---
-# Exploratory plots
-
-- Here are a few more options. Add and run.
-
-```{r, eval=FALSE}
-ggseasonplot(ts_sales2[,1], polar = TRUE)
-ggsubseriesplot(ts_sales2[,1])
-```
-
-- Run `ggseasonplot` and `ggsubseriesplot` on `GDP` using `ts_sales2`
-
---
-
-```{r, eval=FALSE}
-ggseasonplot(ts_sales2[,3], polar = TRUE)
-ggsubseriesplot(ts_sales2[,3])
-```
-
----
-# Trends
+# Exploratory Recap
 
 - Exploratory graphs are good for showing patterns to an audience and getting an initial sense for our own forecasts
 
-- Voting seems to be cyclical and sales are clearly seasonal and maybe a slight upward trend
+  - Voting appears to be cyclical
 
-- We can be more scientific than using visualizations...
+  - Sales are clearly seasonal with a slight upward trend
+
+---
+class: inverse, center, middle
+
+# Choosing and fitting forecast models
+
+---
+# Sources of information
+
+- When choosing a forecast model, there are two general sources of information for making future predictions
+  - Past values of the outcome
+  - Explanatory variables of the outcome
+  
+--
+
+- Models that use past values
+  - Simple methods: naive, mean, trend
+  - Exponential smoothing (common; we will learn how to use)
+  - ARIMA (common; we will not cover)
+
+--
+
+- Regression-adjusted models are useful for scenario forecasts
+  - Example: predicted sales if GDP increases 2% year-over-year
 
 ---
 # Autocorrelation
 
-- Correlation measures the linear association between two variables
+- Models using past values rely on autocorrelation
 
-- **Autocorrelation** measures the linear association between a variable and past values of the same variable
+--
+
+- Recall correlation measures the linear association between two variables
+
+--
+
+- **Autocorrelation** measures the linear association between a variable and past values of the *same* variable
 
 - If past values are correlated with future values, then the past informs the future
 
 --
 
 - **Lag**: term used to refer to a past value
-
-- The 3rd lag for annual time series value for 2020 is 2017
+  - The 3rd lag for annual time series value for 2020 is 2017
 
 ---
-# Autocorrelation
+# Autocorrelation Plot
 
+.pull-left[
 ```{r, echo=FALSE, fig.align='center', fig.height=3}
 autoplot(usmelec) +
   labs(title = 'U.S. monthly net electricity generation')
 ```
 
-```{r, echo=FALSE, fig.align='center', fig.height=3}
+```{r, fig.align='center', fig.height=3}
 ggAcf(usmelec)
 ```
+]
 
-- Blue dashed line delineates statistically significant correlation
+.pull-right[
 
----
-# Autocorrelation
+- Blue dashed line delineates statistically significant autocorrelation
 
-- Data with a trend will have large positive residuals for recent lags that decrease over time
+- Here, values as far back as 2 years significantly correlate with values at a particular time
 
-- Data with seasonality only will have peaks and valleys that correspond to the seasons that correlate with each other
+]
 
 ---
 # White noise
 
-- A time series that shows no autocorrelation is called white noise
+- A time series that shows no autocorrelation is called **white noise**
 
-- Means the time series is random and past values do not predict future values to a statistically significant degree
-
---
-
-- We can check for white noise **after using a forecast model**
-
-- If the residuals from our forecast are white noise, this means we have extracted all of the useful information from the past to predict the future
+- The time series is random and past values do not correlate with future values
 
 ---
-# Autocorrelation
+# Autocorrelation Plot
 
-- We can generate an autocorrelation plot for the `sales` variable. Add and run.
+- Can use `ggAcf` to generate an autocorrelation plot of sales.
 
 ```{r, fig.align='center', fig.height=4}
 ggAcf(ts_sales[,1])
 ```
 
----
-# Autocorrelation
-
-- We can formally (i.e. hypothesis test) test for white noise like so:
-  - Null hypothesis is the time series is white noise
-  - Alternative hypothesis is the time series is autocorrelated
-
-```{r}
-Box.test(ts_sales[,1], lag = 4) #test based on fourth lag bc quarterly
-```
---
-
-- Use `ggAcf` and `Box.test` to test for autocorrelation in `ts_voting`
+> **Generate an autocorrelation plot for voting**
 
 ```{r, include=FALSE}
 ggAcf(ts_voting)
-Box.test(ts_voting, lag = 1)
 ```
 
 ---
@@ -461,7 +450,7 @@ include_graphics('labs_files/forecastcompare2.png')
 ```
 
 ---
-# In R
+# Simple Forecasts in R
 
 - General syntax
 
@@ -469,8 +458,8 @@ include_graphics('labs_files/forecastcompare2.png')
 new_object <- forecast_model(tsdata, h = periods into future)
 ```
 
-- Default for `h` is 10 periods
-- Period corresponds to frequency; h = 4 in quarterly is one year
+- Default for `h`orizon is 10 periods
+- Corresponds to frequency; h = 4 in quarterly is one year
 
 - Simple model functions
 
@@ -484,7 +473,7 @@ snaive()
 ---
 # In R
 
-- Let's run `meanf`, `naive`, and `snaive` on `sales` using the `ts_sales` data
+- Suppose I run `meanf`, `naive`, and `snaive` on `sales` using the `ts_sales` data
 
 ```{r}
 sales_meanf <- meanf(ts_sales[,1], h = 12)
@@ -493,71 +482,54 @@ sales_snaive <- snaive(ts_sales[,1], h = 12)
 ```
 
 - These new objects are like the regression results we have saved many times
+
 - We can use functions on these to view our results
 
 ---
 # Viewing forecasts in R
 
-- Use `autoplot` for a quick visualization. Visualize each of our three sales forecasts.
+- Can use `autoplot` on the saved model to visualize forecast.
 
-```{r, fig.align='center', fig.height=6}
+```{r, fig.align='center', fig.height=5}
 autoplot(sales_meanf)
-```
-
-```{r, include=FALSE}
-autoplot(sales_naive)
-autoplot(sales_snaive)
 ```
 
 ---
 # Viewing forecasts in R
 
-- Use `summary` for quantities. Let's report the numbers from what is likely the best forecast of the three.
+```{r, fig.align='center', fig.height=5}
+autoplot(sales_naive)
+```
+
+---
+# Viewing forecasts in R
+
+```{r, fig.align='center', fig.height=5}
+autoplot(sales_snaive)
+```
+
+---
+# Reporting plausible ranges
+
+- Utility of these forecasts are the ranges based on how well they predict observed past values
+
+- Can use `summary` on saved models to obtain ranges.
 
 ```{r, eval=FALSE}
 summary(sales_snaive)
 ```
 
----
-# Evaluating forecasts
-
-- Similar to evaluating goodness-of-fit from before
-
-- We can compare our point forecast to each observed year of the outcome
-
-- The difference between the observed value and our point forecast is the residual
-
-- We prefer the model with the best fit
-
---
-
-- Must achieve two things to have a valid forecast:
-  - The residuals are white noise
-  - The residuals have a mean equal to 0
-
----
-# Evaluating forecasts
-
-- Use `checkresiduals` to test whether our forecast is valid
-
-```{r, eval=FALSE}
-checkresiduals(sales_snaive)
-checkresiduals(sales_meanf)
+```{r, include=FALSE}
+sum.sales_snaive <- summary(sales_snaive)
 ```
 
-- Use `accuracy` to compare the fit of competing valid models
-
-```{r, eval=FALSE}
-accuracy(sales_snaive)
-accuracy(sales_meanf)
+```{r, echo=FALSE}
+kable(sum.sales_snaive)
 ```
-
-- Which is the better model? How far off is it, on average?
 
 ---
 # Exponential smoothing
 
-- Combines naive and mean models
 - Assigns a descending weight to each past value
 
 ```{r, echo=FALSE, fig.align='center'}
@@ -583,51 +555,134 @@ include_graphics('labs_files/expsmooth-season.png')
 ```
 
 ---
-# In R
+# Exponential smoothing combinations
+
+- Error: A, M
+
+- Trend: N, A, A_d
+
+- Seasonal: N, A, M
+
+- 18 possible exponential smoothing models
+
+---
+# Exponential smoothing in R
+
+- The `ets` function tests the 18 competing models and chooses the best one
+
+```{r, fig.align='center', fig.height=5}
+ets(bonds) %>% # Monthly US 10-year bond yields
+  forecast(h=12) %>% 
+  autoplot()
+```
+
+---
+# Exponential smoothing in R
 
 ```{r, eval=FALSE}
-# simple exp smoothing; R automates best alpha
-ses(tsdata, h = )
-# exp smoothing with trend
-holt(tsdata, damped = TRUEorFALSE)
-# exp smoothing with trend and seasonality
-hw(tsdata, seasonal = "additiveORmultiplicative")
+ets(bonds) %>% # Monthly US 10-year bond yields
+  forecast(h = 12) %>% 
+  summary()
 ```
 
----
-# In R
-
-Let's use exponential smoothing to forecast sales
-
-```{r}
-sales_ses <- hw(ts_sales[,1], h = 12, seasonal = "additive")
-```
-
-- Does this forecast perform better than `sales_snaive` forecast?
-
-- Provide the graph and estimates for using the more accurate model.
-
-```{r, include=FALSE, eval=FALSE}
-accuracy(sales_snaive)
-accuracy(sales_ses)
-```
-
----
-# Sales Forecast
-
-```{r}
-autoplot(sales_ses)
-```
 ```{r, include=FALSE}
-summary(sales_ses)
+sum.ets_bonds <- ets(bonds) %>% # Monthly US 10-year bond yields
+  forecast(h = 12) %>% 
+  summary()
 ```
+
+```{r, echo=FALSE}
+kable(sum.ets_bonds)
+```
+
+---
+# Exponential smoothing in R
+
+> **Use the `ets` function on sales to produce a plot and ranges for the next 12 periods**
+
+```{r, include=FALSE}
+ets(ts_sales[,1]) %>% 
+  forecast(h=12) %>% 
+  autoplot()
+```
+
+```{r, include=FALSE}
+ets(ts_sales[,1]) %>% 
+  forecast(h=12) %>% 
+  summary()
+```
+
+---
+class: inverse, center, middle
+
+# Evaluating forecast models
+
+---
+# Evaluating forecasts
+
+- To have a valid forecast:
+  - The residuals are white noise
+  - The residuals have a mean equal to 0
+
+- We can compare our point forecast to each observed year of the outcome
+
+- The difference between the observed value and our point forecast is the residual
+
+- We prefer the model with the best fit
+  
+---
+# Evaluating forecasts
+
+- Can use `checkresiduals` to test whether our forecast is valid
+
+- Looking for a p-value > 0.05
+
+```{r}
+ets(bonds) %>% checkresiduals()
+```
+
+---
+# Evaluating forecasts
+
+> **Use `checkresiduals` on the seasonal naive and ets models for sales**
+
+```{r, include=FALSE}
+checkresiduals(sales_snaive)
+ets(ts_sales[,1]) %>% checkresiduals()
+```
+
+---
+# Goodness of fit
+
+- Can use `accuracy` to compare the fit of competing models
+
+```{r}
+ets(bonds) %>% accuracy()
+```
+
+---
+# Goodness of fit
+
+> **Use `accuracy` to compare seasonal naive and ets models for sales**
+
+```{r, include=FALSE}
+accuracy(sales_snaive)
+ets(ts_sales[,1]) %>% accuracy()
+```
+
+- Even thought the residuals indicate `ets` is better, which model has a better fit to the data? How far off is it, on average?
+
+---
+class: inverse, center, middle
+
+# Regression-adjusted forecast models
 
 ---
 # Time series regression forecasts
 
-- Other factors can (often) improve our forecasts
+- Other factors can improve our forecasts
 
-- We can incorporate these concepts into regression
+- We can incorporate trend and seasonality in regression while controlling for other explanatory factors
 
 $$y_t=\beta_0+\beta_1x_t + \beta_3t + \beta_4s_t + \epsilon_t$$
 
@@ -639,11 +694,17 @@ $$y_t=\beta_0+\beta_1x_t + \beta_3t + \beta_4s_t + \epsilon_t$$
 
 - Let's forecast sales incorporating GDP and AdBudget
 
+> **Add and run below time series linear model**
+
 ```{r}
 sales_reg <- tslm(Sales ~ AdBudget + GDP + trend + season, data = ts_sales)
 ```
 
-- Does this forecast perform better than `sales_ses` forecast?
+- Does this forecast fit better than `ets` forecast?
+
+```{r, eval=FALSE}
+summary(sales_reg)
+```
 
 ---
 # Using a regression on new data
@@ -661,11 +722,7 @@ new_object <- forecast(reg_results, newdata = name_of_newdata)
 
 - Now we can forecast sales given new scenarios with respect to the explanatory variables
 
-- Download the `sales_forecast_data.RData` file and add to your project folder. Load these data.
-
-```{r, eval=FALSE}
-load("sales_forecast_data.RData")
-```
+> **Download `sales_forecast_data` file and add to your project folder. Import**
 
 ```{r, include=FALSE}
 load("labs_files/sales_forecast_data.RData")
@@ -676,11 +733,15 @@ load("labs_files/sales_forecast_data.RData")
 ---
 # In R
 
+> **Add and run below code**
+
 ```{r}
 fc_sales_reg <- forecast(sales_reg, newdata = sales_forecast_data)
 ```
 
-- Now we can report these results same as before. Add and run.
+- Now we can report these results same as before. 
+
+> **Add and run below code**
 
 ```{r, fig.show='hide', results='hide'}
 autoplot(fc_sales_reg)
@@ -694,18 +755,9 @@ summary(fc_sales_reg)
 
 --
 
-- Identify patterns to inform which model to use
-
-- If time series is white noise, past values aren't great for forecasting
-
-- Consider regression
-
---
-
-- Exponential smoothing is one of the most common methods; include trends and seasonality as needed
-
-- Check residuals and accuracy to determine best model
-
---
-
-- To learn more on forecasting with R: [https://otexts.com/fpp2/](https://otexts.com/fpp2/)
+- Key concepts
+  - Patterns
+  - Autocorrelation
+  - White noise
+  - Conditions for valid forecast
+  - Difference between using past values vs. explanatory variables

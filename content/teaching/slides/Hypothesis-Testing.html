@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-11-11" />
+    <script src="Hypothesis-Testing_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="Hypothesis-Testing_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="Hypothesis-Testing_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Hypothesis Testing
 ### Alex Combs
 ### UGA | SPIA | PADP
-### November 11, 2020
+### Last updated: March 21, 2021
 
 ---
 
@@ -51,21 +53,24 @@ class: inverse, center, middle
 # What is a p-value?
 
 ---
-class: inverse, center, middle
+# p-value
 
-# A p-value is the probability of obtaining my result or more extreme in a world where the **null hypothesis** is actually true. The p-value is misunderstood and misused in research to an alarming extent. [Story1](https://www.vox.com/science-and-health/2017/7/31/16021654/p-values-statistical-significance-redefine-0005) [Story2](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained)
+**p-value:** the probability of obtaining my result or more extreme in a world where the **null hypothesis** is actually true.
+
+The p-value is misunderstood and misused in research to an concerning extent. [Story1](https://www.vox.com/science-and-health/2017/7/31/16021654/p-values-statistical-significance-redefine-0005) [Story2](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained)
 
 ---
-class: inverse, center, middle
+# Hypothesis test
 
-# Hypothesis test: "Is my result **so unlikely** that I can conclude with a **sufficient level of confidence** that there is evidence in support of my hypothesis?"
+**Hypothesis test:** "Is my result so unlikely that I can conclude with a sufficient level of confidence that there is evidence in support of my hypothesis?"
 
 ---
 # Structure of hypothesis test
 
 - Alternative hypothesis `\(H_A\)`
   - Claims there is evidence for the phenomenon you are interested in testing.
-  - Often denoted as the parameter does not equal `\(\theta \neq 0\)`
+  - Often denoted as the parameter does not equal 0 
+  - `\(\theta \neq 0\)`
 
 --
 
@@ -133,25 +138,30 @@ class: inverse, center, middle
 --
 
 - Inference:
-  - But this is just a sample of an unobserved population.
+  - But this is just a sample of an unobserved population
+  - And/or the counterfactual is unobservable
   - This sample provides us estimates of `\(P_M\)`, `\(P_F\)`, and `\(P_M-P_F\)`
   - The question is whether `\(P_M-P_F=0.3\)` something close enough to that, or does `\(P_M-P_F=0\)`?
 
 ---
 # Example
 
-`\(H_A\)`: Males and females are not promoted in equal proportions. `\(P_M-P_F \neq 0\)`
+`\(H_A\)`: Males and females are not promoted in equal proportions. 
+
+- `\(P_M-P_F \neq 0\)`
 
 --
 
-`\(H_0\)`: Males and females are promoted in equal proportions. `\(P_M-P_F=0\)`
+`\(H_0\)`: Males and females are promoted in equal proportions.
+
+- `\(P_M-P_F=0\)`
 
 --
 
 - Some might state the `\(H_A\)` as "Males are promoted in higher proportion than females."
 - `\(H_A: P_M-P_F&gt;0\)` and `\(H_0: P_M-P_F \leq 0\)`
 - This is a one-tailed test instead of a two-tailed test
-- I do not support one-tailed tests and won't be teaching them
+- I do not recommend one-tailed tests and won't be teaching them
 
 ---
 # Hypothesis test conclusion
@@ -256,7 +266,7 @@ It is never the case that we accept the null hypothesis that `\(\theta = 0\)`
 
 --
 
-- But we only have one sample of data and we don't know which world we are in (null true or not)
+- But we only have one sample of data and we don't know which world we are in (whether null true or not)
 
 - How do we estimate the probability of our result in a null world?
 
@@ -283,7 +293,7 @@ It is never the case that we accept the null hypothesis that `\(\theta = 0\)`
 
 --
 
-- Therefore, if p-value is less than 0.05, we reject the null. If it is greater than or equal to 0.05, we fail to reject the null.
+- Therefore, if p-value is less than 0.05, we **reject** the null. If it is greater than or equal to 0.05, we **fail to reject** the null.
 
 --
 
@@ -546,7 +556,7 @@ class: inverse, center, middle
 3b. Or, if the explanatory variable is statistically insignificant, is its confidence interval so closely around zero that the entire range of plausible values of the parameter would lead to a negligible change in the outcome?
   
 ---
-# Example
+# Example 1
 
 &lt;img src="lectures_files/prac-sig1.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
 
@@ -556,65 +566,67 @@ class: inverse, center, middle
 
 - Typical change (standard deviation) in property tax is $4
 
-- Predicted change in average rent from a 1 SD increase in property tax is $400, or at least 240.
+- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
 
-- That's a 40% (24%) increase compared to the mean of rent and 2x (1.2x) the SD of rent. Practically significant!
+- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200)...practically significant!
 
 ---
-# Example
+# Example 2
 
 &lt;img src="lectures_files/prac-sig2.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
 
+- SD for property tax is now 0.04 instead of 4
 - Is the property tax result practically significant?
 
 --
 
 - Typical change in property tax is now $0.04
 
-- Predicted change in average rent from 1 SD increase in property tax = $4. Not significant.
+- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
 
 - Confidence intervals do not change this conclusion.
 
 ---
-# Example
+# Example 3
 
 &lt;img src="lectures_files/prac-sig3.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
 
+- SD of property tax back to 4 but CI has changed
 - Is the property tax result practically significant?
 
 --
 
-- Same as first example and would be practically significant if not for the 95% CI being so close to 0.
+- Same as first example and would definitely be practically significant if not for the 95% CI being so close to 0.
 
-- Minimum effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
+- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
 
 ---
-# Example
+# Example 4
 
 &lt;img src="lectures_files/prac-sig4.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
 
+- Estimate and CI for property tax has changed
 - Is the property tax result practically significant?
 
 --
 
 - Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
 
-- Unlikely for statistical insignificance to have practical significance.
+- Rare for statistical insignificance to have practical significance.
 
 ---
-# Example
+# Example 5
 
 &lt;img src="lectures_files/prac-sig5.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
 
+- Estimate and CI has changed again
 - Is the property tax result practically significant?
 
 --
 
-- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precisely around 0.
+- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
 
-- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. No plausible value is a meaningful change average rent. 
-
-- This could be useful in reporting that there is no evidence that property tax has any meaningful impact on average rent.
+- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

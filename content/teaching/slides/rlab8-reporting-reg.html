@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-10-21" />
+    <script src="rlab8-reporting-reg_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="rlab8-reporting-reg_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="rlab8-reporting-reg_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 8: Reporting Regression Results
 ### Alex Combs
 ### UGA | SPIA | PADP
-### October 21, 2020
+### Last updated: March 23, 2021
 
 ---
 
@@ -23,16 +25,16 @@ class: center, middle, inverse, title-slide
 
 By the end of this lab, you will have learned how to...
 
-- Report regression results via tables and graphs in a realistic and accurate manner
+- Report regression results via tables and graphs in a realistic and professional manner
 
 
 
 ---
 # Set-up
 
-- Start a new project and notebook
+&gt; **Start a new project and Rmd**
 
-- Change YAML
+&gt; **Change YAML**
 
 
 ```r
@@ -49,6 +51,8 @@ output:
 ---
 # Packages
 
+&gt; **Load following packages**
+
 - Remember to set `include=FALSE`
 
 
@@ -56,62 +60,53 @@ output:
 library(tidyverse)
 library(moderndive)
 library(knitr)
+library(fivethirtyeight)
 library(carData)
-library(stargazer) # for regression tables
-library(jtools) # for regression visualizations
-library(interactions) # for regression viz of interactions
+library(stargazer) # for better regression tables
+library(jtools) # for better regression visualizations
+library(interactions) # for regression viz with interactions
 ```
 
 ---
-# Revisiting Professor Salaries
+# Revisiting PS2 Regression
 
-- In R Chapter 22 (interactions), you ran the following model.
+&gt; **Add below code**
 
 
 ```r
-sal_mod &lt;- lm(salary ~ sex + yrs.service + sex*yrs.service, 
-              data = Salaries)
+state_data &lt;- hate_crimes %&gt;%
+  mutate(share_white = 1 - share_non_white,
+         urbanization = if_else(share_pop_metro&lt;=0.75, "low", "high")) %&gt;% 
+  select(state, median_house_inc, share_pop_hs, 
+         share_white, share_white_poverty, share_vote_trump,
+         urbanization) %&gt;%
+  filter(state != "District of Columbia") %&gt;% 
+  mutate_at(vars(share_pop_hs, share_white, share_white_poverty, share_vote_trump), funs(.*100))
 ```
 
-```r
-get_regression_table(sal_mod)
-```
-
-
-- Add this code to your notebook
-
 ---
-# Revisiting Professor Salaries
+# Revisiting PS2 Regression
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+`$$MedInc = \beta_0 + \beta_1 \%HS + \beta_2Urban + \epsilon$$`
 
-- The data suggests we may want to model `yrs.service` using a quadratic
-
----
-# Quadratic Salary Model
-
-- Let's run a new model for `salary` that allows our regression to change direction once.
-
-$$Salary = \beta_0 + \beta_1Male + \beta_2YrsServe + \beta_3YrsServe^2 + \epsilon $$
-
--Add the following code.
+&gt; **Add and run following code**
 
 
 ```r
-sal_mod2 &lt;- lm(salary ~ sex + yrs.service + I(yrs.service^2),
-               data = Salaries)
+inc_mod &lt;- lm(median_house_inc ~ share_pop_hs + urbanization, data = state_data)
 ```
 
 ---
 # Reporting Results
 
-- You are proud of your work and need to provide the results in a report or a presentation.
+- You are proud of your work and want to report your results.
 
-- Add following code. Knit to HTML.
+&gt; **Add following code. Knit to HTML.**
 
 
 ```r
-get_regression_table(sal_mod2)
+get_regression_table(inc_mod) %&gt;% 
+  kable()
 ```
 
 ---
@@ -120,15 +115,14 @@ get_regression_table(sal_mod2)
 - This table isn't great for an external audience
 
 
-|term             |  estimate| std_error| statistic| p_value|  lower_ci|  upper_ci|
-|:----------------|---------:|---------:|---------:|-------:|---------:|---------:|
-|intercept        | 77227.504|  4929.331|    15.667|   0.000| 67536.347| 86918.662|
-|sexMale          |  9392.245|  4574.882|     2.053|   0.041|   397.942| 18386.548|
-|yrs.service      |  2984.383|   327.463|     9.114|   0.000|  2340.584|  3628.182|
-|I(yrs.service^2) |   -51.272|     7.111|    -7.210|   0.000|   -65.252|   -37.291|
+|term            |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
+|:---------------|----------:|---------:|---------:|-------:|-----------:|----------:|
+|intercept       | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
+|share_pop_hs    |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
+|urbanizationlow |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
 ---
-# Reporting results
+# Better Regression Tables
 
 - Regression results tables usually include:
   - estimate
@@ -138,107 +132,59 @@ get_regression_table(sal_mod2)
   - number of observations
 
 - Sometimes goodness-of-fit measure like `\(R^2\)`  
-- Sometimes include confidence intervals
+- Sometimes include confidence intervals instead of standard error or t-stat
 
 ---
-# Option 1: kable
+# Better Regression Tables
 
-- Add heading "Kable"
-- Add this code and knit to HTML again
+&gt; **Add below code. Include the chunk option `results='asis'`. Knit to HTML.**
 
 
 ```r
-regtable.colnames &lt;- c('Variable', 'Estimate', 
-                       'SE', 'P-Value', 
-                       'Lower 95% CI', 'Upper 95% CI')
-
-get_regression_table(sal_mod2) %&gt;% 
-  select(-statistic) %&gt;% 
-  kable(col.names = regtable.colnames)
-```
-
----
-# Option 2: stargazer
-
-- Add heading "Stargazer"
-- Add this code. Include the chunk option `results='asis'`. Knit to HTML.
-
-
-```r
-stargazer(sal_mod2,
+stargazer(inc_mod,
           type="html",
           title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
-          keep.stat=c("n"), # reports only the number of observations
-          digits = 0, # no decimals
-          digits.extra = 3) #allows up to 3 decimals if rounding causes a 0
+          dep.var.labels=c("Median Household Income"),
+          covariate.labels=c("Percent High School", 
+                             "High Urbanization"),
+          keep.stat=c("n"), # number of observations
+          digits = 2) # limit to two decimals
 ```
 
 ---
-# Option 2: stargazer
+# Better Regression Tables
 
-- Change first line like so to include confidence intervals instead of standard errors.
-- Knit to HTML.
+&gt; **Change options to include confidence intervals instead of standard errors and include goodness-of-fit. Knit to HTML.**
 
 
 ```r
-stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
+stargazer(inc_mod, 
+*         ci=TRUE, ci.separator = " : ",
           type="html",
           title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
-          keep.stat=c("n"),
-          digits = 0,
-          digits.extra = 3)
+          dep.var.labels=c("Median Household Income"),
+          covariate.labels=c("Percent High School", 
+                             "High Urbanization"),
+*         keep.stat=c("n","rsq","ser"),
+          digits.extra = 2)
 ```
 
 ---
-# Option 2: stargazer
+# Better Regression Tables
 
-- Add last line like so to generate a new document named `sal_mod2.htm` that you can open in Word. Knit to HTML.
+&gt; **Add below code to generate a new document named `inc_mod.htm` that you can open in Word. Knit to HTML.**
 
 
 ```r
-stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
+stargazer(inc_mod, ci=TRUE, ci.separator = " : ",
           type="html",
           title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
-          keep.stat=c("n"),
-          digits = 0,
-          digits.extra = 3,
-          out = "sal_mod2.htm")
-```
-
----
-# Option 2: stargazer
-
-- Also plays nicely with PDF provided you installed `tinytex` back in RLab2
-
-
-```r
-# First
-install.packages('tinytex') # hit Enter
-# Next
-tinytex::install_tinytex() # hit Enter, this will take a few minutes
-# if you ever need to uninstall TinyTeX, run tinytex::uninstall_tinytex()
-```
-
----
-# Option 2: stargazer
-
-- Delete `type="html"` and table will be formatted for PDF export instead
-
-
-```r
-stargazer(sal_mod2, ci=TRUE, ci.separator = " : ",
-          title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served", "Years Served Sq."),
-          keep.stat=c("n"),
-          digits = 0,
-          digits.extra = 3)
+          dep.var.labels=c("Median Household Income"),
+          covariate.labels=c("Percent High School", 
+                             "High Urbanization"),
+          keep.stat=c("n","rsq","ser"),
+          digits.extra = 2,
+*         out = "inc_mod.htm")
 ```
 
 ---
@@ -247,46 +193,124 @@ class: inverse, center, middle
 # Tables aren't great for presentations. We want to use graphs instead.
 
 ---
-# Visualizing Regression Line
+# Visualizing Regression
 
 - We already know one option using `ggplot`
 
 .pull-left[
 
 ```r
-ggplot(Salaries, 
-       aes(x = yrs.service, 
-           y = salary, 
-           color = sex)) +
-  geom_point(alpha = 0.6, size = 5) +
-  geom_smooth(method = 'lm', se = FALSE, size = 2) +
-  theme_minimal() +
-  theme(text = element_text(size = 20))
+ggplot(state_data, 
+       aes(x = share_pop_hs, 
+           y = median_house_inc, 
+           color = urbanization)) +
+  geom_point() +
+* geom_parallel_slopes(se=FALSE) +
+  theme_minimal()
 ```
 ]
 
 .pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-18-1.png" width="99%" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-12-1.png" width="99%" /&gt;
+]
+
+---
+# Visualizing Regression
+
+.pull-left[
+
+```r
+ggplot(state_data, 
+       aes(x = share_pop_hs, 
+           y = median_house_inc, 
+           color = urbanization)) +
+  geom_point() +
+* geom_smooth(method = 'lm', se = FALSE) +
+  theme_minimal()
+```
+]
+
+.pull-right[
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-14-1.png" width="99%" /&gt;
 ]
 
 ---
 # Visualizing Regression Line
 
-- At most, `ggplot` can easily visualize regression models that include:
+- `ggplot` can visualize regression models that include:
   - **ONE** numerical explanatory variable
-  - **ONE** categorical explanatory variable (interacted with numerical or not)
-  
-- The quadratic is difficult to add
-- If we decided to control for one more variable, our graph would not be showing the relationship between salary and years of service **controlling for that other variable**
+  - **ONE** categorical explanatory variable (with or without interaction)
+
+--
+
+- If we controlled for one more variable, our `ggplot` graph would not show the relationship between income and percent high school **controlling for the other variable**
 
 ---
-# Visualizing Regression Line
+# Two numeric explanatory variables
 
-- `effect_plot` from the `jtools` package makes this very easy. Add code:
+- Neither regression line controls for the other explanatory variable
+
+.pull-left[
+&lt;img src="rlab8-reporting-reg_files/figure-html/q8.1-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="rlab8-reporting-reg_files/figure-html/q8.2-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Two numerical explanatory variables
+
+- Visualizing the full model requires a 3-D regression plane
+
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Revisiting Teacher Evals
+
+`$$Eval = \beta_0 + \beta_1Beauty + \beta_2Age \\ +\beta_3Female + \beta_4Beauty \times Female + \epsilon$$`
+
+
+&gt; **Download "teach_beauty" from eLC. Load the data and run the below code.**
 
 
 ```r
-effect_plot(sal_mod2, pred = yrs.service, plot.points = TRUE)
+mod1 &lt;- lm(course_eval ~ beauty, data = all_data)
+mod2 &lt;- lm(course_eval ~ beauty + age + female, data = all_data)
+mod3 &lt;- lm(course_eval ~ beauty + age + female + beauty*female, data = all_data)
+```
+
+---
+# Visualizing Regression
+
+
+```r
+get_regression_table(mod3) %&gt;% 
+  kable()
+```
+
+
+
+|term          | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:-------------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept     |    3.643|     0.215|    16.923|   0.000|    3.220|    4.066|
+|beauty        |    0.125|     0.029|     4.244|   0.000|    0.067|    0.183|
+|age           |   -0.002|     0.003|    -0.776|   0.438|   -0.008|    0.003|
+|female        |    0.106|     0.196|     0.539|   0.590|   -0.279|    0.491|
+|beauty:female |   -0.070|     0.042|    -1.677|   0.094|   -0.153|    0.012|
+
+- We can't visualize the relationship between evals and beauty controlling for age using `ggplot`
+
+---
+# Visualizing Regression
+
+- `effect_plot` from the `jtools` package can
+
+&gt; **Add below code**
+
+
+```r
+effect_plot(mod3, pred = beauty, plot.points = TRUE)
 ```
 
 &lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
@@ -294,68 +318,78 @@ effect_plot(sal_mod2, pred = yrs.service, plot.points = TRUE)
 ---
 # Visualizing Regression Line
 
-- If we want to include Male, `interact_plot` from `interactions` package is useful. 
-- Works the same had we interacted `sex` with `yrs.service`.
+- To include Female, `interact_plot` from `interactions` package 
+
+&gt; **In a new code chunk, add below code**
 
 
 ```r
-interact_plot(sal_mod2, pred = yrs.service, modx = sex, plot.points = TRUE)
+interact_plot(mod3, pred = beauty, modx = female, plot.points = TRUE)
 ```
 
 &lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Visualizing regression estimates
+# Visualizing Coefficients
 
-- Very common to visualize the estimates instead of the regression line. 
+- Common to visualize the coefficients instead of using a table or regression lines. 
 
-- Add following code and knit to HTML.
+&gt; **Add following code**
+
+.pull-left[
+
+```r
+plot_summs(mod3, 
+           coefs = c("Beauty" = "beauty", 
+                     "Age" = "age", 
+                     "Female" = "female",
+                     "Beauty X Female" = "beauty:female"))
+```
+]
+
+.pull-right[
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+---
+# Multiple models in same table
+
+&gt; Add below code in a new code chunk. Set `echo=FALSE` and `results='asis'`.
 
 
 ```r
-plot_summs(sal_mod2, 
-           coefs = c("Male" = "sexMale", 
-                     "Years Served" = "yrs.service", 
-                     "Years Served Sq." = "I(yrs.service^2)"))
-ggsave('sal_mod2_est.png') # saves most recent graph to separate file
+*stargazer(mod1, mod2, mod3,
+          ci = TRUE, ci.separator = " : ",
+          type="html",
+          title="Regression Results",
+          dep.var.labels=c("Course evaluation score"),
+          covariate.labels=c("Professor beauty", 
+                             "Professor age", 
+                             "Professor female",
+                             "Beauty X Female"),
+          keep.stat=c("n","adj.rsq","ser"),
+          digits = 2,
+          notes = "95% confidence intervals in parentheses.",
+          notes.align = "l")
 ```
-
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Multiple models
 
-- We have two models `sal_mod` and `sal_mod2` we may want to report together
-- Add code and knit to HTML
+&gt; **Add below code in a new code chunk**
 
 
 ```r
-stargazer(sal_mod, sal_mod2, ci=TRUE, ci.separator = " : ",
-          type = "html",
-          title="Regression Results",
-          dep.var.labels=c("Salary"),
-          covariate.labels=c("Male", "Years Served","Males X Years Served", "Years Served Sq."),
-          keep.stat=c("n"),
-          digits = 0,
-          digits.extra = 2)
+plot_summs(mod1, mod2, 
+           coefs = c("Beauty" = "beauty", 
+                     "Age" = "age", 
+                     "Female" = "female"))
 ```
 
----
-# Multiple Models
+&gt; **Knit to HTML**
 
-- Add code. Knit to HTML.
+&gt; **Upload your Rmd to eLC**
 
-
-```r
-plot_summs(sal_mod, sal_mod2, 
-           coefs = c("Male" = "sexMale", 
-                     "Years Served" = "yrs.service", 
-                     "Male X Years Served" = "sexMale:yrs.service",
-                     "Years Served^2" = "I(yrs.service^2)"))
-```
-
----
-# Save and upload to eLC
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -363,7 +397,7 @@ plot_summs(sal_mod, sal_mod2,
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
 "countIncrementalSlides": false,
-"highlightlines": true
+"highlightLines": true
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -429,7 +463,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {
