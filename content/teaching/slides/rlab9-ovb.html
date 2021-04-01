@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 9: Reporting Regression Results
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 21, 2021
+### Last updated: April 01, 2021
 
 ---
 
@@ -52,7 +52,7 @@ output:
 ---
 # Set-up
 
-&gt; **Download `predicting_happiness.RData` from eLC and `load` into RStudio**
+&gt; **Download `predicting_happiness.csv` from eLC and import into RStudio**
 
 
 
@@ -67,11 +67,9 @@ library(moderndive)
 ---
 # Introduction
 
-- Governments want citizens to be happy. 
+- Governments generally want citizens to be happy. 
 
-- Happy citizens cost less, spend more, attract new business, stay healthier, and do not overthrow their government overlords. 
-
-- Suppose we are government officials interested in whether citizens' social networks affect their happiness. Perhaps we have concerns about isolation during the pandemic.
+- Suppose we are government officials interested in whether citizens' social network diversity affects their happiness. Perhaps we have concerns about isolation during the pandemic.
 
 ---
 # Data
@@ -121,6 +119,8 @@ head(predicting_happiness, n = 4) %&gt;%
 &lt;img src="labs_files/happydag.png" width="407" style="display: block; margin: auto;" /&gt;
 
 --
+
+- We want to estimate the effect of ND on SWB.
 
 - How many backdoor paths between ND and SWB? Is it open or closed?
 

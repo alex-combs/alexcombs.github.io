@@ -47,7 +47,7 @@ output:
 ---
 # Set-up
 
-> **Download `predicting_happiness.RData` from eLC and `load` into RStudio**
+> **Download `predicting_happiness.csv` from eLC and import into RStudio**
 
 ```{r, include=FALSE}
 load('labs_files/predicting_happiness.RData')
@@ -63,11 +63,9 @@ library(moderndive)
 ---
 # Introduction
 
-- Governments want citizens to be happy. 
+- Governments generally want citizens to be happy. 
 
-- Happy citizens cost less, spend more, attract new business, stay healthier, and do not overthrow their government overlords. 
-
-- Suppose we are government officials interested in whether citizens' social networks affect their happiness. Perhaps we have concerns about isolation during the pandemic.
+- Suppose we are government officials interested in whether citizens' social network diversity affects their happiness. Perhaps we have concerns about isolation during the pandemic.
 
 ---
 # Data
@@ -109,6 +107,8 @@ include_graphics('labs_files/happydag.png')
 ```
 
 --
+
+- We want to estimate the effect of ND on SWB.
 
 - How many backdoor paths between ND and SWB? Is it open or closed?
 
