@@ -4,7 +4,9 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <meta name="date" content="2020-11-18" />
+    <script src="Reg_Diagnostics_files/header-attrs-2.5/header-attrs.js"></script>
+    <link href="Reg_Diagnostics_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+    <script src="Reg_Diagnostics_files/anchor-sections-1.0/anchor-sections.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Regression Diagnostics
 ### Alex Combs
 ### UGA | SPIA | PADP
-### November 18, 2020
+### Last updated: April 15, 2021
 
 ---
 
@@ -33,26 +35,32 @@ class: center, middle, inverse, title-slide
 
 &lt;img src="lectures_files/credible.png" width="1304" style="display: block; margin: auto;" /&gt;
 
-- Today is all about statistical conclusion validity
+- Today is about statistical conclusion validity
+
+---
+class: inverse, center, middle
+
+# Classical assumptions of linear regression
 
 ---
 # Regression is BLUE
 
-- Regression gives us the best (most precise), linear, unbiased, estimate
+- Regression gives us the Best (most precise), Linear, Unbiased, Estimate
 
 - But only if a set of assumptions hold
 
 ---
-# Consequences of violated assumptions
+# Concerns
 
-- Can't be so sure that **LLN** and **CLT** are working properly for inference
+- Our data or regression model choices may cause **LLN** and **CLT** not to work properly for valid inference
 
 - Biased estimates
+  - Systematically higher/lower estimates than the parameter
 
 - Invalid hypothesis test
-  - Higher chance of false positives or negatives than p-value indicates
+  - Inflated chance of false positives or false negatives
 
-- Less precision around estimate
+- Wider confidence intervals than necessary (i.e., less precision)
   - Undesirable but tolerable
 
 ---
@@ -69,7 +77,9 @@ class: center, middle, inverse, title-slide
 |white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
 |white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
 
-- We finally understand everything this table is telling us. But it could all be wrong if we don't check assumptions.
+- We finally understand all the information in this table. 
+
+- But it could all be wrong if assumptions are violated.
 
 ---
 # It's all about residuals
@@ -82,19 +92,27 @@ class: center, middle, inverse, title-slide
 # Classical regression assumptions
 
 - LINE
-  - **L**inear relationship between `\(x\)`s and `\(y\)` (or nonlinear relationship included appropriately)
-  - **I**ndependent residuals (independent observations; random sampling)
-  - **N**ormality of residuals
-  - **E**qual variance in residuals
+
+- **L**inear relationship between `\(x\)`s and `\(y\)` (or nonlinear relationship included appropriately)
 
 --
 
-- Should at least be knowledgeable enough to competently ask an analyst whether they have checked their regression assumptions and explain the consequences
+- **I**ndependent residuals (independent observations; random sampling)
 
-- Of course, we will go one step further and learn how to check them ourselves
+--
+
+- **N**ormality of residuals
+
+--
+
+- **E**qual variance in residuals
+
+--
+
+- Goal is to have sufficient knowledge to ask good questions and explain consequences if an analyst did not check assumptions
 
 ---
-# Residual vs. Fitted Plot
+# Residual vs. Fitted Plot (RVF)
 
 .pull-left[
 &lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
@@ -104,19 +122,25 @@ class: center, middle, inverse, title-slide
 &lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
-- Assumptions L, N, and E can be seen using an RVF plot
+- Assumptions **L**, **N**, and **E** can be observed directly using an RVF plot
 
-- We want to see no discernible pattern in the RVF plot points
+- We want to see no pattern in the RVF plot points
 
 ---
 # Linear assumption
 
 &lt;img src="lectures_files/rvfp-linear.png" width="1260" style="display: block; margin: auto;" /&gt;
 
+- Obvious pattern in RVF on the right
+
+- Violation of **L**
+
 ---
 # Linear assumption
 
 &lt;img src="lectures_files/rvfp-linear2.png" width="1272" style="display: block; margin: auto;" /&gt;
+
+- Changing the model to quadratic has improved the RVF
 
 ---
 # Normally distributed residuals
@@ -128,6 +152,10 @@ class: center, middle, inverse, title-slide
 
 &lt;img src="lectures_files/rvfp-normality.png" width="1251" style="display: block; margin: auto;" /&gt;
 
+- Pattern on right shows a highly skewed distribution of residuals
+
+- Violation of **N**
+
 ---
 # Equal variance in residuals
 
@@ -138,19 +166,29 @@ class: center, middle, inverse, title-slide
 
 &lt;img src="lectures_files/homoskedasticity.png" width="1251" style="display: block; margin: auto;" /&gt;
 
+- Spread of the distribution is constant along the regression line
+
 ---
 # Equal variance in residuals
 
 &lt;img src="lectures_files/heteroskedasticity.png" width="1223" style="display: block; margin: auto;" /&gt;
 
+- Spread of distribution clearly changing
+
+- Violation of **E**
+
 ---
 # Independent residuals/observations
 
-- Evidence of linear or normal violation could be due to violation of independence
+- Cannot directly observe violation of **I**
 
-- Requires an understanding of how sample was collected
+- If there are signs that **L** or **N** have been violated, could be violation of **I**
 
-- True independence is extremely hard to achieve unless sample was randomized
+--
+
+- Evaluating **I** requires an understanding of how sample was collected
+
+- Independence is hard to achieve unless sample was truly random
 
 ---
 # Consequences
@@ -178,6 +216,11 @@ class: center, middle, inverse, title-slide
   - Statistical correction outside scope of class (clustered standard errors)
 
 ---
+class: inverse, center, middle
+
+# Multicollinearity
+
+---
 # Multicollinearity
 
 - When two explanatory variables are strongly correlated with each other
@@ -200,26 +243,37 @@ class: center, middle, inverse, title-slide
   - If one variable is really important to your RQ, drop the other. Be careful not to introduce OVB!
 
 ---
+class: inverse, center, middle
+
+# Unusual and influential data
+
+---
 # Unusual and influential data
 
 - Regression outlier
   - An observation with a large residual
 
+--
+
 - High-leverage
   - An observation with a large deviation from the explanatory variable's mean
+
+--
 
 - High-influence
   - A regression outlier with high leverage
 
-- Removing an influential observation will sunbstantially change regression results
+--
+
+- An influential observation is an observation that, if removed, meaningfully changes regression results
 
 ---
-# Unusual and influential data
+class: inverse, center, middle
 
-&lt;img src="lectures_files/influence.png" width="1276" style="display: block; margin: auto;" /&gt;
+# Regression diagnostics in R
 
 ---
-# Back to regression table
+# Revisiting Trump Support
 
 `$$TrumpVote = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$` 
 
@@ -230,10 +284,14 @@ class: center, middle, inverse, title-slide
 |white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
 |white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
 
+- We got our initial results. 
+
+- Now we should check assumptions.
+
 ---
 # In R
 
-- R makes all of this very easy!
+- R makes this very easy!
 
 - After saving a regression model...
 
@@ -250,10 +308,12 @@ trump_mod &lt;- lm(share_vote_trump ~ white + white_pov,
 plot(trump_mod)
 ```
 
+- Each plot targets a specific assumption or issue
+
 ---
 # RVF Plot
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see no pattern and a straight red line along 0
 
@@ -262,29 +322,29 @@ plot(trump_mod)
 ---
 # Normal Q-Q
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
-- We want to see points fall approximately along the straight line
+- We want to see points fall approximately along the dotted line
 
-- If not, **N** may be violated
+- If not, suggests **N** may be violated
 
 ---
 # Scale-Location
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see a straight red line
 
-- If not, **E** may be violated
+- If not, evidence **E** may be violated
 
 ---
 # Residuals vs. Leverage
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
-- We want to see a relatively straight red line
+- Useful for identifying high-influence observations
 
-- More importantly, this graph will place observations along a dotted Cook's distance that may be a problem
+- Observations that cross the dotted Cook's distance may be a problem
 
 ---
 # Cook's distance
@@ -297,7 +357,7 @@ plot(trump_mod)
 
 - Where `\(n\)` is the number of observations and `\(p\)` the number of explanatory variables in our model
 
-- This is a rule of thumb; even if an observation does not meet this threshold, it is wise to consider whether an observation is different somehow from other observations
+- Even if an observation does not meet this threshold, it is worth considering whether an observation is somehow different from other observations
 
 ---
 # Cook's distance
@@ -307,7 +367,7 @@ plot(trump_mod)
 plot(trump_mod, 4)
 ```
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
 
 - This is a separate graph that focuses on Cook's distance
 
@@ -322,62 +382,66 @@ trump_mod.metrics &lt;- augment(trump_mod) %&gt;%
 ```
 
 
-| share_vote_trump| .fitted| .resid| .std.resid| .hat| .sigma| .cooksd|
-|----------------:|-------:|------:|----------:|----:|------:|-------:|
-|                4|   29.42| -25.42|      -3.01| 0.15|   8.33|    0.52|
-|               33|   57.54| -24.54|      -2.78| 0.07|   8.47|    0.19|
-|               45|   61.11| -16.11|      -1.83| 0.07|   8.92|    0.08|
-|               63|   70.43|  -7.43|      -0.92| 0.22|   9.16|    0.08|
-|               70|   52.99|  17.01|       1.90| 0.04|   8.89|    0.05|
-|               53|   39.99|  13.01|       1.47| 0.06|   9.03|    0.05|
-|               53|   39.32|  13.68|       1.54| 0.05|   9.01|    0.05|
-|               60|   47.04|  12.96|       1.46| 0.05|   9.04|    0.04|
-|               62|   50.28|  11.72|       1.31| 0.05|   9.08|    0.03|
-|               33|   40.85|  -7.85|      -0.90| 0.09|   9.16|    0.03|
-|               65|   49.89|  15.11|       1.67| 0.02|   8.97|    0.02|
-|               57|   47.30|   9.70|       1.09| 0.05|   9.13|    0.02|
-|               64|   52.99|  11.01|       1.23| 0.04|   9.10|    0.02|
-|               34|   47.64| -13.64|      -1.51| 0.03|   9.02|    0.02|
-|               63|   54.25|   8.75|       0.98| 0.05|   9.15|    0.02|
-|               37|   48.04| -11.04|      -1.23| 0.03|   9.10|    0.02|
-|               41|   52.27| -11.27|      -1.25| 0.02|   9.09|    0.01|
-|               38|   48.77| -10.77|      -1.19| 0.02|   9.11|    0.01|
-|               58|   52.41|   5.59|       0.63| 0.06|   9.20|    0.01|
-|               51|   44.28|   6.72|       0.75| 0.04|   9.19|    0.01|
-|               50|   44.02|   5.98|       0.67| 0.04|   9.20|    0.01|
-|               40|   47.38|  -7.38|      -0.82| 0.03|   9.18|    0.01|
-|               69|   66.00|   3.00|       0.35| 0.12|   9.23|    0.01|
-|               55|   47.45|   7.55|       0.83| 0.02|   9.18|    0.00|
-|               40|   42.77|  -2.77|      -0.32| 0.10|   9.23|    0.00|
-|               46|   41.57|   4.43|       0.50| 0.05|   9.22|    0.00|
-|               60|   56.63|   3.37|       0.38| 0.05|   9.23|    0.00|
-|               39|   42.82|  -3.82|      -0.43| 0.04|   9.22|    0.00|
-|               58|   56.24|   1.76|       0.21| 0.13|   9.24|    0.00|
-|               61|   58.54|   2.46|       0.28| 0.07|   9.23|    0.00|
-|               30|   31.21|  -1.21|      -0.15| 0.20|   9.24|    0.00|
-|               35|   37.21|  -2.21|      -0.25| 0.07|   9.24|    0.00|
-|               47|   49.75|  -2.75|      -0.31| 0.04|   9.23|    0.00|
-|               45|   43.47|   1.53|       0.18| 0.11|   9.24|    0.00|
-|               48|   51.14|  -3.14|      -0.35| 0.03|   9.23|    0.00|
-|               42|   45.00|  -3.00|      -0.33| 0.03|   9.23|    0.00|
-|               45|   42.56|   2.44|       0.27| 0.04|   9.24|    0.00|
-|               48|   50.61|  -2.61|      -0.29| 0.02|   9.23|    0.00|
-|               57|   54.71|   2.29|       0.25| 0.03|   9.24|    0.00|
-|               59|   57.08|   1.92|       0.21| 0.04|   9.24|    0.00|
-|               47|   48.03|  -1.03|      -0.12| 0.12|   9.24|    0.00|
-|               41|   42.49|  -1.49|      -0.17| 0.06|   9.24|    0.00|
-|               51|   49.10|   1.90|       0.21| 0.03|   9.24|    0.00|
-|               57|   58.21|  -1.21|      -0.14| 0.05|   9.24|    0.00|
-|               52|   53.58|  -1.58|      -0.18| 0.03|   9.24|    0.00|
-|               49|   50.61|  -1.61|      -0.18| 0.02|   9.24|    0.00|
-|               42|   40.97|   1.03|       0.11| 0.04|   9.24|    0.00|
-|               52|   52.99|  -0.99|      -0.11| 0.04|   9.24|    0.00|
-|               57|   56.49|   0.51|       0.06| 0.05|   9.24|    0.00|
-|               44|   44.40|  -0.40|      -0.04| 0.04|   9.24|    0.00|
-|               49|   49.17|  -0.17|      -0.02| 0.06|   9.24|    0.00|
+| share_vote_trump| .fitted|  .resid| .std.resid|  .hat| .sigma| .cooksd|
+|----------------:|-------:|-------:|----------:|-----:|------:|-------:|
+|                4|  29.418| -25.418|     -3.008| 0.146|  8.326|   0.516|
+|               33|  57.541| -24.541|     -2.779| 0.068|  8.466|   0.187|
+|               45|  61.112| -16.112|     -1.827| 0.070|  8.915|   0.084|
+|               63|  70.435|  -7.435|     -0.921| 0.221|  9.160|   0.080|
+|               70|  52.986|  17.014|      1.901| 0.042|  8.888|   0.053|
+|               53|  39.989|  13.011|      1.470| 0.064|  9.032|   0.049|
+|               53|  39.320|  13.680|      1.538| 0.054|  9.012|   0.045|
+|               60|  47.041|  12.959|      1.455| 0.052|  9.036|   0.039|
+|               62|  50.277|  11.723|      1.312| 0.046|  9.075|   0.028|
+|               33|  40.851|  -7.851|     -0.898| 0.087|  9.164|   0.026|
+|               65|  49.891|  15.109|      1.672| 0.024|  8.969|   0.023|
+|               57|  47.305|   9.695|      1.090| 0.054|  9.127|   0.023|
+|               64|  52.986|  11.014|      1.231| 0.042|  9.095|   0.022|
+|               34|  47.639| -13.639|     -1.512| 0.028|  9.019|   0.022|
+|               63|  54.253|   8.747|      0.982| 0.051|  9.149|   0.017|
+|               37|  48.044| -11.044|     -1.228| 0.033|  9.096|   0.017|
+|               41|  52.265| -11.265|     -1.246| 0.023|  9.092|   0.012|
+|               38|  48.765| -10.765|     -1.189| 0.020|  9.105|   0.010|
+|               58|  52.407|   5.593|      0.632| 0.065|  9.204|   0.009|
+|               51|  44.280|   6.720|      0.750| 0.040|  9.188|   0.008|
+|               50|  44.017|   5.983|      0.669| 0.043|  9.199|   0.007|
+|               40|  47.375|  -7.375|     -0.817| 0.027|  9.178|   0.006|
+|               69|  66.002|   2.998|      0.349| 0.116|  9.231|   0.005|
+|               55|  47.446|   7.554|      0.835| 0.021|  9.175|   0.005|
+|               40|  42.768|  -2.768|     -0.320| 0.103|  9.233|   0.004|
+|               46|  41.572|   4.428|      0.496| 0.045|  9.219|   0.004|
+|               60|  56.627|   3.373|      0.377| 0.046|  9.229|   0.002|
+|               39|  42.820|  -3.820|     -0.425| 0.035|  9.225|   0.002|
+|               58|  56.241|   1.759|      0.206| 0.131|  9.238|   0.002|
+|               61|  58.545|   2.455|      0.278| 0.068|  9.235|   0.002|
+|               30|  31.213|  -1.213|     -0.148| 0.199|  9.240|   0.002|
+|               35|  37.209|  -2.209|     -0.250| 0.065|  9.236|   0.001|
+|               47|  49.750|  -2.750|     -0.307| 0.041|  9.233|   0.001|
+|               45|  43.470|   1.530|      0.178| 0.112|  9.239|   0.001|
+|               48|  51.139|  -3.139|     -0.348| 0.027|  9.231|   0.001|
+|               42|  45.001|  -3.001|     -0.332| 0.025|  9.232|   0.001|
+|               45|  42.556|   2.444|      0.272| 0.036|  9.235|   0.001|
+|               48|  50.612|  -2.612|     -0.289| 0.025|  9.234|   0.001|
+|               57|  54.710|   2.290|      0.254| 0.031|  9.236|   0.001|
+|               59|  57.084|   1.916|      0.214| 0.042|  9.238|   0.001|
+|               47|  48.025|  -1.025|     -0.119| 0.116|  9.241|   0.001|
+|               41|  42.486|  -1.486|     -0.167| 0.057|  9.240|   0.001|
+|               51|  49.100|   1.900|      0.211| 0.027|  9.238|   0.000|
+|               57|  58.210|  -1.210|     -0.136| 0.049|  9.241|   0.000|
+|               52|  53.584|  -1.584|     -0.176| 0.028|  9.239|   0.000|
+|               49|  50.612|  -1.612|     -0.178| 0.025|  9.239|   0.000|
+|               42|  40.973|   1.027|      0.115| 0.041|  9.241|   0.000|
+|               52|  52.986|  -0.986|     -0.110| 0.042|  9.241|   0.000|
+|               57|  56.486|   0.514|      0.058| 0.054|  9.242|   0.000|
+|               44|  44.403|  -0.403|     -0.045| 0.037|  9.242|   0.000|
+|               49|  49.170|  -0.170|     -0.019| 0.055|  9.242|   0.000|
 
 ---
 # Influencer?
+
+- Model has 51 observations and 2 explanatory variables. 
+
+- Threshold is:
 
 
 ```r
@@ -388,26 +452,28 @@ trump_mod.metrics &lt;- augment(trump_mod) %&gt;%
 ## [1] 0.08333333
 ```
 
-- So observation 9 doesn't exceed the threshold, but it still warrants investigation
+- So observation 9 does exceed the threshold. Observations 33 and 45 do too.
 
 ---
-# Identifying an observation from `plot()`
+# Identifying an observation
 
-- With 51 observations, we could easily identify row 9
-
-- But what if we're working with 51,000 observations?
+- Which observations are rows 9, 33, and 45?
 
 
 ```r
-state_trump[9, ]
+state_trump[c(9,33,45), ]
 ```
 
 
 |state                | med_inc|   hs| white| white_pov| share_vote_trump|urban |
 |:--------------------|-------:|----:|-----:|---------:|----------------:|:-----|
 |District of Columbia |   68277| 87.1|    37|         4|                4|high  |
+|New York             |   54310| 84.7|    58|        10|               37|high  |
+|Utah                 |   63383| 90.4|    81|         8|               47|high  |
 
-- Even though D.C. doesn't exceed the rule of thumb, it is just different; probably warrants exclusion
+- Since D.C. is qualitatively different from states, it probably warrants exclusion
+
+- Less clear whether to exclude New York or Utah
 
 ---
 # Influencer?
@@ -433,7 +499,7 @@ get_regression_table(trump_mod_nodc)
 |white     |     0.21|      0.08|      2.79|    0.01|     0.06|     0.36|
 |white_pov |     1.77|      0.51|      3.47|    0.00|     0.74|     2.80|
 
-- Need to compare this to the results including D.C. on slide 6
+- Need to compare this to the initial results
 
 ---
 # Results including DC
@@ -445,17 +511,19 @@ get_regression_table(trump_mod_nodc)
 |white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
 |white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
 
-- Estimates changed a quite a bit
+- Estimates changed.
+
+- Meaningfully? Probably not. Nothing changed with respect to the sign and statistical significance of each estimate. The confidence intervals mostly overlap.
 
 ---
 # Comparing regression lines
 
 .pull-left[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 - D.C. (on left) pulls the left of regression line down; forces slope to be greater
@@ -471,6 +539,12 @@ gvlma(trump_mod)
 
 &lt;img src="lectures_files/gvlma1.png" width="1064" style="display: block; margin: auto;" /&gt;
 
+- Global Stat: Overall test of your model
+- Skewness: Primary test of **N**; secondary test for influence
+- Kurtosis: Primary test for influence; secondary test of **N**
+- Link Function: Test of **L**
+- Heteroskedasticity: Test of **E**
+
 ---
 # Statistical test on assumptions
 
@@ -479,6 +553,8 @@ gvlma(trump_mod)
 gvlma(trump_mod_nodc)
 ```
 &lt;img src="lectures_files/gvlma2.png" width="1056" style="display: block; margin: auto;" /&gt;
+
+- Exclusion of DC makes a difference
 
 ---
 # Checking multicollinearity

@@ -3,7 +3,7 @@ title: "PADP 7120 Data Applications in PA"
 subtitle: "Regression Diagnostics"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
-date: "November 18, 2020"
+date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
 output:
   xaringan::moon_reader:
     css: 'mypres.css'
@@ -52,26 +52,32 @@ state_trump <- hate_crimes %>%
 include_graphics('lectures_files/credible.png')
 ```
 
-- Today is all about statistical conclusion validity
+- Today is about statistical conclusion validity
+
+---
+class: inverse, center, middle
+
+# Classical assumptions of linear regression
 
 ---
 # Regression is BLUE
 
-- Regression gives us the best (most precise), linear, unbiased, estimate
+- Regression gives us the Best (most precise), Linear, Unbiased, Estimate
 
 - But only if a set of assumptions hold
 
 ---
-# Consequences of violated assumptions
+# Concerns
 
-- Can't be so sure that **LLN** and **CLT** are working properly for inference
+- Our data or regression model choices may cause **LLN** and **CLT** not to work properly for valid inference
 
 - Biased estimates
+  - Systematically higher/lower estimates than the parameter
 
 - Invalid hypothesis test
-  - Higher chance of false positives or negatives than p-value indicates
+  - Inflated chance of false positives or false negatives
 
-- Less precision around estimate
+- Wider confidence intervals than necessary (i.e., less precision)
   - Undesirable but tolerable
 
 ---
@@ -89,7 +95,9 @@ get_regression_table(trump_mod) %>%
   kable(digits = 2)
 ```
 
-- We finally understand everything this table is telling us. But it could all be wrong if we don't check assumptions.
+- We finally understand all the information in this table. 
+
+- But it could all be wrong if assumptions are violated.
 
 ---
 # It's all about residuals
@@ -117,19 +125,27 @@ trump_mod2.graph
 # Classical regression assumptions
 
 - LINE
-  - **L**inear relationship between $x$s and $y$ (or nonlinear relationship included appropriately)
-  - **I**ndependent residuals (independent observations; random sampling)
-  - **N**ormality of residuals
-  - **E**qual variance in residuals
+
+- **L**inear relationship between $x$s and $y$ (or nonlinear relationship included appropriately)
 
 --
 
-- Should at least be knowledgeable enough to competently ask an analyst whether they have checked their regression assumptions and explain the consequences
+- **I**ndependent residuals (independent observations; random sampling)
 
-- Of course, we will go one step further and learn how to check them ourselves
+--
+
+- **N**ormality of residuals
+
+--
+
+- **E**qual variance in residuals
+
+--
+
+- Goal is to have sufficient knowledge to ask good questions and explain consequences if an analyst did not check assumptions
 
 ---
-# Residual vs. Fitted Plot
+# Residual vs. Fitted Plot (RVF)
 
 .pull-left[
 ```{r, echo=FALSE, message=FALSE, fig.align='center'}
@@ -149,9 +165,9 @@ ggplot(trump_mod2.metrics, aes(.fitted, .resid)) +
 ```
 ]
 
-- Assumptions L, N, and E can be seen using an RVF plot
+- Assumptions **L**, **N**, and **E** can be observed directly using an RVF plot
 
-- We want to see no discernible pattern in the RVF plot points
+- We want to see no pattern in the RVF plot points
 
 ---
 # Linear assumption
@@ -160,12 +176,18 @@ ggplot(trump_mod2.metrics, aes(.fitted, .resid)) +
 include_graphics('lectures_files/rvfp-linear.png')
 ```
 
+- Obvious pattern in RVF on the right
+
+- Violation of **L**
+
 ---
 # Linear assumption
 
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('lectures_files/rvfp-linear2.png')
 ```
+
+- Changing the model to quadratic has improved the RVF
 
 ---
 # Normally distributed residuals
@@ -181,6 +203,10 @@ include_graphics('lectures_files/norm-residuals.png')
 include_graphics('lectures_files/rvfp-normality.png')
 ```
 
+- Pattern on right shows a highly skewed distribution of residuals
+
+- Violation of **N**
+
 ---
 # Equal variance in residuals
 
@@ -195,6 +221,8 @@ include_graphics('lectures_files/homo-hetero.png')
 include_graphics('lectures_files/homoskedasticity.png')
 ```
 
+- Spread of the distribution is constant along the regression line
+
 ---
 # Equal variance in residuals
 
@@ -202,14 +230,22 @@ include_graphics('lectures_files/homoskedasticity.png')
 include_graphics('lectures_files/heteroskedasticity.png')
 ```
 
+- Spread of distribution clearly changing
+
+- Violation of **E**
+
 ---
 # Independent residuals/observations
 
-- Evidence of linear or normal violation could be due to violation of independence
+- Cannot directly observe violation of **I**
 
-- Requires an understanding of how sample was collected
+- If there are signs that **L** or **N** have been violated, could be violation of **I**
 
-- True independence is extremely hard to achieve unless sample was randomized
+--
+
+- Evaluating **I** requires an understanding of how sample was collected
+
+- Independence is hard to achieve unless sample was truly random
 
 ---
 # Consequences
@@ -237,6 +273,11 @@ include_graphics('lectures_files/heteroskedasticity.png')
   - Statistical correction outside scope of class (clustered standard errors)
 
 ---
+class: inverse, center, middle
+
+# Multicollinearity
+
+---
 # Multicollinearity
 
 - When two explanatory variables are strongly correlated with each other
@@ -259,28 +300,37 @@ include_graphics('lectures_files/heteroskedasticity.png')
   - If one variable is really important to your RQ, drop the other. Be careful not to introduce OVB!
 
 ---
+class: inverse, center, middle
+
+# Unusual and influential data
+
+---
 # Unusual and influential data
 
 - Regression outlier
   - An observation with a large residual
 
+--
+
 - High-leverage
   - An observation with a large deviation from the explanatory variable's mean
+
+--
 
 - High-influence
   - A regression outlier with high leverage
 
-- Removing an influential observation will sunbstantially change regression results
+--
+
+- An influential observation is an observation that, if removed, meaningfully changes regression results
 
 ---
-# Unusual and influential data
+class: inverse, center, middle
 
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('lectures_files/influence.png')
-```
+# Regression diagnostics in R
 
 ---
-# Back to regression table
+# Revisiting Trump Support
 
 $$TrumpVote = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$ 
 
@@ -289,10 +339,14 @@ get_regression_table(trump_mod) %>%
   kable(digits = 2)
 ```
 
+- We got our initial results. 
+
+- Now we should check assumptions.
+
 ---
 # In R
 
-- R makes all of this very easy!
+- R makes this very easy!
 
 - After saving a regression model...
 
@@ -306,6 +360,8 @@ trump_mod <- lm(share_vote_trump ~ white + white_pov,
 ```{r, eval=FALSE}
 plot(trump_mod)
 ```
+
+- Each plot targets a specific assumption or issue
 
 ---
 # RVF Plot
@@ -325,9 +381,9 @@ plot(trump_mod, 1)
 plot(trump_mod, 2)
 ```
 
-- We want to see points fall approximately along the straight line
+- We want to see points fall approximately along the dotted line
 
-- If not, **N** may be violated
+- If not, suggests **N** may be violated
 
 ---
 # Scale-Location
@@ -338,7 +394,7 @@ plot(trump_mod, 3)
 
 - We want to see a straight red line
 
-- If not, **E** may be violated
+- If not, evidence **E** may be violated
 
 ---
 # Residuals vs. Leverage
@@ -347,9 +403,9 @@ plot(trump_mod, 3)
 plot(trump_mod, 5)
 ```
 
-- We want to see a relatively straight red line
+- Useful for identifying high-influence observations
 
-- More importantly, this graph will place observations along a dotted Cook's distance that may be a problem
+- Observations that cross the dotted Cook's distance may be a problem
 
 ---
 # Cook's distance
@@ -362,7 +418,7 @@ $$4/(n-p-1)$$
 
 - Where $n$ is the number of observations and $p$ the number of explanatory variables in our model
 
-- This is a rule of thumb; even if an observation does not meet this threshold, it is wise to consider whether an observation is different somehow from other observations
+- Even if an observation does not meet this threshold, it is worth considering whether an observation is somehow different from other observations
 
 ---
 # Cook's distance
@@ -386,35 +442,39 @@ trump_mod.metrics <- augment(trump_mod) %>%
 trump_mod.metrics %>%
   select(-white, -white_pov) %>%
   arrange(desc(.cooksd)) %>% 
-  kable(digits = 2)
+  kable(digits = 3)
 ```
 
 ---
 # Influencer?
 
+- Model has 51 observations and 2 explanatory variables. 
+
+- Threshold is:
+
 ```{r}
 4/(51-2-1)
 ```
 
-- So observation 9 doesn't exceed the threshold, but it still warrants investigation
+- So observation 9 does exceed the threshold. Observations 33 and 45 do too.
 
 ---
-# Identifying an observation from `plot()`
+# Identifying an observation
 
-- With 51 observations, we could easily identify row 9
-
-- But what if we're working with 51,000 observations?
+- Which observations are rows 9, 33, and 45?
 
 ```{r, eval=FALSE}
-state_trump[9, ]
+state_trump[c(9,33,45), ]
 ```
 
 ```{r, echo=FALSE}
-state_trump[9, ] %>% 
+state_trump[c(9,33,45), ] %>% 
   kable()
 ```
 
-- Even though D.C. doesn't exceed the rule of thumb, it is just different; probably warrants exclusion
+- Since D.C. is qualitatively different from states, it probably warrants exclusion
+
+- Less clear whether to exclude New York or Utah
 
 ---
 # Influencer?
@@ -436,7 +496,7 @@ get_regression_table(trump_mod_nodc) %>%
   kable(digits = 2)
 ```
 
-- Need to compare this to the results including D.C. on slide 6
+- Need to compare this to the initial results
 
 ---
 # Results including DC
@@ -446,7 +506,9 @@ get_regression_table(trump_mod) %>%
   kable(digits = 2)
 ```
 
-- Estimates changed a quite a bit
+- Estimates changed.
+
+- Meaningfully? Probably not. Nothing changed with respect to the sign and statistical significance of each estimate. The confidence intervals mostly overlap.
 
 ---
 # Comparing regression lines
@@ -493,6 +555,12 @@ gvlma(trump_mod)
 include_graphics('lectures_files/gvlma1.png')
 ```
 
+- Global Stat: Overall test of your model
+- Skewness: Primary test of **N**; secondary test for influence
+- Kurtosis: Primary test for influence; secondary test of **N**
+- Link Function: Test of **L**
+- Heteroskedasticity: Test of **E**
+
 ---
 # Statistical test on assumptions
 
@@ -502,6 +570,8 @@ gvlma(trump_mod_nodc)
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('lectures_files/gvlma2.png')
 ```
+
+- Exclusion of DC makes a difference
 
 ---
 # Checking multicollinearity
