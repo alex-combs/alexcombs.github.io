@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 10: Forecasting
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 22, 2021
+### Last updated: April 22, 2021
 
 ---
 
@@ -67,7 +67,7 @@ library(fpp2)
 
 - Convert a dataset to a time series dataset in R
 - Explore time series for patterns
-- Understand simple forecasting models like naive, average, and (seasonal) trend
+- Understand simple forecasting models like naive, average, and trend
 - Use exponential smoothing
 - Use regression-adjusted forecast
 - Evaluate and choose between forecast models
@@ -108,10 +108,10 @@ library(fpp2)
 
 
 ```r
-ts_name &lt;- ts(data_name[,-1], # skips first row of variable names
-              start = first_time_period,
-              end = last_time_period, 
-              frequency = unit_of_time_between_observations)
+ts_name &lt;- ts(data_name[,-1], # skip the column measuring time
+              start = year_of_first_observation,
+              end = year_of_last_observation, 
+              frequency = number_of_observations_between_years)
 ```
 
 ---
@@ -123,7 +123,9 @@ ts_name &lt;- ts(data_name[,-1], # skips first row of variable names
 
 
 ```r
-ts_data &lt;- ts(data[,-1], start = 2012, end = 2016,
+ts_data &lt;- ts(data[,-1], 
+              start = 2012,
+              end = 2016,
               frequency = 1)
 ```
 
@@ -137,19 +139,20 @@ ts_data &lt;- ts(data[,-1], start = 2012, end = 2016,
 
 | year| quarter| value|
 |----:|-------:|-----:|
-| 2016|       1|    57|
-| 2016|       2|    35|
+| 2016|       1|    50|
+| 2016|       2|    59|
 
 
 
 | year| quarter| value|
 |----:|-------:|-----:|
-| 2020|       3|    57|
-| 2020|       4|    57|
+| 2020|       3|    59|
+| 2020|       4|    43|
 
 
 ```r
-ts_quarterly &lt;- ts(quarterly[,-1], start = 2016, end = 2020,
+ts_quarterly &lt;- ts(quarterly[,-1], 
+                   start = 2016, end = 2020,
 *                  frequency = 4)
 ```
 
@@ -163,19 +166,20 @@ ts_quarterly &lt;- ts(quarterly[,-1], start = 2016, end = 2020,
 
 | year| month| value|
 |----:|-----:|-----:|
-| 2016|     1|    43|
-| 2016|     2|    59|
+| 2016|     1|    48|
+| 2016|     2|    41|
 
 
 
 | year| month| value|
 |----:|-----:|-----:|
-| 2020|    11|    35|
-| 2020|    12|    46|
+| 2020|    11|    39|
+| 2020|    12|    63|
 
 
 ```r
-ts_monthly &lt;- ts(monthly[,-1], start = 2016, end = 2020,
+ts_monthly &lt;- ts(monthly[,-1], 
+                 start = 2016, end = 2020,
 *                  frequency = 12)
 ```
 
@@ -189,19 +193,20 @@ ts_monthly &lt;- ts(monthly[,-1], start = 2016, end = 2020,
 
 | year| value|
 |----:|-----:|
-| 2000|    28|
-| 2002|    51|
+| 2000|    43|
+| 2002|    44|
 
 
 
 | year| value|
 |----:|-----:|
-| 2018|    43|
-| 2020|    53|
+| 2018|    56|
+| 2020|    61|
 
 
 ```r
-ts_biennial &lt;- ts(biennial[,-1], start = 2000, end = 2020,
+ts_biennial &lt;- ts(biennial[,-1], 
+                  start = 2000, end = 2020,
 *                  frequency = 0.5)
 ```
 
@@ -224,25 +229,19 @@ ts_biennial &lt;- ts(biennial[,-1], start = 2000, end = 2020,
 
 - `voting` contains national turnout for each U.S. presidential election from 1912 to 2016
 
-&gt; **Set `voting` as a TS object**
+&gt; **Set `voting` as a TS object named `ts_voting`**
 
 
 ```r
 ts_voting &lt;- 
 ```
 
---
 
-
-```r
-ts_voting &lt;- ts(voting[,-1], start = 1912, end = 2016, 
-                frequency = 0.25)
-```
 
 ---
 # Creating TS object
 
-- `sales` contains quarterly data
+- `sales` contains quarterly data from 1981 to 2005
 
 &gt; **Set `sales` as a TS object**
 
@@ -251,13 +250,7 @@ ts_voting &lt;- ts(voting[,-1], start = 1912, end = 2016,
 ts_sales &lt;- 
 ```
 
---
 
-
-```r
-ts_sales &lt;- ts(sales[,-1], start = 1981, end = 2005, 
-               frequency = 4)
-```
 
 ---
 # Exploratory plotting
@@ -290,9 +283,10 @@ ts_sales &lt;- ts(sales[,-1], start = 1981, end = 2005,
 &lt;img src="labs_files/patterns-colfinance.png" width="1005" style="display: block; margin: auto;" /&gt;
 
 ---
-# Exploratory plots
+# Exploratory plots (line graphs)
 
-- With a TS object, line graphs can be made very quickly
+- We learned how to make line plots within the `ggplot` package
+- If R knows data is time series, we can generate a line graph using a shortcut
 
 &gt; **Add and run following code**
 
@@ -306,9 +300,9 @@ autoplot(ts_sales)
 ```
 
 ---
-# Exploratory plots
+# Exploratory plots (seasonal plots)
 
-- The sales data exhibits seasonality. There are useful ways to visualize seasonal patterns.
+- The sales data exhibits seasonality. Here are a few useful plots for seasonal time series.
 
 &gt; **Add and run following code**
 
@@ -334,11 +328,11 @@ ggsubseriesplot(ts_sales[,1])
 ---
 # Exploratory Recap
 
-- Exploratory graphs are good for showing patterns to an audience and getting an initial sense for our own forecasts
+- Exploratory graphs are useful for detecting patterns that can inform our choice of forecast and providing summary information to an audience
 
-  - Voting appears to be cyclical
+  - Voting appears to be cyclical only
 
-  - Sales are clearly seasonal with a slight upward trend
+  - Sales are seasonal with a slight upward trend
 
 ---
 class: inverse, center, middle
@@ -348,7 +342,7 @@ class: inverse, center, middle
 ---
 # Sources of information
 
-- When choosing a forecast model, there are two general sources of information for making future predictions
+- When choosing a forecast model, there are two sources of information for making future predictions
   - Past values of the outcome
   - Explanatory variables of the outcome
   
@@ -361,7 +355,8 @@ class: inverse, center, middle
 
 --
 
-- Regression-adjusted models are useful for scenario forecasts
+- Regression-adjusted models incorporate explanatory variables
+  - Useful for forecasts based on scenarios
   - Example: predicted sales if GDP increases 2% year-over-year
 
 ---
@@ -382,7 +377,7 @@ class: inverse, center, middle
 --
 
 - **Lag**: term used to refer to a past value
-  - The 3rd lag for annual time series value for 2020 is 2017
+  - The 3rd lag for annual time series value in 2020 is 2017
 
 ---
 # Autocorrelation Plot
@@ -420,12 +415,17 @@ ggAcf(usmelec)
 
 
 ```r
-ggAcf(ts_sales[,1])
+ggAcf(ts_sales[,1]) # applied to first column, sales
 ```
 
 &lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
 
-&gt; **Generate an autocorrelation plot for voting**
+- Sales is not white noise; every 2nd and 4th lag is significantly correlated with their current value
+
+---
+# Autocorrelation Plot
+
+&gt; **Use `ggAcf` to generate an autocorrelation plot for `ts_voting` dataset**
 
 
 
@@ -434,17 +434,17 @@ ggAcf(ts_sales[,1])
 
 1. Mean - future values predicted to equal average over time
   - No trend pattern
-  - Cyclic or seasonal pattern around what appears to be a stable mean
+  - Cyclic or seasonal pattern around a stable average level
 
 --
 
 2. Naive - future values predicted to equal most recent value
-  - No trend pattern
+  - No trend pattern; last period is best guess
 
 --
 
 3. Drift - draw line from first to last value and extrapolate
-  - Strong trend
+  - Strong trend from start to end
 
 --
 
@@ -463,30 +463,30 @@ ggAcf(ts_sales[,1])
 ---
 # Simple Forecasts in R
 
-- General syntax
+- Generic syntax
 
 
 ```r
-new_object &lt;- forecast_model(tsdata, h = periods into future)
+new_object &lt;- forecast_model(tsdata, h = periods_into_future)
 ```
 
-- Default for `h`orizon is 10 periods
-- Corresponds to frequency; h = 4 in quarterly is one year
-
-- Simple model functions
+- Replace `forecast_model` with:
 
 
 ```r
 meanf()
 naive()
-rwf(drift = TRUE)
+rwf(drift = TRUE) 
 snaive()
 ```
+
+- Default for `h`orizon is 10 periods
+- Corresponds to frequency; h = 4 in quarterly is one year
 
 ---
 # In R
 
-- Suppose I run `meanf`, `naive`, and `snaive` on `sales` using the `ts_sales` data
+- Running `meanf`, `naive`, and `snaive` on `sales` in the `ts_sales` data
 
 
 ```r
@@ -534,8 +534,6 @@ autoplot(sales_snaive)
 ---
 # Reporting plausible ranges
 
-- Utility of these forecasts are the ranges based on how well they predict observed past values
-
 - Can use `summary` on saved models to obtain ranges.
 
 
@@ -562,6 +560,11 @@ summary(sales_snaive)
 |2008 Q1 |         1112.5|  976.2003| 1248.7997| 904.0476| 1320.9524|
 
 ---
+class: inverse, center, middle
+
+# Exponential Smoothing
+
+---
 # Exponential smoothing
 
 - Assigns a descending weight to each past value
@@ -571,33 +574,46 @@ summary(sales_snaive)
 ---
 # Exponential smoothing
 
-- Can also incorporate trend
+- Can also incorporate trend, damped or linear
 
 &lt;img src="labs_files/expsmooth-trend.png" width="1341" style="display: block; margin: auto;" /&gt;
 
 ---
 # Exponential smoothing
 
-- Can also incorporate seasonality
+- Can also incorporate additive or multiplicative seasonality
 
 &lt;img src="labs_files/expsmooth-season.png" width="1349" style="display: block; margin: auto;" /&gt;
 
 ---
 # Exponential smoothing combinations
 
-- Error: A, M
+- Error: `A`dditive, `M`ultiplicative
 
-- Trend: N, A, A_d
+- Trend: `N`one, `A`dditive, `A_d`amped
 
-- Seasonal: N, A, M
+- Seasonal: `N`one, `A`dditive, `M`ultiplicative
 
-- 18 possible exponential smoothing models
+- 18 possible combinations for exponential smoothing models
 
 ---
 # Exponential smoothing in R
 
-- The `ets` function tests the 18 competing models and chooses the best one
+- The `ets` (error, trend, seasonal) function tests the 18 competing models and chooses the best one
 
+- Generic syntax
+
+
+```r
+ets(ts_data) %&gt;% 
+  forecast(h=forecast_horizon) %&gt;% 
+  autoplot() OR summary()
+```
+
+---
+# Exponential smoothing in R
+
+.pull-left[
 
 ```r
 ets(bonds) %&gt;% # Monthly US 10-year bond yields
@@ -605,8 +621,12 @@ ets(bonds) %&gt;% # Monthly US 10-year bond yields
   autoplot()
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-50-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-51-1.png" style="display: block; margin: auto;" /&gt;
+]
 
+.pull-right[
+- Note that `ets` has fit a model with `A`dditive error, `A_d`amped trend, and `N`o seasonality
+]
 ---
 # Exponential smoothing in R
 
@@ -638,7 +658,7 @@ ets(bonds) %&gt;% # Monthly US 10-year bond yields
 ---
 # Exponential smoothing in R
 
-&gt; **Use the `ets` function on sales to produce a plot and ranges for the next 12 periods**
+&gt; **Use the `ets` function on `sales` in the `ts_sales` dataset to produce a forecast plot and ranges for the next 12 time periods**
 
 
 
@@ -652,29 +672,34 @@ class: inverse, center, middle
 ---
 # Evaluating forecasts
 
-- To have a valid forecast:
-  - The residuals are white noise
-  - The residuals have a mean equal to 0
-
 - We can compare our point forecast to each observed year of the outcome
 
 - The difference between the observed value and our point forecast is the residual
 
-- We prefer the model with the best fit
+--
+
+- To have a valid forecast:
+  - The residuals are white noise
+  - The residuals have a mean equal to 0
+  - If not, we haven't extracted all the useful information from the past
+
+--
+
+- Among valid models, we prefer the model with the best fit
   
 ---
 # Evaluating forecasts
 
-- Can use `checkresiduals` to test whether our forecast is valid
+- Can use `checkresiduals` to test the validity of our forecast
 
-- Looking for a p-value &gt; 0.05
+.pull-left[
 
 
 ```r
 ets(bonds) %&gt;% checkresiduals()
 ```
 
-![](rlab10-forecasting_files/figure-html/unnamed-chunk-56-1.png)&lt;!-- --&gt;
+![](rlab10-forecasting_files/figure-html/unnamed-chunk-57-1.png)&lt;!-- --&gt;
 
 ```
 ## 
@@ -685,6 +710,13 @@ ets(bonds) %&gt;% checkresiduals()
 ## 
 ## Model df: 5.   Total lags used: 24
 ```
+]
+
+.pull-right[
+- Also produces the p-value for a hypothesis test (e.g., Ljung-Box) of overall fit
+
+- Null hypothesis is that the model is valid
+]
 
 ---
 # Evaluating forecasts
@@ -692,6 +724,8 @@ ets(bonds) %&gt;% checkresiduals()
 &gt; **Use `checkresiduals` on the seasonal naive and ets models for sales**
 
 
+
+- Does the information provided help us choose a preferred model?
 
 ---
 # Goodness of fit
@@ -717,7 +751,7 @@ ets(bonds) %&gt;% accuracy()
 
 
 
-- Even thought the residuals indicate `ets` is better, which model has a better fit to the data? How far off is it, on average?
+- Which model fits the data better? How far off is it, on average?
 
 ---
 class: inverse, center, middle
@@ -739,7 +773,7 @@ class: inverse, center, middle
 ---
 # In R
 
-- Let's forecast sales incorporating GDP and AdBudget
+- Let's forecast sales incorporating GDP and AdBudget as explanatory variables
 
 &gt; **Add and run below time series linear model**
 
@@ -758,21 +792,22 @@ summary(sales_reg)
 ---
 # Using a regression on new data
 
-- When we save regression results, we can feed new data into that model for predictions
+- When we save regression results, we can feed new data into the `forecast` function to make predictions
 
-- General syntax
+- Generic syntax
 
 
 ```r
-new_object &lt;- forecast(reg_results, newdata = name_of_newdata)
+new_object &lt;- forecast(saved_reg_results, 
+                       newdata = name_of_new_dataset)
 ```
 
 ---
 # In R
 
-- Now we can forecast sales given new scenarios with respect to the explanatory variables
+- Now we can forecast sales in response to changes in explanatory variables
 
-&gt; **Download `sales_forecast_data` file and add to your project folder. Import**
+&gt; **Download `sales_forecast_data` CSV file and add to your project folder. Import**
 
 
 
