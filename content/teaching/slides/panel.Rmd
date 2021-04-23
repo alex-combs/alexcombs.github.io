@@ -114,41 +114,70 @@ include_graphics('lectures_files/fixfx-dag.png')
 - If those constant factors also affect other explanatory variables in our model, then FE closes the backdoor path they created
 
 ---
-# Some helpful notation
+# Regression notation
+
+- Standard OLS:
+
+$$ y_i=\beta_0 + \beta_1x_i + \epsilon_i $$
+
+- The $i$ subscript is an **index**; corresponds to the unit of analysis
+
+- Signals to the reader that we are using variation *between* units $i = 1 \dots N$ where $N$ is the total units in our data
+
+- Each row $i$ in our data has an observed value for $y$ and $x$
+
+- For all the rows in our data, we estimate a *single, common* intercept, $b_0$, and a common slope $b_1$
+
+---
+# Fixed Effects Notation
 
 $$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$
 
-- N cross-sectional units $i$ followed over T time periods $t$
+- Now we have values for unit $i = 1 \dots N$ at time $t = 1 \dots T$ where $N$ is still the total units in the data and $T$ is the total time periods 
 
 --
 
-- $x_{it}$ vary across units and over time
-  - Education, crime, unemployment, tax rates, etc.
+- $x_{it}$ represents factors that vary between units $i$ and over time $t$
+  - Education level, crime, unemployment, tax rates, etc.
+  
+--
+
+- $z_i$ vary between units $i$ but are constant over time
+  - Sex, race, geographic region, treatment/control group
 
 --
 
-- $z_i$ vary across units but are constant over time
-  - Sex, race, geographic region, governance model
-
---
-
-- $w_t$ vary over time but are constant across units
-  - Macroeconomic trends like inflation or interest rates; events that affect all units like a recession or war
+- $w_t$ vary over time $t$ but are constant between units
+  - Inflation, interest rates, recession, war
 
 ---
 # Fixed effects
 
 $$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$
 
-- If we observe (i.e. have data) on all the $z_i$ variables that matter, we could just control for them
+- Fixed effects is an admission that we can't possibly collect data for all the $z_i$ variables
+
+- Fortunately, we don't need data for $z_i$ if we have panel data and run fixed effects
 
 --
 
-- If we don't and run fixed effects instead, then ALL of those variables in $z_i$ get collapsed into the intercept
+- With fixed effects. ALL $z_i$ variables collapse into a *unique* intercept for each unit $i$
+
+$$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$
+- Note the subscript $i$ for the intercept instead of a common $\beta_0$ intercept
+
+---
+# Two-Way Fixed Effects
 
 $$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$
 
-- Even if we do control for a few $z_i$ variables, they will be absorbed by the fixed effect intercept
+- We can also control for all factors that vary over time but not across units $w_t$
+
+- Often referred to as two-way fixed effects: unit and time
+
+- Now including a dummy variable for each unit and each time period
+
+$$y_{it}= \alpha_i + \delta_t + \beta x_{it} + \epsilon_{it}$$
 
 ---
 # Example
@@ -214,15 +243,6 @@ ggplot(statepanel, aes(x=tuition, y=enroll_pct)) +
   labs(y = 'Percent Enrollment',
        x ='Tuition') +
   theme_minimal()
-```
-
----
-# Within and Between Variation
-
-- Last few slides demonstrated within and between variation
-
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('lectures_files/withinbetween.png')
 ```
 
 ---
@@ -370,11 +390,11 @@ pFtest(fe2, standard_ols2)
 ---
 # Controlling for time trends
 
-$$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$
+$$y_{it}= \alpha_i + \delta_t + \beta x_{it} + \epsilon_{it}$$
 
-- We may also want to control for common time trends, $w_t$
+- We may also want to control for a common time trend, $\delta_t$
 - Adds dummy variables for each year in our panel
-- Controls for factors that changed/occurred during this time period that affected all units in the panel similarly
+- Controls for factors that changed/occurred during over this time period that affected all units in the panel
 
 ---
 # Adding time trends in FE
@@ -401,9 +421,14 @@ pFtest(fe2_time, fe2)
 
 - If p-value < 0.05, include time trends
 
+- We should include time trends in this example
+
 ---
 # Recap
 
-- Remember, FE eliminates OVB caused by time-invariant explanatory variables only
+- FE eliminates OVB caused by time-invariant explanatory variables only
 
-- Omitted variables that change over time can still cause OVB
+- Controlling for time trends eliminates OVB caused by unit-invariant explanatory variables only
+
+- Omitted variables that change over time and vary between units can still cause OVB
+
