@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Data Description
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: February 04, 2021
+### Last updated: June 03, 2021
 
 ---
 
@@ -42,21 +42,17 @@ class: center, middle, inverse, title-slide
 ![](lectures_files/stats_types.png)
 ]
 
-- **Descriptive statistics** has the goal of summarizing qualities of variables, typically describing aspects of their distributions or the relationship between two variables.
-
-- **Inferential statistics** has the goal of using the descriptive statistics of a sample to make conclusions about an unobserved population.
-
 ---
 # Descriptive vs. inferential
 
-- Suppose we survey 100 SPIA alumni 2 years after completing their MPA to examine employment and earnings outcomes.
+- Suppose we survey 100 alumni 2 years after completing their MPA to examine employment and earnings outcomes.
 
 .pull-left[
 **Descriptive**
 
 - What is the average income of respondents?
 - What percentage of respondents are employed?
-- How many earn more than they did prior to starting MPA?
+- What percentage earn more than they did prior to starting MPA?
 
 ]
 
@@ -65,295 +61,135 @@ class: center, middle, inverse, title-slide
 .pull-right[
 **Inferential**
 
-- What is the expected income for MPA grads 2 years after graduation?
+- What is the average income for MPA grads 2 years after graduation?
 - Does getting an MPA increase the likelihood of being employed?
 - Does getting an MPA increase income?
 ]
 
 ---
-# Population vs. sample
+# Population v sample; Parameter v statistic
 
-- **Population:** all members of a specified group pertaining to a research question
+Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states. Suppose we set out to investigate average salary in Georgia for ourselves. 
 
-  - A population can be any size based on our research question
-
-- **Sample:** a subset of that population
+We take a sample of 100 college-educated women in Georgia and record the income of each.
 
 --
 
-- We can describe a sample or a population
-
-- Inference uses a sample to make educated, scientific guesses about an unobserved population
-
----
-# Parameter vs. statistic
-
-- **Parameter:** a measure pertaining to a population
-
-- **Statistic:** a measure pertaining to a sample
-
-  - In inference, a statistic is often referred to as an **estimate** because it is being used to estimate a population parameter
-
---
-
-- Thinking back to that survey of SPIA MPA alumni...
-  - What is one statistic we might report?
-  - When might that statistic be referred to as an estimate?
-
----
-# Practice
-
-Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states. Suppose we find this dubious and set out to investigate average salary in Georgia for ourselves. 
-
-You take a sample of 100 college-educated women in Georgia and record the income of each.
-
-- What is the unit of analysis in your dataset?
-- What are the variables in your dataset?
+- What is the unit of analysis in our dataset?
+- What are the variables in our dataset?
 - What is the population and sample for this study?
 - What is the parameter and statistic/estimate for this study?
 
 ---
+# Population v sample; Parameter v statistic
+
+Suppose we send a survey to all SPIA MPA alumni who graduated two years ago, asking about employment and earnings. Miraculously, we achieve a 100% response rate to the survey.
+
+We calculate the average income of all SPIA MPA alumni who graduated two years ago.
+
+--
+
+- Is this value for average income a parameter or a statistic?
+
+---
+# Population v sample; Parameter v statistic
+
+Suppose we want to estimate the percentage of Athens residents who have a valid ID for the next election. We set up booths around UGA campus and ask people if they have a valid ID according to Georgia's election laws. We get 80 responses, and 80% said they have a valid ID.
+
+--
+
+- How might these 80 responses not represent a sample of the population?
+
+---
 class: inverse, middle, center
 
-# Data description begins with the distribution of a variable.
+# Data description describes distributions.
 
 ---
-# Distribution
+# Describing numerical variables
 
-- A distribution shows the (possible) values for a variable and how often they occur.
+- Center
+  - Mean, median, mode
+- Spread
+  - Variance, standard deviation, IQR, range
+- Association
+  - Covariance, correlation, regression coefficient, coefficient of determination
+  
+---
+# Affected measures
 
-- Let's look at weeks pregnancy for live births in North Carolina. Lots of data on births and deaths from [NCHS Vital Statistics](https://www.cdc.gov/nchs/nvss/index.htm)
+A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
 
-&lt;img src="Description_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
+--
+
+One year, the highest scoring student in the public school transfers to the private school.
+
+--
+
+What effect does this transfer have on the measures of center and spread for the public school's distribution of test scores?
 
 ---
-# Conditional distributions
+# Affected measures
 
-- Distribution of a variable *given* another variable's values
+A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
 
+--
+
+After hiring better teachers, the public school is able to raise the test scores of each of its students by 5 points.
+
+--
+
+What effect does this transfer have on the measures of center and spread for the public school's distribution of test scores?
+
+---
+# Affected measures
+
+A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
+
+--
+
+After hiring better teachers, the public school is able to raise the test scores of each of its students by 5 percent.
+
+--
+
+What effect does this transfer have on the measures of center and spread for the public school's distribution of test scores?
+
+---
+# Shapes of distributions
+
+Summary statistics of test scores were the following:
+
+- Private school
+  - Mean: 80
+  - Median: 80
+  - Standard deviation: 5
+  
+- Public school
+  - Mean: 70
+  - Median: 80
+  - Standard deviation: 12
+
+--
+
+- What do these numbers tell us about the shape of each school's distribution of test scores?
+
+---
+# Choosing measures
+
+.pull-left[
+![](Description_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
 &lt;img src="Description_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+- Which measures of center and spread should we use or not use for the above distributions?
 
 ---
-class: inverse, center, middle
-
-# Descriptive statistics report important characteristics of distributions.
-
----
-# Measures of center
-
-- Mean: the balancing point of the distribution
-- Median: the middle of the distribution (50th percentile)
-- Mode: the peak(s) of the distribution
-
----
-# Mean (average)
-
-- Add values and divide by the count of values
-
-
-```r
-(2 + 4 + 6 + 8 + 10)/5
-```
-
-```
-## [1] 6
-```
-
-
+# Choosing measures
 
 .pull-left[
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-]
-
-.pull-right[
-
-```r
-mean(x$variable)
-```
-
-```
-## [1] 6
-```
-
-&lt;img src="lectures_files/mean.png" width="1105" /&gt;
-
-
-```r
-mean(ncbirths$weeks)
-```
-
-```
-## [1] 38.4675
-```
-
-
-]
-
----
-# Median
-
-- Arrange values in order, find the middle value
-- If no middle value because even number of values, average the two middle values
-
-.pull-left[
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-]
-
-.pull-right[
-
-```r
-median(x$variable)
-```
-
-```
-## [1] 6
-```
-
-![](lectures_files/median.png)
-
-
-```r
-median(ncbirths$weeks)
-```
-
-```
-## [1] 39
-```
-
-]
-
----
-# Mode
-
-- The value that occurs most frequently
-
-.pull-left[
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-]
-
-.pull-right[
-
-- Variable has no mode. One more of any of the 5 values would make that value the mode.
-
-]
-
----
-# Mean vs. median vs. mode
-
-- Measures of center are our way of communicating the *typical* value of a distribution.
-
-- Which measure best conveys the typical value depends on the data.
-
-![](lectures_files/center.png)
-
----
-# Mean vs. median vs. mode
-
-- Mean is sensitive to extreme values
-
-- Median is not sensitive to extreme values
-
-- Median is better to use when a distribution is skewed
-
-- Mode is rarely used for continuous variables, usually used for the frequency of categorical variables
-
----
-# Mean vs. median vs. mode
-
-- Which measure of center is best for describing typical weeks pregnant?
-
-.pull-left[
-&lt;img src="Description_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
 
 ```r
 mean(ncbirths$weeks)
@@ -369,289 +205,6 @@ median(ncbirths$weeks)
 
 ```
 ## [1] 39
-```
-]
-
----
-# Mean vs. median vs. mode
-
-- Which measure of center is best for describing typical GDP per capita?
-
-.pull-left[
-&lt;img src="Description_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
-
-```r
-mean(gapminder$gdpPercap)
-```
-
-```
-## [1] 7215.327
-```
-
-```r
-median(gapminder$gdpPercap)
-```
-
-```
-## [1] 3531.847
-```
-]
-
----
-class: inverse, middle, center
-
-# Measures of spread
-
----
-class: inverse, middle, center
-
-# Measures of center tell us one point inside the distribution. They give us no sense by how much and how frequently values deviate above and below the center.
-
----
-# Measures of spread
-
-- **Variance:** the average squared deviation from the mean
-
-- **Standard deviation:** the average deviation from the mean
-
-- **Interquartile range:** the difference between 75th and 25th percentiles
-
-- **Range:** the difference between the maximum and minimum values
-
----
-# Variance
-
-- Subtract mean from each value, square the deviation, add up deviation, divide by count of values minus 1
-
-
-
-.pull-left[
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; deviation &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; squared_dev &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; -2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 0 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 16 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-]
-.pull-right[
-
-```r
-sum(xvar$squared_dev)
-```
-
-```
-## [1] 40
-```
-
-```r
-sum(xvar$squared_dev)/4
-```
-
-```
-## [1] 10
-```
-
-```r
-var(xvar$variable)
-```
-
-```
-## [1] 10
-```
-]
-
----
-# Standard deviation (SD)
-
-- Variance is important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
-
-- If our original variable were dollars, the variance says that on average variable deviates from the mean by 10 squared dollars
-
-- Standard deviation is the square root of variance, returns us to the original unit of the variable
-
-
-```r
-sqrt(10)
-```
-
-```
-## [1] 3.162278
-```
-
-- On average, `variable` deviates from its mean by 3.2 units
-
----
-# Standard deviation (SD)
-
-
-```r
-var(ncbirths$weeks)
-```
-
-```
-## [1] 7.583423
-```
-
-- On average, weeks pregnant deviates from the average by 7.6 squared weeks. Huh?
-
-
-```r
-sd(ncbirths$weeks)
-```
-
-```
-## [1] 2.753802
-```
-
-- On average, weeks pregnant deviates from the average by almost 3 weeks.
-
----
-# Interquartile range (IQR)
-
-- Divide the distribution into 4 equal parts 
-- The value of each divider line is called a quartile
-- IQR is the difference between 1st and 3rd quartiles; 50% of values
-
-
-```r
-quantile(x$variable, c(.25, .75))
-```
-
-```
-## 25% 75% 
-##   4   8
-```
-
-```r
-IQR(x$variable)
-```
-
-```
-## [1] 4
-```
-
-```r
-quantile(ncbirths$weeks, c(.25, .5, .75))
-```
-
-```
-## 25% 50% 75% 
-##  38  39  40
-```
-
----
-# SD vs. IQR
-
-- SD and IQR are our way of describing the typical deviation of a distribution from its center
-- SD is based on the mean, so it is also sensitive to extreme values
-- IQR is based on percentiles like median, so it is not sensitive to extreme values
-
-.pull-left[
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; ID &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; variable &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 1 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 2 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 5 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 100 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-]
-
-.pull-right[
-
-```r
-sd(xextreme$variable)
-```
-
-```
-## [1] 42.54409
-```
-
-```r
-IQR(xextreme$variable)
-```
-
-```
-## [1] 4
-```
-]
-
----
-# SD vs. IQR
-
-.pull-left[
-![](Description_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-
-```r
-var(ncbirths$weeks)
-```
-
-```
-## [1] 7.583423
 ```
 
 ```r
@@ -671,21 +224,22 @@ IQR(ncbirths$weeks)
 ```
 ]
 
----
-# SD vs. IQR
-
-.pull-left[
-&lt;img src="Description_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
-]
-
 .pull-right[
 
 ```r
-var(gapminder$gdpPercap)
+mean(gapminder$gdpPercap)
 ```
 
 ```
-## [1] 97169410
+## [1] 7215.327
+```
+
+```r
+median(gapminder$gdpPercap)
+```
+
+```
+## [1] 3531.847
 ```
 
 ```r
@@ -706,342 +260,33 @@ IQR(gapminder$gdpPercap)
 ]
 
 ---
-# Range
-
-.pull-left[
-- Answer to what is the greatest extent this variable changes?
-
-- Or what are the possible or plausible values of this variable?
-
-- Or how different are the most different values?
-]
-
-.pull-right[
-
-```r
-range(x$variable)
-```
-
-```
-## [1]  2 10
-```
-
-```r
-range(xextreme$variable)
-```
-
-```
-## [1]   2 100
-```
-
-```r
-range(ncbirths$weeks)
-```
-
-```
-## [1] 20 45
-```
-
-```r
-range(gapminder$gdpPercap)
-```
-
-```
-## [1]    241.1659 113523.1329
-```
-]
-
----
-class: inverse, middle, center
-
-# When deciding between mean and median, standard deviation and IQR, consider whether extreme values are distractions or an important part of the story. And, don't forget about effects of measurement validity and reliability.
-
----
-class: inverse, middle, center
-
-# Measures of Association
-
----
-# Measures of association
-
-- Instead of describing the distribution of one variable, now describing conditional distributions
-
-- What does the distribution of one variable look like *given* a value within another variable's distribution
-
-- Requires at least two variables: usually some explanatory variable (x) and a response variable (y)
-
----
-# Measures of association
-
-Suppose we want to investigate the association between the weight a mother gains during pregnancy and the weight of the child?
-
-.pull-left[
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; gained &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; weight &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 38 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.63 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 34 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8.00 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 76 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8.44 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.69 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 52 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.94 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 28 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 7.44 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 75 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 7.56 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.81 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-]
-
-.pull-right[
-![](Description_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
-]
-
----
-# Measures of association
-
-- The association between two or more variables can be described in terms of
-
-- **Direction:** when one variable increases, does the other variable increase or decrease
-
-- **Strength:** how much do the variables move together in tandem
-
-- **Magnitude:** when one variable increases, for instance, one unit, by how much does the other variable increase or decrease
-
----
-# Measures of association
-
-- **Covariance:** measures **direction** of association between between two variables
-
-- **Correlation coefficient:** measures **direction** and **strength** of association between two variables
-
-- **Regression coefficient:** measures the **direction** and **magnitude** of association between an explanatory variable and an outcome variable
-
----
-# Correlation coefficient
-
-- Ranges between -1 and 1
-
-- Positive or negative value tells us the direction
-
-- The closer to -1 or 1, the stronger the association in that direction, with 0 indicating no association
-
-- No definitive scale; rule of thumb:
-  - 0.8: very strong
-  - 0.6: moderately strong
-  - 0.2: weak
-
-
-```r
-cor(ncbirths$gained, ncbirths$weight)
-```
-
-```
-## [1] 0.1660534
-```
-
----
-# Limitations of correlation
-
-- Measures only linear association
-
-- Sensitive to extreme values
-
-- Is necessary but not sufficient to claim causation
-
----
-# Spurious correlation
-
-- For example, crime is strongly correlated with ice cream sales.
-
---
-
-- Many such examples.
-
-![](lectures_files/butter_divorce.png)
-
-- And more [here](https://www.tylervigen.com/spurious-correlations)
-
----
-class: inverse, middle, center
-
-# Describing categorical variables
-
----
-# Describing categorical variables
-
-.pull-left[
-![](Description_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-
-- There isn't a continuous distribution to calculate mean, median, variance, SD, IQR, or range.
-
-- Mode still works.
-
-- Frequency and cross-tabulations (contingency tables) are common.
-]
-
----
-# Frequency Table
-
-- Tabulates  count or proportion for each level of a categorical variable
-
-
-```r
-(premie.table &lt;- table(ncbirths$premie)) %&gt;% kable(col.names = c('Term', 'Count'))
-```
-
-
-
-|Term      | Count|
-|:---------|-----:|
-|full term |   694|
-|premie    |   106|
-
-
-```r
-prop.table(premie.table) %&gt;% kable(digits = 2, col.names = c('Term', 'Proportion'))
-```
-
-
-
-|Term      | Proportion|
-|:---------|----------:|
-|full term |       0.87|
-|premie    |       0.13|
-]
-
----
-# Contingency Table or Cross-tab
-
-
-```r
-(mytable &lt;- table(ncbirths$habit, ncbirths$premie)) %&gt;% 
-  kable()
-```
-
-
-
-|          | full term| premie|
-|:---------|---------:|------:|
-|nonsmoker |       625|     91|
-|smoker    |        69|     15|
-
-- Tabulates the intersections between levels of two categorical variables
-
-- Common to use proportions or percentages
-
-- Important whether you use row or column percentages
-
----
-# Contingency Table
-
-
-```r
-prop.table(mytable, 1) %&gt;% 
-  kable(digits = 2)
-```
-
-
-
-|          | full term| premie|
-|:---------|---------:|------:|
-|nonsmoker |      0.87|   0.13|
-|smoker    |      0.82|   0.18|
-
-- This table reports row proportions; note each row sums to 1
-
-- This table conveys the relative frequency of term levels conditional on smoking status level
-
-- "Among non-smoking mothers, 87% carried full-term and 13% had premature births."
-
----
-# Contingency Table
-
-
-```r
-prop.table(mytable, 2) %&gt;% 
-  kable(digits = 2)
-```
-
-
-
-|          | full term| premie|
-|:---------|---------:|------:|
-|nonsmoker |       0.9|   0.86|
-|smoker    |       0.1|   0.14|
-
-- This table reports column proportions; note each column sums to 1
-
-- Conditional on term status, the relative frequency of smoking
-
-- "Among full-term births, 90% came from non-smoking mothers and 10% came from smoking mothers."
-
----
-# Contingency Table
-
-- If your question involves an outcome and a possible explanation
-
-- Place the outcome in the columns
-
-- Use row percentages
-
---
-
-- **Be careful using contingency tables to make conclusions. Do not generalize from a sample without inferential tests. Consider the measurement and scope of the numerator and denominator.**
-
----
-class: inverse, center, middle
-
-# Let's consider some cases of possible deception
-
----
-# Deceptive description
+# Consider unit of analysis
 
 - **Politician A:** The economy is awful! Thirty states had falling incomes last year.
 
 - **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
 
----
-# Deceptive description
-
-- Suppose PADP has only 5 classes with no student in more than 1 class
-
-- 4 classes have 5 students
-
-- 1 class has 100 students
+- Which politician is lying?
 
 ---
-# Deceptive description
+# Consider unit of analysis
+
+- Average class size
+- What is the unit of analysis?
+
+--
+
+- Class size for average student
+- What is the unit of analysis?
+
+--
+
+- Can this make a difference?
+
+---
+# Consider unit of analysis
+
+- Suppose PADP has only 5 classes with no student in more than 1 class. 4 classes have 5 students, and 1 class has 100 students
 
 - Average class size
 
@@ -1053,14 +298,9 @@ class: inverse, center, middle
 ## [1] 24
 ```
 
-  - Average class size is only 24. Put that on a website!
-
 --
   
-- What about class size experienced by average student
-  - Survey all 120 students about class size
-  - 100 would answer 100
-  - 20 would answer 5
+- Class size experienced by average student
 
 
 ```r
@@ -1072,166 +312,69 @@ class: inverse, center, middle
 ```
 
 ---
-# Deceptive description
+# Center is only partial story
 
-- An expensive new drug increases the median life expectancy among patients by only two weeks. 
+- An expensive new drug increases the median life expectancy among patients of a terminal illness by only one week. Insurance company decides not to cover this ineffective drug.
 
-- Insurance won't cover such an expensive drug for such small gains in life expectancy.
+--
 
-- What may be wrong with this rationale?
+- Average test scores stay the same despite increase in spending.
 
 ---
-# Deceptive descriptions
+# Correlation
+
+
+
+.pull-left[
+&lt;img src="Description_files/figure-html/q8.1-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+&lt;img src="Description_files/figure-html/q8.2-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+- Units with higher values along the x-axis tend to have higher/lower values along the Y axis.
+
+---
+# Correlation
+
+.pull-left[
+&lt;img src="Description_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+.pull-right[
+
+Guess the correlation coefficient.
+
+]
+
+--
+
+
+```
+## [1] -0.5925995
+```
+
+---
+# Correlation
+
+- Correlation is not causation. What does this mean?
+
+--
+
+- Crime is strongly correlated with ice cream sales.
+
+--
+
+- Many such examples [here](https://www.tylervigen.com/spurious-correlations)
+
+---
+# Denominators
 
 - [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/) by KC Cole
 
-- When given a percentage or rate, think carefully about the denominator 
-  - How large is it
-  - Is it measured validly and reliably
-
 - [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
 
----
-# Fatal police encounters
-
-
-
-
-```r
-glimpse(fatal_encounters)
-```
-
-```
-## Rows: 29,529
-## Columns: 8
-## $ id           &lt;chr&gt; "25746", "25747", "25748", "25749", "1", "2", "28711", "…
-## $ age          &lt;int&gt; 17, 21, 19, 23, 24, 53, 25, 35, 30, 29, 42, 41, 55, 45, …
-## $ gender       &lt;fct&gt; Male, Male, Male, Male, Female, Male, Male, Male, Male, …
-## $ race         &lt;fct&gt; European-American/White, African-American/Black, African…
-## $ race_imputed &lt;fct&gt; European-American/White, African-American/Black, African…
-## $ year         &lt;dbl&gt; 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 2000, 20…
-## $ state        &lt;fct&gt; CA, MI, MI, NM, CA, GA, GA, GA, NC, NC, MD, MD, PA, AL, …
-## $ cause        &lt;fct&gt; Vehicle, Vehicle, Vehicle, Vehicle, Vehicle, Gunshot, Ve…
-```
-
-- Data from [Fatal Encounters](https://fatalencounters.org)
-
----
-# Fatal police encounters
-
-
-```r
-levels(fatal_encounters$cause)
-```
-
-```
-##  [1] "Vehicle"                           "Gunshot"                          
-##  [3] "Beaten/Bludgeoned with instrument" "Stabbed"                          
-##  [5] "Asphyxiated/Restrained"            "Drowned"                          
-##  [7] "Drug overdose"                     "Fell from a height"               
-##  [9] "Undetermined"                      "Chemical agent/Pepper spray"      
-## [11] "Medical emergency"                 "Other"                            
-## [13] "Burned/Smoke inhalation"           "Tasered"                          
-## [15] "Pursuit"
-```
-
----
-# Fatal police encounters
-
-
-```r
-fatal_shot_2019 &lt;- fatal_encounters %&gt;% 
-  select(year, race_imputed, cause) %&gt;% 
-  filter(cause == 'Gunshot' &amp; year == 2019) %&gt;% 
-  glimpse()
-```
-
-
-```
-## Rows: 1,346
-## Columns: 3
-## $ year         &lt;dbl&gt; 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 2019, 20…
-## $ race_imputed &lt;fct&gt; European-American/White, African-American/Black, African…
-## $ cause        &lt;fct&gt; Gunshot, Gunshot, Gunshot, Gunshot, Gunshot, Gunshot, Gu…
-```
-
----
-# Fatal police encounters
-
-```r
-fatal.table &lt;- table(fatal_shot_2019$race_imputed,
-                      fatal_shot_2019$cause)
-kable(fatal.table)
-```
-
-.pull-left[
-
-|                        | Gunshot|
-|:-----------------------|-------:|
-|European-American/White |     645|
-|African-American/Black  |     329|
-|Hispanic/Latino         |     219|
-|Race unspecified        |      98|
-|Asian/Pacific Islander  |      35|
-|Native American/Alaskan |      14|
-|Middle Eastern          |       4|
-]
-
-.pull-right[
-- Note limitations of these data:
-  - Only includes gunshots
-  - No context of encounter
-  - Measurement issues
-  - No perspective of non-fatal encounters
-  
-- Could already start manipulating messages by ignoring these
-]
-
----
-# Using different denominators
-
-.pull-left[
-
-|                        | Gunshot|
-|:-----------------------|-------:|
-|European-American/White |     645|
-|African-American/Black  |     329|
-|Hispanic/Latino         |     219|
-|Race unspecified        |      98|
-|Asian/Pacific Islander  |      35|
-|Native American/Alaskan |      14|
-|Middle Eastern          |       4|
-]
-.pull-right[
-- Total gunshots = 1,346
-- Group 1: Your goal is to highlight bias against people of color. ([Hint](https://www.census.gov/quickfacts/fact/table/US/PST045219))
-- Group 2: Your goal is to downplay severity of police shootings in general ([Hint](https://www.census.gov/quickfacts/fact/table/US/PST045219))
-- Group 3: Your goal is to downplay bias against people of color. Two ways to do this. ([Hint for one](https://ucr.fbi.gov/crime-in-the-u.s/2017/crime-in-the-u.s.-2017/tables/table-43))
-]
-
----
-# Data from 2019 Census and FBI UCR
-
-**US Pop = 328,239,523**
-
-White, not Hispanic/Latino 196,789,401 (60%)
-
-Black, not Hispanic/Latino: 40,596,040 (12%)
-
-Hispanic/Latino (any race): 60,481,746 (18%)
-
-**Total Arrests: 8,162,849**
-
-White, not Hispanic/Latino: 4,669,696 (57%)
-
-Black, not Hispanic/Latino: 2,155,046 (26%)
-
-Hispanic/Latino (any race): 1,190,671 (15%)
-
-Total Violent Crime: 404,236
-White, not Hispanic/Latino: 196,370 (49%)
-Black, not Hispanic/Latino: 147,192 (36%)
-Hispanic/Latino: 79,078 (20%)
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

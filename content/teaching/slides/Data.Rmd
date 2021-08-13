@@ -52,9 +52,9 @@ output:
 ```{r, include=FALSE}
 library(tidyverse)
 library(knitr)
-generic <- tibble(ID = c("Unit of Analysis", "Unit", "Unit"),
-                  Variable_1 = c("Datum", "Datum", "Datum"),
-                  Variable_2 = c("Datum", "Datum", "Datum"))
+generic <- tibble(Variable_1 = c("Unit of Analysis", "Unit", "Unit"),
+                  Variable_2 = c("Datum", "Datum", "Datum"),
+                  Variable_3 = c("Datum", "Datum", "Datum"))
 ```
 
 ```{r, echo=FALSE}
@@ -68,14 +68,14 @@ kable(generic, format = 'html')
 ---
 # Unit of analysis
 
-- The unit of analysis uniquely identifies each row in a data set. Let's practice.
+- The unit of analysis is the variable or set of variables that uniquely identifies each row in a data set. Let's practice.
 
 --
 
 - What is the likely unit of analysis based on the variable names?
 
 ```{r, echo=FALSE}
-generic <- tibble(ID = c("Unit of Analysis", "Unit", "Unit"),
+generic <- tibble(Var1 = c("Unit of Analysis", "Unit", "Unit"),
                   GDP = c("Datum", "Datum", "Datum"),
                   Population = c("Datum", "Datum", "Datum"))
 kable(generic, format = 'html')
@@ -87,7 +87,7 @@ kable(generic, format = 'html')
 - What is the likely unit of analysis based on the variable names?
 
 ```{r, echo=FALSE}
-generic <- tibble(ID = c("Unit of Analysis", "Unit", "Unit"),
+generic <- tibble(Var1 = c("Unit of Analysis", "Unit", "Unit"),
                   GRE_Score = c("Datum", "Datum", "Datum"),
                   Income = c("Datum", "Datum", "Datum"))
 kable(generic, format = 'html')
@@ -172,18 +172,6 @@ background-image: url(lectures_files/racing.jpg)
 ```{r, echo=FALSE, out.height='50%'}
 include_graphics("lectures_files/varinfo.png")
 ```
-
----
-# Types (scales) of continuous variables
-
-- **Interval** variables (or the interval scale) are continuous variables with no meaningful zero
-
-- **Ratio** variables (or the ratio scale) are continuous variables with a meaningful zero
-
-- **Index** variables are constructed from multiple variables
-  - Can make a continuous variables out of categorical variables
-  - Simplify multidimensional measures into one measure
-  - Example:  [Global Multidimensional Poverty Index](http://hdr.undp.org/en/2018-MPI)
 
 ---
 # Why should we care?

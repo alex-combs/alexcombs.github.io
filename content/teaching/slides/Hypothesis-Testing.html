@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Hypothesis Testing
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 31, 2021
+### Last updated: June 08, 2021
 
 ---
 
@@ -61,78 +61,25 @@ class: inverse, center, middle
 
 - The p-value helps us answer the hypothesis test
 
---
-
-- The p-value is often misunderstood and misused
-
-  - [Story1](https://www.vox.com/science-and-health/2017/7/31/16021654/p-values-statistical-significance-redefine-0005)
-  - [Story2](https://www.vox.com/latest-news/2019/3/22/18275913/statistical-significance-p-values-explained)
-
 ---
 # Structure of hypothesis test
 
 - Alternative hypothesis `\(H_A\)`
 
   - Claims there is evidence for the phenomenon you are interested in testing.
-  - Often denoted as the parameter, `\(\theta\)`, does not equal 0 
-  - `\(\theta \neq 0\)`
 
 --
 
 - Null hypothesis `\(H_0\)`
 
   - Claims there is no evidence; the opposite of the alternative
-  - `\(\theta = 0\)`
 
 ---
 # Example
 
+&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
-| id|decision |gender |
-|--:|:--------|:------|
-| 31|promoted |female |
-| 15|promoted |male   |
-| 14|promoted |male   |
-|  3|promoted |male   |
-| 42|not      |female |
-| 43|not      |female |
-| 37|not      |male   |
-| 46|not      |female |
-| 25|promoted |female |
-| 26|promoted |female |
-
----
-# Example
-
-&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Example
-
-
-|gender |decision |  n|
-|:------|:--------|--:|
-|male   |not      |  3|
-|male   |promoted | 21|
-|female |not      | 10|
-|female |promoted | 14|
-
-
-```r
-(m_promo &lt;- 21/24)
-```
-
-```
-## [1] 0.875
-```
-
-```r
-(f_promo &lt;- 14/24)
-```
-
-```
-## [1] 0.5833333
-```
+&gt; **Run the all code chunks down to `promo-estimates`**
 
 ---
 # Example
@@ -149,42 +96,19 @@ class: inverse, center, middle
   - This is a sample of an unobserved population
   - And/or the counterfactual is unobservable
   - This sample provides us estimates of `\(P_M\)`, `\(P_F\)`, and `\(P_M-P_F\)`
-  - The question is whether `\(P_M-P_F=0.3\)` or something far enough away from 0, or does `\(P_M-P_F=0\)`?
 
 ---
 # Example
 
-`\(H_A\)`: Males and females are not promoted in equal proportions. 
+`\(H_A\)`:  
 
-- `\(P_M-P_F \neq 0\)`
 
---
-
-`\(H_0\)`: Males and females are promoted in equal proportions.
-
-- `\(P_M-P_F=0\)`
-
---
-
-- Some might state the `\(H_A\)` as "Males are promoted in higher proportion than females."
-- `\(H_A: P_M-P_F&gt;0\)` and `\(H_0: P_M-P_F \leq 0\)`
-- This is a one-tailed test instead of a two-tailed test
-- I do not recommend one-tailed tests and won't be teaching them
+`\(H_0\)`: 
 
 ---
 # Hypothesis test conclusion
 
-Hypothesis tests result in one of two possible conclusions:
-
-1. Reject the null hypothesis that `\(\theta = 0\)`, meaning that `\(\theta \neq 0\)`
-
---
-
-2. Fail to reject the null hypothesis, meaning it could be that `\(\theta=0\)` or `\(\theta \neq 0\)`. We can't tell from our evidence.
-
---
-
-It is *never* the case that we accept the null hypothesis that `\(\theta = 0\)`
+- What are the possible conclusions of a hypothesis test?
 
 ---
 # Example
@@ -237,6 +161,7 @@ It is *never* the case that we accept the null hypothesis that `\(\theta = 0\)`
   - False positive
 
 ---
+# What If We're Wrong
 
 - We may fail to reject the null because our 95% CI does include 0, thus we can't rule out with high enough confidence that `\(P_M-P_F \neq 0\)`
 
@@ -247,228 +172,76 @@ It is *never* the case that we accept the null hypothesis that `\(\theta = 0\)`
   - False negative
 
 ---
-# Type I vs. II error
+# Decision rule
 
-- Is one necessarily worse than the other?
+- Common to choose a **significance level** of 5%, which is the same as choosing a **confidence level** of 95%.
 
-- No. Depends entirely on the context or consequence of the conclusion.
+  - Sometimes denoted `\(\alpha = 0.05\)` where `\(\alpha\)` is significance level
 
 --
 
-- Dilemma: the more we choose to reduce the chance of a false positive, the more we increase the chance of a false negative
+- If p-value is less than 0.05, we **reject** the null. If it is greater than or equal to 0.05, we **fail to reject** the null.
 
-- Have to balance the two based on the context
+- If p-value `\(&lt;\alpha\)`, reject `\(H_0\)`
 
-- Research community tolerates false negatives much more than false positives
+- If p-value `\(\geq \alpha\)`, fail to reject `\(H_0\)`
 
 ---
-# Recap
+class: inverse, center, middle
 
-- Hypo test: "Is my result so unlikely that I can reject my null hypothesis with a sufficient level of confidence?"
-
-- p-value: the probability of obtaining our results or more extreme in a world where the null hypothesis is in fact true
-
---
-
-- But we only have one sample of data and we don't know which world we are in (whether the null is true or not)
-
-- How do we estimate the probability of our result as if we are in a world where the null is true?
+# How do we know the probability of our result in a null world with one sample and not knowing if we live in a world where the null is true or not?
 
 ---
 # Null distribution
 
 &lt;img src="lectures_files/nulldist.png" width="1128" height="66%" style="display: block; margin: auto;" /&gt;
 
-- We estimate a null distribution, similar to the sampling distribution
+- We assume a null distribution, similar to the sampling distribution
 
 - Null distribution is centered at 0 as if null were actually true
 
 - Assuming null distribution is normal, we can then calculate the probability of our result
 
 ---
-# Decision rule
-
-- Suppose we declare that if the probability of our estimate `\(p_M-p_F=0.3\)` in a world where the null, `\(P_M-P_F = 0\)`, is true is less than 5%, then we will reject the null and conclude that `\(P_M-P_F \neq 0\)`.
-
---
-
-- We have chosen a **significance level** of 5%, which is the same as choosing a **confidence level** of 95%.
-  - Sometimes denoted `\(\alpha = 0.05\)` where `\(\alpha\)` is significance level
-
---
-
-- Therefore, if p-value is less than 0.05, we **reject** the null. If it is greater than or equal to 0.05, we **fail to reject** the null.
-
---
-
-- If p-value `\(&lt;\alpha\)`, reject `\(H_0\)`
-- If p-value `\(\geq \alpha\)`, fail to reject `\(H_0\)`
-
----
-class: inverse, center, middle
-
-# How can we possibly estimate this null distribution with only one sample of data from a world where the null may or may not be true?
-
----
 # Example
 
 - If the null were true, then promotions would be random with respect to gender
+
   - On average, `\(P_M-P_F = 0\)`
   - Promotions and gender would share no correlation
 
 --
 
-- If null were true, promotions between genders unlikely to be *exactly* equal because randomness
+- Let's use R to simulate a world where the null is true.
 
-- But would they be as different as what we see in our sample?
-
-
-```r
-(real_diff &lt;- m_promo - f_promo)
-```
-
-```
-## [1] 0.2916667
-```
+&gt; **Run all code chunks down to `null-estimate`**
 
 ---
 # Example
 
-- To simulate a world in which the null is true, we could randomly shuffle gender in our data
-
-
-| resume number|decision |gender |shuffled gender |
-|-------------:|:--------|:------|:---------------|
-|             1|not      |male   |female          |
-|             2|not      |female |male            |
-|             3|not      |female |female          |
-|             4|promoted |male   |male            |
-|             5|promoted |male   |male            |
-|             6|promoted |female |female          |
-
----
-# Example
-
-&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Example
-
-
-|gender |decision |  n|
-|:------|:--------|--:|
-|male   |not      |  6|
-|male   |promoted | 18|
-|female |not      |  7|
-|female |promoted | 17|
-
-
-```r
-(m_promo_shuff &lt;- 18/24)
-```
-
-```
-## [1] 0.75
-```
-
-```r
-(f_promo_shuff &lt;- 17/24)
-```
-
-```
-## [1] 0.7083333
-```
-
----
-# Example
-
-- Could repeat this random shuffling 1,000 times, calculating the difference in promotions between males and females each time?
+- Let's repeat this random shuffling 1,000 times, calculating the difference in promotions between males and females each time.
 
 - Then we could plot the 1,000 values as a histogram, giving us a distribution of differences between males and females in a world where promotions are random with respect to gender
 
-- Then we would have a simulated null distribution
-
----
-# Example null distribution
-
-&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&gt; **Run `null-distribution` code chunk**
 
 ---
 # Null distribution
 
 - The **LLN** tells us the center of the null distribution will settle around 0, and the **CLT** tells us that the null distribution will be normal just like the sampling distribution.
 
-- Therefore, we can calculate the percent of values expected to fall outside some chosen number of standard errors (a.k.a. standard deviations). That is, we can apply the **68-95-99 rule** to the null distribution.
+- Therefore, we can calculate the percent of values expected to fall outside some chosen number of standard errors by applying the **68-95-99 rule** to the null distribution.
 
----
-# Example
+--
 
-**Center of null distribution**
-
-```r
-mean(null_distribution$stat)
-```
-
-```
-## [1] -0.002166667
-```
-
-**Standard error of null distribution**
-
-```r
-sd(null_distribution$stat)/sqrt(1000)
-```
-
-```
-## [1] 0.004095848
-```
-
----
-# Null distribution
-
-**95% CI of null distribution**
-
-```r
--0.0022-1.96*0.0041
-```
-
-```
-## [1] -0.010236
-```
-
-```r
--0.0022+1.96*0.0041
-```
-
-```
-## [1] 0.005836
-```
-
-- 95% of differences between male and female promotions fall between -0.01 and 0.006
-
-- Our observed difference was 0.3! How likely is this result if the null were actually true?
+&gt; **Run `null-center`, `null-se`, and `null-ci` code chunks.**
 
 ---
 # Example p-value
 
-.pull-left[
-&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
-]
+- Our observed difference was 0.3! How likely is this result if the null were actually true?
 
-.pull-right[
-
-
-| p_value|
-|-------:|
-|    0.03|
-
-- The probability of obtaining +/- 0.3 or more extreme is 3%.
-
-- `\(0.03&lt;0.05 \rightarrow\)` reject the null `\(H_0\)`
-
-- Statistically significant evidence that males and females are not promoted equally.
-
-]
+&gt; **Run `p-value-viz` and `p-value` code chunks**
 
 ---
 # Back to regression table
@@ -480,11 +253,9 @@ sd(null_distribution$stat)/sqrt(1000)
 |hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
 |urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
-- Can we now explain the prior concepts with respect to this table?
-
 - What are the null and alternative hypotheses? What is the result of the test?
 
-- How many standard errors is are our estimates from the center of the null distribution?
+- How many standard errors are our estimates from the center of the null distribution?
 
 - What is the probability of obtaining our estimates or more extreme in a world where the null is true?
 
@@ -498,141 +269,7 @@ sd(null_distribution$stat)/sqrt(1000)
 |hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
 |urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
-`\(H_0:\)` `\(\beta_1 = 0\)` 
-Percent of population with high school degree has no association/effect on median income
-
-`\(H_A:\)` `\(\beta_1 \neq 0\)` 
-Percent of population with high school degree has an association/effect on median income
-
---
-
-Reject the null. Our estimate is 7.6 standard errors away from 0. Probability of this result or more extreme in a world where the null is true less than 0.05%.
-
----
-# Back to regression table
-
-
-|term      |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:---------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
-
 There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately 1,993 dollars per 1 percentage point increase in the population with at least a high school degree, all else equal. With 95% confidence, a 1 p.p. increase in high school attainment is associated with an increase of median income between 1,465 and 2,521 dollars. 
-
----
-# Example
-
-- Again, could simulate a null world where `hs` and `med_inc` are random; calculating 1,000 regression slopes/estimates
-
-
-| replicate|     slope|
-|---------:|---------:|
-|         1|  723.5899|
-|         2| -442.6101|
-|         3| -194.3022|
-|         4| -159.4283|
-|         5| -103.5605|
-|         6|  262.4841|
-
----
-# Example
-
-&lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
-
-
----
-class: inverse, center, middle
-
-# Statistical significance does not neccessarily determine whether our results warrant action. We must consider if our results have **practical significance**.
-
----
-# Practical significance questions
-
-1. What is the typical change (standard deviation) in the explanatory variable associated with the statistically significant estimate?
-
---
-
-2. Is the predicted change in the outcome due to a typical change in the explanatory variable negligible or meaningful based on the outcome's mean and/or standard deviation?
-
---
-
-3. Do the bounds of the confidence interval for the explanatory variable change my answer after steps 1 &amp; 2?
- - Bounds close to 0
- - CI precisely around 0
-  
----
-# Example 1
-
-&lt;img src="lectures_files/prac-sig1.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- Is the property tax result practically significant?
-
---
-
-- Typical change (standard deviation) in property tax is $4
-
-- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
-
-- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200)...practically significant!
-
----
-# Example 2
-
-&lt;img src="lectures_files/prac-sig2.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- SD for property tax is now 0.04 instead of 4
-- Is the property tax result practically significant?
-
---
-
-- Typical change in property tax is now $0.04
-
-- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
-
-- Confidence intervals do not change this conclusion.
-
----
-# Example 3
-
-&lt;img src="lectures_files/prac-sig3.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- SD of property tax back to 4 but CI has changed
-- Is the property tax result practically significant?
-
---
-
-- Same as first example and would definitely be practically significant if not for the 95% CI being so close to 0.
-
-- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
-
----
-# Example 4
-
-&lt;img src="lectures_files/prac-sig4.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- Estimate and CI for property tax has changed
-- Is the property tax result practically significant?
-
---
-
-- Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
-
-- Rare for statistical insignificance to have practical significance.
-
----
-# Example 5
-
-&lt;img src="lectures_files/prac-sig5.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- Estimate and CI has changed again
-- Is the property tax result practically significant?
-
---
-
-- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
-
-- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

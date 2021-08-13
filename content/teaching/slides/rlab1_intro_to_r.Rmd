@@ -44,12 +44,10 @@ summary(cars)
 - Not recommended that you work ahead even if you are waiting for others to catch up
 
 - Highly likely that you will encounter errors; this is normal
-  - If so, **STOP ME** with your voice or a Zoom icon like raised hand or stop sign
+  - If so, **STOP ME**
   - Be prepared to share your screen
   - Troubleshooting can help you and others learn
   - Observers are encouraged to offer suggestions
-
-- Feel free to write your own notes inside your Rmd document
 
 ---
 # Starting R
@@ -74,14 +72,16 @@ summary(cars)
 
 - When you tell R to look for or save a file, this is the location R uses
 
-- We usually want to separate folder for each project/assignment to hold all of our data and documents
+- We usually want a separate folder for each project/assignment that holds all relevant data and documents
 
 ---
 # R Projects
 
 - R Projects are the best way to organize your work
 
-- Creates a folder for R to work from during the current session
+- Creates a folder for R to work from
+
+- Creates a .Rproj file that, when opened, automatically sets your working directory to that folder
 
 --
 
@@ -89,7 +89,7 @@ summary(cars)
 
 --
 
-> **Now create a project called "rlab1" in a file location of your choice**
+> **Create a project called "rlab1" in a file location of your choice**
 
 --
 
@@ -102,7 +102,7 @@ summary(cars)
 
 - Certain software uses certain file extensions like `.xlsx` for Excel
 
-- A data file that is already formatted for R has the extension `.RData`
+- A data file that is already formatted for R has the extension `.RData` or `.rds`
 
 --
 
@@ -112,7 +112,7 @@ summary(cars)
 
 > **Type `load('states1.RData')` in the console and hit `Enter`**
 
-- Remember you must use single or double quotes anytime you tell R to do something with a file
+- You must use quotes (single or double) anytime you tell R to load or save a file
 
 ---
 # Our first error (hopefully)
@@ -125,7 +125,7 @@ Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> loa
 Execution halted
 ```
 
-- Be sure to read error messages; R tries to tell you what went wrong
+- R tries to tell you what went wrong in the error message
 
 --
 
@@ -135,12 +135,12 @@ Execution halted
 
 > **Using your computer's file manager, move states1.RData to your project folder**
 
-> **Now try to execute the load**
+> **Now re-run `load('states1.RData')` command**
 
 ---
 # Data in your R session
 
-- The environment pane (top-right) will list all data and any other objects currently loaded
+- The environment pane (top-right) will list all data currently loaded
 
 - You should see `states1` in your environment pane
 
@@ -149,7 +149,7 @@ Execution halted
 - Or click on `states1` to see the data in spreadsheet format
 
 ---
-# Starting an editable document
+# Starting a document
 
 - Two common documents 
   - Script: minimalist place to save code
@@ -224,7 +224,7 @@ x <- ((5+5)/2)^2
 
 - We create an object whenever we want to use something for later or save it as a file.
 
-- Suppose `x` is *super* interesting but your boss wants to know what `x` is squared.
+- Suppose you want to know what `x^2` equals.
 
 - You don't need to recreate `x`. You can just square `x` like below.
 
@@ -250,7 +250,7 @@ x^2
 ---
 # R Markdown
 
-> **Close your script. Your choice whether to save it or not.**
+> **Close your script. You don't have to save it if you don't want.**
 
 --
 
@@ -265,19 +265,15 @@ x^2
 ---
 # Knit
 
-- Knit refers to taking the combination of prose and code and knitting it into a HTML, PDF, Word doc, etc.
+- Knit refers to taking the combination of text and code and knitting it into a HTML, PDF, Word doc, etc.
 
 - Should see a knit button at the top of the editor pane. Clicking it will knit your document.
 
   - Keyboard shortcut is `Cmd+Shift+K`
-
-> **Knit your Rmd document. Name it "test"**
-
+  
 --
 
-- Should see some new files in your file pane
-
-- Let's compare the export to the Rmd document to learn some of how markdown works
+> **Knit your Rmd document. Name it "test"**
 
 ---
 # Cheatsheets

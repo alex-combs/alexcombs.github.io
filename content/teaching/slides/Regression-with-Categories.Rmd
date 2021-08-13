@@ -125,7 +125,7 @@ $$\hat{y} = b_0 + b_1x + b_2 d$$
 
 $$\hat{y} = b_0 + b_1x + b_2 d$$
 
-- Change in $y$ due to a change in $x$ is still $b_1$
+- Change in $y$ due to a one-unit change in $x$ is still $b_1$
 
 --
 
@@ -146,7 +146,7 @@ $$\hat{y} = (b_0 + b_2) + b_1x$$
 ---
 # Example: Parallel Slopes
 
-$$Salary=\beta_0+\beta_1YrsEmployed+\beta_2Male + \epsilon$$
+$$Salary=\beta_0+\beta_1YrsEmployed+\beta_2Sex + \epsilon$$
 ```{r}
 sal_mod <- lm(salary ~ yrs.service + sex, data = Salaries)
 ```
@@ -158,64 +158,40 @@ get_regression_table(sal_mod) %>%
   kable(format = 'html')
 ```
 
-$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$
+$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
 ---
 # Interpreting results
 
-$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$
+$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
-- Standard interpretation for the `YrsEmployed` coefficient:
-
---
-
-- All else equal, for each year of employment, salary increases $748, on average.
+- What is the standard interpretation for the `YrsEmployed` coefficient?
 
 --
 
-- Standard interpretation for the Male coefficient:
-
---
-
-- On average, male professors earn $9,072 more than female professors, controlling for years of employment.
+- What is the standard interpretation for the `Sex` coefficient?
 
 ---
 # Interpreting results
 
-$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$
+$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
 - What is the predicted change in salary for a male professor three years later?
 
 --
 
-```{r}
-748*3
-```
+- For a female professor three years later?
 
 --
-
-- For a female professor?
-
---
-
-```{r}
-748*3
-```
 
 - If slopes are parallel, then the predicted change must be the same.
 
 ---
 # Interpreting results
 
-$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$
+$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
 - What is the predicted salary for a male professor employed 20 years?
-
---
-
-```{r}
-92357+748*20+9072*1
-```
 
 --
 
@@ -223,36 +199,17 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Male$$
 
 --
 
-```{r}
-92357+748*20+9072*0
-```
-
 - Predicted value will **not** be the same because each group has a different intercept
 
 ---
 class: inverse, middle, center
 
-# We aren't required to force the slopes to be parallel. Could allow the effect of years employed to differ between male and female professors.
+# Let's practice another example using a parallel slopes model.
 
 ---
-# Interaction model implications
+class: inverse, middle, center
 
-$$y = \beta_0 + \beta_1x + \beta_2d + \beta_3 xd + \epsilon$$
-$$\hat{y} = b_0 + b_1x + b_2d + b_3 xd$$
-
---
-
-- For the $d=0$ group:
-
-$$\hat{y} = b_0 + b_1x$$
-
---
-
-- For the $d=1$ group:
-
-$$\hat{y} = (b_0 + b_2) + (b_1+b_3)x$$
-
-- Intercept *and* slope *can* differ between groups
+# We aren't required to force the slopes to be parallel. Could allow the effect of years employed to differ between male and female professors.
 
 ---
 # Visualizing Interaction Model
@@ -279,26 +236,48 @@ ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
 ]
 
 ---
+# Interaction model implications
+
+$$y = \beta_0 + \beta_1x + \beta_2d + \beta_3 xd + \epsilon$$
+$$\hat{y} = b_0 + b_1x + b_2d + b_3 xd$$
+
+--
+
+- For the $d=0$ group:
+
+$$\hat{y} = b_0 + b_1x$$
+
+--
+
+- For the $d=1$ group:
+
+$$\hat{y} = (b_0 + b_2) + (b_1+b_3)x$$
+
+- Intercept *and* slope *can* differ between groups
+
+
+---
 # Interaction
 
 - An interaction allows the effect of one variable to differ depending on the value of another variable
 
-$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Male + \beta_3YrsEmp*Male + \epsilon$$
+$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Sex + \beta_3YrsEmp*Sex + \epsilon$$
 
 - $\beta_3$ tells us how the slopes compare
-  - For Male = 1, the marginal effect of years on salary is $\beta_1+\beta_3$
-  - For Male = 0 (female), it is $\beta_1$
+  - For Sex = 1, the marginal effect of years on salary is $\beta_1+\beta_3$
+  - For Sex = 0 (female), it is $\beta_1$
 
 - $\beta_2$ tells us how the intercepts compare
-  - For Male = 1, intercept is $\beta_0+\beta_2$
-  - For Male = 0, it is $\beta_0$
+  - For Sex = 1, intercept is $\beta_0+\beta_2$
+  - For Sex = 0, it is $\beta_0$
 
 ---
 # Running an interaction model
 
 ```{r}
 sal_mod2 <- lm(salary ~ yrs.service + sex + 
-                 yrs.service*sex, data = Salaries)
+                 yrs.service*sex, #<<
+               data = Salaries)
 ```
 ```{r, eval=FALSE}
 get_regression_table(sal_mod2)
@@ -311,51 +290,29 @@ get_regression_table(sal_mod2) %>%
 ---
 # Interpreting an interaction model
 
-$$\hat{Sal}=82069+1637*YrsEmp+20129*Male - 932*YrsEmp*Male$$
+$$\hat{Sal}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$
 
-- What is the predicted change in salary for a male professor given two more years of service?
-
---
-
-```{r}
-(1637-932)*2
-```
-
-- What is the predicted change in salary for a female professor given two more years of service?
+- What is the predicted change in salary for a male professor given one more year of employment?
 
 --
 
-```{r}
-1637*2
-```
+- What is the predicted change in salary for a female professor given one more year of employment?
 
 ---
 # Interpreting an interaction model
 
-$$\hat{Sal}=82069+1637*YrsEmp+20129*Male - 932*YrsEmp*Male$$
+$$\hat{Sal}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$
 
-- What is the predicted salary for a female professor with 10 years of service?
-
---
-
-```{r}
-82069+1637*10
-```
+- What is the predicted salary for a female professor employed for 10 years?
 
 --
 
-- What is the predicted salary for a male professor with 10 years of service?
-
---
-
-```{r}
-82069 + 1637*10 + 20129 - 931*10
-```
+- What is the predicted salary for a male professor employed for 10 years?
 
 ---
 class: inverse, middle, center
 
-# Let's practice answering questions related to regression using explanatory categories and interactions. 
+# Let's practice another example using interactions. 
 
 ---
 class: inverse, middle, center
@@ -384,7 +341,7 @@ head(divorce, n=5) %>%
   kable(format = 'html')
 ```
 
-- Suppose we want to know how these variables might affect the probability of divorce among married or previously so individuals
+- Suppose we want to know how these variables might affect the probability of divorce among married or previously married individuals
 
 ---
 # Running an LPM
@@ -412,11 +369,7 @@ $$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$
 
 --
 
-```{r}
--0.18*1
-```
-
-- All else equal, each child reduces the probability of divorce by 18 percentage points, on average.
+- All else equal, each child reduces the probability of divorce by 18 **percentage points**, on average.
 
 --
 
@@ -427,4 +380,9 @@ $$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$
 ```{r}
 0.38 + 0.4*1 + 0.001*50 - 0.18*0
 ```
+- The probability of divorce for someone with this profile is 83%, on average.
 
+---
+class: inverse, middle, center
+
+# Let's practice another example with using an LPM

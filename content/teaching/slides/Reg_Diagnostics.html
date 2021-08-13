@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Regression Diagnostics
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: April 15, 2021
+### Last updated: June 08, 2021
 
 ---
 
@@ -25,17 +25,110 @@ class: center, middle, inverse, title-slide
 
 
 
+- Do my results have practical significance?
+
 - Are my confidence interval and hypothesis test valid?
   - Classic assumptions of regression (LINE)
   - Multicollinearity
   - Outliers, high-leverage, and high-influence
 
 ---
+class: inverse, center, middle
+
+# Statistical significance does not neccessarily determine whether our results warrant action. We must consider if our results have **practical significance**.
+
+---
+# Practical significance questions
+
+1. What is the typical change (standard deviation) in the explanatory variable associated with the statistically significant estimate?
+
+--
+
+2. Is the predicted change in the outcome due to a typical change in the explanatory variable negligible or meaningful based on the outcome's mean and/or standard deviation?
+
+--
+
+3. Do the bounds of the confidence interval for the explanatory variable change my answer after steps 1 &amp; 2?
+ - Bounds close to 0
+ - CI precisely around 0
+  
+---
+# Example 1
+
+&lt;img src="lectures_files/prac-sig1.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- Is the property tax result practically significant?
+
+--
+
+- Typical change (standard deviation) in property tax is $4
+
+- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
+
+- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200)...practically significant!
+
+---
+# Example 2
+
+&lt;img src="lectures_files/prac-sig2.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- SD for property tax is now 0.04 instead of 4
+- Is the property tax result practically significant?
+
+--
+
+- Typical change in property tax is now $0.04
+
+- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
+
+- Confidence intervals do not change this conclusion.
+
+---
+# Example 3
+
+&lt;img src="lectures_files/prac-sig3.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- SD of property tax back to 4 but CI has changed
+- Is the property tax result practically significant?
+
+--
+
+- Same as first example and would definitely be practically significant if not for the 95% CI being so close to 0.
+
+- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
+
+---
+# Example 4
+
+&lt;img src="lectures_files/prac-sig4.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- Estimate and CI for property tax has changed
+- Is the property tax result practically significant?
+
+--
+
+- Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
+
+- Rare for statistical insignificance to have practical significance.
+
+---
+# Example 5
+
+&lt;img src="lectures_files/prac-sig5.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- Estimate and CI has changed again
+- Is the property tax result practically significant?
+
+--
+
+- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
+
+- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.
+
+---
 # Credible analysis
 
 &lt;img src="lectures_files/credible.png" width="1304" style="display: block; margin: auto;" /&gt;
-
-- Today is about statistical conclusion validity
 
 ---
 class: inverse, center, middle
@@ -86,7 +179,7 @@ class: inverse, center, middle
 
 
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Classical regression assumptions
@@ -115,11 +208,11 @@ class: inverse, center, middle
 # Residual vs. Fitted Plot (RVF)
 
 .pull-left[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 - Assumptions **L**, **N**, and **E** can be observed directly using an RVF plot
@@ -313,7 +406,7 @@ plot(trump_mod)
 ---
 # RVF Plot
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see no pattern and a straight red line along 0
 
@@ -322,7 +415,7 @@ plot(trump_mod)
 ---
 # Normal Q-Q
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see points fall approximately along the dotted line
 
@@ -331,7 +424,7 @@ plot(trump_mod)
 ---
 # Scale-Location
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see a straight red line
 
@@ -340,7 +433,7 @@ plot(trump_mod)
 ---
 # Residuals vs. Leverage
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 
 - Useful for identifying high-influence observations
 
@@ -367,7 +460,7 @@ plot(trump_mod)
 plot(trump_mod, 4)
 ```
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 
 - This is a separate graph that focuses on Cook's distance
 
@@ -519,11 +612,11 @@ get_regression_table(trump_mod_nodc)
 # Comparing regression lines
 
 .pull-left[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-38-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-39-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 - D.C. (on left) pulls the left of regression line down; forces slope to be greater

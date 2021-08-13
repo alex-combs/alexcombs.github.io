@@ -32,17 +32,6 @@ library(knitr)
 - Understand what it means to control for other variables
 
 ---
-# Correlation review
-
-.center[
-![:scale 60%](lectures_files/infmort_lifeExp.png)
-]
-
-- Correlation reports the direction and strength between two variables
-
-- Correlation between infant mortality rate and life expectancy is -0.9; very strong negative correlation
-
----
 # Correlation coefficients
 
 ```{r}
@@ -92,16 +81,16 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 .pull-right[
 - Regression gives us direction, strength, and magnitude of association
 - Draws the line of **best fit** through a set of paired x-y data points
-- The slope of the line tells us the **average, predicted change in y given a change in x**
+- The slope of the line tells us the **average, predicted change in y given a change in x**, or
 - At any value along x-axis, regression line gives us the **predicted value of y**
 ]
 
 ---
 # Basic purpose of regression
 
-- Regression is a statistical method to
-  - **Explain** the relationship between an outcome variable and one or more explanatory variables, and/or
-  - **Predict** the value of an outcome given the value(s) of one or more explanatory variables
+- Fill in the blanks: Regression can be used to [    ] an outcome or [    ] an outcome, or both.
+
+--
 
 - Either way, regression is a way of modeling an outcome $y$ as a function of explanatory $x$
 
@@ -117,65 +106,42 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 ```
 
 ---
+# Equation of a line
+
+$$y = 600 - 20x$$
+
+- If $x=5$, $y=?$
+
+- If $x=6$, $y=?$
+
+--
+
+- If $x$ increases from 5 to 6, by how much does $y$ change?
+
+- If $x$ increases from 2 to 5, by how much does $y$ change?
+
+---
 # Simple linear regression model
 
-.pull-left[
 $$y=\beta_0+\beta_1x+\epsilon$$
 
-- $y$ referred to as the outcome, response, dependent variable
-- $\beta_0$ (beta-naught) is the y-intercept constant
-- $\beta_1$ is the slope of the regression line; the marginal effect of $x$ on $y$
-- $x$ referred to as explanatory, independent variable
-- $\epsilon$ is referred to as the error term or random noise
-]
-
---
-
-.pull-right[
-- This is a **population** model. 
-- The $\beta$s are **population parameters** we wish to estimate, assuming we don't observe the entire population.
-- $\epsilon$ is also a parameter that captures all the other factors that affect $y$ for which we cannot include in our model
-]
+- Which represents the dependent variable?
+- Which represents the independent variable?
+- Which represents the unknown population parameters?
+- Which represents statistical noise?
 
 ---
 # Simple linear regression model
 
-.pull-left[
 $$\hat{y}=b_0+b_1x$$
 
-- $\hat{y}$ is the **predicted** value of $y$ given a value of $x$
-- $b_0$ is the estimate of $\beta_0$; our prediction of $y$ if $x$ equaled 0
-- $b_1$ is the estimate of $\beta_1$; our predicted slope; our predicted marginal effect of $x$ on $y$
-- the $b$s are often referred to as **coefficients**
-]
-
---
-
-.pull-right[
-- This is our sample regression equation based on the population model
-]
-
----
-# Interpreting Regression Results
-
-$$\hat{y}=b_0+b_1x$$
-
-On average, a [one] [unit] [increase/decrease] in $x$ [is associated with] a [increase/decrease] of $b_1$ [units] in $y$.
-
---
-
-- [one] can be any number
-- Replace [unit] with the actual units of the $x$ variable (e.g. dollars, percentage point, count of houses)
-- Replace $x$ with what $x$ is
-- [is associated with] can be any combination of words that expresses the intended relationship (causes, results in)
-- Replace $b_1$ with the estimate from the results
-- Replace [units] with the units of the $y$ variable
-- Replace $y$ with what $y$ is
+- Which represents the predicted outcome?
+- Which represents the estimates?
 
 ---
 # Example: Population to sample models
 
-- Suppose we want to model average SAT math scores, `SATM`, in a state as a function of its spending on public education in **1000s per student**, `dollars`
+- Suppose we want to model average SAT math scores, `SATM`, in a state as a function of its spending on public education in **$1000s per student**, `dollars`
 
 $$SATM=\beta_0+\beta_1Dollars+\epsilon$$
 
@@ -196,34 +162,22 @@ $$\hat{SATM} = 560 - 12 \times Dollars$$
 
 $$\hat{SATM} = 560 - 12 \times Dollars$$
 
-On average, a one thousand dollar increase in state spending on public education per student is associated with a 12 point decline in average SAT math scores.
+**On average**, a **one thousand dollar increase** in **state spending on public education per student** is *associated with* a **12 point decline** in **average SAT math scores**.
 
 --
 
-Results suggest each additional thousand dollars spent on public education per student decreases average SAT math scores by 12 points, on average.
+- What is the predicted increase in `SATM` if a state increased `Dollars` by $2,500 per student?
 
 --
 
-If states increased spending by $5,000 per student, SAT math scores are predicted to decrease 60 points, on average.
+- What is the predicted `SATM` in a state that spends $5,000 per student?
 
 --
 
-If states spent nothing on public education, SAT math scores are predicted to be 560, on average.
+- What is the predicted `SATM` in a state that spends $0 per student?
 
 ---
-# Many ways to interpret
-
-- Regression results can be applied to countless scenarios
-- Any scenario involves either 
-  - a predicted *change* in $y$ given a *change* in $x$ or 
-  - a predicted *value* of $y$ given a *value* of $x$
-
---
-
-- Run regression, plug coefficients into equation, plug scenario into equation, then solve.
-
----
-# Predicted Change vs. Predicted Value
+# Another example
 
 - Now `SATM` as a function of the percent of graduating high school students who take the SAT, `percent`
 
@@ -243,25 +197,18 @@ $$\hat{SATM} = 539 - 1.2 \times Percent$$
 $$\hat{SATM} = 539 - 1.2 \times Percent$$
 .pull-left[
 What if percent taking SAT increased from 50% to 55%?
-```{r}
--1.2*5
-```
-SAT math is predicted to **decrease** 6 points, on average.
+
 ]
 
 --
 
 .pull-right[
 What is the predicted average SAT math score for a state where 75% of high school graduates take the SAT?
-```{r}
-539 - 1.2*75
-```
 
-Average SAT math is predicted to **equal** 449, on average.
 ]
 
 ---
-# You practice
+# More practice
 
 $$\hat{SATM} = 539 - 1.2 \times Percent$$
 
@@ -273,27 +220,6 @@ $$\hat{SATM} = 539 - 1.2 \times Percent$$
 class: inverse, middle, center
 
 # Make sure you understand the difference between a percent change and a percentage point change.
-
----
-# Percent vs. percentage point change
-
-- Linear regression involves **unit changes** (for now)
-
-- A unit change of a variable expressed in percentages is a **percentage point** change
-
-- Increase from 25% to 100% is an increase of 75 percentage points
-
----
-# Percent vs. percentage point change
-
-- Percent change conveys the percent of the old number it takes to get to the new number
-
-$$ \%\Delta = (\frac{New-Old}{Old}) \times 100$$
-- An increase from 25% to 100% is a 300% increase.
-
-```{r}
-((100-25)/25)*100
-```
 
 ---
 class: inverse, middle, center
@@ -313,7 +239,8 @@ glimpse(States)
 # Running regression
 
 ```{r, out.width=8}
-summary(States)
+filter(States, -region) %>% 
+summary()
 ```
 
 ---
@@ -331,15 +258,6 @@ get_regression_table(satm_mod1)
 ```{r, echo=FALSE}
 get_regression_table(satm_mod1) %>% 
   kable()
-```
-
----
-# Running regression
-
-- Alternative: `summary` available by default; not as pretty
-
-```{r}
-summary(satm_mod1)
 ```
 
 ---
@@ -388,7 +306,20 @@ viz.resid
 ```
 
 ---
-# How to examine residuals
+# Residuals
+
+$$\hat{SATM} = 560 - 12 \times Dollars$$
+
+- What is the predicted `SATM` for a state where `dollars` equals $7,887? 
+
+- How about a state where `dollars` equals $4,231?
+
+--
+
+- If these values for `dollars` are actually observed in the data, we can also check what `SATM` actually equaled. Our regression model will either overestimate or underestimate that actual value of `SATM`.
+
+---
+# Examining residuals
 
 ```{r, eval=FALSE}
 get_regression_points(satm_mod1)
@@ -459,18 +390,18 @@ class: inverse, middle, center
 ---
 # Goodness-of-fit
 
-- Any outcome varies across observations (i.e. variance)
-
 - When we ask how good is our best regression line, one way to answer is the **percent of total variation/variance in the outcome that is explained by our model**
 
 --
 
 - $R^2$ (r-squared)
   - Ranges from 0 to 1
-  - The percent of variation in $y$ explained by our regression
+  - The percent of variation in $y$ explained by our regression model
 
 ---
 # Goodness of fit
+
+- Model 1 using `dollars`
 
 ```{r, eval=FALSE}
 get_regression_summaries(satm_mod1)
@@ -486,6 +417,9 @@ The regression using dollars explains 24% of total variation in average SAT math
 
 ---
 # Goodness of fit
+
+- Model 2 using `percent`
+
 ```{r, eval=FALSE}
 get_regression_summaries(satm_mod2)
 ```
@@ -504,20 +438,7 @@ get_regression_summaries(satm_mod2) %>%
 
 --
 
-- Model 2 has the highest $R^2$, thus it is the *statistically* superior model
-
----
-# Goodness of fit
-
-```{r}
-select(States, SATM, dollars, percent) %>% 
-  cor()
-```
-
-```{r}
--0.48^2
--0.86^2
-```
+- Model 2 has the highest $R^2$. It is *statistically* superior.
 
 ---
 # Goodness of fit
@@ -575,9 +496,17 @@ get_regression_summaries(satm_mod2) %>%
 
 --
 
+.pull-left[
 - Model 1 predictions are off by about 30 points, on average.
+- What about model 2?
+]
+
+--
+
+.pull-right[
 - Model 2 predictions are off by about 18 points, on average.
 - Model 2 is the *statistically* superior model.
+]
 
 ---
 class: inverse, center, middle
@@ -599,7 +528,7 @@ $$\hat{y}=b_0+b_1x_1+b_2x_2+\dots+b_kx_k$$
 
 --
 
-- This isolates the association between the outcome and each explanatory variable, holding all other variables constant.
+- This isolates the association between the outcome and each explanatory variable, holding all other variables constant at their respective means.
 
 ---
 # Controlling for other factors
@@ -646,20 +575,6 @@ ggplot(States, aes(x = dollars, y = percent)) +
 ```
 
 ---
-# Controlling for other factors
-
-- Multiple regression provides the marginal effect of $x_k$ on $y$, while holding all other $x$s constant at their respective mean
-
-**Interpretation**
-
-On average, a [one-unit] [increase/decrease] in $x_k$ [is associated with] a $b_k$ [unit] [increase/decrease] in $y$, [**holding other factors constant].**
-
-- Variations on last part:
-  - all else equal
-  - controlling for other factors
-  - *ceteris paribus*
-
----
 # Running multiple regression
 
 $$SATM=\beta_0+\beta_1Dollars+\beta_2Percent+\epsilon$$
@@ -678,6 +593,17 @@ get_regression_table(satm_mod3) %>%
 $$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$
 
 ---
+# Reporting results
+
+$$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$
+
+On average, a one thousand dollar increase in spending per pupil is associated with 6.4 point increase in average SAT math scores, **controlling for the percent of students taking the SAT**.
+
+--
+
+- Blah, blah, blah, **all else equal**.
+
+---
 # Interpreting results
 
 ```{r, echo=FALSE}
@@ -688,12 +614,6 @@ get_regression_table(satm_mod3) %>%
 $$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$
 
 - Controlling for the percent of graduates taking the SAT, what is the predicted change in SAT math scores if states increase public education spending by $5,000 per student?
-
---
-
-```{r}
-6.4*5
-```
 
 ---
 # Interpreting results
@@ -706,12 +626,6 @@ get_regression_table(satm_mod3) %>%
 $$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$
 
 What is the predicted average SAT math score for a state that spends $5,000 per student, and has 50% of high school graduates take the SAT?
-
---
-
-```{r}
-515 + 6.4*5 - 1.5*50
-```
 
 ---
 class: inverse, middle, center
@@ -806,7 +720,7 @@ get_regression_summaries(satm_mod3) %>%
 
 --
 
-- Adjusted $R^2$ accounts for this, adjusting based on how useful each additional variable is at explaining the outcome
+- **Adjusted $R^2$ ** accounts for this, adjusting based on how useful each additional variable is at explaining the outcome
 
 - Model 3 still has the higher adjusted $R^2$ so it remains the statistically better model
 

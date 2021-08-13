@@ -40,10 +40,115 @@ state_trump <- hate_crimes %>%
          white = share_white, white_pov = share_white_poverty)
 ```
 
+- Do my results have practical significance?
+
 - Are my confidence interval and hypothesis test valid?
   - Classic assumptions of regression (LINE)
   - Multicollinearity
   - Outliers, high-leverage, and high-influence
+
+---
+class: inverse, center, middle
+
+# Statistical significance does not neccessarily determine whether our results warrant action. We must consider if our results have **practical significance**.
+
+---
+# Practical significance questions
+
+1. What is the typical change (standard deviation) in the explanatory variable associated with the statistically significant estimate?
+
+--
+
+2. Is the predicted change in the outcome due to a typical change in the explanatory variable negligible or meaningful based on the outcome's mean and/or standard deviation?
+
+--
+
+3. Do the bounds of the confidence interval for the explanatory variable change my answer after steps 1 & 2?
+ - Bounds close to 0
+ - CI precisely around 0
+  
+---
+# Example 1
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig1.png')
+```
+
+- Is the property tax result practically significant?
+
+--
+
+- Typical change (standard deviation) in property tax is $4
+
+- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
+
+- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200)...practically significant!
+
+---
+# Example 2
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig2.png')
+```
+
+- SD for property tax is now 0.04 instead of 4
+- Is the property tax result practically significant?
+
+--
+
+- Typical change in property tax is now $0.04
+
+- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
+
+- Confidence intervals do not change this conclusion.
+
+---
+# Example 3
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig3.png')
+```
+
+- SD of property tax back to 4 but CI has changed
+- Is the property tax result practically significant?
+
+--
+
+- Same as first example and would definitely be practically significant if not for the 95% CI being so close to 0.
+
+- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
+
+---
+# Example 4
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig4.png')
+```
+
+- Estimate and CI for property tax has changed
+- Is the property tax result practically significant?
+
+--
+
+- Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
+
+- Rare for statistical insignificance to have practical significance.
+
+---
+# Example 5
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig5.png')
+```
+
+- Estimate and CI has changed again
+- Is the property tax result practically significant?
+
+--
+
+- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
+
+- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.
 
 ---
 # Credible analysis
@@ -51,8 +156,6 @@ state_trump <- hate_crimes %>%
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('lectures_files/credible.png')
 ```
-
-- Today is about statistical conclusion validity
 
 ---
 class: inverse, center, middle

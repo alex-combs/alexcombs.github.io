@@ -14,13 +14,9 @@ output:
 ---
 # Outline
 
-- Credible analysis
-
 - Measurement validity
 
 - Measurement reliability
-
-- Missing data
 
 ---
 # Credible analysis
@@ -30,11 +26,11 @@ output:
 ---
 # Measurement
 
-- **Measurement Validity**: Does the variable measure the concept/phenomenon it is intended or claims to measure? Are the recorded values of the variable accurate measures of the true values of the variable?
+- **Measurement Validity**: The extent to which a variable measures what it is intended to measure.
 
 --
 
-- **Measurement Reliability**: Provided no change in a subject’s condition/reality, does the way the variable is measured generate the same value? Given identical conditions/realities between multiple subjects, does the measure generate identical values?
+- **Measurement Reliability**: The extent to which the measurement process or instrument for a variable generates consistent values.
 
 ---
 # Measurement
@@ -44,124 +40,13 @@ output:
 ---
 class: inverse, middle, center
 
-# In your groups, pick a variable and discuss its measurement validity and reliability. Be ready to discuss with class.
+# In your group, discuss circumstances where the following would have poor measurement validity and/or reliability: 1) A scale in a doctor's office, 2) Pre-tax income as a measure of wealth, and 3) Police response time as a measure of station performance.
 
 ---
 # Why does this matter?
 
-- Often leads to important and interesting questions about how data is collected and whether it is trustworthy.
+- Often leads to important and interesting questions about how data is collected.
 
-- If data have a weak or no relationship with the thing you are trying to study, you have no foundation upon which to continue your work.
+- If data have a weak relationship with what you are trying to study, you have a weak foundation upon which to continue your work.
 
-- Sometimes flawed data is all we have, and understanding its flaws can help mitigate mistakes in interpretations and decisions.
-
----
-class: inverse, middle, center
-
-# Missing data
-
----
-# Missing Data
-
-- Two types
-  - Explicit
-  - Implicit
-  
-- Explicitly missing data are data that we can *see* are missing in the data; cells containing a value that denotes missing
-
-- Implicitly missing data are data that we would expect to be included based on data structure but are not; no obvious sign of missing
-
----
-# Explicitly missing
-
-```{r, echo=FALSE, message=FALSE}
-library(gapminder)
-library(tidyverse)
-library(knitr)
-
-crossgap <- gapminder %>% 
-  filter(year == 2007 & continent == 'Americas') %>% 
-  head(n=3)
-
-crossgap[1,4] <- NA
-crossgap[2,6] <- NA
-
-kable(crossgap, format = 'html', digits = 1)
-```
-
---
-
-- Conceptual concerns
-  - Do not assume data are missing at random
-  - Ask yourself why data are missing and if it is influenced by a factor that is relevant to your analysis
-
---
-- Technical concern
-  - When describing data, account for missing values
-  - Incorrect to say we have 3 countries with a mean life expectancy of `r mean(crossgap$lifeExp, na.rm=TRUE)`
-
----
-# Implicitly missing
-
-```{r, echo=FALSE}
-gapminder %>% 
-  filter(continent == 'Americas', year >= 1997) %>% 
-  head(n=6) %>%
-  filter(country!='Bolivia' | year!=2002) %>% 
-  kable(format = 'html', digits = 1)
-```
-
-- Typical in panel data where units enter and exit the data
-- Same concerns apply
-
----
-# Precision
-
-- Measurement validity involves accuracy. 
-
-- Measurement reliability involves a type of precision: repeated measures.
-
---
-
-- Another type of precision involves the exactness of a measurement, which one may mistakenly associate with accuracy.
-
----
-background-image: url(lectures_files/ruler.jpg)
-
-# Precision
-
----
-# Precision
-
-```{r, echo=FALSE}
-head(gapminder, n=3) %>% 
-  kable(format = 'html', digits = 1)
-```
-
-- Life expectancy is reported to the nearest tenth decimal place.
-
-- But the underlying value for life expectancy could have been anything that rounds to the tenth decimal we see in the data.
-
---
-
-- What was the possible life expectancy in Afghanistan in 1952?
-
---
-
-- What if five deaths at 28, 29, 29, 29, 29?
-
----
-# Why does this matter?
-
-- 14.38% of all statistics are lies
-
---
-
-- Precision can be used to mislead people that information is accurate; a cognitive bias known as precision bias
-
---
-
-- Be careful reporting numbers that are more precise than the underlying data
-
-- May be legitimate reasons to round to fewer decimal places than underlying data, but understand you are decreasing precision
-
+- Sometimes flawed data is all we have, and understanding its flaws can help mitigate mistakes when interpreting and making decisions.

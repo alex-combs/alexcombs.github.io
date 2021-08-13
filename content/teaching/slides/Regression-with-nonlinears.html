@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Regression with Nonlinear Variables
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 18, 2021
+### Last updated: June 05, 2021
 
 ---
 
@@ -29,33 +29,17 @@ class: center, middle, inverse, title-slide
 
 - How to interpret coefficients for nonlinear variables
 
-- How to choose the best model
+- Assess goodness of fit
 
 ---
 # Why use nonlinear variables
 
 - The relationship between `\(x\)` and `\(y\)` may not follow a straight line
 
-.pull-left[
 &lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
-
-```r
-gapminder %&gt;% 
-  filter(year == 2007) %&gt;% 
-  ggplot(aes(x = gdpPercap, y = lifeExp)) +
-  geom_point(alpha = 0.5, color = 'steelblue', size = 2) +
-  geom_smooth(method = 'lm', se = FALSE, color = 'blue') +
-* geom_smooth(span = 1, se = FALSE, color = 'red') +
-  labs(y = 'Life Expectancy', x = 'GDP per Capita') +
-  theme_minimal()
-```
-]
 
 ---
-# Common nonlinear variable regressions
+# Common nonlinear variables
 
 - Quadratic model
 
@@ -101,7 +85,7 @@ gapminder %&gt;%
 ]
 
 .pull-right[
-![](Regression-with-nonlinears_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](Regression-with-nonlinears_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 ]
 ---
 # Quadratic regression
@@ -129,27 +113,9 @@ gapminder %&gt;%
 
 - What is the marginal effect of `\(x\)` at `\(x=2\)`?
 
-
-```r
-10+(2*-1*2)
-```
-
-```
-## [1] 6
-```
-
 --
 
 - At what value of `\(x\)` is `\(y\)` at its maximum?
-
-
-```r
--10/(2*-1)
-```
-
-```
-## [1] 5
-```
 
 ---
 class: inverse, center, middle
@@ -170,10 +136,12 @@ class: inverse, center, middle
 ##  Max.   :43.44   Max.   :22.00   Max.   :77.00
 ```
 
+- Note average age is about 49
+
 ---
 # Viz
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Quadratic regression
@@ -205,113 +173,16 @@ get_regression_table(quad)
 
 `$$\hat{Wage}=-22.7+1.25*Educ+1.35*Age-0.013*Age^2$$`
 
-- What is the marginal effect of age on wage?
+- What is the marginal effect of age on wage at 49 years old?
 
 - At what age are wages at their maximum?
 
-- What is the predicted wage for a 27-year old with 12 years of education?
-
----
-# Interpretation
-
-`$$\hat{Wage}=-22.7+1.25*Educ+1.35*Age-0.013*Age^2$$`
-
-- What is the marginal effect of age on wage at average age of 49?
-
-
-```r
-1.35-2*0.013*49
-```
-
-```
-## [1] 0.076
-```
-
-- On average, 49-year old workers' wages will increase 8 cents next year, controlling for education.
-
----
-# Interpretation
-
-`$$\hat{Wage}=-22.7+1.25*Educ+1.35*Age-0.013*Age^2$$`
-
-- At what age are wages at their maximum?
-
-
-```r
--1.35/(2*-0.013)
-```
-
-```
-## [1] 51.92308
-```
-
-- Controlling for education, the results suggest wages reach their maximum at age 52, on average.
-
----
-# Interpretation
-
-`$$\hat{Wage}=-22.7+1.25*Educ+1.35*Age-0.013*Age^2$$`
-
-- What is the predicted wage for a 49-year old with 12 years of education?
-
-
-```r
--22.7+(1.25*12)+(1.35*49)-(0.013*49^2)
-```
-
-```
-## [1] 27.237
-```
-
-- The predicted wage is approximately 27.24 dollars
-
----
-# Beware predicting large changes in x
-
-- We computed the marginal effect of age on wage at 49 equals 0.08
-
-- What if we used that to predict a change in age from 49 to 53 (4 years)?
-
-
-```r
-4*0.08
-```
-
-```
-## [1] 0.32
-```
-
----
-# Beware predicting large changes in x
-
-- But if we predict wage for 53 year old with 12 years of education
-
-
-```r
--22.7+(1.25*12)+(1.35*53)-(0.013*53^2)
-```
-
-```
-## [1] 27.333
-```
-
-- Comparing this to predicted wage of 49 year old from before
-
-
-```r
-27.333-27.237
-```
-
-```
-## [1] 0.096
-```
-
-- An increase of only 0.10, not 0.32...because not linear
+- What is the predicted wage for a 26-year old with 16 years of education?
 
 ---
 class: inverse, center, middle
 
-# Time for some practice
+# Let's practice using another example involving a quadratic variable
 
 ---
 class: inverse, center, middle
@@ -325,33 +196,11 @@ class: inverse, center, middle
 
 - Express change in percentages instead of units
 
-- Reflect our theoretical claim for the relationship between two variables
-
 --
 
-- Cannot log transform 0 or negative values
-
-
-```r
-log(0)
-```
-
-```
-## [1] -Inf
-```
-
-
-```r
-log(-5)
-```
-
-```
-## Warning in log(-5): NaNs produced
-```
-
-```
-## [1] NaN
-```
+- Reflect our theoretical claim for the relationship between two variables
+  - Based on scatterplot, or
+  - We believe the effect of a change in X on Y depends on the starting value of X, but the effect never switches sign
 
 ---
 # Transform skewed data
@@ -363,7 +212,7 @@ log(-5)
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Transform skewed data
@@ -375,7 +224,7 @@ log(-5)
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Transform skewed data
@@ -388,7 +237,7 @@ ggplot(gapminder, aes(x = gdpPercap)) +
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Transform skewed data
@@ -402,7 +251,7 @@ gapminder %&gt;%
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Transform skewed data
@@ -417,22 +266,7 @@ gapminder %&gt;%
   theme_minimal()
 ```
 
-&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Report results in percent change
-
-- Recall that regression coefficients quantify the **unit-change** in `\(y\)` given a **one-unit** change in `\(x\)`
-
---
-
-- Using the natural log in regression quantifies **percent changes**
-
-- This is useful when the effect of `\(x\)` on `\(y\)` is not constant and depends on the starting value of `\(x\)` and/or `\(y\)`
-
---
-
-- Remember not to confuse **percent change** with **percentage-point change**
+&lt;img src="Regression-with-nonlinears_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 class: inverse, center, middle
@@ -457,127 +291,18 @@ class: inverse, center, middle
 - This is how **elasticities** are estimated
 
 ---
-# Elasticities
+# Log-log model in R
 
-- Who cares? Well, elasticities are useful because they are unit and scale independent. This often allows us to make better sense of relationships between variables.
-
---
-
-- Suppose increasing the income tax rate 1 percentage point results in $100 Billion more in revenue. 
-
-- Wouldn't the result depend on the starting tax rate? Probably. Is that a lot in return for the increase? I don't know. Hard to compare percentage point changes relative to dollar changes.
-
---
-
-- Instead, suppose we use a log-log model and find that a 1% increase in the income tax rate results in a 0.5% increase in tax revenues.
-
-- Now can be applied to any starting point for tax rates. Though positive, also tells us we get diminishing returns. Put simply, an eventual plateau in revenues.
-
----
-# In R
-
-- First, let's run a level-level model
-
-`$$LifeExp=\beta_0+\beta_1GDPperCap+\beta_2Pop+\beta_3Continent+\epsilon$$`
+`$$ln(LifeExp)=\beta_0+\beta_1ln(GDPperCap)+\beta_2Continent+\epsilon$$`
 
 
 ```r
-lev_lev &lt;- lm(lifeExp ~ gdpPercap + pop + continent, 
+log_log &lt;- lm(log(lifeExp) ~ log(gdpPercap) + continent, 
                data = gapminder)
 ```
 
 ---
-# In R
-
-
-```r
-get_regression_table(lev_lev) %&gt;% 
-  select(term, estimate)
-```
-
-.pull-left[
-
-|term              | estimate|
-|:-----------------|--------:|
-|intercept         |   47.814|
-|gdpPercap         |    0.000|
-|pop               |    0.000|
-|continentAmericas |   13.476|
-|continentAsia     |    8.193|
-|continentEurope   |   17.473|
-|continentOceania  |   18.083|
-]
-
-.pull-right[
-
-- Why 0s for `gdpPercap` and `pop`?
-
-- How do we interpret the `continentEurope` estimate?
-
-]
-
----
-# In R
-
-- One dollar and one person are very small unit-changes for an outcome that does not change drastically like life expectancy
-
-
-```r
-gapminder2 &lt;- gapminder %&gt;% 
-  mutate(gdpPercap_thou = gdpPercap/1000,
-         pop_100mill = pop/100000000)
-
-lev_lev2 &lt;- lm(lifeExp ~ gdpPercap_thou + pop_100mill + continent, 
-               data = gapminder2)
-```
-
----
-# In R
-
-
-```r
-get_regression_table(lev_lev2) %&gt;% 
-  select(term, estimate)
-```
-
-.pull-left[
-
-
-|term              | estimate|
-|:-----------------|--------:|
-|intercept         |   47.814|
-|gdpPercap_thou    |    0.450|
-|pop_100mill       |    0.657|
-|continentAmericas |   13.476|
-|continentAsia     |    8.193|
-|continentEurope   |   17.473|
-|continentOceania  |   18.083|
-
-]
-
-.pull-right[
-
-- How do we interpret `gdpPercap_thou` and `pop_100mill`?
-
-- How do we interpret, say, `Europe`?
-
-]
-
----
 # Log-log model in R
-
-`$$ln(LifeExp)=\beta_0+\beta_1ln(GDPperCap)+\beta_2Pop+\beta_3Continent+\epsilon$$`
-
-
-```r
-log_log &lt;- lm(log(lifeExp) ~ log(gdpPercap) + pop_100mill + continent, 
-               data = gapminder2)
-```
-
-- Using `gdpPercap` instead of `gdpPercap_thou` because to report a 1% change in thousands GDP per capita is confusing
-
----
-# Log-log Model in R
 
 
 ```r
@@ -589,22 +314,17 @@ get_regression_table(log_log) %&gt;%
 
 |term              | estimate|
 |:-----------------|--------:|
-|intercept         |    3.046|
-|log(gdpPercap)    |    0.114|
-|pop_100mill       |    0.018|
-|continentAmericas |    0.128|
-|continentAsia     |    0.096|
-|continentEurope   |    0.161|
-|continentOceania  |    0.148|
+|intercept         |    3.062|
+|log(gdpPercap)    |    0.112|
+|continentAmericas |    0.133|
+|continentAsia     |    0.110|
+|continentEurope   |    0.166|
+|continentOceania  |    0.152|
 ]
 
 .pull-right[
 
 - How do we interpret `log(gdpPercap)` coefficient?
-
-- Life expectancy increases 0.1% per 1% increase in GDP per capita.
-
-- What about the `pop_100mill` and `continent` coefficients? Refer to the handout on eLC.
 
 ]
 
@@ -623,15 +343,17 @@ get_regression_table(log_log) %&gt;%
 
 - As `\(x_1\)` increases 1%, y changes `\(\frac{b_1}{100}\)` units
 
+- Remember, any variable that is log-transformed will be expressed in percent change. `\(y\)` has not been transformed so it is expressed in unit change.
+
 ---
 # Level-log Model in R
 
-`$$LifeExp=\beta_0+\beta_1ln(GDPperCap)+\beta_2Pop+\beta_3Continent+\epsilon$$`
+`$$LifeExp=\beta_0+\beta_1ln(GDPperCap)+\beta_2Continent+\epsilon$$`
 
 
 ```r
-lev_log &lt;- lm(lifeExp ~ log(gdpPercap) + pop_100mill + continent, 
-               data = gapminder2)
+lev_log &lt;- lm(lifeExp ~ log(gdpPercap) + continent, 
+               data = gapminder)
 ```
 
 ---
@@ -647,22 +369,17 @@ get_regression_table(lev_log) %&gt;%
 
 |term              | estimate|
 |:-----------------|--------:|
-|intercept         |    1.476|
-|log(gdpPercap)    |    6.524|
-|pop_100mill       |    0.999|
-|continentAmericas |    6.729|
-|continentAsia     |    5.157|
-|continentEurope   |    9.290|
-|continentOceania  |    8.965|
+|intercept         |    2.317|
+|log(gdpPercap)    |    6.422|
+|continentAmericas |    7.015|
+|continentAsia     |    5.912|
+|continentEurope   |    9.577|
+|continentOceania  |    9.213|
 ]
 
 .pull-right[
 
 - How do we interpret `log(gdpPercap)` coefficient?
-
-- Life expectancy increases 0.07 years per 1% increase in GDP per capita.
-
-- What about the `pop_100mill` and `continent` coefficients? Refer to handout on eLC.
 
 ]
 
@@ -684,12 +401,12 @@ get_regression_table(lev_log) %&gt;%
 ---
 # Log-level Model in R
 
-`$$ln(LifeExp)=\beta_0+\beta_1GDPperCap+\beta_2Pop+\beta_3Continent+\epsilon$$`
+`$$ln(LifeExp)=\beta_0+\beta_1GDPperCap+\beta_2Continent+\epsilon$$`
 
 
 ```r
-log_lev &lt;- lm(log(lifeExp) ~ gdpPercap_thou + pop_100mill + continent, 
-               data = gapminder2)
+log_lev &lt;- lm(log(lifeExp) ~ gdpPercap + continent, 
+               data = gapminder)
 ```
 
 ---
@@ -705,29 +422,29 @@ get_regression_table(log_lev) %&gt;%
 
 |term              | estimate|
 |:-----------------|--------:|
-|intercept         |    3.855|
-|gdpPercap_thou    |    0.007|
-|pop_100mill       |    0.012|
-|continentAmericas |    0.248|
-|continentAsia     |    0.152|
-|continentEurope   |    0.309|
-|continentOceania  |    0.315|
+|intercept         |    3.856|
+|gdpPercap         |    0.000|
+|continentAmericas |    0.250|
+|continentAsia     |    0.160|
+|continentEurope   |    0.311|
+|continentOceania  |    0.316|
 ]
 
 .pull-right[
 
-- How do we interpret `gdpPercap_thou`?
-
-- Life expectancy increases 0.7% per $1,000 increase in GDP per capita.
-
-- What about the `continent` coefficients? Refer to handout on eLC.
+- Rounded to 0. Suppose the estimate is 0.0004. How do we interpret `gdpPercap`?
 
 ]
 
 ---
 class: inverse, center, middle
 
-# Time to practice once again
+# What about those estimates for continent?
+
+---
+class: inverse, center, middle
+
+# Time for more practice
 
 ---
 # Predicting Value of Y
@@ -763,217 +480,65 @@ exp(3.912023)
 ---
 # Predicting value of Y
 
-- For example, log-level model
-
-`$$ln(\hat{y})=b_0+b_1x_1+...+b_kx_k$$`
-
-`$$\hat{y}=e^{b_0+b_1x_1+...+b_kx_k+\frac{MSE}{2}}$$`
-
-- Where MSE is mean squared error `\(RMSE^2\)`
-
----
-# Predicting value of Y
-
-`$$ln(LifeExp)=\beta_0+\beta_1GDPperCap+\beta_2Pop+\beta_3Continent+\epsilon$$`
+`$$ln(LifeExp)=\beta_0+\beta_1GDPperCap+\beta_2Continent+\epsilon$$`
 .pull-left[
 
 |term              | estimate|
 |:-----------------|--------:|
-|intercept         |    3.855|
-|gdpPercap_thou    |    0.007|
-|pop_100mill       |    0.012|
-|continentAmericas |    0.248|
-|continentAsia     |    0.152|
-|continentEurope   |    0.309|
-|continentOceania  |    0.315|
+|intercept         |    3.856|
+|gdpPercap         |    0.000|
+|continentAmericas |    0.250|
+|continentAsia     |    0.160|
+|continentEurope   |    0.311|
+|continentOceania  |    0.316|
 ]
 
 .pull-right[
-- Suppose we want to know the predicted life expectancy of an African country with a gdpPercap of $25,000 and population of 90,000,000?
+- Suppose we want to know the predicted life expectancy of an American country with a GDP per capita of $30,000.
 ]
 
 ---
 # Predicting value of Y
 
-`$$ln(\hat{LifeExp})=3.9+(0.007*25)+(0.012*0.9)$$`
+- **Step 1:** Usual calculation
 
-
-```r
-summary(log_lev)
-```
-
-&lt;img src="lectures_files/log-lev-rmse.png" width="1017" /&gt;
-
-
-`$$\hat{LifeExp}=e^{3.9+(0.007*25)+(0.012*0.9)+\frac{0.1577^2}{2}}$$`
-
-
-```r
-exp(3.9+(0.007*25)+(0.012*0.9)+((0.1577^2)/2))
-```
-
-```
-## [1] 60.23386
-```
-
----
-class: inverse, center, middle
-
-# Choosing between models
-
----
-# How to choose
-
-- We want to use the best model from our regression toolbox
+- `\(3.856+30000*0.000007+0.25 = 4.316\)`
 
 --
 
-- Could use model fit
+- **Step 2:** Add a correction term `\(\frac{SE^2}{2}\)`
 
-- Could use theory and/or data visualization
+&lt;img src="lectures_files/log-lev-rmse.png" width="1035" /&gt;
+
+- `\(4.316 + \frac{0.158^2}{2} = 4.328\)`
+
+--
+
+- **Step 3:** Exponentiate
+
+- `\(e^{4.328}=76\)`
 
 ---
-# Model fit
-
-- Choose the model with highest `\(R^2\)` or lowest RMSE
-
-- However, we can only compare models with a response variable in the same units
-
-- Therefore, we can't compare models with level and log response without some extra work
-
----
-# R-squared with level response
+# Predicting value of Y
 
 
 ```r
-summary(lev_lev2)
-summary(lev_log)
+gapminder %&gt;% 
+  filter(continent == 'Americas') %&gt;% 
+  ggplot(aes(x = gdpPercap, y = lifeExp)) +
+    geom_point() +
+*   geom_smooth()
 ```
 
-&lt;img src="lectures_files/lev_lev2_summary.png" width="1013" /&gt;
+![](Regression-with-nonlinears_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
 
-&lt;img src="lectures_files/lev_log_summary.png" width="1005" /&gt;
 
 ---
-# R squared with log response
+# Choosing the best model
 
+- You can't compare models that use ln(y) to models that do not based on the default goodness of fit values.
 
-```r
-library(broom)
-aug_log_log &lt;- augment(log_log)
-```
-
-
-```r
-aug_log_log
-```
-
-
-| log(lifeExp)| log(gdpPercap)| pop_100mill|continent | .fitted| .std.resid| .hat| .sigma| .cooksd|
-|------------:|--------------:|-----------:|:---------|-------:|----------:|----:|------:|-------:|
-|         3.36|           6.66|        0.08|Asia      |    3.90|      -4.06|    0|   0.13|    0.01|
-|         3.41|           6.71|        0.09|Asia      |    3.91|      -3.71|    0|   0.13|    0.01|
-|         3.47|           6.75|        0.10|Asia      |    3.91|      -3.35|    0|   0.13|    0.01|
-
----
-# R squared with log response
-
-- To obtain `\(R^2\)`, calculate correlation between `\(y\)` and `\(\hat{y}\)` then square it
-
-
-```r
-r_yyhat &lt;- cor(aug_log_log$`log(lifeExp)`, aug_log_log$.fitted)
-r_yyhat^2
-```
-
-```
-## [1] 0.6712588
-```
-
-
-```r
-aug_log_lev &lt;- augment(log_lev)
-r_yyhat &lt;- cor(aug_log_lev$`log(lifeExp)`, aug_log_lev$.fitted)
-r_yyhat^2
-```
-
-```
-## [1] 0.5404477
-```
-
----
-# Summary of Models
-
-
-|Model       | R_sq|
-|:-----------|----:|
-|Level-level | 0.58|
-|Level-log   | 0.71|
-|Log-level   | 0.54|
-|Log-log     | 0.67|
-
-- Results suggest level-log model is the best. Could stop here is all we cared about was best model.
-
-- But how far off is this model, on average, when predicting life expectancy?
-
-- We saw this on slide 54; **residual standard error** = 8.4, so about 8.4 years.
-
----
-# RMSE from log Y
-
-- The RMSE reported from models using `\(ln(y)\)` is in log units
-
-- What if we want RMSE in original units?
-
-
-```r
-aug_log_log &lt;- aug_log_log %&gt;% 
-* mutate(lifeExp = exp(`log(lifeExp)`),
-         yhat = exp(.fitted)) %&gt;% 
-* mutate(error = lifeExp - yhat)
-  
-sqrt(mean(aug_log_log$error^2))
-```
-
-```
-## [1] 7.049349
-```
-
-- Need only to modify the name of the new and existing variables in highlighted lines
-
-- Log-log model is off by 7 years, on average
-
----
-# RMSE from log Y
-
-
-```r
-aug_log_lev &lt;- aug_log_lev %&gt;% 
-  mutate(lifeExp = exp(`log(lifeExp)`), 
-         yhat = exp(.fitted)) %&gt;% 
-  mutate(error = lifeExp - yhat)
-  
-sqrt(mean(aug_log_lev$error^2))
-```
-
-```
-## [1] 8.711723
-```
-
-- Log-level model is off by 8.7 years, on average.
-
----
-# Summary
-
-
-|Model       | R_sq| RMSE|
-|:-----------|----:|----:|
-|Level-level | 0.58| 8.37|
-|Level-log   | 0.71| 6.97|
-|Log-level   | 0.54| 8.71|
-|Log-log     | 0.67| 7.05|
-
-- Unsurprisingly, `\(R^2\)` and RMSE agree. We should choose the level-log model for best fit. Other reasons may lead us to choose a different model such as log-log.
+- Converting goodness of fit models to be comparable is dense. Instead, use scatterplots and your best judgment to decide whether to log transform.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
