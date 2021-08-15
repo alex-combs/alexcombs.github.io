@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 1: Intro to R
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: May 25, 2021
+### Last updated: August 15, 2021
 
 ---
 
@@ -26,7 +26,7 @@ class: center, middle, inverse, title-slide
 By the end of this lab, you will learn how to...
 
 - open and navigate R
-- start a R project to organize your work
+- start an R project to organize your work
 - load data already formatted for R
 - load R packages
 - use R markdown and run code
@@ -41,13 +41,14 @@ By the end of this lab, you will learn how to...
 
 &gt; **Do this thing in this block**
 
-- Example code is in blocks like below or this `in-line code like this`
+- Example code is in blocks like below
 
 
 ```r
 summary(cars)
 ```
 
+- Or `in-line code like this`
 ---
 # RLab Process
 
@@ -76,13 +77,11 @@ summary(cars)
 
 &gt; **Type `getwd()` into the console (bottom-left pane) and hit Enter**
 
-- Should now see a printout of the current file path; for example
-
-- "/Users/alexcombs/Documents/"
+- R should return the current file path, such as "/Users/alexcombs/Documents/"
 
 - When you tell R to look for or save a file, this is the location R uses
 
-- We usually want a separate folder for each project/assignment that holds all relevant data and documents
+- We want a separate folder for each project/assignment that holds all relevant data and documents
 
 ---
 # R Projects
@@ -90,8 +89,6 @@ summary(cars)
 - R Projects are the best way to organize your work
 
 - Creates a folder for R to work from
-
-- Creates a .Rproj file that, when opened, automatically sets your working directory to that folder
 
 --
 
@@ -108,19 +105,25 @@ summary(cars)
 - R Demo 1 on eLC demonstrates this process in case you forget
 
 ---
-# Loading data already formatted for R
+# Importing CSV data
 
-- Certain software uses certain file extensions like `.xlsx` for Excel
+- Certain software uses file extensions like `.xlsx` for Excel
 
 - A data file that is already formatted for R has the extension `.RData` or `.rds`
 
---
-
-&gt; **Download the file titled "states1.RData" on eLC. Leave it wherever your computer saved it (probably your Downloads folder)**
+- A `.csv` file can be opened by virtually any software
 
 --
 
-&gt; **Type `load('states1.RData')` in the console and hit `Enter`**
+&gt; **Download the file titled "states1.csv" on eLC. Leave it wherever your computer saved it (probably your Downloads folder). In your console, type:**
+
+--
+
+
+```r
+library(tidyverse) # Need to have installed tidyverse
+states1 &lt;- read_csv("states1.csv")
+```
 
 - You must use quotes (single or double) anytime you tell R to load or save a file
 
@@ -131,22 +134,27 @@ summary(cars)
 
 
 ```r
-Error in load(states1.RData) : object 'states1.RData' not found
+Error in load(states1.RData) : object 'states1.csv' not found
 Calls: &lt;Anonymous&gt; ... withCallingHandlers -&gt; withVisible -&gt; eval -&gt; eval -&gt; load
 Execution halted
 ```
 
 - R tries to tell you what went wrong in the error message
 
---
+---
+# Moving a file to our project
 
 - Remember, R looks for files in your project folder
 
-- R is saying it can't find the file we just told it to load
+- R is saying it can't find the file we just told it to import
 
-&gt; **Using your computer's file manager, move states1.RData to your project folder**
+- I will now demonstrate moving a file to my project folder
 
-&gt; **Now re-run `load('states1.RData')` command**
+--
+
+&gt; **Using your computer's file manager, move states1.csv to your project folder**
+
+&gt; **Now re-run `states1 &lt;- read_csv("states1.csv")` command**
 
 ---
 # Data in your R session
@@ -160,127 +168,19 @@ Execution halted
 - Or click on `states1` to see the data in spreadsheet format
 
 ---
-# Starting a document
+# Starting an R Markdown Document
 
-- Two common documents 
-  - Script: minimalist place to save code
-  - R Markdown: allows you to fluidly combine content and code to export to all sorts of things [video](https://rmarkdown.rstudio.com/lesson-1.html)
+- R Markdown: allows you to fluidly combine content and code to export to all sorts of things [video](https://rmarkdown.rstudio.com/lesson-1.html)
 
 - We will use R Markdown documents exclusively in this course
 
-- But let's start with editing a script seeing the difference between the two can be helpful
-  
----
+--
 
-# Scripts
-
-- I will now demonstrate how to open a script
+- I will now demonstrate how to start an R Markdown (.Rmd) document.
 
 --
 
-&gt; **Open a script**
-
---
-
-- Purpose of scripts is to save code without caring about a finished document
-
-- Scripts support two elements:
-  - Code
-  - Comments (requires hashtag `#` so R knows what is a comment)
-  
-
-```r
-# This is a comment. Below is some arbitrary math.
-((5+5)/2)^2
-```
-
-```
-## [1] 25
-```
-
----
-# Using a script
-
-- R interprets each line of a script as a command to execute
-
-- To execute a line, use Cmd+Enter
-
-- I will now demonstrate executing code in a script
-
---
-
-&gt; **Type some arbitrary math in your script and execute**
-
----
-# Objects
-
-- Objects are anything you tell R to temporarily save during a session. A dataset, a number, a list of numbers, etc.
-
-- You can save any object to your computer or delete it when you close R. Deleting is fine as long as you saved the code that created the object(s).
-
-- You should already have an object `states1`
-
----
-# Creating an object
-
-&gt; **Add `x &lt;-` to the arbitrary math in your script like I did below. Execute.**
-
-
-```r
-x &lt;- ((5+5)/2)^2
-```
-
---
-
-- The `&lt;-` symbol is called the **assignment operator**. It tells R to save the result of the thing on the right side as the name on the left side.
-
-- The keyboard shortcut for the assignment is `Alt-` on PC or `Option-` on Mac.
-
----
-# Why save an object?
-
-- We create an object whenever we want to use something for later or save it as a file.
-
-- Suppose you want to know what `x^2` equals.
-
-- You don't need to recreate `x`. You can just square `x` like below.
-
-
-```r
-x^2
-```
-
-```
-## [1] 625
-```
-
-- This becomes very useful when working with multiple datasets
-
----
-# Cleaning our environment
-
-- By default, R keeps all the objects in our environment
-
-- Over time, this becomes too much
-
---
-
-- I will now demonstrate two options to clean our environment
-  - Manually
-  - Automatically via settings
-
----
-# R Markdown
-
-&gt; **Close your script. You don't have to save it if you don't want.**
-
---
-
-- I will now demonstrate how to start a R Markdown (.Rmd) document.
-
---
-
-&gt; **Start a .Rmd document.**
+&gt; **Start an R Markdown (.Rmd) document.**
 
 - Let's review the template. It is informative.
 
@@ -291,25 +191,16 @@ x^2
 
 - Should see a knit button at the top of the editor pane. Clicking it will knit your document.
 
-  - Keyboard shortcut is `Cmd+Shift+K`
+- Every time you knit, R saves your document
   
 --
 
 &gt; **Knit your Rmd document. Name it "test"**
 
 ---
-# Cheatsheets
-
-- The R Markdown cheatsheet is also informative
-
-&gt; **Go to Help-&gt;Cheatsheets-&gt;R Markdown Cheat Sheet**
-
----
 # YAML header
 
 - The YAML header tells R how to format the output
-
-- We will learn additions later
 
 &gt; **Change the YAML to the following:**
 
@@ -325,16 +216,129 @@ output: html_document
 &gt; **Knit to HTML again**
 
 ---
+# Code Chunks
+
+- Code chunks separate text from R code
+
+- To add a code chunk, you can point-and-click or use the keyboard shortcut `Cmd+Opt+I`
+
+- I will now demonstrate inserting a code chunk and typing some arbitrary arithmetic
+
+--
+
+&gt; **At the bottom of your Rmd, insert a code chunk and type some arbitrary arithmetic inside it. Click `Enter` a few times and type another line of arithmetic.**
+
+---
+# Running Code Chunks
+
+- Several options to run code in an Rmd
+
+- To run a particular code chunk, click on the play button. This runs ALL of the lines of code in the chunk.
+
+- To run a single line of code, place your cursor on that line and click `Cmd+Enter`
+
+- To run multiple code chunks, use the Run menu at the top of the editor pane
+
+---
+# Objects
+
+- Objects are anything you tell R to temporarily save during a session. A dataset, a number, a list of numbers, etc.
+
+- You can save any object to your computer or delete it when you close R. Deleting is fine as long as you saved the code that created the object(s).
+
+- You should already have an object `states1`
+
+---
+# Creating an object
+
+&gt; **Add `x &lt;-` to the second line of arbitrary arithmetic in your code chunk like below. Run the code chunk.**
+
+
+```r
+x &lt;- ((5+5)/2)^2
+```
+
+--
+
+- The `&lt;-` symbol is called the **assignment operator**. It tells R to save the result of the thing on the right side as the name on the left side.
+
+- The keyboard shortcut for the assignment is `Alt-` on PC or `Option-` on Mac.
+
+---
+# Why save an object?
+
+- We create an object whenever we want to use it later in the Rmd or save it as a file.
+
+- Suppose you want to know what `x^2` equals.
+
+- You don't need to recreate `x`. You can just square `x` like below.
+
+
+```r
+x^2
+```
+
+```
+## [1] 625
+```
+
+- This becomes very useful when working with multiple datasets, or changing an original dataset
+
+---
+# Creating an object
+
+&gt; **Insert another code chunk. Add and run the following code:**
+
+
+```r
+states2 &lt;- select(states1, state, pop_1990)
+```
+
+- Now we have two datasets. We can use states2 for whatever we needed it for while preserving states1 if we need that too.
+
+--
+
+&gt; **Knit your Rmd again.**
+
+---
+# Our second error
+
+- R cannot find function `select`. But it worked when we ran the line of code.
+
+- When you knit, R runs the code from beginning-to-end and ignores anything you did in the console to load a package or import data.
+
+- If a code chunk in your Rmd depends on something you did in the console, your Rmd won't knit unless we include that code in the Rmd
+
+--
+
+&gt; **In the first code chunk of your Rmd, add a new line of code: `library(tidyverse)`. Try to knit again.**
+
+---
+# Our third error
+
+- R can't find object `states1`, but `states1` is in our environment.
+
+- What is the problem?
+
+--
+
+&gt; **Add `states1 &lt;- read_csv("states1.csv")` in the first code chunk BELOW loading tidyverse because read_csv depends on tidyverse. Try to knit again.**
+
+---
+# Returning to a project
+
+&gt; **Since you just knitted, everything is saved. Close RStudio.**
+
+- To return to a project, you can open the .Rproj file in your project folder. 
+- RStudio should open right where you left off.
+
+---
 class: inverse, middle, center
 
 # Let's create our first RLab and upload to eLC
 
 ---
 # Starting RLab1
-
-- I will now demonstrate adding another file to our project folder
-
---
 
 &gt; **Download the file "rlab1_profile" from eLC and add to your "rlab1" project folder**
 
@@ -343,15 +347,9 @@ class: inverse, middle, center
 &gt; **Complete the instructions in the "rlab1_profile" until you reach the section titled "Some of my R skills"**
 
 ---
-# Adding code chunks
+# Some of my R skills
 
-- Unlike a script, we must tell RStudio when to interpret code using a **code chunk**
-
-- To add a code chunk, use the keyboard shortcut `Cmd+Opt+I`
-
-- I will now demonstrate
-
---
+- Under "I know how to include and execute code chunks."
 
 &gt; **Add a code chunk** 
 
@@ -360,103 +358,41 @@ class: inverse, middle, center
 &gt; **Assign the result to an object named `math`**
 
 ---
-# Running a code chunk
+# Some of my R skills
 
-- Several options to run code
+- Under "I know how to load an R package."
 
-- I will now demonstrate
+&gt; **Add another code chunk**
 
-- Simplest option is the keyboard shortcut `Cmd+Enter`
+&gt; **Write code that will load the tidyverse package**
 
 ---
-# Packages
+# Some of my R skills
 
-- Many functions we want to use require packages.
+- Under "I know how to import a data set."
 
-- Your Rmd won't knit if you use code that requires a package that you haven't loaded **inside** of your Rmd.
+&gt; **Add another code chunk**
 
---
+&gt; **Write code that will import states1.csv**
 
-&gt; **Add another code chunk to your Rmd.**
+---
+# Some of my R skills
 
-&gt; **Add the below code to it and run**
+- Under "I know one way to print a data set."
+
+&gt; **Add another code chunk and add the following code**
 
 
 ```r
-glimpse(states1)
+states1
 ```
 
---
-
-
-```r
-Error in glimpse(states1) : could not find function "glimpse"
-```
-
-- This is because we haven't loaded the package to which `glimpse` belongs.
-
----
-# Installing packages
-
-- To load a package, it has to be installed on your computer. You only need to install a package once.
-
-- If you haven't already, let's install the `tidyverse` package to our copy of R.
-
-&gt; **Run the following code in your console**
-
-
-```r
-install.packages("tidyverse")
-```
-
---
-
-- **Never** install packages inside of your Rmd. This causes R to install every time you knit. Only install in your console.
-
----
-# Loading packages
-
-- Once installed, now we can load a package whenever we need it. 
-
-&gt; **Add another code chunk to the bottom of your Rmd.**
-
-&gt; **Add this code to it and run.**
-
-
-```r
-library(tidyverse)
-```
-
----
-# Knitting in order
-
-&gt; **Now try running the `glimpse(states1)` code from before.**
-
-- The result of the code should now be visible inside of your Rmd.
-
---
-
-&gt; **Now knit your Rmd.**
-
---
-
-Error?! Let's investigate.
-
----
-# Knitting in order
-
-- R knits in the order of your code chunks. If you use a function that requires a package but you load the package afterwards, then R won't recognize the function when you knit.
-
---
-
-&gt; **Copy-and-paste the `library(tidyverse)` chunk above the `glimpse(states1)` chunk**
-
-&gt; **Knit to HTML again.**
+&gt; **Knit your Rmd.**
 
 ---
 # Upload to eLC
 
-- Upload your Rmd file to the RLabs assignment dropbox on eLC.
+&gt; **Upload your Rmd file to the RLab1 assignment dropbox on eLC.**
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
