@@ -226,6 +226,8 @@ class: inverse, center, middle
 
 - Graded pass/fail if you work on RLab in class
 
+- If you miss class, due by 12:00PM the Sunday following class. I will check for accuracy and completeness. 
+
 ---
 # Problem Sets
 
