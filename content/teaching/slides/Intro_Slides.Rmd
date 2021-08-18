@@ -171,8 +171,6 @@ class: inverse, center, middle
 - Statistical concepts relatively simple at first, then complexity increases around Week 6
 
 - Struggling with R is part of the process
-  - Do not worry
-  - Practice R frequently
 
 ---
 
@@ -180,9 +178,7 @@ class: inverse, center, middle
 
 - All materials are free
 
-- Almost all materials produced using R
-
-- Text: [Data Apps in PA](https://alex-combs.github.io/data-apps-text/)
+- Readings: [Data Apps in PA](https://alex-combs.github.io/data-apps-text/)
   - List of supplemental texts provided in the preface
 
 - Slides mostly build off of text with different examples or additional R code that may be helpful for assignments
@@ -206,8 +202,6 @@ class: inverse, center, middle
 # R Chapters
 
 - Provide weekly R practice
-
-- Designed to take an hour at most or point of diminishing returns
 
 - Graded pass/fail conditional on good faith effort
 
@@ -264,7 +258,7 @@ class: inverse, center, middle
 
 - Attendance not required; no explanation needed unless pertains to missing a deadline
 
-- Link to schedule office hours is on syllabus (Zoom only)
+- Link to schedule office hours is on eLC.
   - W 3-7PM
   - F 10AM-12PM
 
