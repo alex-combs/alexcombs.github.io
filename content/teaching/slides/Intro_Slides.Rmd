@@ -181,8 +181,6 @@ class: inverse, center, middle
 - Readings: [Data Apps in PA](https://alex-combs.github.io/data-apps-text/)
   - List of supplemental texts provided in the preface
 
-- Slides mostly build off of text with different examples or additional R code that may be helpful for assignments
-
 ---
 # Course Components & Assignments
 
@@ -254,7 +252,7 @@ class: inverse, center, middle
 - Logistics and invite link on eLC
 
 ---
-# Remainder
+# Attendance & Office Hours
 
 - Attendance not required; no explanation needed unless pertains to missing a deadline
 

@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 1: Intro to R
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: August 15, 2021
+### Last updated: August 19, 2021
 
 ---
 
@@ -35,7 +35,7 @@ By the end of this lab, you will learn how to...
 ---
 # RLab Conventions
 
-- Bullets denote background, instructions, etc.
+- Bullets provide background, explanation, etc.
 
 - Block quote in bold like below denotes a prompt
 
@@ -56,14 +56,15 @@ summary(cars)
 
 - Highly likely that you will encounter errors; this is normal
   - If so, **STOP ME**
-  - Be prepared to share your screen
   - Troubleshooting can help you and others learn
-  - Observers are encouraged to offer suggestions
+  
+---
+class: inverse, middle, center
+
+# Does everyone have access to RStudio (need R installed too) or RStudio Cloud? If so, let's begin.
 
 ---
 # Starting R
-
-- Once R and RStudio are installed on your computer
 
 &gt; **Launch RStudio**
 
@@ -105,25 +106,36 @@ summary(cars)
 - R Demo 1 on eLC demonstrates this process in case you forget
 
 ---
-# Importing CSV data
+# Some data file types
 
 - Certain software uses file extensions like `.xlsx` for Excel
 
 - A data file that is already formatted for R has the extension `.RData` or `.rds`
 
-- A `.csv` file can be opened by virtually any software
+- A `.csv` file is compatible with virtually any software
 
---
+---
+# Importing CSV data
 
-&gt; **Download the file titled "states1.csv" on eLC. Leave it wherever your computer saved it (probably your Downloads folder). In your console, type:**
+&gt; **Download the file titled "states1.csv" from eLC. Leave it wherever your computer saved it (probably Downloads folder). In your console, type:**
 
 --
 
 
 ```r
-library(tidyverse) # Need to have installed tidyverse
+library(tidyverse) # Must have tidyverse installed
+```
+
+&gt; **Then hit Enter. Next, type in your console:**
+
+--
+
+
+```r
 states1 &lt;- read_csv("states1.csv")
 ```
+
+&gt; **Then hit Enter**
 
 - You must use quotes (single or double) anytime you tell R to load or save a file
 
@@ -195,7 +207,7 @@ Execution halted
   
 --
 
-&gt; **Knit your Rmd document. Name it "test"**
+&gt; **Knit your Rmd document. R will ask you to name it first. Name it "test" (or whatever you want).**
 
 ---
 # YAML header
@@ -335,16 +347,22 @@ states2 &lt;- select(states1, state, pop_1990)
 ---
 class: inverse, middle, center
 
-# Let's create our first RLab and upload to eLC
+# Let's create our first RLab Rmd to upload to eLC
 
 ---
-# Starting RLab1
+# Set-up
 
 &gt; **Download the file "rlab1_profile" from eLC and add to your "rlab1" project folder**
 
-&gt; **Rename the file "firstname_lastname_profile"**
+--
 
-&gt; **Complete the instructions in the "rlab1_profile" until you reach the section titled "Some of my R skills"**
+&gt; **Rename the file "firstname_lastname_profile" which you can do via your file manager (as with any file) or inside RStudio (I will demonstrate).**
+
+--
+
+&gt; **In your file pane, click on the file and it will open in the top-left pane.**
+
+&gt; **Complete the instructions until you reach the section titled "Some of my R skills"**
 
 ---
 # Some of my R skills
