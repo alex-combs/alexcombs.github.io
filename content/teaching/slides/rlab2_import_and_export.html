@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 2: Importing &amp; Exporting Data &amp; Documents
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: January 21, 2021
+### Last updated: August 26, 2021
 
 ---
 
@@ -28,7 +28,7 @@ By the end of this lab, you will have learned how to...
 - Import data
 
   - included in a R package
-  - csv and xlsx
+  - csv and Excel
   - directly from url
   
 - Export R Markdown
@@ -55,8 +55,6 @@ By the end of this lab, you will have learned how to...
 ---
 # Packages
 
-- I will now demonstrate loading the R packages we need for this lab.
-
 - Remember that a package will not load if it is not installed.
 
 --
@@ -78,48 +76,22 @@ class: inverse, middle, center
 # Data imports
 
 ---
-# Review
-
-- Learned last week how to load RData files
-
-&gt; **In your setup code chunk, load the "states1.RData" file from the previous lab**
-
-- You can copy-and-paste from rlab1 to rlab2 folder, then
-
-
-```r
-load("states1.RData")
-```
-
-- Or, if you want to keep file in rlab1:
-
-
-```r
-load("../rlab1/states1.RData")
-```
-
-- The `..` is a shortcut so you don't have to type the entire file directory.
-
----
-# Data in R
+# R Package data
 
 - R loads with some example datasets already built in
 
 
 ```r
-# head() prints out the top 6 rows of a dataset
-head(mtcars)
+slice_head(mtcars, n=4)
 ```
 
 
-|                  |  mpg| cyl| disp|  hp| drat|    wt|  qsec| vs| am| gear| carb|
-|:-----------------|----:|---:|----:|---:|----:|-----:|-----:|--:|--:|----:|----:|
-|Mazda RX4         | 21.0|   6|  160| 110| 3.90| 2.620| 16.46|  0|  1|    4|    4|
-|Mazda RX4 Wag     | 21.0|   6|  160| 110| 3.90| 2.875| 17.02|  0|  1|    4|    4|
-|Datsun 710        | 22.8|   4|  108|  93| 3.85| 2.320| 18.61|  1|  1|    4|    1|
-|Hornet 4 Drive    | 21.4|   6|  258| 110| 3.08| 3.215| 19.44|  1|  0|    3|    1|
-|Hornet Sportabout | 18.7|   8|  360| 175| 3.15| 3.440| 17.02|  0|  0|    3|    2|
-|Valiant           | 18.1|   6|  225| 105| 2.76| 3.460| 20.22|  1|  0|    3|    1|
+|               |  mpg| cyl| disp|  hp| drat|    wt|  qsec| vs| am| gear| carb|
+|:--------------|----:|---:|----:|---:|----:|-----:|-----:|--:|--:|----:|----:|
+|Mazda RX4      | 21.0|   6|  160| 110| 3.90| 2.620| 16.46|  0|  1|    4|    4|
+|Mazda RX4 Wag  | 21.0|   6|  160| 110| 3.90| 2.875| 17.02|  0|  1|    4|    4|
+|Datsun 710     | 22.8|   4|  108|  93| 3.85| 2.320| 18.61|  1|  1|    4|    1|
+|Hornet 4 Drive | 21.4|   6|  258| 110| 3.08| 3.215| 19.44|  1|  0|    3|    1|
 
 ---
 # Data in R Packages
@@ -128,8 +100,6 @@ head(mtcars)
 
 - We can browse these datasets by going to the "Packages" tab in the bottom-right pane of RStudio
 
-- I will demonstrate
-
 ---
 # Data in R Packages
 
@@ -137,8 +107,8 @@ head(mtcars)
 
 
 ```r
-# n=4 changes default of first six rows to first 4
-head(gapminder, n=4)
+# n=4 prints the top 4 rows
+slice_head(gapminder, n=4)
 ```
 
 
@@ -156,44 +126,43 @@ head(gapminder, n=4)
 
 
 ```r
-gap_preview &lt;- head(gapminder, n=4)
+gap_preview &lt;- slice_head(gapminder, n=4)
 ```
 
 ---
+# Printing the result
 
 - Note that you now have a new object in the environment and R does not print the table
 
-- If you want R to print `gap_preview`, you can wrap the line in parentheses or type `gap_preview` on a separate line
+&gt; **Type `gap_preview` on a separate line so the table prints when knit**
 
 
 ```r
-(gap_preview &lt;- head(gapminder, n=4))
+gap_preview &lt;- slice_head(gapminder, n=4)
 
 gap_preview
 ```
-
-&gt; **Use one of the options to print first 4 rows of `gapminder`.**
 
 ---
 # Data in R Packages
 
 - There is a dataset named `hate_crimes` loaded from the the `fivethirtyeight` package.
 
-- We can use it directly, but suppose we want to copy it as a local object. Then,
+&gt; **Insert a new code chunk and add the following code**
 
 
 ```r
 hc &lt;- hate_crimes
 ```
 
-&gt; **In the same code chunk, use the code above to copy `hate_crimes` to your environment**
+&gt; **Add code that will print the first six rows of the `hc` dataset.**
 
-&gt; **Print the first six rows of the `hc` dataset.**
+&gt; **Knit to HTML**
 
 ---
 class: inverse, middle, center
 
-# Let's pause learning data imports to learn how to print tables.
+# Let's pause learning data imports to learn some ways to print tables.
 
 ---
 # Printing tables
@@ -202,17 +171,13 @@ class: inverse, middle, center
 
 
 ```r
-(gap_preview &lt;- head(gapminder, n=4))
-head(hc, n=4)
+gap_preview
+slice_head(hc, n=4)
 ```
 
-&gt; **Knit to HTML and view the output**
+- Note both tables are readable but look pretty bad
 
-- Note that both tables are readable but neither looks good
-
-- There is enough horizontal space for all `gapminder` variables to display but not for all `hc` variables
-
-- Common to knit often to check how the output looks. We can make this output look better.
+- There is enough horizontal space for all `gap_preview` variables to display but not for all `hc` variables
 
 ---
 # YAML df_print: kable
@@ -226,7 +191,6 @@ head(hc, n=4)
 ---
 title: "RLab2: Import &amp; Export"
 author: "Alex Combs"
-date: "1/21/2021"
 *output: #no space after colon
 * html_document: #tab indent
 *   df_print: kable #tab indent
@@ -237,7 +201,7 @@ date: "1/21/2021"
 
 --
 
-- The `gapminder` table looks good but notice that the `hc` table runs off the page.
+- The `gap_preview` table looks good but the `hc` table runs off the page.
 
 ---
 # YAML df_print: paged
@@ -255,8 +219,6 @@ output:
 *   df_print: paged
 ---
 ```
-
---
 
 - Now we can interact with the `hc` table to view multiple pages of variables
 
@@ -300,6 +262,13 @@ class: inverse, middle, center
 
 - echo = TRUE/FALSE 
   - Suppress the code from the output but show results
+  
+
+```r
+{r, echo=FALSE}
+```
+
+--
 
 - include = TRUE/FALSE
   - Suppress the code and the results from the output
@@ -312,17 +281,13 @@ class: inverse, middle, center
 ---
 # Code chunk options
 
-- Suppose we wanted to explore the `gapminder` data like we have already done but don't want the code or the table to show in the output.
-
-&gt; **Add the code chunk option that will achieve this.**
+&gt; **Add the code chunk option that will suppress the code AND the output related to `gap_preview`**
 
 --
 
-- Now, suppose we want to suppress the code that generated the `hc` table but keep the table.
+&gt; **Add the code chunk option that will suppress the code but show the output related to `hc`.**
 
-&gt; **Add the code chunk option that will achieve this.**
-
-&gt; **Knit to HTML again to check the output**
+&gt; **Knit to HTML again to check the export**
 
 ---
 # Output options overview
@@ -335,30 +300,25 @@ class: inverse, middle, center
 # Back to data imports
 
 ---
-# Importing CSV and Excel
+# Importing data
 
-- Two very common data file types are
+- Organizations publish data files in a variety of (inconvenient) formats.
 
-  - Comma separated files (CSV)
-  - Excel files (XLS or XLSX)
+- But a given organization tends to use a consistent format across files and time
 
 --
-  
-- Considerations:
 
-  - Will others need to replicate my analysis in the future?
-  - Do I want to create a RData file and discard the original file, or
-  - Keep the original file and import with each knit?
-  - Do the data update frequently?
+- Some guidelines:
+  - Don't overwrite the original file, use code to change how it is formatted
+  - Improve the formatting at least enough to eliminate unnecessary rows/columns
+  - Decide whether additional formatting is worth your time (renaming variables, changing variable types)
 
 ---
-# Import CSV files
+# Import CSV
 
-&gt; **Download "ncbirths.csv" available on eLC and add it to your "rlab2" project folder**
+&gt; **Download "ncbirths.csv" from eLC and add it to your "rlab2" project folder**
 
-&gt; **Open it using whatever spreadsheet software you prefer.**
-
-- Some notable features for this import:
+- Some notable features of this file (viewing in Excel):
   - Variable names are in the top row
   - Variable names are concise and lowercase
   - Missing values denoted by "NA"
@@ -367,8 +327,6 @@ class: inverse, middle, center
 
 ---
 # Import CSV
-
-- To import CSV, we should use `read_csv` which is part of the `tidyverse` package.
 
 - Generic syntax:
 
@@ -380,25 +338,10 @@ any_name &lt;- read_csv("filename.csv")
 - Tells R to import the `"filename.csv"`, naming it whatever we type on the left side
 
 - Remember:
-  - Quotes (single or double) around the file
+  - Quotes around the file
   - Include the file extension .csv
 
 &gt; **Add a code chunk to your Rmd and import `ncbirths`**
-
----
-# Import CSV
-
-- Should see a long printout where R tells you how it stored each variable
-
-- Should also see a new object in the environment
-
---
-
-- `read_csv()` has several options that can help us import files less neatly organized csv files
-
-- To see options of any function, go to its `help` documentation on the "Help" tab in the bottom-right pane
-
-- Start typing the function in the search bar. If you loaded the package that contains the function, it should auto-complete.
 
 ---
 # read_csv() options
@@ -421,45 +364,39 @@ ncbirths &lt;- read_csv("ncbirths.csv",
 
 - The above code uses options to:
   - Name first two variables
-  - Store all variables as integers or factors
-  - Skip the first row because no longer using it
+  - Store all variables as integers, numbers, or factors
+  - Skip the first row of variable names (because inserting my own row of names)
 
 ---
 # Import Excel
 
-- To import Excel files, we should use the `read_xlsx` or `read_xls` functions in the `readxl` package.
+- To import Excel files, use the `read_excel` function in the `readxl` package.
+
+- Works with both .xls or .xlsx extensions
 
 - Generic syntax:
 
 
 ```r
-anyname &lt;- read_xlsx("filename.xlsx")
+anyname &lt;- read_excel("filename.xlsx")
 ```
-
-- Remember
-  - Quotes around the file name
-  - File extension .xlsx or .xls needs to match the function `read_xlsx()` or `read_xls()`
   
 ---
 # Import Excel
 
 &gt; **Download "ga_schdist_raw.xlsx" from eLC and add to your "rlab2" project folder.**
 
-&gt; **Open "ga_schdist_raw.xlsx" using your preferred spreadsheet software.**
-
---
-
-- Notable features for this import:
+- Notable features for this file (viewing in Excel):
   - Variable names start on 7th row
   - Variable names are messy
   - Several rows we should not import starting after row 230
 
-- We need to use options for this file. Let's check out what options `read_xlsx` has.
+- We need to use options for this file. Let's check out what options `read_excel` has via the "Help" tab in the bottom-right pane.
 
 ---
 # Import Excel
 
-- The `range` option allows us to specify the cells we want to import
+- The `range` option allows us to specify the cells we want to import from top-left to bottom-right
 
 - We could import "A7:I230" but that includes variable names that we would want to change later anyway.
 
@@ -480,13 +417,26 @@ ga_schdist_raw &lt;- read_xlsx("ga_schdist_raw.xlsx",
                                            "state",
                                            "charter",
                                            "enroll",
-                                           "lep", "sped",
+                                           "lep", "iep",
                                            "frpl",
                                            "white",
                                            "expenditures"))
 ```
 
 - Now anyone using the same data file can run this code to get a clean import
+
+---
+# Point-click-and-code option
+
+- For virtually any data file in your project folder:
+
+- Click on the file in your files pane (bottom-left), then click "Import Dataset..."
+
+- R will choose the package and function needed to import that file and provide a preview
+
+- Allows you to point-and-click based on what options you want to use to improve the formatting
+
+- Displays and updates the code to complete the import. You can then copy-and-paste this code to your Rmd.
 
 ---
 # Import from URL
@@ -525,6 +475,8 @@ anyname &lt;- fread('url')
 
 
 
+--
+
 &gt; **Set eval=FALSE so the data does not load every time we knit.**
 
 ---
@@ -539,18 +491,14 @@ class: inverse, center, middle
 
 &gt; **In the Knit dropdown menu, select "Knit to Word"**
 
-- Formatting likely an issue
-
-- I recommend changing the formatting from inside Word after you finish the main content using R
+- Then you can change the formatting using Word after you finish the main content using R (text, tables, graphs)
 
 ---
 # Knit to PDF
 
 - In order to knit to PDF, your computer needs a copy of a program called LaTeX
 
-- You can install a light version of LaTeX within RStudio. 
-
-&gt; **Run the following code in your console**
+- If you want, you can install a light version of LaTeX within RStudio. 
 
 
 ```r
@@ -563,10 +511,6 @@ tinytex::install_tinytex() # hit Enter, this will take a few minutes
 
 ---
 # Knit to PDF
-
-&gt; **Knit your document to PDF using the Knit dropdown menu**
-
-- You should now have a PDF document in your project folder you can open.
 
 - There are packages you can download that offer templates that will format your PDFs into research papers or reports so you don't have to learn LaTeX formatting.
 
@@ -582,7 +526,7 @@ class: inverse, center, middle
 ---
 # Export data to CSV
 
-- We may want to export an object in our environment to CSV for non-R-users to use
+- We may want to export data in our environment to CSV for others to use
 
 - Generic syntax:
 
@@ -593,26 +537,14 @@ write_csv(name_of_object, 'name_for_new_file.csv')
 
 --
 
-&gt; **Export the `gap_preview` object to a csv file.**
+&gt; **Export the `ga_schdist_raw` object to a csv file. Name the file "ga_schdist_clean"**
 
 ---
 # Recap
 
 - Over past two weeks...
 
-- Launch R -&gt; load data &amp; packages needed to do analysis -&gt; knit to document -&gt; save documents and data for later use
-
---
-
-  - Import .RData, .csv, Excel, and urls
-
-  - Export analysis to HTML, Work, PDF
-
-  - Format what your reader sees
-
-  - Export any new data to .csv for anyone else to use with other software
-
---
+- Launch R -&gt; load packages &amp; import data needed to do analysis -&gt; knit to document -&gt; save documents and data for later use
 
 - This covers the general procedure of realistically using R 
 - Now just need to add analytical skills
@@ -620,7 +552,7 @@ write_csv(name_of_object, 'name_for_new_file.csv')
 ---
 # Upload to eLC
 
-- Upload your Rmd to the RLabs assignment dropbox on eLC.
+- Upload your Rmd to the RLab assignment dropbox on eLC.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
