@@ -784,6 +784,9 @@ gapminder %>%
 
 ```{r, eval=FALSE}
 gapminder52 %>% 
+  select(country, pct_global_gdp) %>% 
+  arrange(desc(pct_global_gdp)) %>% 
+  slice_head(n=5) %>% 
   kable(digits = 1,
         col.names = c('Country', 'Percent of Global GDP'),
         caption = 'Largest Economies in 1952')

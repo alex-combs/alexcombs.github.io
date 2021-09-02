@@ -312,9 +312,9 @@ class: inverse, middle, center
 - Brief review of each verb then practice using `gapminder`
 
 
-|country          |continent | year| lifeExp|     pop| gdpPercap|
-|:----------------|:---------|----:|-------:|-------:|---------:|
-|Hong Kong, China |Asia      | 2007|    82.2| 6980412|     39725|
+|country |continent | year| lifeExp|     pop| gdpPercap|
+|:-------|:---------|----:|-------:|-------:|---------:|
+|Algeria |Africa    | 1952|    43.1| 9279525|      2449|
 
 - Continents &amp; years included
 
@@ -828,6 +828,9 @@ gapminder %&gt;%
 
 ```r
 gapminder52 %&gt;% 
+  select(country, pct_global_gdp) %&gt;% 
+  arrange(desc(pct_global_gdp)) %&gt;% 
+  slice_head(n=5) %&gt;% 
   kable(digits = 1,
         col.names = c('Country', 'Percent of Global GDP'),
         caption = 'Largest Economies in 1952')
