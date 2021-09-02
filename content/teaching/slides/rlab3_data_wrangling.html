@@ -312,9 +312,9 @@ class: inverse, middle, center
 - Brief review of each verb then practice using `gapminder`
 
 
-|country   |continent | year| lifeExp|     pop| gdpPercap|
-|:---------|:---------|----:|-------:|-------:|---------:|
-|Guatemala |Americas  | 1997|    66.3| 9803875|    4684.3|
+|country |continent | year| lifeExp|      pop| gdpPercap|
+|:-------|:---------|----:|-------:|--------:|---------:|
+|Canada  |Americas  | 1957|      70| 17010154|     12490|
 
 - Continents &amp; years included
 
@@ -371,7 +371,7 @@ filter(gapminder, continent == 'Africa')
 
 &gt; **Type a new heading, "Wrangle Practice"**
 
-&gt; **Type a lower-level hearing, "Filter"**
+&gt; **Type a lower-level heading, "Filter"**
 
 &gt; **Start a new code chunk and name it filter. Set option to suppress code AND output.**
 
@@ -435,7 +435,7 @@ filter(gapminder, continent != 'Oceania' &amp; year &gt;= 1992)
 ---
 # Filter practice
 
-&gt; **In a new code chunk, write code that will filter `gapminder` according to each prompt below and print the resulting table.**
+&gt; **Start a new code chunk named filter2, write code that will filter `gapminder` according to each prompt below and print the resulting table.**
 
 &gt; **Keep Americas in 1952**
 
@@ -696,7 +696,7 @@ arrange(gapminder, desc(lifeExp))
 ---
 # Arrange practice
 
-&gt; **Type a heading the same level as Filter titled, "Arrange"**
+&gt; **Type a heading the same level as Mutate titled, "Arrange"**
 
 &gt; **Start a new code chunk and name it arrange.**
 
@@ -759,12 +759,12 @@ Suppose I wanted to provide a table of the top five countries with respect to pe
 ```r
 gapminder07 &lt;- filter(gapminder, year == 2007)
 
-gapminder07 &lt;- mutate(gapminder2, 
+gapminder07 &lt;- mutate(gapminder07, 
                      gdp = gdpPercap*pop,
                      global_gdp = sum(gdp),
                      pct_global_gdp = (gdp/global_gdp)*100)
 
-gdp_table &lt;- select(gapminder2, country, pct_global_gdp)
+gdp_table &lt;- select(gapminder07, country, pct_global_gdp)
 gdp_table &lt;- arrange(gdp_table, desc(pct_global_gdp))
 
 slice_head(gdp_table, n = 5)
@@ -798,11 +798,13 @@ gapminder %&gt;%
 
 &gt; **Add a heading "Pipe Operator"**
 
-&gt; **Start a new code chunk and name it pipe.**
+&gt; **Start a new code chunk and name it pipe. Copy &amp; paste the code from the previous slide.**
 
-&gt; **Copy &amp; paste the code from the previous slide.**
+&gt; **Change the code so it includes 1952 instead of 2007.**
 
-&gt; **Change the code so it prints a list of countries for 1952 instead of 2007.**
+&gt; **We want to save a new dataset `gapminder52` that contains all original and new variables *before* creating the top 5 table. Change the code to do this.**
+
+&gt; **On a new line, pipe `gapminder52` into the remaining code to print the top 5 table.**
 
 &gt; **Knit to HTML**
 
@@ -821,16 +823,14 @@ gapminder %&gt;%
 
 &gt; **Add a heading "Kable Table"**
 
-&gt; **Start a new code chunk and name it kable. Copy&amp;paste your code from the pipe code chunk above.**
-
-&gt; **Extend the code like so**
+&gt; **Start a new code chunk and name it kable. Add the following code.**
 
 
 ```r
-  slice_head(n=5) %&gt;% # Bottom line of previous code
-* kable(digits = 1,
-*       col.names = c('Country', 'Percent of Global GDP'),
-*       caption = 'Largest Economies in 1952')
+gapminder52 %&gt;% 
+  kable(digits = 1,
+        col.names = c('Country', 'Percent of Global GDP'),
+        caption = 'Largest Economies in 1952')
 ```
 
 &gt; **Knit to HTML.**
@@ -860,7 +860,7 @@ summarize(data_set, "Name of column" = function(variable),
 ---
 # Summarize example
 
-Report median life expectancy and GDP per capita in 2007
+Suppose I want to report median life expectancy and GDP per capita in 2007
 
 
 ```r
@@ -884,7 +884,7 @@ gapminder %&gt;%
 
 &gt; **Start a new code chunk and name it summarize**
 
-&gt; **Produce a table that reports the `min`imum, `median`, and `max`imum percentages of global GDP in 1952.**
+&gt; **Summarize `gapminder52` into a table that reports the `min`imum, `median`, and `max`imum percentages of global GDP in 1952.**
 
 ---
 # Group By
@@ -929,9 +929,11 @@ gapminder %&gt;%
 ---
 # Group by practice
 
+&gt; **Add a heading "Group By"**
+
 &gt; **Start a new code chunk and name it groupby.**
 
-&gt; **Produce a table that reports the `min`imum, `median`, and `max`imum percentages of global GDP by year.**
+&gt; **Produce a table that reports the `min`imum, `median`, and `max`imum percentages of global GDP by each year included in `gapminder`.**
 
 &gt; **Knit to HTML**
 
