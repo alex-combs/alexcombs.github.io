@@ -14,9 +14,18 @@ output:
 ---
 # Outline
 
+```{r, include=FALSE}
+library(gapminder)
+library(tidyverse)
+library(knitr)
+```
+
+
 - Measurement validity
 
 - Measurement reliability
+
+- Review of R Chapter on missing data
 
 ---
 # Credible analysis
@@ -40,13 +49,13 @@ output:
 ---
 class: inverse, middle, center
 
-# In your group, discuss circumstances where the following would have poor measurement validity and/or reliability: 1) A scale in a doctor's office, 2) Pre-tax income as a measure of wealth, and 3) Police response time as a measure of station performance.
+# Group discussion
 
 ---
 # Why does this matter?
 
-- Often leads to important and interesting questions about how data is collected.
+- Can lead to important questions about how data are collected.
 
-- If data have a weak relationship with what you are trying to study, you have a weak foundation upon which to continue your work.
+- Can impact our ability to make comparisons between entities or over time that are often involved in decision-making.
 
-- Sometimes flawed data is all we have, and understanding its flaws can help mitigate mistakes when interpreting and making decisions.
+- Reminds us not to be too certain. Much of statistics is about producing a *range* of values that *contains* the truth, not producing exact values.

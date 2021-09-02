@@ -17,19 +17,20 @@ class: center, middle, inverse, title-slide
 ## Measurement Validity &amp; Reliability
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: January 27, 2021
+### Last updated: September 02, 2021
 
 ---
 
 # Outline
 
-- Credible analysis
+
+
 
 - Measurement validity
 
 - Measurement reliability
 
-- Missing data
+- Review of R Chapter on missing data
 
 ---
 # Credible analysis
@@ -39,11 +40,11 @@ class: center, middle, inverse, title-slide
 ---
 # Measurement
 
-- **Measurement Validity**: Does the variable measure the concept/phenomenon it is intended or claims to measure? Are the recorded values of the variable accurate measures of the true values of the variable?
+- **Measurement Validity**: The extent to which a variable measures what it is intended to measure.
 
 --
 
-- **Measurement Reliability**: Provided no change in a subject’s condition/reality, does the way the variable is measured generate the same value? Given identical conditions/realities between multiple subjects, does the measure generate identical values?
+- **Measurement Reliability**: The extent to which the measurement process or instrument for a variable generates consistent values.
 
 ---
 # Measurement
@@ -53,232 +54,16 @@ class: center, middle, inverse, title-slide
 ---
 class: inverse, middle, center
 
-# In your groups, pick a variable and discuss its measurement validity and reliability. Be ready to discuss with class.
+# Group discussion
 
 ---
 # Why does this matter?
 
-- Often leads to important and interesting questions about how data is collected and whether it is trustworthy.
+- Can lead to important questions about how data are collected.
 
-- If data have a weak or no relationship with the thing you are trying to study, you have no foundation upon which to continue your work.
+- Can impact our ability to make comparisons between entities or over time that are often involved in decision-making.
 
-- Sometimes flawed data is all we have, and understanding its flaws can help mitigate mistakes in interpretations and decisions.
-
----
-class: inverse, middle, center
-
-# Missing data
-
----
-# Missing Data
-
-- Two types
-  - Explicit
-  - Implicit
-  
-- Explicitly missing data are data that we can *see* are missing in the data; cells containing a value that denotes missing
-
-- Implicitly missing data are data that we would expect to be included based on data structure but are not; no obvious sign of missing
-
----
-# Explicitly missing
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 12779.4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 65.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 72.4 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 190010647 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9065.8 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
---
-
-- Conceptual concerns
-  - Do not assume data are missing at random
-  - Ask yourself why data are missing and if it is influenced by a factor that is relevant to your analysis
-
---
-- Technical concern
-  - When describing data, account for missing values
-  - Incorrect to say we have 3 countries with a mean life expectancy of 68.972
-
----
-# Implicitly missing
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 73.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 36203463 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10967.3 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 74.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 38331121 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8797.6 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 75.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 12779.4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 62.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 7693188 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3326.1 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 65.6 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 3822.1 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-- Typical in panel data where units enter and exit the data
-- Same concerns apply
-
----
-# Precision
-
-- Measurement validity involves accuracy. 
-
-- Measurement reliability involves a type of precision: repeated measures.
-
---
-
-- Another type of precision involves the exactness of a measurement, which one may mistakenly associate with accuracy.
-
----
-background-image: url(lectures_files/ruler.jpg)
-
-# Precision
-
----
-# Precision
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
-   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1952 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 28.8 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8425333 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 779.4 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1957 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 30.3 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 9240934 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 820.9 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Afghanistan &lt;/td&gt;
-   &lt;td style="text-align:left;"&gt; Asia &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 1962 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 32.0 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 10267083 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 853.1 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-- Life expectancy is reported to the nearest tenth decimal place.
-
-- But the underlying value for life expectancy could have been anything that rounds to the tenth decimal we see in the data.
-
---
-
-- What was the possible life expectancy in Afghanistan in 1952?
-
---
-
-- What if five deaths at 28, 29, 29, 29, 29?
-
----
-# Why does this matter?
-
-- 14.38% of all statistics are lies
-
---
-
-- Precision can be used to mislead people that information is accurate; a cognitive bias known as precision bias
-
---
-
-- Be careful reporting numbers that are more precise than the underlying data
-
-- May be legitimate reasons to round to fewer decimal places than underlying data, but understand you are decreasing precision
-
+- Reminds us not to be too certain. Much of statistics is about producing a *range* of values that *contains* the truth, not producing exact values.
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
