@@ -267,7 +267,7 @@ st_fin$state <- as.factor(st_fin$state)
 ```{r, eval=FALSE}
 ga_schdist_raw$enroll <- as.numeric(ga_schdist_raw$enroll)
 ga_schdist_raw$lep <- as.numeric(ga_schdist_raw$lep)
-ga_schdist_raw$sped <- as.numeric(ga_schdist_raw$sped)
+ga_schdist_raw$iep <- as.numeric(ga_schdist_raw$iep)
 ga_schdist_raw$frpl <- as.numeric(ga_schdist_raw$frpl)
 ga_schdist_raw$white <- as.numeric(ga_schdist_raw$white)
 ga_schdist_raw$expenditures <- as.numeric(ga_schdist_raw$expenditures)
