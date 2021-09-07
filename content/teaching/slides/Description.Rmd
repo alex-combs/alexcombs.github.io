@@ -355,10 +355,19 @@ cor(state_trump$median_house_inc, state_trump$share_vote_trump)
 - Many such examples [here](https://www.tylervigen.com/spurious-correlations)
 
 ---
-# Denominators
+# Recap
 
-- [Those damn denominators](https://www.wired.com/story/damn-denominators-coronavirus/) by KC Cole
+- Difference between descriptive and inferential statistics; sample and population
 
-- [Hot tea and throat cancer](https://www.cnn.com/2019/03/20/health/hot-tea-linked-to-higher-cancer-risk-study-intl/index.html)
+--
 
+- When presented with descriptive statistics, consider what they say and don't say about the underlying distribution.
+
+--
+
+- When presented with changes in descriptive statistics, consider the different ways the distribution could have changed.
+
+--
+
+- Correlation is a building block of how we explain or predict phenomena in our world using statistics.
 
