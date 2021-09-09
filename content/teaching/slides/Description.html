@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Data Description
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: September 07, 2021
+### Last updated: September 09, 2021
 
 ---
 
@@ -28,10 +28,6 @@ class: center, middle, inverse, title-slide
 - Identify population, sample, parameter, and statistic
 
 - Distributions and their description
-
-- Describing categorical variables with frequency tables
-
-- Deceptive descriptions
 
 
 
@@ -67,7 +63,7 @@ class: center, middle, inverse, title-slide
 ]
 
 ---
-# Population v sample; Parameter v statistic
+# Descriptive vs. inferential
 
 Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states. Suppose we set out to investigate average salary in Georgia for ourselves. 
 
@@ -81,7 +77,7 @@ We take a sample of 100 college-educated women in Georgia and record the income 
 - What is the parameter and statistic/estimate for this study?
 
 ---
-# Population v sample; Parameter v statistic
+# Descriptive vs. inferential
 
 Suppose we send a survey to all SPIA MPA alumni who graduated two years ago, asking about employment and earnings. Miraculously, we achieve a 100% response rate to the survey.
 
@@ -92,7 +88,7 @@ We calculate the average income of all SPIA MPA alumni who graduated two years a
 - Is this value for average income a parameter or a statistic?
 
 ---
-# Population v sample; Parameter v statistic
+# Descriptive vs. inferential
 
 Suppose we want to estimate the percentage of Athens residents who have a valid ID for the next election. We set up booths around UGA campus and ask people if they have a valid ID according to Georgia's election laws. We get 80 responses, and 80% said they have a valid ID.
 
@@ -122,7 +118,7 @@ A city has a private high school and a public high school. Each year, all studen
 
 --
 
-One year, the highest scoring student in the public school transfers to the private school.
+Suppose the student who will score the highest in the public school transfers to the private school.
 
 --
 
@@ -139,7 +135,7 @@ After hiring better teachers, the public school is able to raise the test scores
 
 --
 
-What effect does this transfer have on the measures of center and spread for the public school's distribution of test scores?
+What effect does this have on the measures of center and spread for the public school's distribution of test scores?
 
 ---
 # Affected measures
@@ -152,26 +148,30 @@ After hiring better teachers, the public school is able to raise the test scores
 
 --
 
-What effect does this transfer have on the measures of center and spread for the public school's distribution of test scores?
+What effect does this have on the measures of center and spread for the public school's distribution of test scores?
 
 ---
 # Shapes of distributions
 
-Summary statistics of test scores were the following:
-
+.pull-left[
 - Private school
   - Mean: 80
   - Median: 80
   - Standard deviation: 5
+  - Min: 65
+  - Max: 100
   
 - Public school
   - Mean: 70
   - Median: 80
   - Standard deviation: 12
+  - Min: 25
+  - Max: 100
+]
 
---
-
-- What do these numbers tell us about the shape of each school's distribution of test scores?
+.pull-right[
+- What story do these numbers tell about test scores between the two schools?
+]
 
 ---
 # Choosing measures
@@ -271,17 +271,13 @@ IQR(gapminder$gdpPercap)
 ---
 # Consider unit of analysis
 
-- Average class size
-- What is the unit of analysis?
+- Average class size vs. class size for average student
+
+- Do the units of analysis differ?
 
 --
 
-- Class size for average student
-- What is the unit of analysis?
-
---
-
-- Can this make a difference?
+- Does this change what would be reported?
 
 ---
 # Consider unit of analysis
@@ -314,7 +310,7 @@ IQR(gapminder$gdpPercap)
 ---
 # Center is only partial story
 
-- An expensive new drug increases the median life expectancy among patients of a terminal illness by only one week. Insurance company decides not to cover this ineffective drug.
+- An expensive new drug increases the median life expectancy among patients by one week. Insurance company decides not to cover what it deems an ineffective drug.
 
 --
 
@@ -344,21 +340,29 @@ IQR(gapminder$gdpPercap)
 
 .pull-right[
 
-Guess the correlation coefficient.
-
-]
+Is the correlation positive or negative?
 
 --
 
+Do you think it is closer to 0 or -1?
+
+--
+
+
+```r
+cor(state_trump$median_house_inc, state_trump$share_vote_trump)
+```
 
 ```
 ## [1] -0.5925995
 ```
 
+]
+
 ---
 # Correlation
 
-- Correlation is not causation. What does this mean?
+- Correlation is not causation. It is a necessary condition but not sufficient.
 
 --
 
