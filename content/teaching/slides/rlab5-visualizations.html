@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 5: Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: February 05, 2021
+### Last updated: September 11, 2021
 
 ---
 
@@ -61,14 +61,6 @@ output:
 ```r
 library(data.table)
 library(tidyverse)
-```
-
-```
-## Warning: replacing previous import 'vctrs::data_frame' by 'tibble::data_frame'
-## when loading 'dplyr'
-```
-
-```r
 library(lubridate)
 ```
 
@@ -91,7 +83,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 998,409
+## Rows: 1,706,152
 ## Columns: 6
 ## $ date   &lt;chr&gt; "2020-01-21", "2020-01-22", "2020-01-23", "2020-01-24", "2020-…
 ## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "O…
@@ -103,7 +95,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 - Let's focus on Georgia
 
-&gt; **Use one or more wrangling verbs to create a new dataset called `covid_ga` that contains only counties in Georgia**
+&gt; **Create a new dataset called `covid_ga` that contains only counties in Georgia**
 
 
 
@@ -112,7 +104,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 50,809
+## Rows: 85,689
 ## Columns: 6
 ## $ date   &lt;chr&gt; "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
@@ -136,7 +128,7 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```
-## Rows: 50,809
+## Rows: 85,689
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 2…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
@@ -146,9 +138,7 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 ## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
 ```
 
-&gt; **Convert `county` from character to factor**
-
-
+- Now date is stored as a date instead of character
 
 ---
 # Quick Summary
@@ -165,66 +155,58 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```r
-yesterday &lt;- '2021-01-29'
+yesterday &lt;- '2021-09-10'
 ```
 
-- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data
+- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data, and we only need to update this code to update any graph we make.
 
 ---
 # Viz 1
 
-- Suppose we are asked for the distribution of cumulative county cases for the most recent available date.
+- Suppose we are asked for the distribution of cumulative county cases in GA for the most recent available date.
 
 - What kind of graph should we use?
 
 --
 
-- A histogram
-
---
-
-&gt; **Generate a histogram for cumulative cases during the most recent date. Suppress the message that R prints.**
+&gt; **In a new code chunk, write code to generate the correct graph.**
 
 ---
 # Viz 1
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 2
 
-&gt; **Generate another histogram for cumulative deaths during the most recent date.**
+&gt; **In a new code chunk, write code to generate another histogram for cumulative deaths during the most recent date.**
 
 --
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 3
 
-- Suppose we are asked for the distribution of cumulative county deaths during the most recent date that includes visual markers along key points of the distribution
+- Suppose we are asked to visualize the distribution of cumulative county deaths during the most recent date that includes visual markers for descriptive statistics and outliers
 
 - Which graph should we use?
 
 --
 
-- A box plot
-
---
-
-&gt; **Generate a box plot for deaths during the most recent date.**
+&gt; **In a new code chunk, write code to generate the correct graph.**
 
 ---
 # Viz 3
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Five Counties
+# County comparison
 
 - Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
 
-&gt; **Create a new dataset named `covid_ga_5` that contains only the above counties.**
+&gt; **Copy and paste below code to create a new data set that includes only these counties.**
 
 
 
@@ -250,31 +232,15 @@ yesterday &lt;- '2021-01-29'
 ---
 # Viz 4
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 5
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Viz 6
-
-- Suppose we want to compare these counties by the percent of total cases among them instead of absolute counts.
-
-&gt; **Add and run following code.**
-
-
-```r
-covid_ga_5 %&gt;% 
-  filter(date == yesterday) %&gt;% 
-  ggplot(aes(x = county, 
-             y = (cases/sum(cases))*100)) +
-  geom_col()
-```
-
----
-# Viz 7 &amp; 8
+# Viz 6 &amp; 7
 
 - Suppose we want to compare the trends in cases and deaths for our 5 counties over the time span of our data.
 
@@ -282,19 +248,17 @@ covid_ga_5 %&gt;%
 
 --
 
-- Line graph
+&gt; **Generate a line graph each for cases and deaths over the time span in the data for our 5 counties. Give each county its own line. To do so, you will need to include a third `aes`thetic in addition to `x` and `y`.**
 
-&gt; **Generate a line graph over the time span in the data for our 5 counties. Give each county its own line.**
+---
+# Viz 6
+
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 7
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Viz 8
-
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # What's the Problem?
@@ -307,9 +271,9 @@ covid_ga_5 %&gt;%
 
 --
 
-- Therefore, we need to compute rates; cases and/or deaths *per* some standard number of people.
+- Therefore, we need to compute rates; cases and/or deaths *per* some standard number of people. But these data do not include county population.
 
-- We need more data to add to these data. We'll learn how to combine datasets in the next lab.
+- We need more data to add to these data. We'll learn how to combine data in the next lab.
 
 ---
 class: inverse, center, middle
@@ -324,31 +288,24 @@ class: inverse, center, middle
 - Text size
 
 ---
-# Saving a graph as an object
+# Improving Viz 4
 
-- We can save a graph just like we would a dataset to use for later
-
-&gt; **Even though you've already created `viz1`, copy, paste, and run below code to save the basic version of `viz1`.**
-
-
-```r
-*viz1 &lt;- covid_ga %&gt;%
-  filter(date == yesterday) %&gt;% 
-  ggplot(aes(x = cases)) +
-  geom_histogram()
-```
+&gt; **Find your code for Viz 4 (bar graph of cases for 5 counties) and copy it to a new code chunk.**
 
 ---
 # Titles and axis labels
 
 - Titles and all axis labels are controlled by `labs`
 
-&gt; **In a new code chunk, add the labels below to your saved `viz1`. Run this code to see what it did.**
+&gt; **Add the lines below to your graph.**
 
 
 ```r
-viz1 +
-* labs(title = 'Distribution of COVID cases as of yesterday',
+covid_ga_5 %&gt;% 
+  filter(date == yesterday) %&gt;% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+* labs(title = 'Total COVID Cases',
 *      x = '',
 *      y = 'Number of cases')
 ```
@@ -356,7 +313,7 @@ viz1 +
 ---
 # Titles and axes labels
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Themes
@@ -375,12 +332,15 @@ theme_bw()
 ---
 # Themes
 
-&gt; **Add new line below to your current code and re-run to see what it did.**
+&gt; **Add the new line below to your current code and re-run to see what it did.**
 
 
 ```r
-viz1 +
-  labs(title = 'Distribution of COVID cases as of yesterday',
+covid_ga_5 %&gt;% 
+  filter(date == yesterday) %&gt;% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  labs(title = 'Total COVID Cases',
        x = '',
        y = 'Number of cases') +
 * theme_minimal()
@@ -389,7 +349,7 @@ viz1 +
 ---
 # Themes
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Text size
@@ -400,8 +360,11 @@ viz1 +
 
 
 ```r
-viz1 +
-  labs(title = 'Distribution of COVID cases as of yesterday',
+covid_ga_5 %&gt;% 
+  filter(date == yesterday) %&gt;% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  labs(title = 'Total COVID Cases',
        x = '',
        y = 'Number of cases') +
   theme_minimal() +
@@ -410,12 +373,12 @@ viz1 +
 ```
 
 ---
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Skill Check
 
-&gt; **Use labels, themes, and text size to improve viz 7**
+&gt; **Use labels, themes, and text size to improve Viz 7**
 
 
 

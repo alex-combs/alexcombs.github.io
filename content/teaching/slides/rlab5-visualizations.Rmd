@@ -50,7 +50,7 @@ output:
 
 > **In the top "setup" code chunk, load the following packages.**
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 library(data.table)
 library(tidyverse)
 library(lubridate)
@@ -78,7 +78,7 @@ glimpse(covid)
 
 - Let's focus on Georgia
 
-> **Use one or more wrangling verbs to create a new dataset called `covid_ga` that contains only counties in Georgia**
+> **Create a new dataset called `covid_ga` that contains only counties in Georgia**
 
 ```{r, include=FALSE}
 covid_ga <- covid %>% 
@@ -107,11 +107,7 @@ covid_ga$date <- ymd(covid_ga$date)
 glimpse(covid_ga)
 ```
 
-> **Convert `county` from character to factor**
-
-```{r, include=FALSE}
-covid_ga$county <- as.factor(covid_ga$county)
-```
+- Now date is stored as a date instead of character
 
 ---
 # Quick Summary
@@ -129,25 +125,21 @@ summary(covid_ga)
 > **Add and run following code.**
 
 ```{r}
-yesterday <- '2021-01-29'
+yesterday <- '2021-09-10'
 ```
 
-- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data
+- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data, and we only need to update this code to update any graph we make.
 
 ---
 # Viz 1
 
-- Suppose we are asked for the distribution of cumulative county cases for the most recent available date.
+- Suppose we are asked for the distribution of cumulative county cases in GA for the most recent available date.
 
 - What kind of graph should we use?
 
 --
 
-- A histogram
-
---
-
-> **Generate a histogram for cumulative cases during the most recent date. Suppress the message that R prints.**
+> **In a new code chunk, write code to generate the correct graph.**
 
 ---
 # Viz 1
@@ -162,7 +154,7 @@ covid_ga %>%
 ---
 # Viz 2
 
-> **Generate another histogram for cumulative deaths during the most recent date.**
+> **In a new code chunk, write code to generate another histogram for cumulative deaths during the most recent date.**
 
 --
 
@@ -176,17 +168,13 @@ covid_ga %>%
 ---
 # Viz 3
 
-- Suppose we are asked for the distribution of cumulative county deaths during the most recent date that includes visual markers along key points of the distribution
+- Suppose we are asked to visualize the distribution of cumulative county deaths during the most recent date that includes visual markers for descriptive statistics and outliers
 
 - Which graph should we use?
 
 --
 
-- A box plot
-
---
-
-> **Generate a box plot for deaths during the most recent date.**
+> **In a new code chunk, write code to generate the correct graph.**
 
 ---
 # Viz 3
@@ -199,11 +187,11 @@ covid_ga %>%
 ```
 
 ---
-# Five Counties
+# County comparison
 
 - Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
 
-> **Create a new dataset named `covid_ga_5` that contains only the above counties.**
+> **Copy and paste below code to create a new data set that includes only these counties.**
 
 ```{r, include=FALSE}
 covid_ga_5 <- covid_ga %>% 
@@ -254,22 +242,7 @@ covid_ga_5 %>%
 ```
 
 ---
-# Viz 6
-
-- Suppose we want to compare these counties by the percent of total cases among them instead of absolute counts.
-
-> **Add and run following code.**
-
-```{r, eval=FALSE, fig.width=10, fig.height=8, fig.align='center'}
-covid_ga_5 %>% 
-  filter(date == yesterday) %>% 
-  ggplot(aes(x = county, 
-             y = (cases/sum(cases))*100)) +
-  geom_col()
-```
-
----
-# Viz 7 & 8
+# Viz 6 & 7
 
 - Suppose we want to compare the trends in cases and deaths for our 5 counties over the time span of our data.
 
@@ -277,12 +250,10 @@ covid_ga_5 %>%
 
 --
 
-- Line graph
-
-> **Generate a line graph over the time span in the data for our 5 counties. Give each county its own line.**
+> **Generate a line graph each for cases and deaths over the time span in the data for our 5 counties. Give each county its own line. To do so, you will need to include a third `aes`thetic in addition to `x` and `y`.**
 
 ---
-# Viz 7
+# Viz 6
 
 ```{r, echo=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga_5 %>% 
@@ -291,7 +262,7 @@ covid_ga_5 %>%
 ```
 
 ---
-# Viz 8
+# Viz 7
 
 ```{r, echo=FALSE, fig.width=10, fig.height=8, fig.align='center'}
 covid_ga_5 %>% 
@@ -310,9 +281,9 @@ covid_ga_5 %>%
 
 --
 
-- Therefore, we need to compute rates; cases and/or deaths *per* some standard number of people.
+- Therefore, we need to compute rates; cases and/or deaths *per* some standard number of people. But these data do not include county population.
 
-- We need more data to add to these data. We'll learn how to combine datasets in the next lab.
+- We need more data to add to these data. We'll learn how to combine data in the next lab.
 
 ---
 class: inverse, center, middle
@@ -327,29 +298,23 @@ class: inverse, center, middle
 - Text size
 
 ---
-# Saving a graph as an object
+# Improving Viz 4
 
-- We can save a graph just like we would a dataset to use for later
-
-> **Even though you've already created `viz1`, copy, paste, and run below code to save the basic version of `viz1`.**
-
-```{r, results='hide', message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
-viz1 <- covid_ga %>% #<<
-  filter(date == yesterday) %>% 
-  ggplot(aes(x = cases)) +
-  geom_histogram()
-```
+> **Find your code for Viz 4 (bar graph of cases for 5 counties) and copy it to a new code chunk.**
 
 ---
 # Titles and axis labels
 
 - Titles and all axis labels are controlled by `labs`
 
-> **In a new code chunk, add the labels below to your saved `viz1`. Run this code to see what it did.**
+> **Add the lines below to your graph.**
 
 ```{r, eval=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
-viz1 +
-  labs(title = 'Distribution of COVID cases as of yesterday', #<<
+covid_ga_5 %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  labs(title = 'Total COVID Cases', #<<
        x = '',#<<
        y = 'Number of cases')#<<
 ```
@@ -358,10 +323,13 @@ viz1 +
 # Titles and axes labels
 
 ```{r, echo=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
-viz1 +
-  labs(title = 'Distribution of COVID cases as of yesterday',
-       x = '',
-       y = 'Number of cases')
+covid_ga_5 %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  labs(title = 'Total COVID Cases', #<<
+       x = '',#<<
+       y = 'Number of cases')#<<
 ```
 
 ---
@@ -380,11 +348,14 @@ theme_bw()
 ---
 # Themes
 
-> **Add new line below to your current code and re-run to see what it did.**
+> **Add the new line below to your current code and re-run to see what it did.**
 
 ```{r, eval=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
-viz1 +
-  labs(title = 'Distribution of COVID cases as of yesterday',
+covid_ga_5 %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  labs(title = 'Total COVID Cases',
        x = '',
        y = 'Number of cases') +
   theme_minimal() #<<
@@ -394,11 +365,14 @@ viz1 +
 # Themes
 
 ```{r, echo=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
-viz1 +
-  labs(title = 'Distribution of COVID cases as of yesterday',
+covid_ga_5 %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  labs(title = 'Total COVID Cases',
        x = '',
        y = 'Number of cases') +
-  theme_minimal()
+  theme_minimal() #<<
 ```
 
 ---
@@ -409,8 +383,11 @@ viz1 +
 > **Add new lines below to your current code and re-run to see what it did**
 
 ```{r, eval=FALSE}
-viz1 +
-  labs(title = 'Distribution of COVID cases as of yesterday',
+covid_ga_5 %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  labs(title = 'Total COVID Cases',
        x = '',
        y = 'Number of cases') +
   theme_minimal() +
@@ -420,8 +397,11 @@ viz1 +
 
 ---
 ```{r, echo=FALSE, message=FALSE, fig.width=9, fig.height=7, fig.align='center'}
-viz1 +
-  labs(title = 'Distribution of COVID cases as of yesterday',
+covid_ga_5 %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  labs(title = 'Total COVID Cases',
        x = '',
        y = 'Number of cases') +
   theme_minimal() +
@@ -432,12 +412,13 @@ viz1 +
 ---
 # Skill Check
 
-> **Use labels, themes, and text size to improve viz 7**
+> **Use labels, themes, and text size to improve Viz 7**
 
 ```{r, include=FALSE, fig.width=9, fig.height=7, fig.align='center'}
 covid_ga_5 %>% 
-  ggplot(aes(x = date, y = cases, color = county)) +
-  geom_line() +
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
   labs(title = 'Total COVID Cases Among Selected Georgia Counties',
        x = '',
        y = 'Case Count',
