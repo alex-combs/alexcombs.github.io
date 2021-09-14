@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 5: Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: September 11, 2021
+### Last updated: September 14, 2021
 
 ---
 
@@ -83,7 +83,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 1,706,152
+## Rows: 1,715,892
 ## Columns: 6
 ## $ date   &lt;chr&gt; "2020-01-21", "2020-01-22", "2020-01-23", "2020-01-24", "2020-…
 ## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "O…
@@ -104,7 +104,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 85,689
+## Rows: 86,169
 ## Columns: 6
 ## $ date   &lt;chr&gt; "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
@@ -128,7 +128,7 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```
-## Rows: 85,689
+## Rows: 86,169
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 2…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
@@ -209,8 +209,17 @@ yesterday &lt;- '2021-09-10'
 &gt; **Copy and paste below code to create a new data set that includes only these counties.**
 
 
+```r
+covid_ga_5 &lt;- covid_ga %&gt;% 
+  filter(county %in% c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke'))
+```
 
 
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  mutate(county5 = fct_other(county, 
+                             keep = c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')))
+```
 
 ---
 # Viz 4
@@ -248,7 +257,7 @@ yesterday &lt;- '2021-09-10'
 
 --
 
-&gt; **Generate a line graph each for cases and deaths over the time span in the data for our 5 counties. Give each county its own line. To do so, you will need to include a third `aes`thetic in addition to `x` and `y`.**
+&gt; **Generate the appropriate graph each for cases and deaths over the time span in the data for our 5 counties. Give each county its own line. To do so, you will need to include a third `aes`thetic in addition to `x` and `y`.**
 
 ---
 # Viz 6
@@ -373,6 +382,8 @@ covid_ga_5 %&gt;%
 ```
 
 ---
+# Text size
+
 &lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 
 ---

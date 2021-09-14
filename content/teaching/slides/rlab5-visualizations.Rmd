@@ -193,12 +193,12 @@ covid_ga %>%
 
 > **Copy and paste below code to create a new data set that includes only these counties.**
 
-```{r, include=FALSE}
+```{r}
 covid_ga_5 <- covid_ga %>% 
   filter(county %in% c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke'))
 ```
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 covid_ga <- covid_ga %>% 
   mutate(county5 = fct_other(county, 
                              keep = c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')))
@@ -250,7 +250,7 @@ covid_ga_5 %>%
 
 --
 
-> **Generate a line graph each for cases and deaths over the time span in the data for our 5 counties. Give each county its own line. To do so, you will need to include a third `aes`thetic in addition to `x` and `y`.**
+> **Generate the appropriate graph each for cases and deaths over the time span in the data for our 5 counties. Give each county its own line. To do so, you will need to include a third `aes`thetic in addition to `x` and `y`.**
 
 ---
 # Viz 6
@@ -396,6 +396,8 @@ covid_ga_5 %>%
 ```
 
 ---
+# Text size
+
 ```{r, echo=FALSE, message=FALSE, fig.width=9, fig.height=7, fig.align='center'}
 covid_ga_5 %>% 
   filter(date == yesterday) %>% 
