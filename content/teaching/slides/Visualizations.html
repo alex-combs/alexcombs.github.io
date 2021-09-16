@@ -17,20 +17,18 @@ class: center, middle, inverse, title-slide
 ## Data Visualization
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: June 03, 2021
+### Last updated: September 16, 2021
 
 ---
 
 # Outline
 
-- Principles of good and bad visualization
+- Guidelines of good and bad visualization
 
-- Complementing human perception
+- Human perception
 
 ---
 # Exploratory vs. explanatory
-
-- Like most applications within statistics, visualizations can either explore or explain
 
 .center[
 ![](lectures_files/twogoals.png)
@@ -70,7 +68,8 @@ ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
        y = "Life Expectancy",
        x = "GDP Per Capita",
        caption = "Source: Gapminder Dataset") +
-  theme_classic()
+  theme_classic() +
+  theme(text = element_text(size = 14))
 ```
 ]
 
@@ -81,11 +80,6 @@ ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
 .center[
 ![](labs_files/lifeExp.png)
 ]
-
----
-class: inverse, middle, center
-
-# While there are general guidelines to good visualization, much is still subjective.
 
 ---
 # Qualities of good viz
@@ -108,15 +102,6 @@ class: inverse, middle, center
 ]
 
 ---
-# Maximize data-to-ink?
-
-- Six ways to show a distribution with varying data-to-ink ratios
-
-.center[
-![](lectures_files/boxplots.png)
-]
-
----
 # Distortion
 
 - Reproduction of a graph in the *New York Times* about a crisis in democracy
@@ -132,7 +117,7 @@ class: inverse, middle, center
 ![:scale 85%](lectures_files/bettercrisis.png)
 ]
 
-- Previous graph focused on the percentage of people who gave a rating of 10, "essential"
+- Previous graph focused on the percentage of people who gave a rating of 10
 
 ---
 # Distortion
@@ -140,8 +125,6 @@ class: inverse, middle, center
 .center[
 ![](lectures_files/3dgraph.png)
 ]
-
-- Don't use 3-D if the third dimension does not add information
 
 ---
 # Distortion
@@ -163,10 +146,12 @@ class: inverse, middle, center
 
 - Depending on context, bar charts can lead people to think values inside the bars are more likely than values above.
 
+- More examples of bad graphs can be found [here](https://badvisualisations.tumblr.com)
+
 ---
 class: inverse, middle, center
 
-# Human vision has certain strengths and weaknesses
+# Human perception has strengths and weaknesses
 
 ---
 # Decoding numerical visualization
@@ -196,7 +181,7 @@ class: inverse, middle, center
 &lt;img src="Visualizations_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Examples
+# Example
 
 &lt;img src="Visualizations_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -235,11 +220,6 @@ class: inverse, middle, center
 ]
 
 ---
-# More examples
-
-For more examples of bad visualizations, check out this [Tumblr blog](https://badvisualisations.tumblr.com)
-
----
 class: inverse, middle, center
 
 # Let's consider a few graphs you all made in R Chapter 5
@@ -262,7 +242,7 @@ class: inverse, middle, center
 ![](Visualizations_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
 ---
-# Number of counties by state
+# Scatterplot
 
 ![](Visualizations_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
@@ -289,22 +269,7 @@ class: inverse, middle, center
 ---
 # Scatterplot
 
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
 ![](Visualizations_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
-
----
-# Scatterplot
-
-
-```
-## `geom_smooth()` using formula 'y ~ x'
-```
-
-![](Visualizations_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
