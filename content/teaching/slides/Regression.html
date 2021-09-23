@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Simple &amp; Multiple Regression
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: June 03, 2021
+### Last updated: September 23, 2021
 
 ---
 
@@ -91,11 +91,9 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 ---
 # Basic purpose of regression
 
-- Fill in the blanks: Regression can be used to [    ] an outcome or [    ] an outcome, or both.
+- Regression is a way of modeling an outcome `\(y\)` as a function of one or more explanatory variables `\(x\)`.
 
---
-
-- Either way, regression is a way of modeling an outcome `\(y\)` as a function of explanatory `\(x\)`
+- Regression can be used to **explain** an outcome or **predict** an outcome, or both.
 
 ---
 # Adding a regression line
@@ -189,14 +187,14 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 
 --
 
-`$$\hat{SATM} = 560 - 12 \times Dollars$$`
+`$$\hat{SATM} = 560 - 12.17 \times Dollars$$`
 
 ---
 # Example: Reporting results
 
-`$$\hat{SATM} = 560 - 12 \times Dollars$$`
+`$$\hat{SATM} = 560 - 12.17 \times Dollars$$`
 
-**On average**, a **one thousand dollar increase** in **state spending on public education per student** is *associated with* a **12 point decline** in **average SAT math scores**.
+On average, a one thousand dollar increase in state spending on public education per student is associated with a 12 point decline in average SAT math scores.
 
 --
 
@@ -250,14 +248,16 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-`$$\hat{SATM} = 539 - 1.2 \times Percent$$`
+`$$\hat{SATM} = 539 - 1.23 \times Percent$$`
 
 - Now we can consider any hypothetical *change* in percent or specific *value* of percent and provide a prediction for SAT math scores.
 
 ---
 # Change vs. value
-`$$\hat{SATM} = 539 - 1.2 \times Percent$$`
+`$$\hat{SATM} = 539 - 1.23 \times Percent$$`
 .pull-left[
+**Predicted Change**
+
 What if percent taking SAT increased from 50% to 55%?
 
 ]
@@ -265,6 +265,9 @@ What if percent taking SAT increased from 50% to 55%?
 --
 
 .pull-right[
+
+**Predicted Value**
+
 What is the predicted average SAT math score for a state where 75% of high school graduates take the SAT?
 
 ]
@@ -272,7 +275,7 @@ What is the predicted average SAT math score for a state where 75% of high schoo
 ---
 # More practice
 
-`$$\hat{SATM} = 539 - 1.2 \times Percent$$`
+`$$\hat{SATM} = 539 - 1.23 \times Percent$$`
 
 - What is the predicted average SAT math score in a state where 25% of its high school graduates take the SAT?
 - What is the predicted average SAT math score in a state where 100% of its high school graduates take the SAT?
@@ -315,32 +318,27 @@ glimpse(States)
 
 
 ```r
-filter(States, -region) %&gt;% 
-summary()
+summary(States)
 ```
 
-```
-## Warning in Ops.factor(region): '-' not meaningful for factors
-```
 
 ```
-##      region       pop           SATV          SATM        percent   
-##  ENC    :0   Min.   : NA   Min.   : NA   Min.   : NA   Min.   : NA  
-##  ESC    :0   1st Qu.: NA   1st Qu.: NA   1st Qu.: NA   1st Qu.: NA  
-##  MA     :0   Median : NA   Median : NA   Median : NA   Median : NA  
-##  MTN    :0   Mean   :NaN   Mean   :NaN   Mean   :NaN   Mean   :NaN  
-##  NE     :0   3rd Qu.: NA   3rd Qu.: NA   3rd Qu.: NA   3rd Qu.: NA  
-##  PAC    :0   Max.   : NA   Max.   : NA   Max.   : NA   Max.   : NA  
-##  (Other):0                                                          
-##     dollars         pay     
-##  Min.   : NA   Min.   : NA  
-##  1st Qu.: NA   1st Qu.: NA  
-##  Median : NA   Median : NA  
-##  Mean   :NaN   Mean   :NaN  
-##  3rd Qu.: NA   3rd Qu.: NA  
-##  Max.   : NA   Max.   : NA  
-## 
+##       pop             SATV            SATM          percent     
+##  Min.   :  454   Min.   :397.0   Min.   :437.0   Min.   : 4.00  
+##  1st Qu.: 1215   1st Qu.:422.5   1st Qu.:470.0   1st Qu.:11.50  
+##  Median : 3294   Median :443.0   Median :490.0   Median :25.00  
+##  Mean   : 4877   Mean   :448.2   Mean   :497.4   Mean   :33.75  
+##  3rd Qu.: 5780   3rd Qu.:474.5   3rd Qu.:522.5   3rd Qu.:57.50  
+##  Max.   :29760   Max.   :511.0   Max.   :577.0   Max.   :74.00  
+##     dollars           pay       
+##  Min.   :2.993   Min.   :22.00  
+##  1st Qu.:4.354   1st Qu.:27.50  
+##  Median :5.045   Median :30.00  
+##  Mean   :5.175   Mean   :30.94  
+##  3rd Qu.:5.689   3rd Qu.:33.50  
+##  Max.   :9.159   Max.   :43.00
 ```
+
 
 ---
 # Running regression
@@ -374,7 +372,7 @@ get_regression_table(satm_mod1)
 **Sample Model**
 
 `$$\hat{y}=b_0+b_1x$$`
-`$$\hat{SATM} = 560 - 12 \times Dollars$$`
+`$$\hat{SATM} = 560 - 12.17 \times Dollars$$`
 
 ---
 class: inverse, center, middle
@@ -393,12 +391,12 @@ class: inverse, center, middle
 
 
 
-&lt;img src="Regression_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Residuals
 
-`$$\hat{SATM} = 560 - 12 \times Dollars$$`
+`$$\hat{SATM} = 560 - 12.17 \times Dollars$$`
 
 - What is the predicted `SATM` for a state where `dollars` equals $7,887? 
 
@@ -492,7 +490,7 @@ class: inverse, center, middle
 # OLS
 
 .pull-left[
-![](Regression_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+![](Regression_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -699,27 +697,25 @@ get_regression_summaries(satm_mod2)
 
 --
 
-- 74%
-
---
-
-- Model 2 has the highest `\(R^2\)`. It is *statistically* superior.
+- Model 2 has the higher `\(R^2\)`. It is *statistically* superior.
 
 ---
 # Goodness of fit
 
 .pull-left[
-&lt;img src="Regression_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Regression_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 ]
+
+- Note that the data points in model 2 (right) are closer to the regression line -&gt; less unexplained variance in `SATM` -&gt; higher `\(R^2\)`
 
 ---
 # Goodness of fit
 
-- `\(R^2\)` isn't very useful for a general audience and it has limited practical application for predictions.
+- `\(R^2\)` may not be useful for a general audience and it has limited practical application for predictions.
 
 --
 
@@ -832,7 +828,7 @@ class: inverse, center, middle
 ---
 # Making sense of our results
 
-- So far, states spending more on public education apparently tend to have lower SAT math scores; may seem counter-intuitive to some
+- So far, states spending more on public education apparently tend to have lower SAT math scores; may stike some as counter-intuitive
 
 --
 
@@ -845,7 +841,7 @@ class: inverse, center, middle
 ---
 # Making sense of our results
 
-&lt;img src="Regression_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Regression_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Running multiple regression
@@ -910,11 +906,7 @@ get_regression_table(satm_mod3)
 
 `$$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$`
 
-On average, a one thousand dollar increase in spending per pupil is associated with 6.4 point increase in average SAT math scores, **controlling for the percent of students taking the SAT**.
-
---
-
-- Blah, blah, blah, **all else equal**.
+On average, a one thousand dollar increase in spending per pupil is associated with 6.4 point increase in average state SAT math scores, **controlling for the percent of students taking the SAT**.
 
 ---
 # Interpreting results
@@ -1024,21 +1016,15 @@ class: inverse, middle, center
 ---
 # Policy Decision
 
-- We haven't covered enough material to know whether or how we should act on this information, but let's work with what we know so far
-
-  - Let's ignore matters of inference
-  
-  - Let's assume these results are causal
+- For now, let's ignore inference and assume these results are causal.
 
 --
 
-- That said, so far:
-
-  - Spending increases average SAT math scores among states, *controlling for percent of high school grads taking SAT*
+- Spending increases average SAT math scores among states, *controlling for percent of high school grads taking SAT*
   
-  - But spending seems to increase the percent of SAT participation, which then decreases average SAT math scores
+- But spending seems to increase the percent of SAT participation, which then decreases average SAT math scores
 
-- Let's examine the effect of spending on SAT math scores
+- Let's quantify the effect of spending on SAT participation
 
 ---
 # Spending and SAT participation

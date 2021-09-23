@@ -88,11 +88,9 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 ---
 # Basic purpose of regression
 
-- Fill in the blanks: Regression can be used to [    ] an outcome or [    ] an outcome, or both.
+- Regression is a way of modeling an outcome $y$ as a function of one or more explanatory variables $x$.
 
---
-
-- Either way, regression is a way of modeling an outcome $y$ as a function of explanatory $x$
+- Regression can be used to **explain** an outcome or **predict** an outcome, or both.
 
 ---
 # Adding a regression line
@@ -155,14 +153,14 @@ get_regression_table(satm_mod1) %>%
 
 --
 
-$$\hat{SATM} = 560 - 12 \times Dollars$$
+$$\hat{SATM} = 560 - 12.17 \times Dollars$$
 
 ---
 # Example: Reporting results
 
-$$\hat{SATM} = 560 - 12 \times Dollars$$
+$$\hat{SATM} = 560 - 12.17 \times Dollars$$
 
-**On average**, a **one thousand dollar increase** in **state spending on public education per student** is *associated with* a **12 point decline** in **average SAT math scores**.
+On average, a one thousand dollar increase in state spending on public education per student is associated with a 12 point decline in average SAT math scores.
 
 --
 
@@ -188,14 +186,16 @@ get_regression_table(satm_mod2) %>%
   kable(format = 'html')
 ```
 
-$$\hat{SATM} = 539 - 1.2 \times Percent$$
+$$\hat{SATM} = 539 - 1.23 \times Percent$$
 
 - Now we can consider any hypothetical *change* in percent or specific *value* of percent and provide a prediction for SAT math scores.
 
 ---
 # Change vs. value
-$$\hat{SATM} = 539 - 1.2 \times Percent$$
+$$\hat{SATM} = 539 - 1.23 \times Percent$$
 .pull-left[
+**Predicted Change**
+
 What if percent taking SAT increased from 50% to 55%?
 
 ]
@@ -203,6 +203,9 @@ What if percent taking SAT increased from 50% to 55%?
 --
 
 .pull-right[
+
+**Predicted Value**
+
 What is the predicted average SAT math score for a state where 75% of high school graduates take the SAT?
 
 ]
@@ -210,7 +213,7 @@ What is the predicted average SAT math score for a state where 75% of high schoo
 ---
 # More practice
 
-$$\hat{SATM} = 539 - 1.2 \times Percent$$
+$$\hat{SATM} = 539 - 1.23 \times Percent$$
 
 - What is the predicted average SAT math score in a state where 25% of its high school graduates take the SAT?
 - What is the predicted average SAT math score in a state where 100% of its high school graduates take the SAT?
@@ -238,10 +241,15 @@ glimpse(States)
 ---
 # Running regression
 
-```{r, out.width=8}
-filter(States, -region) %>% 
-summary()
+```{r, eval=FALSE}
+summary(States)
 ```
+
+```{r, echo=FALSE}
+select(States, -region) %>% 
+  summary()
+```
+
 
 ---
 # Running regression
@@ -272,7 +280,7 @@ $$SATM=\beta_0+\beta_1Dollars+\epsilon$$
 **Sample Model**
 
 $$\hat{y}=b_0+b_1x$$
-$$\hat{SATM} = 560 - 12 \times Dollars$$
+$$\hat{SATM} = 560 - 12.17 \times Dollars$$
 
 ---
 class: inverse, center, middle
@@ -308,7 +316,7 @@ viz.resid
 ---
 # Residuals
 
-$$\hat{SATM} = 560 - 12 \times Dollars$$
+$$\hat{SATM} = 560 - 12.17 \times Dollars$$
 
 - What is the predicted `SATM` for a state where `dollars` equals $7,887? 
 
@@ -434,11 +442,7 @@ get_regression_summaries(satm_mod2) %>%
 
 --
 
-- 74%
-
---
-
-- Model 2 has the highest $R^2$. It is *statistically* superior.
+- Model 2 has the higher $R^2$. It is *statistically* superior.
 
 ---
 # Goodness of fit
@@ -463,10 +467,12 @@ ggplot(States, aes(x = percent, y = SATM)) +
 ```
 ]
 
+- Note that the data points in model 2 (right) are closer to the regression line -> less unexplained variance in `SATM` -> higher $R^2$
+
 ---
 # Goodness of fit
 
-- $R^2$ isn't very useful for a general audience and it has limited practical application for predictions.
+- $R^2$ may not be useful for a general audience and it has limited practical application for predictions.
 
 --
 
@@ -553,7 +559,7 @@ class: inverse, center, middle
 ---
 # Making sense of our results
 
-- So far, states spending more on public education apparently tend to have lower SAT math scores; may seem counter-intuitive to some
+- So far, states spending more on public education apparently tend to have lower SAT math scores; may stike some as counter-intuitive
 
 --
 
@@ -597,11 +603,7 @@ $$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$
 
 $$SATM=515+6.4 \times Dollars - 1.5 \times Percent+\epsilon$$
 
-On average, a one thousand dollar increase in spending per pupil is associated with 6.4 point increase in average SAT math scores, **controlling for the percent of students taking the SAT**.
-
---
-
-- Blah, blah, blah, **all else equal**.
+On average, a one thousand dollar increase in spending per pupil is associated with 6.4 point increase in average state SAT math scores, **controlling for the percent of students taking the SAT**.
 
 ---
 # Interpreting results
@@ -635,21 +637,15 @@ class: inverse, middle, center
 ---
 # Policy Decision
 
-- We haven't covered enough material to know whether or how we should act on this information, but let's work with what we know so far
-
-  - Let's ignore matters of inference
-  
-  - Let's assume these results are causal
+- For now, let's ignore inference and assume these results are causal.
 
 --
 
-- That said, so far:
-
-  - Spending increases average SAT math scores among states, *controlling for percent of high school grads taking SAT*
+- Spending increases average SAT math scores among states, *controlling for percent of high school grads taking SAT*
   
-  - But spending seems to increase the percent of SAT participation, which then decreases average SAT math scores
+- But spending seems to increase the percent of SAT participation, which then decreases average SAT math scores
 
-- Let's examine the effect of spending on SAT math scores
+- Let's quantify the effect of spending on SAT participation
 
 ---
 # Spending and SAT participation
