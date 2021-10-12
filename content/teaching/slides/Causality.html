@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Causation
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 11, 2021
+### Last updated: October 12, 2021
 
 ---
 
@@ -25,7 +25,7 @@ class: center, middle, inverse, title-slide
 
 
 
-- Overview of research design and key components
+- Overview of research design
   - Counterfactual
   - Internal validity
   - External validity
@@ -40,11 +40,9 @@ class: center, middle, inverse, title-slide
 
 - A causal effect is a comparison of two potential outcomes
 
---
+  - The outcome that we observe in the presence of the event
 
-- The outcome that we observe in the presence of the event
-
-- The outcome that we would have observed had the event *not happened*
+  - The outcome that we would have observed had the event *not happened*
 
 --
 
@@ -55,9 +53,9 @@ class: center, middle, inverse, title-slide
 
 - Half of the data we need to *observe* causation is missing
 
-- We observe the outcome for those who received some treatment
+  - We observe the outcome for those who received some treatment
 
-- We observe the outcome for those who did not receive the treatment
+  - We observe the outcome for those who did not receive the treatment
 
 --
 
@@ -111,21 +109,15 @@ class: center, middle, inverse, title-slide
 ---
 # Temporal Precedence
 
-- Easiest for discrete event or intervention
+- Easiest to claim for discrete events with a pre and post
 
-  - Medicaid expansion on health outcomes
+  - Marijuana legalization on health outcomes
   
   - Stimulus check on spending/saving
-  
-  - Job training program on employment outcomes
 
 --
   
-- More difficult with ongoing/continuous phenomena
-
-  - Mask wearing and COVID spread
-  
-  - Macroeconomics
+- Without a pre/post, `\(x\)` could be responding to prior changes in `\(y\)`.
   
 - Possible solution: Use `\(x\)` from previous periods to explain current `\(y\)`
 
@@ -167,40 +159,7 @@ class: inverse, center, middle
 
 &lt;img src="lectures_files/dag15.png" width="843" style="display: block; margin: auto;" /&gt;
 
----
-# Notation and Rules
 
-.pull-left[
-
-- Solid arrow: effect is observable
-- Dashed arrow: effect is unobservable
-- Arrows claim correlation, at least
-
-- Two types of paths:
-  - Direct `\(X \rightarrow Y\)`
-  - Mediated (indirect) `\(X \rightarrow Z \rightarrow Y\)`
-
-]
-
-.pull-right[
-
-&lt;img src="lectures_files/dag2.png" width="336" /&gt;
-
-- No two-way arrows
-- No direct path from `\(Y\)` back to `\(X\)`
-
-]
-
----
-# Our focus on DAGS
-
-- Backdoor paths
-
-- Adjusting for **confounding** and **colliding** variables
-
-- Translating regression to DAGS and vice versa
-
-- Further reading: Pearl, J. (2018). [The Book of Why](https://www.amazon.com/dp/B07CYJ4G2L/ref=cm_sw_em_r_mt_dp_QlXEFb2CK71MS)
 
 ---
 # Backdoor path
@@ -485,7 +444,7 @@ class: inverse, center, middle
 ---
 class: inverse, center, middle
 
-# Let's practice using DAGs in groups
+# Let's practice using DAGs
 
 ---
 class: inverse, center, middle
@@ -500,20 +459,6 @@ class: inverse, center, middle
 - Controlling for a collider in our regression in a way that opens a backdoor path that would have been closed
 
 - Using a sample where observations are based on a collider variable
-
----
-# Collider bias: bad control
-
-&lt;img src="lectures_files/dag12.png" width="351" style="display: block; margin: auto;" /&gt;
-
-1. `\(Marijuana \rightarrow CarAcc\)`
-2. `\(Marijuana \leftarrow Norms \rightarrow Seatbelt \leftarrow Safety \rightarrow CarAcc\)`
-
-
-`$$CarAcc = \beta_0 + \beta_1Marijuana + \beta_2Seatbelt + \epsilon$$`
-
-- Controlling for seatbelt usage would introduce bias
-
 
 ---
 # Seeing collider bias
@@ -664,7 +609,7 @@ biased &lt;- lm(Y ~ X + Z, data = collider_bias)
 
 .pull-left[
 
-![](Causality_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+![](Causality_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -683,7 +628,7 @@ biased &lt;- lm(Y ~ X + Z, data = collider_bias)
 
 .pull-left[
 
-![](Causality_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
+![](Causality_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -702,7 +647,7 @@ biased &lt;- lm(Y ~ X + Z, data = collider_bias)
 
 .pull-left[
 
-![](Causality_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+![](Causality_files/figure-html/unnamed-chunk-31-1.png)&lt;!-- --&gt;
 
 ]
 
@@ -719,7 +664,7 @@ biased &lt;- lm(Y ~ X + Z, data = collider_bias)
 ---
 # Seeing Selection Bias
 
-&lt;img src="Causality_files/figure-html/unnamed-chunk-35-1.png" height="90%" style="display: block; margin: auto;" /&gt;
+&lt;img src="Causality_files/figure-html/unnamed-chunk-33-1.png" height="90%" style="display: block; margin: auto;" /&gt;
 
 
 ---
