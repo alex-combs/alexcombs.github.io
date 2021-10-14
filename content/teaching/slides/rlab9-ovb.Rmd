@@ -35,7 +35,7 @@ library(knitr)
 
 ```{r, eval=FALSE}
 ---
-title: "RLab 9: Omitted Variable Bias"
+title: "RLab 6: Omitted Variable Bias"
 author: "Your Name"
 output: 
   html_document:
