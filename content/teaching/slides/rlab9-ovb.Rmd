@@ -132,17 +132,6 @@ $$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$
 
 $$SWB_i=\beta_0+\beta_1ND_i+\epsilon$$
 
-- What are our null and alternative hypotheses?
-
---
-
-- $H_0:\beta_1=0$
-
-- $H_A: \beta_1 \neq 0$
-
----
-# Biased regression
-
 > **Estimate the biased model and produce a basic regression table**
 
 ```{r, eval=FALSE}
@@ -158,30 +147,34 @@ get_regression_table(biased) %>%
   kable()
 ```
 
+
+- What is the interpretation of the ND estimate?
+
 --
 
-- What is the conclusion of our hypothesis test at a 5% significance level?
+- **Haven't covered yet:** the estimate is also statistically significant at standard threshold of p-value < 0.05.
 
 --
 
-- Reject the null. $H_A: \beta_1 \neq 0$
-
-- In other words, our estimate of 0.523 is too far from 0 to be due to random noise. The probability of getting this result (or more extreme) if the null were true is 0.8%. 
+- In other words, our estimate of 0.523 is too far (above) from 0 to be due to random noise.
 
 ---
-# But OVB
+# OVB
 
 - But we know our estimate for ND is biased :(
 
 - Bias causes our estimate to be higher or lower than what it should be.
 
-- So we can't trust our estimate of 0.523. Maybe it should be closer to 0; enough so that we would fail to reject the null.
-
 --
+
+- So we can't trust our estimate of 0.523. Maybe it should be closer to 0 and enough so that it could be random noise (i.e., statistically insignificant).
+
+---
+# OVB
 
 - It would be useful to predict whether the bias was causing our estimate to be too high or low.
 
-- If it were causing our estimate to be too low, and given that it is already far enough above 0 to reject the null, we could still conclude statistical significance.
+- If it were causing our estimate to be too low, and given that 0.523 is already far enough above 0 to be statistically significant, we could still make useful conclusions.
 
 ---
 # OVB Direction
@@ -217,7 +210,7 @@ predicting_happiness %>%
 ]
 
 
-Based on the correlations between these three variables, what direction is the OVB on $ND$ for the biased model?
+Based on the correlations between these three variables, what direction is the OVB for $ND$ for the biased model?
 
 ---
 # OVB Direction
@@ -256,18 +249,18 @@ get_regression_table(valid) %>%
   kable()
 ```
 
-- Would our conclusion for the hypothesis test on ND have been different if PSS were included?
+- Does our conclusion for ND change?
 
 --
 
-- Yes. In this case we would have failed to reject the null because p-value = 0.787
+- Yes. The estimate is negative AND it is no longer statistically significant p-value = 0.787 > 0.05
 
 ---
 # Computing OVB
 
-- OVB can be calculated like so:
+- OVB can be calculated by subtracting the valid estimate from the biased estimate:
 
-$$\beta^{biased}-\beta^{valid}$$
+$$b^{biased}-b^{valid}$$
 
 > **Calculate the magnitude of the OVB on the estimate for ND between the two models**
 
