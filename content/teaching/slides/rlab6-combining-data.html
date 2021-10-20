@@ -14,10 +14,10 @@
 class: center, middle, inverse, title-slide
 
 # PADP 7120 Data Applications in PA
-## RLab 6: Combining Data
+## RLab 7: Combining Data
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 11, 2021
+### Last updated: October 20, 2021
 
 ---
 
@@ -29,18 +29,19 @@ class: center, middle, inverse, title-slide
   - Left join
 
 ---
+
 # Setup
 
-&gt; **Either start a new project, "rlab6", or continue using your "rlab5" project.**
+&gt; **Start a new project, "rlab7".**
   
-&gt; **If starting a new project, copy and paste or move your "rlab5_lastname" Rmd to "rlab6" folder. Rename Rmd "rlab6_lastname"**
+&gt; **Copy or move your RLab5 Rmd to your RLab7 project folder. Change file name to "rlab7_lastname".**
 
 &gt; **Change YAML to:**
 
 
 ```r
 ---
-title: "RLab6: Combining Data"
+*title: "RLab7: Combining Data"
 author: "Your Name"
 output:
   html_document:
@@ -65,17 +66,16 @@ library(lubridate)
 ---
 # Download &amp; Import Data
 
-&gt; **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, and `st_fin_2016.csv` files from eLC and add them to your project folder.**
+&gt; **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, `st_fin_2016.csv`, and `ga_county_pop.csv` files from eLC and add them to your project folder.**
 
-&gt; **Start a new code chunk anywhere in your Rmd. Set to `include=FALSE`. Name the code chunk `append`.**
-
-&gt; **Import the three files**
+&gt; **In your setup code chunk, import the four data files.**
 
 
 ```r
 st_fin_14 &lt;- 
 st_fin_15 &lt;- 
 st_fin_16 &lt;- 
+ga_county_pop &lt;- 
 ```
 
 
@@ -92,11 +92,24 @@ st_fin_16 &lt;-
 ![:scale 50%](labs_files/append.png)
 
 ---
+# Excel Append
+
+- Let's try the combinations today using Excel to compare and better visualize what we are trying to do in R
+  
+&gt; **Download and open the "gapminder_joins.xlsx" file on eLC.**
+
+--
+
+- First three tabs contain gapminder data for three different years.
+
+&gt; **Append the three years into the fourth tab `4.gap97_07`.
+
+---
 # Append
 
 - Appending is simple to do in something like Excel but can become tedious if you need to append many datasets
 
-- And like always, Excel doesn't allow the process to be replicated for later use
+- And like always, Excel doesn't allow the process to be replicated
 
 - R can append datasets with much less effort
 
@@ -117,9 +130,9 @@ glimpse(gapminder07)
 ```
 ## Rows: 142
 ## Columns: 3
-## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
-## $ year      &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007,…
-## $ gdpPercap &lt;dbl&gt; 974.5803, 5937.0295, 6223.3675, 4797.2313, 12779.3796, 3443…
+## $ country   &lt;fct&gt; "Afghanistan", "Albania", "Algeria", "Angola", "Argentina", …
+## $ year      &lt;int&gt; 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, 2007, …
+## $ gdpPercap &lt;dbl&gt; 974.5803, 5937.0295, 6223.3675, 4797.2313, 12779.3796, 34435…
 ```
 
 ```r
@@ -129,9 +142,9 @@ glimpse(gapminder02)
 ```
 ## Rows: 142
 ## Columns: 3
-## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
-## $ year      &lt;int&gt; 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002,…
-## $ gdpPercap &lt;dbl&gt; 726.7341, 4604.2117, 5288.0404, 2773.2873, 8797.6407, 30687…
+## $ country   &lt;fct&gt; "Afghanistan", "Albania", "Algeria", "Angola", "Argentina", …
+## $ year      &lt;int&gt; 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002, 2002, …
+## $ gdpPercap &lt;dbl&gt; 726.7341, 4604.2117, 5288.0404, 2773.2873, 8797.6407, 30687.…
 ```
 
 ---
@@ -145,9 +158,9 @@ glimpse(gapminder97)
 ```
 ## Rows: 142
 ## Columns: 3
-## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
-## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997,…
-## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 2699…
+## $ country   &lt;fct&gt; "Afghanistan", "Albania", "Algeria", "Angola", "Argentina", …
+## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, …
+## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 26997…
 ```
 
 ---
@@ -175,9 +188,9 @@ glimpse(gapminder97_07)
 ```
 ## Rows: 426
 ## Columns: 3
-## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
-## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997,…
-## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 2699…
+## $ country   &lt;fct&gt; "Afghanistan", "Albania", "Algeria", "Angola", "Argentina", …
+## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, …
+## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 26997…
 ```
 
 - Note that there are now 426 rows in the new dataset (3 x 142)
@@ -185,7 +198,7 @@ glimpse(gapminder97_07)
 ---
 # Append Practice
 
-- You have three datasets with the same layout
+- You have three `st_fin` datasets with the same layout
 
 &gt; **Append them to create a new dataset `st_fin_14_16`**
 
@@ -213,22 +226,38 @@ class: inverse, middle, center
 ---
 # Where to add code
 
-- Now we're ready to add data to the `covid_ga` data from last lab in order to make better comparisons across counties
+- Now we're ready to add data to the `covid_ga` data from the previous lab in order to make better comparisons across counties.
 
-- Therefore, we need to add code chunks that add these data *before* we start making graphs
+- We need to add code chunks that add these data *before* we start making graphs
 
-&gt; **Find the point in your Rmd where you finished preparing `covid_ga` but hadn't yet started creating new variables. Run all code above that point.**
+&gt; **Find the point in your Rmd where you finished preparing `covid_ga` and before making the first visualization. Add a new code chunk here.**
 
 ---
 # Left Joins
 
-- A left join is used when we want to add variables from a second dataset to our main dataset, matching observations based on a common set of variables called the **key**
+- A left join is used when we want to add variables from a secondary dataset to our primary dataset, matching observations based on a common set of variables called the **key**
 
-- Keeps ALL of the observations in our main dataset
+- Keeps **ALL** of the observations in our main dataset regardless of whether there is a match in the secondary dataset
 
-- Observations in the second dataset that don't match with the main dataset aren't added
+- Observations in the secondary dataset that don't match with the main dataset **are not** added
 
 ![:scale 60%](labs_files/left_join.png)
+
+---
+# Excel Comparison
+
+- The fifth tab in our Excel file, `gap_pop_US`, supposes we could only find population data for the US from 1952-2007 in intervals of 5 years.
+
+- Suppose `gap97_07` is our primary dataset
+
+&gt; **Use the `gap_USpop_leftjoin` sheet to left join the `gap_pop_US` data to the the `gap97_07` data**
+
+---
+# Excel Comparison
+
+- This left join was manageable because it did not involve much data in the secondary dataset
+
+- Quickly becomes untenable if there were more data we needed to match to the primary dataset
 
 ---
 # The Key to Joins/Merges
@@ -237,7 +266,9 @@ class: inverse, middle, center
 
 - If you can identify the unit of analysis in both datasets, you have identified the key to use for joins
 
-- Datasets must have the same key in order to join them; they do not need to be named the same across datasets
+- Datasets must have the same key in order to join them
+
+- The key does not need to have the same variable name(s) across datasets
 
 ---
 # General Syntax of Left Joins
@@ -312,9 +343,9 @@ glimpse(gapminder97_07)
 ```
 ## Rows: 426
 ## Columns: 3
-## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
-## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997,…
-## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 2699…
+## $ country   &lt;fct&gt; "Afghanistan", "Albania", "Algeria", "Angola", "Argentina", …
+## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, …
+## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 26997…
 ```
 
 ---
@@ -332,9 +363,9 @@ glimpse(gap_pop_US)
 ```
 ## Rows: 12
 ## Columns: 3
-## $ country &lt;fct&gt; United States, United States, United States, United States, U…
-## $ year    &lt;int&gt; 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 2…
-## $ pop     &lt;int&gt; 157553000, 171984000, 186538000, 198712000, 209896000, 220239…
+## $ country &lt;fct&gt; "United States", "United States", "United States", "United Sta…
+## $ year    &lt;int&gt; 1952, 1957, 1962, 1967, 1972, 1977, 1982, 1987, 1992, 1997, 20…
+## $ pop     &lt;int&gt; 157553000, 171984000, 186538000, 198712000, 209896000, 2202390…
 ```
 
 - Note that there are only 12 observations in `gap_pop_US`, not 426 as in `gapminder97_07`
@@ -362,28 +393,20 @@ glimpse(gap_pop_97_07)
 ```
 ## Rows: 426
 ## Columns: 4
-## $ country   &lt;fct&gt; Afghanistan, Albania, Algeria, Angola, Argentina, Australia…
-## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997,…
-## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 2699…
-## $ pop       &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+## $ country   &lt;fct&gt; "Afghanistan", "Albania", "Algeria", "Angola", "Argentina", …
+## $ year      &lt;int&gt; 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, 1997, …
+## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 26997…
+## $ pop       &lt;int&gt; NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
 ```
 
 ---
 # Left Join Practice
 
-&gt; **Download `ga_county_pop.csv`, add it to your project folder, and import**
+- You imported `ga_county_pop` earlier
+
+- These data include total county population for 2019 from the US Census
 
 
-```r
-ga_county_pop &lt;- 
-```
-
-
-
----
-# County Pop Data
-
-- These data include total county population for 2019 from the Census
 
 
 ```r
@@ -393,11 +416,11 @@ glimpse(ga_county_pop)
 ```
 ## Rows: 159
 ## Columns: 2
-## $ county     &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks…
-## $ population &lt;dbl&gt; 18386, 8165, 11164, 3038, 44890, 19234, 83240, 107738, 167…
+## $ county     &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks"…
+## $ population &lt;dbl&gt; 18386, 8165, 11164, 3038, 44890, 19234, 83240, 107738, 1670…
 ```
 
-- What is the key between `covid_ga` and `ga_county_pop`?
+- What is the variable name(s) of the key between `covid_ga` and `ga_county_pop`?
 
 --
 
@@ -406,11 +429,11 @@ glimpse(ga_county_pop)
 ---
 # Variable Type Mismatch
 
-- Before using a key to join data, make sure they are stored as the same type in both datasets
+- Before using a key to join data, make sure they are stored as the same type of variable in both datasets
 
-- `county` is stored as a factor in `covid_ga` and character in `ga_county_pop`
+- How is `county` stored in `covid_ga` and `ga_county_pop`?
 
-&gt; **Convert `county` to factor in `ga_county_pop`**
+&gt; **If different, convert the type of one to match the type in the other dataset.**
 
 
 
@@ -429,15 +452,15 @@ glimpse(covid_ga)
 ```
 
 ```
-## Rows: 56,249
+## Rows: 91,929
 ## Columns: 7
-## $ date       &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-0…
-## $ county     &lt;fct&gt; Fulton, Fulton, Fulton, Fulton, Fulton, Polk, Cobb, Fulton…
-## $ state      &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Ge…
-## $ fips       &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13…
-## $ cases      &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1…
-## $ deaths     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-## $ population &lt;dbl&gt; 1063937, 1063937, 1063937, 1063937, 1063937, 42613, 760141…
+## $ date       &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06…
+## $ county     &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "…
+## $ state      &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Geo…
+## $ fips       &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 131…
+## $ cases      &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1,…
+## $ deaths     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ population &lt;dbl&gt; 1063937, 1063937, 1063937, 1063937, 1063937, 42613, 760141,…
 ```
 
 ---
@@ -449,7 +472,7 @@ glimpse(covid_ga)
 
 - We will continue this project in the next lab
 
-&gt; **Upload your Rmd to eLC**
+&gt; **Upload your Rmd to eLC. You do not need to upload what you did in the Excel file.**
 
 ---
 # Other types of joins
@@ -458,7 +481,16 @@ glimpse(covid_ga)
 
 ![:scale 65%](labs_files/inner_join.png)
 
-- Replace `left_join` with `inner_join` in any of the examples
+- Replace `left_join` with `inner_join` in any of the previous examples
+
+---
+# Excel Comparison
+
+- The sheet `gap_le_americas` supposes we could find life expectancy data for only North and South American countries between 1952-2007.
+
+&gt; **Using the `gap_97_07_innerjoin` sheet, try to carry out an inner join between `gap_le_americas` data and the data in the `gap_USpop_leftjoin` sheet.**
+
+- Remember, the result should contain only the observations for which there is a match between both datasets.
 
 ---
 # Other types of joins
