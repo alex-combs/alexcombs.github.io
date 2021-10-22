@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Sampling
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: June 08, 2021
+### Last updated: October 22, 2021
 
 ---
 
@@ -30,6 +30,10 @@ class: center, middle, inverse, title-slide
   - Normal distribution and standard deviation (68-95-99 rule)
   - Law of large numbers (LLN)
   - Central limit theorem (CLT)
+  
+- We will use R to make this as concrete as possible
+
+&gt; **Download and open the "sampling-simulations.Rmd" on eLC.**
 
 ---
 # Credible analysis
@@ -69,7 +73,7 @@ class: center, middle, inverse, title-slide
   - Regression coefficient/estimate of `\(\beta\)`
 
 ---
-# Key questions
+# Questions of inference
 
 - Is our estimate an accurate guess of the population parameter?
   - `\(E\)` denotes expected value; the average of our estimate over many repetitions
@@ -89,7 +93,7 @@ class: center, middle, inverse, title-slide
 ---
 # Inference overview
 
-1. We take a sample. Hopefully **random**. If not, need to correct using sample weights or controls in a regression. Otherwise, **biased**.
+1. We take a sample. Hopefully **random**. If not, need to correct using sample weights and/or controls in a regression. Otherwise, **biased**.
 
 --
 
@@ -106,29 +110,37 @@ class: center, middle, inverse, title-slide
 ---
 # Law of Large Numbers (LLN)
 
-- We *know* a (fair) coin has 50/50 chance landing heads/tails
+- We *know* a (fair) coin has 50% chance landing heads. 
 
-- Suppose we didn't know this, as is the case with more important phenomena, and wanted to estimate the probability of heads
+- The population parameter for the number of heads for all coin flips ever is 50%.
 
-- LLN says that, given a large enough sample size, our estimate will approach the population parameter
+--
+
+- We do not know the population parameter for most phenomena
+
+- LLN says: given a large enough sample size, our sample estimate will approach the population parameter
 
 ---
 # Law of Large Numbers (LLN)
 
-&gt; **Run the two `coin-flip` code chunks**
+&gt; **Run the `set-up` and `functions` code chunks**
 
 --
 
-&gt; **Run the `head-count` code chunk with its default of 10 flips**
+&gt; **Run the `coin-flips` code chunk**
 
 --
 
-&gt; **Change the number of flips to 100 and run again**
+&gt; **Run the `head-count` code chunk. Make note of the percent of flips resulting in heads.**
+
+--
+
+&gt; **Change the number of flips from 10 to 100 and run again. Make note of the percent of flips resulting in heads.**
 
 ---
 class: inverse, center, middle
 
-# As sample size increases, accuracy increases (assuming no bias)
+# As sample size increases, accuracy tends to increase (assuming no bias)
 
 ---
 # Sampling distribution
@@ -139,7 +151,30 @@ class: inverse, center, middle
 
 --
 
-- What if we collected all of the estimates we got from each of our samples and plotted their distribution? That would give us a **sampling distribution** for our estimate.
+- What if we collected all of the estimates we got from each of our samples and plotted their distribution? That would give us the **sampling distribution** for our estimate.
+
+--
+
+&gt; **Replace values in the `class-sampling-distribution` code chunk then run.**
+
+--
+
+&gt; **We need more estimates to make a proper histogram. Let's obtain two more estimates each and add to histogram.**
+
+---
+# Sampling distribution
+
+- Distribution of a variable is the distribution of *values* for that variable in a given sample
+
+- Sampling distribution is the distribution of *estimates* (e.g., proportion, average, regression coefficient) each obtained from a different sample that contains the variable(s) of interest
+
+--
+
+- In our coin flip example:
+  - Data: 100 observations of a coin flip
+  - Distribution: the distribution of heads and tails in our sample of 100
+  - Estimate: percent of flips resulting in heads in our sample of 100 
+  - Sampling distribution: the distribution of percent heads from all of the samples of 100 flips we simulated
 
 ---
 # Central Limit Theorem
@@ -163,7 +198,7 @@ class: inverse, center, middle
 
 - **Standard error** is the special name we give to the standard deviation of a sampling distribution.
 
-&gt; **Let's compute the standard error of our sampling distribution**
+&gt; **Run the `standard-error` code chunk to compute the standard error of our sampling distribution.**
 
 ---
 # Confidence intervals
@@ -174,16 +209,24 @@ class: inverse, center, middle
 
 --
 
-&gt; **Complete the `confidence-interval` code chunk then run**
+&gt; **Run the `confidence-interval` code chunk**
 
 ---
 # Confidence intervals &amp; sample size
 
+- Each of the next three code chunks uses a different sample size of coin flips (10,100,1000), counts the number of heads, then replicates this 100 times to provide you 100 *estimates* for percent heads.
+
+--
+
 &gt; **Run the `sampling-distribution` code chunks**
+
+- Should notice the spread of the sampling distribution decreasing as sample size increases
 
 --
 
 &gt; **Run the `se` code chunks**
+
+- The standard error should be decreasing as sample size increases
 
 ---
 class: inverse, center, middle
@@ -199,20 +242,28 @@ class: inverse, center, middle
 
 - Let's use inference in a more realistic way, but test its success by making a simulated population we can observe
 
-&gt; **Run the `population` and `parameter` code chunks.**
+&gt; **Run the `mpa-population` and `parameter` code chunks.**
+
+- What is the population parameter for average salary among all MPA graduates?
 
 ---
 # Sample and estimate
 
-&gt; **Run the `sample` and `salary-estimate` code chunks.**
+&gt; **Once you've been given your sample size (n), run the `sample` and `salary-estimate` code chunks.**
+
+--
+
+- You now have a sample of MPA graduates drawn from the population
 
 --
 
 - This time, we won't compile our estimates to make a sampling distribution.
 
-- Instead, we assume our estimate is a single draw from a sampling distribution that is approximately normal
+- Instead, we assume our estimate is a single draw from a sampling distribution that is approximately normal even though we never observe the sampling distribution
 
-- But we still need the standard error of the sampling distribution...
+--
+
+- But we still need the standard error of the sampling distribution to construct confidence intervals...
 
 ---
 # Standard error
@@ -232,6 +283,12 @@ class: inverse, center, middle
 - Now we need a plausible range of values that we expect to capture the parameter 95 times if this "study" was conducted 100 times
 
 &gt; **Run the `salary-ci` and `precision` code chunks**
+
+--
+
+- Those with larger sample sizes should have more precise confidence intervals
+
+- Does your confidence interval contain the population parameter?
 
 ---
 # Confidence interval
@@ -261,7 +318,7 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 ---
 # Point estimate vs. CI
 
-- Our point estimate for average salary was $81,053. This is what often gets reported. This is for brevity and convenience.
+- Suppose our estimate for average salary was $81,053. This is what often gets reported. This is for brevity and convenience.
 
 --
 
@@ -274,6 +331,10 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 --
 
 - Depending on the context of our study and the width of the CI, only reporting the point estimate could be very misleading.
+
+--
+
+- What if the 95% CI for average salary was [20,000 - 140,000]?
 
 ---
 # Back to regression table
@@ -407,11 +468,7 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 ---
 # Final points for consumers
 
-- Beware a point estimate without a confidence interval or at least the standard error
-
---
-
-- Consider measurement validity &amp; reliability, and omitted variable bias
+- Beware a point estimate without a confidence interval
 
 --
 
