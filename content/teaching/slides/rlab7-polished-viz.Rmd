@@ -1,6 +1,6 @@
 ---
 title: "PADP 7120 Data Applications in PA"
-subtitle: "RLab 7: Professional Visualizations"
+subtitle: "RLab 8: Data Viz 2"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
 date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
@@ -15,78 +15,52 @@ output:
 ---
 # Objectives
 
-- Fancify graphs to share with an audience  
+- Cover a few ways to improve graphs
 
 ---
 # Setup
 
-> **Just re-open your "rlab6". No need to start a new project unless you really want to.**
+> **Just open your "rlab7" Rmd in your "rlab7" project folder. No need to start a new project**
 
-> **If you need a working Rmd, download "rlab6_combs.Rmd" from eLC.**
+> **Change yesterday accordingly.**
 
-> **Change YAML to:**
+> **Rerun all the code up to the point where you have the `covid_ga` dataset that now includes county population.**
 
-```{r, eval=FALSE}
----
-title: "RLab7: Professional Viz"
-author: "Your Name"
-output:
-  html_document:
-    df_print: paged
----
-```
-
----
-# Setup
-
-> **Should already have the following packages ready to load:**
-
-```{r, message=FALSE, warning=FALSE}
+```{r, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(data.table)
 library(lubridate)
+covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+ga_county_pop <- read_csv("/Users/alexcombs/Documents/Website/web-work/content/teaching/slides/labs_files/ga_county_pop.csv")
 ```
 
 ```{r, include=FALSE}
-covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
-
 covid_ga <- covid %>% 
   filter(state == 'Georgia')
 
 covid_ga$date <- ymd(covid_ga$date)
+```
 
-yesterday <- '2021-03-17'
+```{r, include=FALSE}
+summary(covid_ga)
 
-covid_ga$county <- as.factor(covid_ga$county)
+yesterday <- '2021-10-21'
+```
 
-ga_county_pop <- read_csv('labs_files/ga_county_pop.csv')
-
-ga_county_pop$county <- as.factor(ga_county_pop$county)
-
+```{r, include=FALSE}
 covid_ga <- covid_ga %>% 
-  left_join(ga_county_pop, by = 'county')
+  left_join(ga_county_pop,
+            by = "county")
 ```
-  
-> **Find `yesterday` and update it accordingly**
-
-```{r, eval=FALSE}
-yesterday <- '2021-03-17'
-```
-
-
----
-# Rerun Code
-
-> **Run your code up to the point where you have the `covid_ga` dataset that now includes county population.**
 
 ---
 # Adjusting for Population
 
-- We realized that it is not as informative to compare counts of COVID cases and/or deaths across counties of different size populations
+- We realized that it is somewhat misleading to compare counts of COVID cases and/or deaths across counties of different populations
 
 --
 
-- We need to compute counts **per capita** or some standard number of people, such as 100,000
+- We need to compute counts per capita or some standard number of people, such as 100,000
 
 - And create two **normalized** variables, `cases_rate`, `deaths_rate`.
 
@@ -120,30 +94,17 @@ yesterday <- '2021-03-17'
 
 ```{r}
 covid_ga <- covid_ga %>% 
-  mutate(pop100thou = population/100000) %>% 
-  mutate(cases_rate = cases/pop100thou, 
+  mutate(pop100thou = population/100000,
+         cases_rate = cases/pop100thou, 
          deaths_rate = deaths/pop100thou)
 ```
 
-Alternatively:
+Alternatively if you did not want to create pop in 100,000s:
 
 ```{r, eval=FALSE}
 covid_ga <- covid_ga %>% 
   mutate(cases_rate = cases/(population/100000),
          deaths_rate = deaths/(population/100000))
-```
-
-
----
-# Selected Counties
-
-- Now rerun the code that created `covid_ga_5`
-
-```{r}
-ga_counties <- c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')
-
-covid_ga_5 <- covid_ga %>% 
-  filter(county %in% ga_counties)
 ```
 
 ---
@@ -156,7 +117,7 @@ covid_ga_5 <- covid_ga %>%
 
 --
 
-- Geometric object
+- Geometric object adjustments
   - Color
   - Shape/line type & size
   - Reference lines
@@ -295,8 +256,43 @@ covid_ga %>%
   labs(title = 'Total County Cases yesterday',
        x = 'Total Cases',
        y = 'Counties') +
-  scale_x_log10(labels = scales::label_comma()) +#<<
+  scale_x_log10(labels = scales::label_comma()) + #<<
   theme_minimal()
+```
+
+---
+# Viz 1 - Change text size
+
+```{r, eval=FALSE, fig.width=9, fig.height=7, message=FALSE}
+covid_ga %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = cases)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'Total County Cases yesterday',
+       x = 'Total Cases',
+       y = 'Counties') +
+  scale_x_log10(labels = scales::label_comma()) +
+  theme_minimal() +
+  theme(title = element_text(size = 16), #<<
+        axis.text = element_text(size = 12)) #<<
+    
+```
+
+---
+# Viz 1 - Change text size
+
+```{r, echo=FALSE, fig.width=9, fig.height=7, message=FALSE}
+covid_ga %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = cases)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'Total County Cases yesterday',
+       x = 'Total Cases',
+       y = 'Counties') +
+  scale_x_log10(labels = scales::label_comma()) +
+  theme_minimal() +
+  theme(title = element_text(size = 16), #<<
+        axis.text = element_text(size = 12)) #<<
 ```
 
 ---
@@ -307,21 +303,6 @@ covid_ga %>%
 ---
 # Viz 2
 
-.pull-left[
-```{r, eval=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=6}
-covid_ga %>% 
-  filter(date == yesterday) %>% 
-  ggplot(aes(x = deaths)) +
-  geom_histogram(fill = 'steelblue', color = 'white') +
-  labs(title = 'Total County Deaths Yesterday',
-       x = 'Total Deaths',
-       y = 'Counties') +
-  scale_x_log10(labels = scales::comma_format()) +
-  theme_minimal()
-```
-]
-
-.pull-right[
 ```{r, echo=FALSE, warning=FALSE, message=FALSE, fig.width=8, fig.height=6}
 covid_ga %>% 
   filter(date == yesterday) %>% 
@@ -331,14 +312,16 @@ covid_ga %>%
        x = 'Total Deaths',
        y = 'Counties') +
   scale_x_log10(labels = scales::comma_format()) +
-  theme_minimal()
+  theme_minimal() +
+  theme(title = element_text(size = 16),
+        axis.text = element_text(size = 12))
 ```
-]
+
 ---
 # Viz 3
 
 .pull-left[
-```{r, fig.width=5, fig.height=4}
+```{r, echo=FALSE, fig.width=5, fig.height=4}
 covid_ga %>% 
   filter(date == yesterday) %>%
   ggplot(aes(x = deaths)) +
@@ -347,8 +330,8 @@ covid_ga %>%
 ]
 
 .pull-right[
-- Y axis isn't easily interpretable.
-- In this case, we should remove the tick marks, line, and text for the y axis
+- Y axis isn't interpretable.
+- We can remove the tick marks, line, and text for the y axis
 ]
 
 ---
@@ -382,7 +365,7 @@ covid_ga %>%
 ---
 # Viz 3: Change theme and fill color
 
-> **On your own, change the theme and fill color of the box plot. Add a title, subtitle that specifies the date, and improve the axis label.**
+> **On your own, try to change the theme and fill color of the box plot. Add a title, subtitle that specifies the date, and improve the axis label. Similar to the graph below.**
 
 ```{r, echo=FALSE, fig.width=7, fig.height=5}
 covid_ga %>% 
@@ -390,7 +373,7 @@ covid_ga %>%
   ggplot(aes(x = deaths)) +
   geom_boxplot(fill = 'springgreen4') +
   labs(title = 'Total County COVID Deaths',
-       subtitle = 'March 10, 2021', x = 'Total Deaths') +
+       subtitle = 'October 27, 2021', x = 'Total Deaths') +
   theme_classic() +
   theme(axis.ticks.y = element_blank(),
         axis.line.y = element_blank(),
@@ -398,21 +381,33 @@ covid_ga %>%
 ```
 
 ---
-# Knit
+# Viz 3: Change theme and fill color
 
-- Let's knit to see how the export looks
+```{r, eval=FALSE, fig.width=7, fig.height=5}
+covid_ga %>% 
+  filter(date == yesterday) %>%
+  ggplot(aes(x = deaths)) +
+  geom_boxplot(fill = 'springgreen4') + #<<
+  labs(title = 'Total County COVID Deaths', #<<
+       subtitle = 'October 27, 2021', x = 'Total Deaths') + #<<
+  theme_classic() + #<<
+  theme(axis.ticks.y = element_blank(),
+        axis.line.y = element_blank(),
+        axis.text.y = element_blank())
+```
 
 ---
 # Viz 3: Change figure size
 
 - Figure size is controlled via code chunk options
 
-> **Add the following code chunks and knit again.**
+> **Add the following code chunk options to viz 3.**
 
 ```{r, eval=FALSE}
-{r, echo=FALSE, fig.width=5, fig.height=3}
+{r viz3, fig.width=5, fig.height=3}
 ```
 
+- This will change the size to 5in wide and 3in tall when knit
 
 ```{r, echo=FALSE, fig.width=5, fig.height=3}
 covid_ga %>% 
@@ -428,16 +423,36 @@ covid_ga %>%
 ```
 
 ---
+# Selected Counties
+
+- Now rerun the code that created `covid_ga_5`
+
+```{r}
+ga_counties <- c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')
+
+covid_ga_5 <- covid_ga %>% 
+  filter(county %in% ga_counties)
+```
+
+---
 # Viz 4
 
 > **Update the bar graph comparing our 5 chosen counties using cases per 100,000**
-
---
 
 ```{r, echo=FALSE, fig.width=7, fig.height=5}
 covid_ga_5 %>% 
   filter(date == yesterday) %>% 
   ggplot(aes(x = county, y = cases_rate)) +
+  geom_col()
+```
+
+---
+# Viz 4
+
+```{r, eval=FALSE, fig.width=7, fig.height=5}
+covid_ga_5 %>% 
+  filter(date == yesterday) %>% 
+  ggplot(aes(x = county, y = cases_rate)) + #<<
   geom_col()
 ```
 
@@ -468,7 +483,7 @@ covid_ga_5 %>%
 ---
 # Viz 4: Other Adjustments
 
-> **Use the adjustments we've learned thus far to improve this graph**
+> **Use the adjustments we've learned thus far for fill color and theme to improve this graph**
 
 ```{r, echo=FALSE, fig.width=7, fig.height=5}
 covid_ga_5 %>% 
@@ -476,10 +491,12 @@ covid_ga_5 %>%
   ggplot(aes(x = reorder(county, -cases_rate), y = cases_rate)) +
   geom_col(fill = 'darkred') +
   scale_y_continuous(labels = scales::comma_format()) +
-  labs(title = 'COVID Cases Per 100,000 yesterday',
+  labs(title = 'COVID Cases Per 100,000 Yesterday',
        x = 'County',
        y = 'Cases per 100,000') +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text=element_text(size=16),
+        title = element_text(size=12))
 ```
 
 ---
@@ -575,22 +592,21 @@ covid_ga_linegraph #will print graph
 - Following code will save our last graph
 
 ```{r, eval=FALSE}
-ggsave("covid_ga_trends.png", width = 7, height = 5, 
-       units = "in", dpi = "retina")
+ggsave("covid_ga_case_trends.png", width = 7, height = 5)
 ```
 
-- Can export as .jpeg, .tiff, .eps, .pdf, and others
+- Can export as .jpeg, .tiff, .eps, .pdf, and more
 
 ---
 # Improving Dates Along Axis
 
-- Suppose we want the x axis to display every month
+- Suppose we want the x axis to display every third month
 
 > **In a new code chunk, copy and paste below code. Note that we are adding on to the saved graph**
 
 ```{r, eval=FALSE, fig.width=9, fig.height=7}
 covid_ga_linegraph +
-  scale_x_date(date_breaks = '1 month', 
+  scale_x_date(date_breaks = '3 month', 
                labels = scales::date_format('%b%y'))
 ```
 
@@ -599,7 +615,7 @@ covid_ga_linegraph +
 
 ```{r, echo=FALSE, fig.width=9, fig.height=7}
 covid_ga_linegraph +
-  scale_x_date(date_breaks = '1 month', 
+  scale_x_date(date_breaks = '3 month', 
                labels = scales::date_format('%b%y'))
 ```
 
@@ -612,14 +628,17 @@ covid_ga_linegraph +
 
 ```{r, eval=FALSE, fig.width=9, fig.height=7}
 covid_ga_linegraph +
-  scale_x_date(date_breaks = '1 month', 
+  scale_x_date(date_breaks = '3 month', 
                labels = scales::date_format('%b%y')) +
   geom_vline(xintercept = date('2020-08-15'),#<<
              color = 'black', #<<
              linetype = 'dashed') + #<<
   geom_vline(xintercept = date('2021-01-11'),#<<
              color = 'black', #<<
-             linetype = 'dashed')#<<
+             linetype = 'dashed') + #<<
+  geom_vline(xintercept = date('2021-08-15'), #<<
+             color = 'black', #<<
+             linetype = 'dashed') #<<
 ```
 
 ---
@@ -627,14 +646,17 @@ covid_ga_linegraph +
 
 ```{r, echo=FALSE, fig.width=9, fig.height=7}
 covid_ga_linegraph +
-  scale_x_date(date_breaks = '1 month', 
+  scale_x_date(date_breaks = '3 month', 
                labels = scales::date_format('%b%y')) +
   geom_vline(xintercept = date('2020-08-15'),#<<
              color = 'black', #<<
              linetype = 'dashed') + #<<
   geom_vline(xintercept = date('2021-01-11'),#<<
              color = 'black', #<<
-             linetype = 'dashed')#<<
+             linetype = 'dashed') + #<<
+  geom_vline(xintercept = date('2021-08-15'), #<<
+             color = 'black', #<<
+             linetype = 'dashed') #<<
 ```
 
 ---
@@ -642,7 +664,7 @@ covid_ga_linegraph +
 
 > **Make similar adjustments to the line graph displaying deaths per 100,000**
 
-```{r, include=FALSE, fig.width=8, fig.height=6}
+```{r, echo=FALSE, fig.width=8, fig.height=6}
 covid_ga_5 %>% 
   ggplot(aes(x = date, y = deaths_rate, color = county)) +
   geom_line() +
@@ -650,20 +672,23 @@ covid_ga_5 %>%
        color = 'County', x = '',
        y = 'Deaths per 100,000 population') +
   theme_minimal() +
-  scale_x_date(date_breaks = '1 month', 
+  scale_x_date(date_breaks = '3 month', 
                labels = scales::date_format('%b%y')) +
   geom_vline(xintercept = date('2020-08-15'), 
              color = 'black', 
              linetype = 'dashed') +
   geom_vline(xintercept = date('2021-01-11'),
              color = 'black', 
+             linetype = 'dashed') +
+  geom_vline(xintercept = date('2021-08-15'),
+             color = 'black',
              linetype = 'dashed')
 ```
 
 ---
 class: inverse, middle, center
 
-# Do the last two graphs suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths?
+# Do the last two graphs suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths in Clarke County?
 
 ---
 # Upload Rmd
