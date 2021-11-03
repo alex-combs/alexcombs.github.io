@@ -693,4 +693,4 @@ class: inverse, middle, center
 ---
 # Upload Rmd
 
-> **Knit and/or save your Rmd. Upload to eLC.**
+> **Knit your Rmd. Upload Rmd to eLC.**

@@ -36,7 +36,7 @@ state_trump <- hate_crimes %>%
   filter(state != "District of Columbia") %>% 
   mutate_at(vars(share_pop_hs, share_white, share_white_poverty,
               share_vote_trump), funs(.*100)) %>% 
-  rename(med_inc = median_house_inc, hs = share_pop_hs, urban = urbanization)
+  select(med_inc = median_house_inc, hs = share_pop_hs, urban = urbanization)
 ```
 
 - Hypothesis testing
@@ -159,7 +159,7 @@ include_graphics('lectures_files/hypotest-tables.png')
 ---
 # What If We're Wrong
 
-- Suppose our estimate, $p_M-p_F=0.3$, of $P_M-P_F=?$ is so unlikely that we reject the null 
+- Suppose our estimate of $P_M-P_F=?$, $p_M-p_F=0.3$, is so unlikely that we reject the null 
 
 - Conclude that males and females are not promoted in equal proportions $P_M-P_F \neq 0$.
 
@@ -263,9 +263,41 @@ include_graphics('lectures_files/nulldist.png')
 ---
 # Example p-value
 
-- Our observed difference was 0.3! How likely is this result if the null were actually true?
+- Our observed difference was 0.29
+
+- How likely is this result if the null were actually true?
 
 > **Run `p-value-viz` and `p-value` code chunks**
+
+---
+# Chi-square test
+
+- A typical analysis does not simulate a null hypothesis to obtain the p-value
+
+- Instead, statistical tests that use standard theoretical formulas are used
+
+--
+
+- We have two nominal variables to test $\rightarrow$ Chi-square test
+
+> **Run the `cross-tab` and `chi-square` code chunks**
+
+- Does our conclusion change?
+
+---
+# Using an LPM
+
+- We *could* use regression (LPM) for this
+
+> **Run the `lpm` code chunk**
+
+- Does our conclusion change?
+
+--
+
+- Note the estimate is the same but p-value differs. This case pushes the limits of when a regression is appropriate to use.
+
+- But if we wanted to control for additional variables, such as age or years employed, we are back to needing a regression model.
 
 ---
 # Back to regression table
@@ -289,4 +321,122 @@ get_regression_table(inc_mod) %>%
   kable(digits = 3)
 ```
 
-There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately 1,993 dollars per 1 percentage point increase in the population with at least a high school degree, all else equal. With 95% confidence, a 1 p.p. increase in high school attainment is associated with an increase of median income between 1,465 and 2,521 dollars. 
+There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately \$1,993 per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between \$1,465 and \$2,521. 
+
+---
+class: inverse, center, middle
+
+# Practical significance
+
+---
+# Practical significance questions
+
+1. What is the typical change in the explanatory variable associated with the statistically significant estimate?
+
+--
+
+2. Is the predicted change in the outcome due to a typical change in the explanatory variable meaningful?
+
+--
+
+3. Do the bounds of the confidence interval for the explanatory variable potentially change my answer?
+  
+---
+# Example 1
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig1.png')
+```
+
+- Is the property tax result practically significant?
+
+--
+
+- Typical change (standard deviation) in property tax is $4
+
+- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
+
+- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200)...practically significant!
+
+---
+# Example 2
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig2.png')
+```
+
+- SD for property tax is now 0.04 instead of 4
+- Is the property tax result practically significant?
+
+--
+
+- Typical change in property tax is now $0.04
+
+- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
+
+- Confidence intervals do not change this conclusion.
+
+---
+# Example 3
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig3.png')
+```
+
+- SD of property tax back to 4 but CI has changed
+- Is the property tax result practically significant?
+
+--
+
+- Same as first example and would definitely be practically significant if not for the 95% CI being so close to 0.
+
+- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
+
+---
+# Example 4
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig4.png')
+```
+
+- Estimate and CI for property tax has changed
+- Is the property tax result practically significant?
+
+--
+
+- Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
+
+- Rare for statistical insignificance to have practical significance.
+
+---
+# Example 5
+
+```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
+include_graphics('lectures_files/prac-sig5.png')
+```
+
+- Estimate and CI has changed again
+- Is the property tax result practically significant?
+
+--
+
+- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
+
+- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.
+
+---
+# Practical significance from PS3
+
+```{r, include=FALSE}
+sum.ps3 <- arsenal::tableby(~ med_inc + hs, data = state_trump)
+```
+
+```{r, echo=FALSE, results='asis'}
+summary(sum.ps3)
+```
+
+```{r, echo=FALSE}
+get_regression_table(inc_mod) %>% 
+  kable(digits = 3)
+```
+

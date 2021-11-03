@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Hypothesis Testing
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: June 08, 2021
+### Last updated: November 03, 2021
 
 ---
 
@@ -137,7 +137,7 @@ class: inverse, center, middle
 ---
 # What If We're Wrong
 
-- Suppose our estimate, `\(p_M-p_F=0.3\)`, of `\(P_M-P_F=?\)` is so unlikely that we reject the null 
+- Suppose our estimate of `\(P_M-P_F=?\)`, `\(p_M-p_F=0.3\)`, is so unlikely that we reject the null 
 
 - Conclude that males and females are not promoted in equal proportions `\(P_M-P_F \neq 0\)`.
 
@@ -239,9 +239,41 @@ class: inverse, center, middle
 ---
 # Example p-value
 
-- Our observed difference was 0.3! How likely is this result if the null were actually true?
+- Our observed difference was 0.29
+
+- How likely is this result if the null were actually true?
 
 &gt; **Run `p-value-viz` and `p-value` code chunks**
+
+---
+# Chi-square test
+
+- A typical analysis does not simulate a null hypothesis to obtain the p-value
+
+- Instead, statistical tests that use standard theoretical formulas are used
+
+--
+
+- We have two nominal variables to test `\(\rightarrow\)` Chi-square test
+
+&gt; **Run the `cross-tab` and `chi-square` code chunks**
+
+- Does our conclusion change?
+
+---
+# Using an LPM
+
+- We *could* use regression (LPM) for this
+
+&gt; **Run the `lpm` code chunk**
+
+- Does our conclusion change?
+
+--
+
+- Note the estimate is the same but p-value differs. This case pushes the limits of when a regression is appropriate to use.
+
+- But if we wanted to control for additional variables, such as age or years employed, we are back to needing a regression model.
 
 ---
 # Back to regression table
@@ -269,7 +301,121 @@ class: inverse, center, middle
 |hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
 |urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
-There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately 1,993 dollars per 1 percentage point increase in the population with at least a high school degree, all else equal. With 95% confidence, a 1 p.p. increase in high school attainment is associated with an increase of median income between 1,465 and 2,521 dollars. 
+There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately \$1,993 per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between \$1,465 and \$2,521. 
+
+---
+class: inverse, center, middle
+
+# Practical significance
+
+---
+# Practical significance questions
+
+1. What is the typical change in the explanatory variable associated with the statistically significant estimate?
+
+--
+
+2. Is the predicted change in the outcome due to a typical change in the explanatory variable meaningful?
+
+--
+
+3. Do the bounds of the confidence interval for the explanatory variable potentially change my answer?
+  
+---
+# Example 1
+
+&lt;img src="lectures_files/prac-sig1.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- Is the property tax result practically significant?
+
+--
+
+- Typical change (standard deviation) in property tax is $4
+
+- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
+
+- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200)...practically significant!
+
+---
+# Example 2
+
+&lt;img src="lectures_files/prac-sig2.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- SD for property tax is now 0.04 instead of 4
+- Is the property tax result practically significant?
+
+--
+
+- Typical change in property tax is now $0.04
+
+- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
+
+- Confidence intervals do not change this conclusion.
+
+---
+# Example 3
+
+&lt;img src="lectures_files/prac-sig3.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- SD of property tax back to 4 but CI has changed
+- Is the property tax result practically significant?
+
+--
+
+- Same as first example and would definitely be practically significant if not for the 95% CI being so close to 0.
+
+- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
+
+---
+# Example 4
+
+&lt;img src="lectures_files/prac-sig4.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- Estimate and CI for property tax has changed
+- Is the property tax result practically significant?
+
+--
+
+- Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
+
+- Rare for statistical insignificance to have practical significance.
+
+---
+# Example 5
+
+&lt;img src="lectures_files/prac-sig5.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
+
+- Estimate and CI has changed again
+- Is the property tax result practically significant?
+
+--
+
+- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
+
+- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.
+
+---
+# Practical significance from PS3
+
+
+
+
+|                            |    Overall (N=50)     |
+|:---------------------------|:---------------------:|
+|**med_inc**                 |                       |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) | 54962.540 (9109.319)  |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     | 35521.000 - 76165.000 |
+|**hs**                      |                       |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) |    86.908 (3.442)     |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     |    79.900 - 91.800    |
+
+
+|term      |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
+|:---------|----------:|---------:|---------:|-------:|-----------:|----------:|
+|intercept | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
+|hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
+|urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
