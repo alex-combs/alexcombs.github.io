@@ -99,7 +99,7 @@ ggplot(promotions, aes(x = gender, fill = decision)) +
        x = "Gender of name on resume")
 ```
 
-> **Run the all code chunks down to `promo-estimates`**
+> **Run the all code chunks down to and including `promo-estimates`**
 
 ---
 # Example
@@ -238,7 +238,7 @@ include_graphics('lectures_files/nulldist.png')
 
 - Let's use R to simulate a world where the null is true.
 
-> **Run all code chunks down to `null-estimate`**
+> **Run all code chunks down to and including `null-estimate`**
 
 ---
 # Example
