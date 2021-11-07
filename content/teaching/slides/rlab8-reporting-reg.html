@@ -14,32 +14,30 @@
 class: center, middle, inverse, title-slide
 
 # PADP 7120 Data Applications in PA
-## RLab 8: Reporting Regression Results
+## RLab 9: Reporting Regression Results
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: March 23, 2021
+### Last updated: November 07, 2021
 
 ---
 
 # Objectives
 
-By the end of this lab, you will have learned how to...
-
-- Report regression results via tables and graphs in a realistic and professional manner
+- Report regression results using tables and graphs in a realistic and professional way
 
 
 
 ---
-# Set-up
+# Setup
 
 &gt; **Start a new project and Rmd**
 
-&gt; **Change YAML**
+&gt; **Change YAML.**
 
 
 ```r
 ---
-title: "RLab 8: Reporting Regression Results"
+title: "RLab 9: Reporting Regression Results"
 author: "Your Name"
 output: 
   html_document:
@@ -49,11 +47,9 @@ output:
 ```
 
 ---
-# Packages
+# Setup
 
-&gt; **Load following packages**
-
-- Remember to set `include=FALSE`
+&gt; **In setup code chunk, set the global echo to `FALSE` and load following packages**
 
 
 ```r
@@ -68,28 +64,33 @@ library(interactions) # for regression viz with interactions
 ```
 
 ---
-# Revisiting PS2 Regression
+# Setup
 
-&gt; **Add below code**
+&gt; **Add below code to setup code chunk**
 
 
 ```r
 state_data &lt;- hate_crimes %&gt;%
-  mutate(share_white = 1 - share_non_white,
-         urbanization = if_else(share_pop_metro&lt;=0.75, "low", "high")) %&gt;% 
-  select(state, median_house_inc, share_pop_hs, 
-         share_white, share_white_poverty, share_vote_trump,
+  filter(state != "District of Columbia") %&gt;%
+  mutate(urbanization = if_else(share_pop_metro&lt;=0.75, "low", "high")) %&gt;% 
+  select(state, 
+         median_house_inc, 
+         share_pop_hs, 
          urbanization) %&gt;%
-  filter(state != "District of Columbia") %&gt;% 
-  mutate_at(vars(share_pop_hs, share_white, share_white_poverty, share_vote_trump), funs(.*100))
+  mutate(share_pop_hs = share_pop_hs*100)
 ```
 
 ---
-# Revisiting PS2 Regression
+# Setup
+
+&gt; **Download and import "teacher_ratings.csv" from eLC. Name the data set whatever you want.**
+
+---
+# Revisiting PS3 Regression
 
 `$$MedInc = \beta_0 + \beta_1 \%HS + \beta_2Urban + \epsilon$$`
 
-&gt; **Add and run following code**
+&gt; **Add and run following code in a new code chunk**
 
 
 ```r
@@ -99,20 +100,7 @@ inc_mod &lt;- lm(median_house_inc ~ share_pop_hs + urbanization, data = state_da
 ---
 # Reporting Results
 
-- You are proud of your work and want to report your results.
-
-&gt; **Add following code. Knit to HTML.**
-
-
-```r
-get_regression_table(inc_mod) %&gt;% 
-  kable()
-```
-
----
-# Reporting Results
-
-- This table isn't great for an external audience
+- We have learned how to produce a standard table of results using `get_regression_table`
 
 
 |term            |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
@@ -120,6 +108,8 @@ get_regression_table(inc_mod) %&gt;%
 |intercept       | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
 |share_pop_hs    |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
 |urbanizationlow |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+
+- This table is not typically how results are presented
 
 ---
 # Better Regression Tables
@@ -132,12 +122,12 @@ get_regression_table(inc_mod) %&gt;%
   - number of observations
 
 - Sometimes goodness-of-fit measure like `\(R^2\)`  
-- Sometimes include confidence intervals instead of standard error or t-stat
+- Sometimes include confidence intervals instead of standard error
 
 ---
 # Better Regression Tables
 
-&gt; **Add below code. Include the chunk option `results='asis'`. Knit to HTML.**
+&gt; **In a new code chunk, add below code. Include the code chunk option `results='asis'`. Knit to HTML.**
 
 
 ```r
@@ -146,9 +136,9 @@ stargazer(inc_mod,
           title="Regression Results",
           dep.var.labels=c("Median Household Income"),
           covariate.labels=c("Percent High School", 
-                             "High Urbanization"),
-          keep.stat=c("n"), # number of observations
-          digits = 2) # limit to two decimals
+                             "Low Urbanization"),
+          keep.stat=c("n"), # reports number of observations
+          digits = 2) # limits results to two decimals
 ```
 
 ---
@@ -164,7 +154,7 @@ stargazer(inc_mod,
           title="Regression Results",
           dep.var.labels=c("Median Household Income"),
           covariate.labels=c("Percent High School", 
-                             "High Urbanization"),
+                             "Low Urbanization"),
 *         keep.stat=c("n","rsq","ser"),
           digits.extra = 2)
 ```
@@ -172,7 +162,7 @@ stargazer(inc_mod,
 ---
 # Better Regression Tables
 
-&gt; **Add below code to generate a new document named `inc_mod.htm` that you can open in Word. Knit to HTML.**
+&gt; **Add the last line below. Knit to HTML.**
 
 
 ```r
@@ -181,16 +171,18 @@ stargazer(inc_mod, ci=TRUE, ci.separator = " : ",
           title="Regression Results",
           dep.var.labels=c("Median Household Income"),
           covariate.labels=c("Percent High School", 
-                             "High Urbanization"),
+                             "Low Urbanization"),
           keep.stat=c("n","rsq","ser"),
           digits.extra = 2,
 *         out = "inc_mod.htm")
 ```
 
+- This will generate a new document named `inc_mod.htm` that you can open in Word.
+
 ---
 class: inverse, center, middle
 
-# Tables aren't great for presentations. We want to use graphs instead.
+# For presentations, we often want to use graphs instead of tables.
 
 ---
 # Visualizing Regression
@@ -205,65 +197,28 @@ ggplot(state_data,
            y = median_house_inc, 
            color = urbanization)) +
   geom_point() +
-* geom_parallel_slopes(se=FALSE) +
-  theme_minimal()
+  geom_smooth(method = 'lm', se = FALSE) +
+  theme_minimal() +
+  theme(title = element_text(size = 16),
+        axis.text = element_text(size = 12))
 ```
 ]
 
 .pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-12-1.png" width="99%" /&gt;
-]
-
----
-# Visualizing Regression
-
-.pull-left[
-
-```r
-ggplot(state_data, 
-       aes(x = share_pop_hs, 
-           y = median_house_inc, 
-           color = urbanization)) +
-  geom_point() +
-* geom_smooth(method = 'lm', se = FALSE) +
-  theme_minimal()
-```
-]
-
-.pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-14-1.png" width="99%" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-11-1.png" width="99%" /&gt;
 ]
 
 ---
 # Visualizing Regression Line
 
-- `ggplot` can visualize regression models that include:
+- `ggplot` can visualize only simple regression models that include:
+
   - **ONE** numerical explanatory variable
   - **ONE** categorical explanatory variable (with or without interaction)
 
 --
 
-- If we controlled for one more variable, our `ggplot` graph would not show the relationship between income and percent high school **controlling for the other variable**
-
----
-# Two numeric explanatory variables
-
-- Neither regression line controls for the other explanatory variable
-
-.pull-left[
-&lt;img src="rlab8-reporting-reg_files/figure-html/q8.1-1.png" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/q8.2-1.png" style="display: block; margin: auto;" /&gt;
-]
-
----
-# Two numerical explanatory variables
-
-- Visualizing the full model requires a 3-D regression plane
-
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+- If we controlled for one more numerical variable, our `ggplot` graph would not show the relationship between income and percent high school **controlling for the other variable**
 
 ---
 # Revisiting Teacher Evals
@@ -271,7 +226,7 @@ ggplot(state_data,
 `$$Eval = \beta_0 + \beta_1Beauty + \beta_2Age \\ +\beta_3Female + \beta_4Beauty \times Female + \epsilon$$`
 
 
-&gt; **Download "teach_beauty" from eLC. Load the data and run the below code.**
+&gt; **In a new code chunk, add and run the below code. Remember to change the data to what you named it.**
 
 
 ```r
@@ -282,13 +237,6 @@ mod3 &lt;- lm(course_eval ~ beauty + age + female + beauty*female, data = all_da
 
 ---
 # Visualizing Regression
-
-
-```r
-get_regression_table(mod3) %&gt;% 
-  kable()
-```
-
 
 
 |term          | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
@@ -306,14 +254,14 @@ get_regression_table(mod3) %&gt;%
 
 - `effect_plot` from the `jtools` package can
 
-&gt; **Add below code**
+&gt; **Add below code in a new code chunk**
 
 
 ```r
 effect_plot(mod3, pred = beauty, plot.points = TRUE)
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing Regression Line
@@ -327,14 +275,14 @@ effect_plot(mod3, pred = beauty, plot.points = TRUE)
 interact_plot(mod3, pred = beauty, modx = female, plot.points = TRUE)
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing Coefficients
 
 - Common to visualize the coefficients instead of using a table or regression lines. 
 
-&gt; **Add following code**
+&gt; **Add following code in a new code chunk.**
 
 .pull-left[
 
@@ -348,13 +296,13 @@ plot_summs(mod3,
 ]
 
 .pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 # Multiple models in same table
 
-&gt; Add below code in a new code chunk. Set `echo=FALSE` and `results='asis'`.
+&gt; **Add below code in a new code chunk. Include `results='asis'` option.**
 
 
 ```r
@@ -386,7 +334,7 @@ plot_summs(mod1, mod2,
                      "Female" = "female"))
 ```
 
-&gt; **Knit to HTML**
+&gt; **Knit to HTML. Let's examine what all this code did.**
 
 &gt; **Upload your Rmd to eLC**
 
