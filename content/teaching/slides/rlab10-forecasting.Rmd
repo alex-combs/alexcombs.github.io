@@ -309,13 +309,6 @@ ggsubseriesplot(ts_house[,3])
 ```
 
 ---
-# Exploratory Recap
-
-- Exploratory graphs are useful for detecting patterns that can inform our choice of forecast and providing summary information to an audience
-
-- All of our data appear to be dominated by trend pattern
-
----
 class: inverse, center, middle
 
 # Choosing and fitting forecast models
@@ -756,7 +749,8 @@ $$y_t=\beta_0+\beta_1x_t + \beta_3t + \beta_4s_t + \epsilon_t$$
 > **Add and run below time series linear model**
 
 ```{r}
-reg_starts <- tslm(house_starts ~ median_homeprice + gdp + trend, data = ts_house)
+reg_starts <- tslm(house_starts ~ median_homeprice + gdp + trend + season, 
+                   data = ts_house)
 ```
 
 - Does this forecast fit better than `ets` forecast?
@@ -812,7 +806,7 @@ summary(reg_starts_forecast)
 ---
 # Recap
 
-- Only scratched surface; time series and forecasting is its own course
+- Thorough coverage of time series and forecasting is its own course
 
 --
 
