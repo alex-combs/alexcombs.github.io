@@ -13,7 +13,7 @@ output:
       countIncrementalSlides: false
       highlightLines: true
 ---
-# Outline
+# Objectives
 
 ```{r, include=FALSE}
 library(tidyverse)
@@ -28,9 +28,10 @@ statepanel <- statepanel %>%
   mutate(tuition = tuition/1000)
 ```
 
-- Our goal is to learn how to incorporate the additional information of panel data into regression and why it matters
-
-- Whether or not to run a fixed effects regression
+- Panel data provides additional information we can incorporate into regression
+  - Why it matters
+  - How to do so
+  - Whether or not to do so
 
 ---
 # Panel Data
@@ -42,14 +43,19 @@ gapminder %>%
   kable(format = 'html')
 ```
 
-- Variation across units AND time
+- Same units measured over multiple time periods
+
+- Provides variation between units (cross-sectional) AND between time periods (time-series)
 
 ---
 # Revisiting Life Exp and GDP
 
-- We have seen versions of the following regression many times
+```{r, eval=FALSE}
+gap_ols <- lm(log(lifeExp) ~ log(gdpPercap) + continent, data = gapminder)
+get_regression_table(gap_ols)
+```
 
-```{r}
+```{r, echo=FALSE}
 gap_ols <- lm(log(lifeExp) ~ log(gdpPercap) + continent, data = gapminder)
 get_regression_table(gap_ols) %>% 
   kable()
@@ -58,18 +64,26 @@ get_regression_table(gap_ols) %>%
 ---
 # Revisiting Life Exp and GDP
 
-- But previous model treats `gapminder` as pooled cross-sectional instead of panel
+- But previous model treats each observation as independent of each other
 
-- Might there be unobserved, "fixed" characteristics of each country that effects GDP and life expectancy?
+- Argentina in 2002 is not independent of Argentina in 1997
+
+--
+
+- Might there be unobserved characteristics of each country that do not change over time and effect GDP and life expectancy?
+
+--
+
+- And might there be global circumstances that change over time but affect all countries?
+
+--
 
 - If so, we have OVB in our model.
-
-- This is what a fixed effects regression accounts for
 
 ---
 # Revisiting Life Exp and GDP
 
-- Controlling for country and year fixed effects:
+- Controlling for country and time **fixed** effects:
 
 ```{r, echo=FALSE}
 gap_fe <- plm(log(lifeExp) ~ log(gdpPercap), data = gapminder, model = "within", effect = "twoways", index = c("country", "year"))
@@ -79,7 +93,7 @@ tidy(gap_fe) %>%
 ```
 
 
-- GDP no longer rejects the null hypothesis
+- GDP now fails to reject the null hypothesis
 
 - No statistically significant evidence that GDP affects life expectancy
 
@@ -90,11 +104,11 @@ tidy(gap_fe) %>%
 include_graphics('lectures_files/fixfx-dag.png')
 ```
 
-- On left, $X$ is biased
+- On left, effect of $X$ on $Y$ is biased
 
-- *IF* we assume *ALL* relevant omitted variables are captured by controlling for **constant** differences between units
+- If we claim all confounding omitted variables are controlled for by including the **fixed** effect of each unit
 
-- Then we have eliminated the OVB and we are back to a causal estimate of $X$ on $Y$
+- Then we have eliminated the OVB and can argue our estimate is a causal effect of $X$ on $Y$
 
 ---
 # Fixed effects regression
@@ -105,86 +119,10 @@ include_graphics('lectures_files/fixfx-dag.png')
 
 - Essentially includes a dummy variable for each unit in the panel, allowing each unit to have its own y-intercept
 
---
-
-- This controls for whatever constant factor(s) cause the different intercepts
-
---
-
-- If those constant factors also affect other explanatory variables in our model, then FE closes the backdoor path they created
-
----
-# Regression notation
-
-- Standard OLS:
-
-$$ y_i=\beta_0 + \beta_1x_i + \epsilon_i $$
-
-- The $i$ subscript is an **index**; corresponds to the unit of analysis
-
-- Signals to the reader that we are using variation *between* units $i = 1 \dots N$ where $N$ is the total units in our data
-
-- Each row $i$ in our data has an observed value for $y$ and $x$
-
-- For all the rows in our data, we estimate a *single, common* intercept, $b_0$, and a common slope $b_1$
-
----
-# Fixed Effects Notation
-
-$$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$
-
-- Now we have values for unit $i = 1 \dots N$ at time $t = 1 \dots T$ where $N$ is still the total units in the data and $T$ is the total time periods 
-
---
-
-- $x_{it}$ represents factors that vary between units $i$ and over time $t$
-  - Education level, crime, unemployment, tax rates, etc.
-  
---
-
-- $z_i$ vary between units $i$ but are constant over time
-  - Sex, race, geographic region, treatment/control group
-
---
-
-- $w_t$ vary over time $t$ but are constant between units
-  - Inflation, interest rates, recession, war
-
----
-# Fixed effects
-
-$$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$
-
-- Fixed effects is an admission that we can't possibly collect data for all the $z_i$ variables
-
-- Fortunately, we don't need data for $z_i$ if we have panel data and run fixed effects
-
---
-
-- With fixed effects. ALL $z_i$ variables collapse into a *unique* intercept for each unit $i$
-
-$$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$
-- Note the subscript $i$ for the intercept instead of a common $\beta_0$ intercept
-
----
-# Two-Way Fixed Effects
-
-$$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$
-
-- We can also control for all factors that vary over time but not across units $w_t$
-
-- Often referred to as two-way fixed effects: unit and time
-
-- Now including a dummy variable for each unit and each time period
-
-$$y_{it}= \alpha_i + \delta_t + \beta x_{it} + \epsilon_{it}$$
-
 ---
 # Example
 
-- Suppose we want to investigate state-level college enrollment as a percentage of population age 18-24
-
-- Let's first look at trends over time
+- Suppose we are interested in state-level college enrollment as a percentage of state population age 18-24
 
 ```{r, echo=FALSE, fig.align='center', fig.height=5}
 ggplot(statepanel, aes(x=year, y=enroll_pct, color = state)) +
@@ -211,7 +149,7 @@ ggplot(statepanel, aes(x=year, y=enroll_pct)) +
 
 - Now suppose we want to investigate the effect of average tuition on enrollment
 
-```{r, echo=FALSE, fig.align='center', fig.height=5.5, message=FALSE, warning=FALSE}
+```{r, echo=FALSE, fig.align='center', fig.height=4.5, message=FALSE, warning=FALSE}
 ggplot(statepanel, aes(x=tuition, y=enroll_pct)) +
   geom_point() +
   geom_smooth(method = lm, se = FALSE) +
@@ -219,6 +157,8 @@ ggplot(statepanel, aes(x=tuition, y=enroll_pct)) +
        x ='Tuition') +
   theme_minimal()
 ```
+
+- Note that a common regression line is fit to **ALL** of the plot points
 
 ---
 # Example
@@ -231,6 +171,8 @@ ggplot(statepanel, aes(x=tuition, y=enroll_pct, color = state)) +
        x ='Tuition') +
   theme_minimal()
 ```
+
+- Note the variation in slopes if we isolate each state
 
 ---
 # Example
@@ -248,28 +190,109 @@ ggplot(statepanel, aes(x=tuition, y=enroll_pct)) +
 ---
 # Fixed effects
 
-- Fixed effects estimates the relationship between variables *within* each unit of the panel
+- Fixed effects estimates the relationship between the response and explanatory variable(s) **within** each unit as the explanatory variable changes
 
 - The estimate for an explanatory variable is the average slope of all the individual unit slopes
 
 ---
+# Basic regression notation
+
+- Basic OLS regression:
+
+$$ y_i=\beta_0 + \beta_1x_i + \epsilon_i $$
+
+- The $i$ subscript is an **index** for the unit of analysis
+
+- Signals to the reader that we are using variation *between* units $i = 1 \dots N$ where $N$ is the total units in our data
+
+--
+
+- In `gapminder`, there are 1,704 observations (142 countries X 12 years)
+
+- Subscript $i$ would run from 1 to 1,704
+
+---
+# Fixed Effects Notation
+
+$$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$
+
+- Now we have values for unit $i = 1 \dots N$ at time $t = 1 \dots T$ where $N$ is the total *unique* units in the data and $T$ is the total time periods
+
+- Signals to reader we are using variation *within* each unit over the time they are observed in the data
+
+--
+
+- In `gapminder`, there are 142 unique countries, so $i$ runs from 1-142
+
+- And there are 12 years for each country, so $t$ runs from 1-12
+
+---
+# Fixed Effects Notation
+
+$$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$
+
+- $x_{it}$ represents factors that vary between units $i$ and over time $t$
+  - Education level, crime, unemployment, tax rates, etc.
+  
+--
+
+- $z_i$ vary between units $i$ but are constant over time
+  - Sex, race, geographic region, treatment/control group
+
+--
+
+- $w_t$ vary over time $t$ but are constant between units
+  - Inflation, interest rates, recession, war
+
+---
+# Fixed effects
+
+$$y_{it}=\beta x_{it} + \alpha z_i + \delta w_t + \epsilon_{it}$$
+
+- Fixed effects is an admission that we can't possibly collect data for all the $z_i$ variables
+
+- Fortunately, we don't need data for $z_i$ if we have panel data and run fixed effects
+
+--
+
+- With fixed effects, ALL $z_i$ variables collapse into a *unique* intercept for each unit $i$
+
+$$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$
+- Note the subscript $i$ for the intercept instead of a common $\beta_0$ intercept
+
+---
+# Two-Way Fixed Effects
+
+$$y_{it}= \alpha_i + \beta x_{it} + \delta w_t + \epsilon_{it}$$
+
+- We can also control for all factors that vary over time but not across units $w_t$
+
+- Often referred to as two-way fixed effects: unit and time
+
+- Now including a dummy variable for each unit and each time period
+
+$$y_{it}= \alpha_i + \delta_t + \beta x_{it} + \epsilon_{it}$$
+
+---
 # Running FE in R and interpretation
 
-- First, standard OLS regression. Tuition is in 1,000s of dollars.
+- First, basic OLS regression. PctEnroll is percent of 18-24 age population in college. Tuition is in 1,000s of dollars.
 
-$$PctEnroll_i = \beta_0 + \beta_1 tuition_i + \epsilon_i$$
+$$PctEnroll_i = \beta_0 + \beta_1 Tuition_i + \epsilon_i$$
 ```{r}
-standard_ols <- lm(enroll_pct ~ tuition, data = statepanel)
+basic_ols <- lm(enroll_pct ~ tuition, data = statepanel)
 ```
 
 ```{r, eval=FALSE}
-get_regression_table(standard_ols)
+get_regression_table(basic_ols)
 ```
 
 ```{r, echo=FALSE}
-get_regression_table(standard_ols) %>% 
+get_regression_table(basic_ols) %>% 
   kable()
 ```
+
+- On average, a $1,000 increase in states' average tuition decreases state enrollment 0.2 percentage points.
 
 ---
 # Running FE in R and interpretation
@@ -284,20 +307,21 @@ fe <- plm(enroll_pct ~ tuition, data = statepanel,
 summary(fe) #get_regression_table won't work
 ```
 
-```{r, eval=FALSE}
-broom::tidy(fe) # nicer looking results
-```
 ```{r, echo=FALSE}
 broom::tidy(fe) %>% 
   kable()
 ```
 
-On average, a 1,000 dollar increase in states' average tuition is associated with a 1 percentage point increase in college enrollment, **controlling for fixed effects**. 
+On average, a $1,000 increase in states' average tuition increases enrollment 1 percentage point, **controlling for state fixed effects**. 
 
 ---
 # Example
 
-- Our FE results are counterintuitive; enrollment is not expected to increase as the price increases
+- Our fixed effects results are counterintuitive
+
+- Economics tells us that as price increases, demand should decrease
+
+- Enrollment should not be expected to increase as the price increases
 
 - What is a plausible explanation?
 
@@ -305,26 +329,44 @@ On average, a 1,000 dollar increase in states' average tuition is associated wit
 
 - Most students do not pay full tuition
 
-- A rise in tuition is typically followed by a rise in financial aid
+- A rise in tuition typically corresponds with a rise in financial aid
 
-- We should control for how much tuition students pay
+- We should control for how much tuition students actually pay
 
 ---
 # Example
 
 ```{r, echo=FALSE}
 statepanel %>% 
-  select(-stfips, -enrollment, -appropriations, -povrate, -medinc) %>% 
-  slice_sample(n = 6) %>% 
+  select(-stfips, -enrollment, -appropriations, -povrate, -medinc, -pop1824) %>% 
+  slice_head(n = 6) %>% 
   kable(digits = 1)
 ```
 
+- `studentshare` column is the percent of `tuition` students pay
+
+- Also note there is a region column
+
+---
+# Back to basic OLS regression
+
+```{r}
+basic_ols2 <- lm(enroll_pct ~ tuition + studentshare + region, 
+           data = statepanel)
+```
+
+```{r, echo=FALSE}
+get_regression_table(basic_ols2) %>% 
+  kable()
+```
+
+- On average, a $1,000 increase in average *sticker price* results in a 1.2 percentage point decline in state enrollment, all else equal.
 
 ---
 # Better FE model
 
 ```{r}
-fe2 <- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824 + region, 
+fe2 <- plm(enroll_pct ~ tuition + studentshare + region, 
            data = statepanel,
            index = c("state", "year"), model = "within")
 ```
@@ -334,44 +376,29 @@ broom::tidy(fe2) %>%
   kable()
 ```
 
+- On average, a $1,000 increase in average sticker price results in a 1.0 percentage point decrease in enrollment, all else equal.
+
+- Note no estimates for regions
+
 ---
 # Interpretation
-
-- On average, an increase in tuition of 1,000 dollars results in a 0.63 percentage point decrease in enrollment, all else equal.
 
 - Why no estimates for `region`?
 
 --
 
-- Because region does not vary over time ( $z_i$ ); a state's region is always the same
+- Because region is constant over time; a state's region is always the same
 
 - Therefore, it gets absorbed into the fixed effect
 
-- If we really care about a time-invariant variable, using FE will prevent us from obtaining an estimate
-
----
-# Back to standard OLS
-
-```{r}
-standard_ols2 <- lm(enroll_pct ~ tuition + studentshare + unemp + pop1824 + region, 
-           data = statepanel)
-```
-
-```{r, eval=FALSE}
-get_regression_table(standard_ols2)
-```
-
-```{r, echo=FALSE}
-get_regression_table(standard_ols2) %>% 
-  kable()
-```
+- If we really care about a time-invariant variable, using fixed effects will prevent us from obtaining an estimate
 
 ---
 # Drawbacks of FE
 
 - Can't estimate association/effect of time-invariant variables
 
-- Estimates are less precise than standard OLS regression
+- Estimates are less precise than basic OLS regression
   - FE is like adding a dummy explanatory variable for each unit in the panel
   - Each explanatory variable imposes a penalty on precision (reduces sample size by 1)
   - Preferable if we can avoid this loss
@@ -380,7 +407,7 @@ get_regression_table(standard_ols2) %>%
 # Testing whether FE should be used
 
 ```{r}
-pFtest(fe2, standard_ols2)
+pFtest(fe2, basic_ols2)
 ```
 
 - If p-value < 0.05, use FE
@@ -400,7 +427,7 @@ $$y_{it}= \alpha_i + \delta_t + \beta x_{it} + \epsilon_{it}$$
 # Adding time trends in FE
 
 ```{r}
-fe2_time <- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824,
+fe2_time <- plm(enroll_pct ~ tuition + studentshare + unemp + region,
                 data = statepanel, index = c("state", "year"), 
                 model = "within", effect = "twoways") #<<
 ```
@@ -409,6 +436,8 @@ fe2_time <- plm(enroll_pct ~ tuition + studentshare + unemp + pop1824,
 broom::tidy(fe2_time) %>% 
   kable()
 ```
+
+- A $1,000 increase in average tuition results in a 1.1 percentage point decline in enrollment, all else equal.
 
 ---
 # Testing whether to include time trends
@@ -426,9 +455,10 @@ pFtest(fe2_time, fe2)
 ---
 # Recap
 
-- FE eliminates OVB caused by time-invariant explanatory variables only
+- Fixed effects eliminates OVB caused by explanatory variables that do not change over time
 
-- Controlling for time trends eliminates OVB caused by unit-invariant explanatory variables only
+- Controlling for time trends eliminates OVB caused by explanatory variables that change over time but affect all units
 
-- Omitted variables that change over time and vary between units can still cause OVB
+- Omitted variables that vary between units AND time can still cause OVB
 
+- Using fixed effects removes estimates for any variable that does not change
