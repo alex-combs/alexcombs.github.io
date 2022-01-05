@@ -12,9 +12,12 @@ output:
       highlightStyle: github
       countIncrementalSlides: false
 ---
-# Objectives
+class: inverse, middle, center
 
-By the end of this lab, you will learn how to...
+# Does everyone have access to RStudio (need R installed too) or RStudio Cloud?
+
+---
+# Objectives
 
 - open and navigate R
 - start an R project to organize your work
@@ -24,7 +27,7 @@ By the end of this lab, you will learn how to...
 - export your R markdown document to HTML
 
 ---
-# RLab Conventions
+# RLab Slides
 
 - Bullets provide background, explanation, etc.
 
@@ -32,7 +35,7 @@ By the end of this lab, you will learn how to...
 
 > **Do this thing in this block**
 
-- Example code is in blocks like below
+- Example R code is in blocks like below
 
 ```{r, eval=FALSE}
 summary(cars)
@@ -42,16 +45,12 @@ summary(cars)
 ---
 # RLab Process
 
-- Not recommended that you work ahead even if you are waiting for others to catch up
-
 - Highly likely that you will encounter errors; this is normal
-  - If so, **STOP ME**
-  - Troubleshooting can help you and others learn
-  
----
-class: inverse, middle, center
 
-# Does everyone have access to RStudio (need R installed too) or RStudio Cloud? If so, let's begin.
+  - If so and you cannot figure out how to fix, **STOP ME**
+  - Troubleshooting can help you and others learn
+
+- First several weeks will likely involve a lot of stopping as I help students. If you are doing fine, resist the temptation to work ahead.
 
 ---
 # Starting R
@@ -72,7 +71,7 @@ class: inverse, middle, center
 
 - When you tell R to look for or save a file, this is the location R uses
 
-- We want a separate folder for each project/assignment that holds all relevant data and documents
+- Helps to have a separate folder for each project/assignment that contains all relevant data and documents
 
 ---
 # R Projects
@@ -81,13 +80,11 @@ class: inverse, middle, center
 
 - Creates a folder for R to work from
 
---
-
-- I will now demonstrate how to start an R Project
+- Creates a file that you can open and pick up where you left off last time you closed RStudio
 
 --
 
-> **Create a project called "rlab1" in a file location of your choice**
+> **Create a project called "rlab1" in a location of your choice (I will demonstrate)**
 
 --
 
@@ -100,7 +97,7 @@ class: inverse, middle, center
 
 - Certain software uses file extensions like `.xlsx` for Excel
 
-- A data file that is already formatted for R has the extension `.RData` or `.rds`
+- A data file that is formatted for R has the extension `.RData` or `.rds`
 
 - A `.csv` file is compatible with virtually any software
 
@@ -145,15 +142,13 @@ Execution halted
 
 - Remember, R looks for files in your project folder
 
-- R is saying it can't find the file we just told it to import
-
-- I will now demonstrate moving a file to my project folder
+- R is saying it can't find the file we just told it to import because it is in our downloads folder, not our project folder
 
 --
 
 > **Using your computer's file manager, move states1.csv to your project folder**
 
-> **Now re-run `states1 <- read_csv("states1.csv")` command**
+> **Try to run `states1 <- read_csv("states1.csv")` again in your console**
 
 ---
 # Data in your R session
@@ -175,11 +170,7 @@ Execution halted
 
 --
 
-- I will now demonstrate how to start an R Markdown (.Rmd) document.
-
---
-
-> **Start an R Markdown (.Rmd) document.**
+> **Start an R Markdown (.Rmd) document. When the dialog box appears, just hit OK.**
 
 - Let's review the template. It is informative.
 
