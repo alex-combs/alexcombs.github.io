@@ -34,37 +34,6 @@ output:
 
 - Statistics is the most powerful tool we have to convert raw information into something useful
 
-- Helps us become better critical thinkers
-
----
-
-# Planes and bullet holes
-
-.pull-left[
-
-![:scale 75%](Intro_Slides_files/plane.png)
-
-Suppose we wanted to add armor to each plane. How would you allocate the armor across the different plane sections based on the data?
-
-]
-
-.pull-right[
-
-Data from planes returning from battle:
-
-```{r, include=FALSE}
-library(tidyverse)
-library(knitr)
-bholes <- tibble(plane_section = c("Engine", "Body", "Fuel System", "Wings"),
-                      holes_per_sqft = c(1.11, 1.73, 1.55, 1.8))
-```
-
-```{r, echo=FALSE}
-kable(head(bholes), format = 'html')
-```
-
-]
-
 ---
 
 # MPA Objectives
@@ -95,7 +64,7 @@ kable(head(bholes), format = 'html')
 
 --
 
-- **Reproducability**
+- **Reproducibility**
 
 --
 
