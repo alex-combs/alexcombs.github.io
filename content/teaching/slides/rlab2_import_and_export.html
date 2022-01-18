@@ -14,16 +14,14 @@
 class: center, middle, inverse, title-slide
 
 # PADP 7120 Data Applications in PA
-## RLab 2: Importing &amp; Exporting Data &amp; Documents
+## RLab 2: Importing &amp; Exporting
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: August 26, 2021
+### Last updated: January 17, 2022
 
 ---
 
 # Objectives
-
-By the end of this lab, you will have learned how to...
 
 - Import data
 
@@ -42,10 +40,23 @@ By the end of this lab, you will have learned how to...
 
 
 ---
-# New Rlab2 project
+# Set-up
 
-&gt; **Start a new project named "rlab2". I recommend locating it in the same parent file your rlab1 folder is in.**
-  
+.pull-left[
+
+&gt; **If using RStudio Cloud, do not create a new project. Instead, use the project you created for RLab1 where you already installed `tidyverse`. Installed packages do not carry over to other project spaces.**
+
+]
+
+.pull-right[
+
+&gt; **Otherwise, create a new project named "rlab2". I recommend locating it in the same parent file as your rlab1 project folder.**
+
+]
+
+---
+# Set-up
+
 &gt; **Start a R Markdown document**
 
 &gt; **Change the title in the YAML to "RLab2: Import &amp; Export"**
@@ -53,22 +64,29 @@ By the end of this lab, you will have learned how to...
 &gt; **Keep the setup code chunk at the top but delete the rest of the template.**
 
 ---
-# Packages
+# Set-up: packages
 
 - Remember that a package will not load if it is not installed.
 
 --
 
-&gt; **In your setup code chunk, load the following packages.**
+&gt; **In the setup code chunk at the top, use the code below to load the following packages.**
 
 
 ```r
 library(tidyverse) #includes function for importing CSV
 library(readxl) #for importing Excel files
 library(data.table) #for importing from URL
-library(gapminder) #example data
-library(fivethirtyeight) #example data
+library(gapminder) #contains example data
+library(fivethirtyeight) #contains example data
 ```
+
+---
+# Set-up: files
+
+&gt; **Download "ncbirths.csv" from eLC and add it to your current project folder**
+
+&gt; **Download "ga_schdist_raw.xlsx" from eLC and add to your "rlab2" project folder.**
 
 ---
 class: inverse, middle, center
@@ -82,16 +100,16 @@ class: inverse, middle, center
 
 
 ```r
-slice_head(mtcars, n=4)
+slice_head(USArrests, n=4)
 ```
 
 
-|               |  mpg| cyl| disp|  hp| drat|    wt|  qsec| vs| am| gear| carb|
-|:--------------|----:|---:|----:|---:|----:|-----:|-----:|--:|--:|----:|----:|
-|Mazda RX4      | 21.0|   6|  160| 110| 3.90| 2.620| 16.46|  0|  1|    4|    4|
-|Mazda RX4 Wag  | 21.0|   6|  160| 110| 3.90| 2.875| 17.02|  0|  1|    4|    4|
-|Datsun 710     | 22.8|   4|  108|  93| 3.85| 2.320| 18.61|  1|  1|    4|    1|
-|Hornet 4 Drive | 21.4|   6|  258| 110| 3.08| 3.215| 19.44|  1|  0|    3|    1|
+|         | Murder| Assault| UrbanPop| Rape|
+|:--------|------:|-------:|--------:|----:|
+|Alabama  |   13.2|     236|       58| 21.2|
+|Alaska   |   10.0|     263|       48| 44.5|
+|Arizona  |    8.1|     294|       80| 31.0|
+|Arkansas |    8.8|     190|       50| 19.5|
 
 ---
 # Data in R Packages
@@ -99,6 +117,9 @@ slice_head(mtcars, n=4)
 - Many R packages, like `gapminder` and `fivethirtyeight` include datasets
 
 - We can browse these datasets by going to the "Packages" tab in the bottom-right pane of RStudio
+  - Click on the package that contains the relevant dataset(s)
+  - A list of datasets will appear
+  - Click on dataset to learn more about it
 
 ---
 # Data in R Packages
@@ -107,6 +128,7 @@ slice_head(mtcars, n=4)
 
 
 ```r
+# slice_head() prints the top row(s) of a dataset
 # n=4 prints the top 4 rows
 slice_head(gapminder, n=4)
 ```
@@ -119,6 +141,8 @@ slice_head(gapminder, n=4)
 |Afghanistan |Asia      | 1962|  31.997| 10267083|  853.1007|
 |Afghanistan |Asia      | 1967|  34.020| 11537966|  836.1971|
 
+- This is one way to provide a preview of the data for a reader
+
 ---
 # Data in R Packages
 
@@ -129,10 +153,16 @@ slice_head(gapminder, n=4)
 gap_preview &lt;- slice_head(gapminder, n=4)
 ```
 
+- You should now see an object named `gap_preview` in your environment (top-right pane)
+
 ---
 # Printing the result
 
-- Note that you now have a new object in the environment and R does not print the table
+- Note that the table does not print when you run the code
+
+- By default, R does not print the result when saved as an object
+
+--
 
 &gt; **Type `gap_preview` on a separate line so the table prints when knit**
 
@@ -140,13 +170,15 @@ gap_preview &lt;- slice_head(gapminder, n=4)
 ```r
 gap_preview &lt;- slice_head(gapminder, n=4)
 
-gap_preview
+*gap_preview
 ```
 
 ---
 # Data in R Packages
 
-- There is a dataset named `hate_crimes` loaded from the the `fivethirtyeight` package.
+- There is a dataset named `hate_crimes` contained within the `fivethirtyeight` package.
+
+--
 
 &gt; **Insert a new code chunk and add the following code**
 
@@ -155,6 +187,13 @@ gap_preview
 hc &lt;- hate_crimes
 ```
 
+- Now we have a copy of `hate_crimes` in our environment
+
+---
+# Data in R Packages
+
+&gt; **Start a new line in the code chunk you just created.**
+
 &gt; **Add code that will print the first six rows of the `hc` dataset.**
 
 &gt; **Knit to HTML**
@@ -162,12 +201,12 @@ hc &lt;- hate_crimes
 ---
 class: inverse, middle, center
 
-# Let's pause learning data imports to learn some ways to print tables.
+# Printing tables.
 
 ---
 # Printing tables
 
-- We have made two tables that will print to our output with the commands:
+- We have made two tables that will print when we knit using the code:
 
 
 ```r
@@ -175,16 +214,14 @@ gap_preview
 slice_head(hc, n=4)
 ```
 
-- Note both tables are readable but look pretty bad
-
 - There is enough horizontal space for all `gap_preview` variables to display but not for all `hc` variables
 
 ---
-# YAML df_print: kable
+# Printing tables
 
-- We can change how all tables print within the YAML
+- We can improve how all tables print
 
-&gt; **Change your YAML to the following:**
+&gt; **Change the YAML to the following:**
 
 
 ```r
@@ -197,32 +234,29 @@ author: "Alex Combs"
 ---
 ```
 
-&gt; **Knit to HTML to see what this did**
+&gt; **Knit to HTML**
 
---
-
-- The `gap_preview` table looks good but the `hc` table runs off the page.
+- The `gap_preview` table should look better but the `hc` table still runs off the page.
 
 ---
-# YAML df_print: paged
+# Printing tables
 
-&gt; **Change your YAML to the following:**
+&gt; **Change the `df_print` option in your YAML like so:**
 
 
 ```r
 ---
 title: "RLab2: Import &amp; Export"
 author: "Alex Combs"
-date: "1/21/2021"
 output:
   html_document:
 *   df_print: paged
 ---
 ```
 
-- Now we can interact with the `hc` table to view multiple pages of variables
+&gt; **Knit to HTML**
 
-- This paged option only works for HTML. Must make table fit the page of a Word doc or PDF.
+- Now we can interact with the `hc` table to view multiple pages of variables.
 
 ---
 # YAML themes
@@ -236,32 +270,39 @@ output:
 ---
 title: "RLab2: Import &amp; Export"
 author: "Alex Combs"
-date: "1/21/2021"
 output:
   html_document:
+    df_print: paged
 *   theme: spacelab
 *   highlight: tango
-    df_print: paged
 ---
 ```
 
-- More info on formatting HTML [here](https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style)
+- More info on formatting HTML [here](https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style) if interested
 
 ---
 class: inverse, middle, center
 
-# Next, let's review code chunk options.
+# Code chunk options.
 
 ---
 # Code chunk options
 
+- Can control how code knits using code chunk options
+
+--
+
+- Include options by adding a comma after the `r`, followed by a space
+
 
 ```r
-{r, options go here}
+{r, options_go_here}
 ```
 
+--
+
 - echo = TRUE/FALSE 
-  - Suppress the code from the output but show results
+  - Suppresses the code from the output but shows results
   
 
 ```r
@@ -271,7 +312,7 @@ class: inverse, middle, center
 --
 
 - include = TRUE/FALSE
-  - Suppress the code and the results from the output
+  - Suppress the code AND all results from the output
 
 
 ```r
@@ -281,13 +322,23 @@ class: inverse, middle, center
 ---
 # Code chunk options
 
-&gt; **Add the code chunk option that will suppress the code AND the output related to `gap_preview`**
+&gt; **Find the code chunk that prints the `gap_preview` table**
 
 --
 
-&gt; **Add the code chunk option that will suppress the code but show the output related to `hc`.**
+&gt; **Add the code chunk option that suppresses the code AND results**
 
-&gt; **Knit to HTML again to check the export**
+--
+
+&gt; **Find the code chunk that prints the first four rows of `hc`**
+
+--
+
+&gt; **Add the code chunk option that suppresses ONLY the code**
+
+--
+
+&gt; **Knit to HTML**
 
 ---
 # Output options overview
@@ -302,31 +353,14 @@ class: inverse, middle, center
 ---
 # Importing data
 
-- Organizations publish data files in a variety of (inconvenient) formats.
+- Organizations publish data files in a variety of (inconvenient) formats and tend to use a consistent format across files and time
 
-- But a given organization tends to use a consistent format across files and time
+- Provides the opportunity to use code to import many similar files quickly
 
---
-
-- Some guidelines:
-  - Don't overwrite the original file, use code to change how it is formatted
-  - Improve the formatting at least enough to eliminate unnecessary rows/columns
-  - Decide whether additional formatting is worth your time (renaming variables, changing variable types)
+- Avoid changing the data file in something like Excel before importing it because you or others can't replicate that
 
 ---
-# Import CSV
-
-&gt; **Download "ncbirths.csv" from eLC and add it to your "rlab2" project folder**
-
-- Some notable features of this file (viewing in Excel):
-  - Variable names are in the top row
-  - Variable names are concise and lowercase
-  - Missing values denoted by "NA"
-
-- This dataset is already in good shape, so its import needs minimal work
-
----
-# Import CSV
+# Importing CSV
 
 - Generic syntax:
 
@@ -341,38 +375,8 @@ any_name &lt;- read_csv("filename.csv")
   - Quotes around the file
   - Include the file extension .csv
 
-&gt; **Add a code chunk to your Rmd and import `ncbirths`**
-
 ---
-# read_csv() options
-
-- A few helpful options:
-  - col_names = list names for variables
-  - col_types = specify what type to store each variable
-  - na = specify what symbols are used to denote missing
-  - skip = number of rows to skip from the top when importing
-
-
-```r
-ncbirths &lt;- read_csv("ncbirths.csv", 
-                     col_names = c("age_f", "age_m"),
-                     col_types = "iifififinffff",
-                     skip = 1)
-```
-
---
-
-- The above code uses options to:
-  - Name first two variables
-  - Store all variables as integers, numbers, or factors
-  - Skip the first row of variable names (because inserting my own row of names)
-
----
-# Import Excel
-
-- To import Excel files, use the `read_excel` function in the `readxl` package.
-
-- Works with both .xls or .xlsx extensions
+# Importing Excel
 
 - Generic syntax:
 
@@ -380,63 +384,177 @@ ncbirths &lt;- read_csv("ncbirths.csv",
 ```r
 anyname &lt;- read_excel("filename.xlsx")
 ```
-  
----
-# Import Excel
 
-&gt; **Download "ga_schdist_raw.xlsx" from eLC and add to your "rlab2" project folder.**
-
-- Notable features for this file (viewing in Excel):
-  - Variable names start on 7th row
-  - Variable names are messy
-  - Several rows we should not import starting after row 230
-
-- We need to use options for this file. Let's check out what options `read_excel` has via the "Help" tab in the bottom-right pane.
+- Works with both .xls or .xlsx extensions
 
 ---
-# Import Excel
+# Importing data
 
-- The `range` option allows us to specify the cells we want to import from top-left to bottom-right
+&gt; **In file pane, click on "ncbirths.csv", then "Import Dataset..."**
 
-- We could import "A7:I230" but that includes variable names that we would want to change later anyway.
+--
 
-- Instead, we can import "A8:I230" and specify the names using `col_names`.
+- Some notable features of this dataset:
+  - Variable names are in the top row
+  - Variable names are short
+  - Missing values denoted by "NA"
+
+- This dataset should import nicely
 
 ---
-# Import Excel
+# Importing data
 
-&gt; **Add and run the following code**
+- Let's review some of the options we can use through this import window
 
+--
 
+- Can click on a variable to change how R stores it, or exclude it from the import
+
+- Can change the name of the object R will save. Same name as file by default.
+
+- Can skip some specified number of the top rows
+
+- Can specify whether the top row includes variable names
+
+---
+# Importing data
+
+- R provides the code needed to import the data based on the options we chose
+
+- We need to include this code in our R Markdown or else it won't knit if we have code that requires the data
+
+--
+
+&gt; **Copy the code. Hit Cancel. Paste the code into a new code chunk.**
+
+---
+# Importing data
+
+&gt; **Change the import code based on the following:**
+
+  - We don't need the first line since we already loaded `tidyverse`
+  - R uses the full file path, but we don't want to use that because others will have to change it
+  - We don't want the last line `View` because it usually causes an error when knit
+
+&gt; **Run the code to import the data**
+
+---
+# Importing data
+
+- This point-and-click method is convenient if you don't know the packages and code needed to import, especially if options are needed.
+
+- Can get you started for any kind of data file
+
+- Has some limitations
+  - Can't rename variables
+  - Can't inspect bottom rows of a large dataset
+
+---
+# Importing data
+
+&gt; **Open "ga_schdist_raw.xlsx" with Excel**
+
+--
+
+- We can see the first 6 rows should be skipped
+
+- Variable names are very long
+
+- At the bottom of the dataset there are rows we do not want to import
+
+--
+
+- Note that the information we want to import runs from cell A7 to cell I230
+
+- Or starting at A8 if we want to exclude variable names
+
+---
+# Importing data
+
+&gt; **Back in RStudio, click on "ga_schdist_raw.xlsx" in the file pane, then "Import Dataset..."**
+
+--
+
+&gt; **Notice there is a "Range" option in the bottom left. Enter `A8:I230`.**
+
+--
+
+&gt; **Uncheck "First Row as Names"**
+
+--
+
+&gt; **Note there are numeric variables stored as character. Click on the first one that needs changed and change to numeric.**
+
+--
+
+&gt; **Copy code and paste in code chunk.**
+
+---
+# Importing data
+
+&gt; **Delete the code we don't want like before.**
+
+--
+
+- Should look something like...
 
 
 ```r
-ga_schdist_raw &lt;- read_xlsx("ga_schdist_raw.xlsx", 
-                            range = "A8:I230",
-                            col_names = c("district",
-                                           "state",
-                                           "charter",
-                                           "enroll",
-                                           "lep", "iep",
-                                           "frpl",
-                                           "white",
-                                           "expenditures"))
+ga_schdist_raw &lt;- read_excel("ga_schdist_raw.xlsx", 
+                             range = "A8:I230", 
+                             col_names = FALSE, 
+                             col_types = c("text", "text", "text", "numeric", "text", "text", "text", "text", "text"))
 ```
 
-- Now anyone using the same data file can run this code to get a clean import
+&gt; **Change the "text" `col_types` following the first "numeric" to numeric**
 
 ---
-# Point-click-and-code option
+# Importing data
 
-- For virtually any data file in your project folder:
+&gt; **Run this code to complete import.**
 
-- Click on the file in your files pane (bottom-left), then click "Import Dataset..."
+- You should have a new object `ga_schdist_raw` in your environment
 
-- R will choose the package and function needed to import that file and provide a preview
+&gt; **Click on `ga_schdist_raw` to view the data.**
 
-- Allows you to point-and-click based on what options you want to use to improve the formatting
+--
 
-- Displays and updates the code to complete the import. You can then copy-and-paste this code to your Rmd.
+- All that's missing now are variable names...
+
+---
+# Importing data
+
+- No variable names because `col_names = FALSE`
+
+
+```r
+ga_schdist_raw &lt;- read_excel("ga_schdist_raw.xlsx", 
+                             range = "A8:I230", 
+*                            col_names = FALSE,
+                             col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+```
+
+---
+# Importing data
+
+&gt; **Replace `FALSE` with below code**
+
+
+```r
+c("district","state","charter","enroll","lep", "iep","frpl","white","expenditures")
+```
+
+--
+
+&gt; **Re-run the code to import**
+
+
+
+--
+
+- High initial cost, but now anyone using the same data file can run this code to get a clean import.
+
+- Can also use code to import the same data for different time periods. Just change the file name accordingly.
 
 ---
 # Import from URL
@@ -447,9 +565,8 @@ ga_schdist_raw &lt;- read_xlsx("ga_schdist_raw.xlsx",
 
 - Lots of data are saved to the web and accessible via a url. We can import directly from the url.
 
---
-
-- We can use the `fread` function from the `data.table` package
+---
+# Import from URL
 
 - General syntax:
 
