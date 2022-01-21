@@ -17,26 +17,10 @@ class: center, middle, inverse, title-slide
 ## RLab 3: Data Wrangling
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: September 02, 2021
+### Last updated: January 19, 2022
 
 ---
 
-# Why learn data wrangling
-
-- One or two goals:
-  
-  - Wrangle data into a table we wish to export to a report
-  - A data set includes data we do not need or data we need to transform for some analysis
-  
---
-
-- About 80% of time working with data is spent preparing it for some analysis (collection, cleaning, creating new variables)
-
-- Learning statistics is not nearly as useful if you can't prepare data
-
-- Software like R can save you a lot of time.
-
----
 # Outline
 
 
@@ -55,13 +39,44 @@ class: center, middle, inverse, title-slide
   - provide descriptive stats using `summarize` and `group_by`
 
 ---
-# Setup
+# Why learn data wrangling
 
-&gt; **Start a new project named "rlab3".**
   
-&gt; **Start a R Markdown document. Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
+- Create a table we want to print in a report
 
-&gt; **Change YAML to:**
+- Our analysis requires us to transform the original dataset
+  
+--
+
+- 80/20 rule: About 80% of time spent on analysis goes toward preparing data 
+
+- Learning statistics is not nearly as useful if you can't prepare data
+
+- Software like R can save you a lot of time.
+
+---
+# Set-up
+
+.pull-left[
+
+&gt; **If using RStudio Cloud, do not create a new project. Instead, use the project you created for where you already installed `tidyverse`. Installed packages do not carry over to other project spaces.**
+
+]
+
+.pull-right[
+
+&gt; **Otherwise, create a new project named "rlab3". I recommend locating it in the same parent file as your other RLab folders.**
+
+]
+
+---
+# Setup
+  
+&gt; **Start a new R Markdown document and click "OK"**
+
+&gt; **Keep setup code chunk at the top. Change code to `echo=FALSE`**
+
+&gt; **Change YAML:**
 
 
 ```r
@@ -74,76 +89,75 @@ output:
 ---
 ```
 
+&gt; **Delete rest of the template.**
+
 ---
-# Setup
+# Setup: packages
 
-- Virtually all wrangling can/should be done with the `tidyverse` package
-
-&gt; **Inside the setup code chunk, load the `tidyverse` package.**
-
---
-
-&gt; **In same setup code chunk, load these additional packages:**
+&gt; **In the setup code chunk, load the following packages:**
 
 
 ```r
-library(readxl)
+library(tidyverse) # handles virtually all wrangling tasks
+library(readxl) # to import Excel
 library(knitr) # probably need to install this first
-library(gapminder)
+library(gapminder) # for data we will use
 ```
 
 ---
-# Download &amp; load data
+# Setup: data files
 
-&gt; **Download the `SGF_2016_00A1_with_ann.csv` and `ga_schdist_raw.xlsx` files from eLC and add to your project folder**
+&gt; **Download the "state_finance_2016.csv" and "ga_schdist_clean.csv" files from eLC and add to your project folder**
 
-- SGF_2016_00A1_with_ann.csv is state government finance data downloaded from the Census
+- "state_finance_2016.csv" is state government finance data downloaded from the Census
 
-- ga_schdist_raw.xlsx is Georgia school district data downloaded from the National Center for Education Statistics (NCES); the file has been renamed
+- "ga_schdist_clean.csv" is almost identical to the csv file we exported at the end of last week's lab
 
 ---
 # Import Data
 
-- The state finance data are fine to import as is because I already wrangled them some via an initial import
 
 
-```r
-state_finance_16 &lt;- read_csv("SGF_2016_00A1_with_ann.csv", 
-                             col_names = c("id1", "id2", "state", "year",
-                                           "finance_type_id", "finance_type",
-                                           "finance_source_id", "finance_source",
-                                           "amount_1000"), 
-                             col_types = "ccciccccn", 
-                             na = c("X"), 
-                             skip = 2)
-
-write_csv(state_finance_16, "SGF_2016_00A1_with_ann.csv")
-```
+&gt; **In the setup code chunk, import "state_finance_2016.csv" and "ga_schdist_clean.csv". You do not need to use any import options. Name the objects the same as the file names.**
 
 --
 
-&gt; **In the setup code chunk, import the state finance data (code above not required). Name the object `state_finance_16`.**
+- You should now have two objects in your environment
 
 ---
 # Preview data
 
-&gt; **Type a heading, "Raw Data"**
+&gt; **Below the setup code chunk, on a new line outside of the code chunk, type a heading titled Raw Data**
 
-&gt; **In a new code chunk, show the reader the current (as imported) gapminder data and state finance data using the `glimpse` function.**
+--
 
-&gt; **Name this code chunk `rawdata`**
+&gt; **In a new code chunk, use the `glimpse()` function to provide our reader information about the `gapminder`, `state_finance_2016`, and `ga_schdist_clean` datasets.**
+
+--
+
+&gt; **Name this code chunk `preview`**
 
 ---
 # Renaming variables
 
-- One of the first things we may want to do so the rest of our code is easier to write
-
---
+- One of the first things we may want to do so the rest of our code is shorter
 
 - Variable names should be as short as possible and most prefer `snake_case_format`
 
+- Recall we already learned how to rename variables while importing a dataset
+
+
+```r
+ga_schdist_raw &lt;- read_excel("ga_schdist_raw.xlsx", 
+                             range = "A8:I230", 
+*                            col_names = c("district","state","charter","enroll","lep", "iep","frpl","white","expenditures"),
+                             col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+```
+
 ---
-# Renaming a few variables after import
+# Renaming variables
+
+- If we want to rename a variable in a dataset already imported, then:
 
 
 ```r
@@ -151,82 +165,63 @@ data_set &lt;- rename(data_set, 'new_var' = 'current_var',
                     'new_var' = 'current_var', ...)
 ```
 
---
+- Replace `data_set` with the name of the dataset, `'new_var'` with the new name you want, and `current_var` with the name of variable you want to change
 
-- Suppose I wanted to rename `id1` to `id_long` and create a new object thereby preserving the original data
+---
+# Renaming variables
+
+- There is a variable named `id_long` in the `state_finance_2016` dataset
+
+- Suppose I wanted to rename `id_long` to `census_code` and **overwrite** the `state_finance_2016` dataset
 
 
 ```r
-st_fin &lt;- rename(state_finance_16, 'id_long' = 'id1')
+state_finance_2016 &lt;- rename(state_finance_2016, 'census_code' = 'id_long')
 ```
 
 ---
 # Rename skill check
 
-&gt; **In a new code chunk, rename `id2` to `id` in `state_finance_16`. Save the new dataset as `st_fin`.**
+&gt; **Insert a new code chunk. Name the code chunk `var_rename`.**
 
---
+&gt; **Rename `id_short` to `id` in the `state_finance_2016` dataset.**
 
 
-```r
-st_fin &lt;- rename(state_finance_16, 'id' = 'id2')
-```
 
 &gt; **Re-run the `glimpse` command above to see if `rename` worked as expected.**
 
 --
 
-- What's wrong?
+&gt; **Knit to HTML. Check the `glimpse` output for `state_finance_2016`.**
 
---
-
-&gt; **Start a new line inside this code chunk and use `glimpse` on the `st_fin` dataset. Run this line to see if it worked. Add the code chunk option that suppresses code AND output.**
-
----
-# Renaming many variables via import
-
-&gt; **In the setup code chunk, copy &amp; paste below code and run**
-
-
-```r
-ga_schdist_raw &lt;- read_xlsx("ga_schdist_raw.xlsx", 
-                            range = "A8:I231",
-                            col_names = c("district", "state",
-                                           "charter", "enroll",
-                                           "lep", "iep", "frpl",
-                                           "white",
-                                           "expenditures"))
-```
-
-
-
-- Take a moment to think about what this code does
-
----
-# Renaming many variables
-
-&gt; **Inside the `rawdata` code chunk, show the reader the original `ga_schdist_raw` data using `glimpse`.**
-
-- Note that since we imported `ga_schdist_raw` before using glimpse, this should work fine.
-
-&gt; **Knit to HTML so we can see what our document looks like so far.**
+- Can you figure out why the output still shows `id_short`?
 
 ---
 # Converting variable types
 
-- We can overwrite how R stores variables within a dataset
+- Recall we already learned how to convert variable types while importing a dataset
 
-- General syntax:
+
+```r
+ga_schdist_raw &lt;- read_excel("ga_schdist_raw.xlsx", 
+                             range = "A8:I230", 
+                             col_names = c("district","state","charter","enroll","lep", "iep","frpl","white","expenditures"),
+*                            col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+```
+
+---
+# Converting variable types
+
+- Suppose we need to convert a variable in a dataset after importing it
 
 
 ```r
 data_set$variable &lt;- as.newtype(data_set$variable)
-#where newtype is the type you want
 ```
 
---
+- Replace `data_set$variable` accordingly and `as.newtype` to one of the variable type options:
 
-- Basic variable type options:
+--
 
 
 ```r
@@ -240,66 +235,36 @@ as.logical() # converts binary (dummy) variables to True/False
 ---
 # Converting variable types
 
-- Note from using `glimpse(st_fin)`, we see that `state` is stored as a character/text variable
+- The output of `glimpse(state_finance_2016)` shows us that the variable `state` is stored as a character/text variable
 
-- Suppose we want R to recognize it as a categorical variable
-
-&gt; **In the code chunk where we created `st_fin`, start a new line and convert `st_fin$state` from text to categorical.**
-
---
+- Suppose I wanted R to recognize `state` as a categorical variable
 
 
 ```r
-st_fin$state &lt;- as.factor(st_fin$state)
-```
-
-&gt; **Re-run `glimpse(st_fin)` to check if it worked.**
-
----
-# Skill check
-
-- Several variables in `ga_schdist_raw` stored as text need converted to numeric
-
-&gt; **Start a new code chunk. Identify one variable that should be numeric and convert it.**
-
---
-
-- We'd eventually type (lots of repetitive copy&amp;paste)
-
-
-```r
-ga_schdist_raw$enroll &lt;- as.numeric(ga_schdist_raw$enroll)
-ga_schdist_raw$lep &lt;- as.numeric(ga_schdist_raw$lep)
-ga_schdist_raw$iep &lt;- as.numeric(ga_schdist_raw$iep)
-ga_schdist_raw$frpl &lt;- as.numeric(ga_schdist_raw$frpl)
-ga_schdist_raw$white &lt;- as.numeric(ga_schdist_raw$white)
-ga_schdist_raw$expenditures &lt;- as.numeric(ga_schdist_raw$expenditures)
+state_finance_2016$state &lt;- as.factor(state_finance_2016$state)
 ```
 
 ---
-# Converting many variable types
+# Type conversion skill check
 
-- There are more efficient ways to do this
+&gt; **Insert a new code chunk. Name the code chunk `type_convert`.**
 
-
-```r
-ga_schdist_raw &lt;- mutate(ga_schdist_raw, 
-                     across(c('list', 'of', 'each', 'var'),
-                            as.numeric))
-```
+&gt; **Convert `finance_type` and `finance_source` to categorical variables in the `state_finance_2016` dataset.**
 
 --
 
-- Or if all the variables are adjacent to each other
+&gt; **Re-run the `glimpse(state_finance_2016)` to check if it worked.**
 
+---
+# Rename and type conversion recap
 
-```r
-ga_schdist_raw &lt;- mutate(ga_schdist_raw, 
-                     across(c('left_most_var':'right_most_var'),
-                            as.numeric))
-```
+- Can rename or convert variables during or after importing the data
 
-- See Appendix B for additional examples of `across`
+- Renaming variables makes coding easier to write and read
+
+- Converting variable types is sometimes necessary for certain functions
+  - Can't perform math on a variable stored as character
+  - Specifying categorical variables helps with summary stats and graphs
 
 ---
 class: inverse, middle, center
@@ -307,14 +272,28 @@ class: inverse, middle, center
 # Wrangle verbs
 
 ---
-# Process &amp; Data
+# Wrangle motivation and choices
 
-- Brief review of each verb then practice using `gapminder`
+- Two motivations
+  - Print an informative table in our report when we knit
+  - Change the original data to aid in our analysis
+
+--
+
+- Three options when considering what to do with the result of our wrangling
+  - Print the result without saving it
+  - Save the result
+  - Print and save the result
+
+---
+# Practice Data
+
+- We will practice wrangle verbs using the `gapminder` dataset
 
 
-|country |continent | year| lifeExp|     pop| gdpPercap|
-|:-------|:---------|----:|-------:|-------:|---------:|
-|Algeria |Africa    | 1952|    43.1| 9279525|      2449|
+|country     |continent | year| lifeExp|     pop| gdpPercap|
+|:-----------|:---------|----:|-------:|-------:|---------:|
+|Afghanistan |Asia      | 1952|    28.8| 8425333|     779.4|
 
 - Continents &amp; years included
 
@@ -346,24 +325,33 @@ unique(gapminder$year)
 ```r
 filter(data_set, criteria) #prints the result
 filtered_data_set &lt;- filter(data_set, criteria) #saves result
-(filtered_data_set &lt;- filter(data_set, criteria)) #saves &amp; prints result
+(filtered_data_set &lt;- filter(data_set, criteria)) #prints and saves the result
+filtered_data_set # prints the saved result
 ```
 
 ---
 # Filter example
 
-Keep all 2007 observations
+Print all observations where year equals 2007
 
 
 ```r
 filter(gapminder, year == 2007)
 ```
 
-Keep all Africa observations
+Print all observations where continent equals Africa
 
 
 ```r
 filter(gapminder, continent == 'Africa')
+```
+
+Save a new dataset containing only observations where life expectancy is greater than 75 years. Then print it.
+
+
+```r
+long_life &lt;- filter(gapminder, lifeExp &gt; 75)
+long_life
 ```
 
 ---
@@ -373,18 +361,22 @@ filter(gapminder, continent == 'Africa')
 
 &gt; **Type a lower-level heading, "Filter"**
 
-&gt; **Start a new code chunk and name it filter. Set option to suppress code AND output.**
+&gt; **Start a new code chunk and name it filter.**
 
 --
 
-&gt; **Keep all Oceania observations**
+&gt; **Use `filter` to print all Asia observations**
 
-&gt; **Keep all 1952 observations**
+&gt; **Use `filter` to print all 1952 observations**
+
+&gt; **Use `filter` to save a new dataset named `oceania` containing only Oceania observations. Then print `oceania`.**
+
+&gt; **Knit to HTML and inspect the output.**
 
 ---
 # Conditional and logical operators
 
-- May need to filter on multiple criteria
+- We may want to filter on multiple criteria
 
 - Conditionals
   - "If equal to" `==`
@@ -398,7 +390,7 @@ filter(gapminder, continent == 'Africa')
 ---
 # Filter examples
 
-Keep all Africa observations in 2007
+Print all Africa observations for 2007
 
 
 ```r
@@ -407,7 +399,7 @@ filter(gapminder, continent == 'Africa' &amp; year == 2007)
 
 --
 
-Keep Africa and Oceania
+Print all Africa and Oceania observations
 
 
 ```r
@@ -416,16 +408,27 @@ filter(gapminder, continent == 'Africa' | continent == 'Oceania')
 
 --
 
-Keep Africa and Oceania after 1992
+Print all Africa and Oceania observations for 2007
 
 
 ```r
-filter(gapminder, (continent == 'Africa' | continent == 'Oceania') &amp; year &gt; 1992)
+filter(gapminder, (continent == 'Africa' | continent == 'Oceania') &amp; year == 2007)
+#OR
+gap_ao &lt;- filter(gapminder, continent == 'Africa' | continent == 'Oceania')
+filter(gap_ao, year == 2007)
 ```
 
---
+---
+# Filter Examples
 
-Remove Oceania and keep 1992 or later
+Save a new dataset that removes Oceania observations
+
+
+```r
+no_oceania &lt;- filter(gapminder, continent != 'Oceania')
+```
+
+Print non-Oceania observations for 1992 or later
 
 
 ```r
@@ -435,15 +438,19 @@ filter(gapminder, continent != 'Oceania' &amp; year &gt;= 1992)
 ---
 # Filter practice
 
-&gt; **Start a new code chunk named filter2, write code that will filter `gapminder` according to each prompt below and print the resulting table.**
-
-&gt; **Keep Americas in 1952**
-
-&gt; **Keep Europe and Asia and remove 1952**
+&gt; **Start a new code chunk named `filter2`, write code that will filter `gapminder` according to each prompt below and print the resulting table.**
 
 --
 
-&gt; **Knit to HTML to see what this looks like so far**
+&gt; **Print observations in the Americas in 1952 with a life expectancy lower than 65**
+
+--
+
+&gt; **Print all non-Americas observations in 2007 with a GDP per capita greater than or equal to \$7,000. Feel free to use multiple steps.**
+
+--
+
+&gt; **Knit to HTML.**
 
 ---
 # Select
@@ -470,7 +477,7 @@ new_dataset &lt;- select(old_dataset, -var1, -var2, ...)
 ---
 # Select examples
 
-Keep country, year, and life expectancy
+Print only country, year, and life expectancy
 
 
 ```r
@@ -479,7 +486,7 @@ select(gapminder, country, year, lifeExp)
 
 --
 
-Remove population
+Remove population and print the rest
 
 
 ```r
@@ -489,62 +496,83 @@ select(gapminder, -pop)
 ---
 # Select practice
 
-&gt; **Type a heading the same level as filter titled, "Select"**
+&gt; **Type a heading the same level as filter titled Select**
 
 &gt; **Start a new code chunk and name it select**
 
-&gt; **In a new code chunk, write code that will select `gapminder` according to each prompts below and print the resulting table.**
+&gt; **Print a table with country, year, and population**
 
-&gt; **Keep country, year, and population**
+&gt; **Print a table with country, year, population, life expectancy, and GDP per capita**
 
-&gt; **Keep country, year, population, life expectancy, and GDP per capita**
-
-&gt; **Knit to HTML to see what this looks like so far**
+&gt; **Knit to HTML.**
 
 ---
 # Subsetting
 
-- `filter` &amp; `select` are intelligent functions that keep/remove rows and columns because they work off of criteria
+- `filter` &amp; `select` keep/remove rows and columns based on intelligent criteria
 
-- **Subsetting** is a naive way to keep/remove rows and columns because it works off of numbered positions of the dataset (e.g. first row or last column)
+- **Subsetting** is a way to keep/remove rows and columns based on their positions in a dataset (e.g. first row or third column)
 
-- Sometimes we want to keep or remove a certain numbered row or column because there is no obvious criteria to provide
+- Sometimes easier to use subsetting 
 
 ---
 # Subsetting
 
-- Generic syntax
+General syntax
 
 
 ```r
 new_dataset &lt;- dataset[row number(s) to keep or remove, 
                    column number(s) to keep or remove]
+```
 
+--
+
+
+```r
 new_dataset &lt;- dataset[5, 2]
-# would keep only the 5th row and 2nd column
+# this saves the 5th row and 2nd column in a new dataset
+```
 
+--
+
+
+```r
 new_dataset &lt;- dataset[-5, -2]
 # would drop 5th row and 2nd column
+```
 
+--
+
+
+```r
 new_dataset &lt;- dataset[c(-3,-5), c(1:10)]
 # would drop 3rd and 5th rows, and keep columns 1-10
 ```
 
 ---
-# Subsetting examples
+# Subsetting example
 
-Suppose I want to show first six rows of `gapminder`
+Suppose I want to print first two rows of `gapminder`
 
 
 ```r
-gapminder[c(1:6),]
+gapminder[c(1:2),]
 ```
 
-Remove first/top row and last/right-most column and save it as a new object
+```
+## # A tibble: 2 × 6
+##   country     continent  year lifeExp     pop gdpPercap
+##   &lt;fct&gt;       &lt;fct&gt;     &lt;int&gt;   &lt;dbl&gt;   &lt;int&gt;     &lt;dbl&gt;
+## 1 Afghanistan Asia       1952    28.8 8425333      779.
+## 2 Afghanistan Asia       1957    30.3 9240934      821.
+```
+
+Or remove first row and sixth column and save it as a new object
 
 
 ```r
-gapminder_clean &lt;- gapminder[-1, -6]
+gapminder_subset &lt;- gapminder[-1, -6]
 ```
 
 ---
@@ -554,13 +582,17 @@ gapminder_clean &lt;- gapminder[-1, -6]
 
 &gt; **Start a new code chunk and name it subset.**
 
-&gt; **Write code that will subset `gapminder` according to each prompts below and print the resulting table.**
+--
 
-&gt; **Keep only first row and all columns**
+&gt; **Print only the first row and all columns of `gapminder`**
 
-&gt; **Remove first, ninth, and thirteenth rows, keep columns 1-4**
+--
 
-&gt; **Knit to HTML to see what this looks like so far**
+&gt; **Save a new dataset named `gap_subset` where you remove the first, ninth, and thirteenth rows, and keep columns 1-4**
+
+--
+
+&gt; **Knit to HTML**
 
 ---
 # Mutate
@@ -571,19 +603,19 @@ gapminder_clean &lt;- gapminder[-1, -6]
 
 
 ```r
-dataset &lt;- mutate(dataset, new_var = whatever)
+dataset &lt;- mutate(dataset, new_var = some_math_function)
 ```
 
 - Only a single `=` is used because we are assigning value
 
 - If `new_var` is the name of an existing variable, `mutate` will overwrite it according to your equation
 
-- Otherwise, `mutate` will add a new variable
+- Otherwise, `mutate` will add a new variable to the dataset
 
 ---
 # Mutate examples
 
-Change population from ones to millions
+Print table with `pop`ulation rescaled from ones to millions
 
 
 ```r
@@ -592,7 +624,7 @@ mutate(gapminder, pop = pop/1000000)
 
 --
 
-Create new population variable expressed in millions
+Print table with new variable `pop_millions` that rescales `pop` to millions
 
 
 ```r
@@ -601,18 +633,17 @@ mutate(gapminder, pop_millions = pop/1000000)
 
 --
 
-Create variable equal to global, all-year life expectancy
+Save new dataset with a variable equal to global, all-time life expectancy
 
 
 ```r
-gapminder2 &lt;- mutate(gapminder, 
-                     avg_lifeExp = mean(lifeExp))
+gapminder2 &lt;- mutate(gapminder, avg_lifeExp = mean(lifeExp))
 ```
 
 ---
 # Mutate examples
 
-Create variable equal to how much above/below country is from `avg_lifeExp`
+Save new dataset with new variable equal to how much above/below country is from `avg_lifeExp`
 
 
 ```r
@@ -638,22 +669,27 @@ gapminder3 &lt;- mutate(gapminder,
 ---
 # Practice
 
-&gt; **Type a heading the same level as subsetting titled, "Mutate." Start a new code chunk and name it mutate.**
+&gt; **Type a heading titled Mutate. Start a new code chunk and name it mutate.**
 
-&gt; **Write code that will mutate `gapminder` according to each prompt following the next two slides and print the resulting table.**
+--
 
-&gt; **Create a new object/dataset `gapminder07` that contains only observations for the year 2007**
+&gt; **Create a new dataset `gapminder07` containing only observations in 2007**
 
----
-# Mutate practice
+--
 
-&gt; **Overwrite `gapminder07`, creating a new variable `gdp` equal to each country's GDP**
+&gt; **On a new line, overwrite `gapminder07`, creating a new variable `gdp` equal to each country's GDP**
 
-&gt; **In the same mutate function, create a new variable `global_gdp` equal to the sum of all GDPs. The `sum()` function adds all values it is given.**
+--
 
-&gt; **In the same mutate function, create a new variable `pct_global_gdp` equal to each country's percent of global GDP.**
+&gt; **In the *same* mutate function, create `global_gdp` equal to the `sum()` of all `gdp`s.**
 
-&gt; **Knit to HTML**
+--
+
+&gt; **In the *same* mutate function, create `pct_gdp` equal to each country's percent of `global_gdp`.**
+
+--
+
+&gt; **Using `gapminder07` print a table containing only observations where `pct_gdp` is greater than or equal to 10. Knit to HTML**
 
 ---
 # Arrange
@@ -672,12 +708,12 @@ arrange(data_set, desc(var))
 # Arranges in descending order
 ```
 
-- Usually doesn't make sense to create a new dataset with `arrange` but helpful for printing tables to see highest or lowest cases
+- Helpful for printing tables to see highest or lowest cases
 
 ---
 # Arrange examples
 
-Arrange countries in ascending order of life expectancy (lowest-to-highest)
+Print countries arranged in ascending order of life expectancy (low-to-high)
 
 
 ```r
@@ -686,7 +722,7 @@ arrange(gapminder, lifeExp)
 
 --
 
-Arrange countries in descending order of life expectancy (highest-to-lowest)
+Print countries arranged in descending order of life expectancy (high-to-low)
 
 
 ```r
@@ -696,15 +732,11 @@ arrange(gapminder, desc(lifeExp))
 ---
 # Arrange practice
 
-&gt; **Type a heading the same level as Mutate titled, "Arrange"**
+&gt; **Type a heading titled Arrange. Start a new code chunk and name it arrange.**
 
-&gt; **Start a new code chunk and name it arrange.**
+--
 
-&gt; **Write code that will arrange `gapminder07` according to the prompts below and print the resulting table.**
-
-&gt; **Arrange your `gapminder07` dataset so the countries with the highest percent of global gdp are at the top.**
-
-&gt; **Type text outside the code chunk, explaining which country had the highest percent of global GDP as of 2007 and the percent.**
+&gt; **Using `gapminder07`, print a table that lists countries in descending order according to `pct_gdp`**
 
 &gt; **Knit to HTML**
 
@@ -714,7 +746,7 @@ class: inverse, middle, center
 # Combining Wrangle Verbs
 
 ---
-# Pipe operator `%&gt;%`
+# Pipe operator %&gt;%
 
 - Allows us to run multiple commands, sequentially feeding the result of the previous line of code to the next
 
@@ -753,7 +785,7 @@ dataset &lt;- dataset %&gt;%
 ---
 # Pipe example
 
-Suppose I wanted to provide a table of the top five countries with respect to percent of global GDP in 2007. Without piping:
+Suppose I wanted to print a table of the top five countries with respect to percent of global GDP in 2007. Without piping:
 
 
 ```r
@@ -762,10 +794,10 @@ gapminder07 &lt;- filter(gapminder, year == 2007)
 gapminder07 &lt;- mutate(gapminder07, 
                      gdp = gdpPercap*pop,
                      global_gdp = sum(gdp),
-                     pct_global_gdp = (gdp/global_gdp)*100)
+                     pct_gdp = (gdp/global_gdp)*100)
 
-gdp_table &lt;- select(gapminder07, country, pct_global_gdp)
-gdp_table &lt;- arrange(gdp_table, desc(pct_global_gdp))
+gdp_table &lt;- select(gapminder07, country, pct_gdp)
+gdp_table &lt;- arrange(gdp_table, desc(pct_gdp))
 
 slice_head(gdp_table, n = 5)
 ```
@@ -773,7 +805,7 @@ slice_head(gdp_table, n = 5)
 ---
 # Pipe example
 
-Providing a table of the top five countries with respect to percent of global GDP in 2007 with piping:
+To print same table with piping:
 
 
 ```r
@@ -781,15 +813,15 @@ gapminder %&gt;%
   filter(year == 2007) %&gt;% 
   mutate(gdp = gdpPercap*pop,
          global_gdp = sum(gdp),
-         pct_global_gdp = (gdp/global_gdp)*100) %&gt;% 
-  select(country, pct_global_gdp) %&gt;% 
-  arrange(desc(pct_global_gdp)) %&gt;% 
+         pct_gdp = (gdp/global_gdp)*100) %&gt;% 
+  select(country, pct_gdp) %&gt;% 
+  arrange(desc(pct_gdp)) %&gt;% 
   slice_head(n=5)
 ```
 
 - Don't have to keep specifying the dataset inside each verb
 
-- Don't have to save the result each step of the way; no `gapminder07` created.
+- Don't have to save the result each step of the way; no `gapminder07` or `gdp_table` needed.
 
 - Easier to follow
 
@@ -798,13 +830,17 @@ gapminder %&gt;%
 
 &gt; **Add a heading "Pipe Operator"**
 
-&gt; **Start a new code chunk and name it pipe. Copy &amp; paste the code from the previous slide.**
+&gt; **Start a new code chunk and name it pipe.**
 
-&gt; **Change the code so it includes 1952 instead of 2007.**
+--
 
-&gt; **We want to save a new dataset `gapminder52` that contains all original and new variables *before* creating the top 5 table. Change the code to do this.**
+&gt; **Use the pipe operator to efficiently save a new dataset `gapminder52` that contains only 1952 observations and the GDP variables we created earlier (copy and paste is your friend)**
 
-&gt; **On a new line, pipe `gapminder52` into the remaining code to print the top 5 table.**
+--
+
+&gt; **On a new line, use piping to print a table of `gapminder52` that includes only `country` and `pct_gdp`, arranged in descending order and only the top 5 countries.**
+
+--
 
 &gt; **Knit to HTML**
 
@@ -872,7 +908,7 @@ gapminder %&gt;%
   summarize('Median Life Expectancy' = median(lifeExp),
             'Median GDP per Capita' = median(gdpPercap)) %&gt;% 
   kable(digits = 0,
-*       format.args = list(big.mark = ','))
+        format.args = list(big.mark = ',')) # Inserts commas
 ```
 
 
