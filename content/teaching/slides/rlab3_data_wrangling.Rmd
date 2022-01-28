@@ -268,6 +268,7 @@ state_finance_2016$state <- as.factor(state_finance_2016$state)
 - Converting variable types is sometimes necessary for certain functions
   - Can't perform math on a variable stored as character
   - Specifying categorical variables helps with summary stats and graphs
+  - When combining datasets, we need certain variables to be the same type across datasets
 
 ---
 class: inverse, middle, center
@@ -279,7 +280,7 @@ class: inverse, middle, center
 
 - Two motivations
   - Print an informative table in our report when we knit
-  - Change the original data to aid in our analysis
+  - Change the original data to aid our analysis
 
 --
 
@@ -329,11 +330,15 @@ Print all observations where year equals 2007
 filter(gapminder, year == 2007)
 ```
 
+--
+
 Print all observations where continent equals Africa
 
 ```{r, eval=FALSE, results='hide'}
 filter(gapminder, continent == 'Africa')
 ```
+
+--
 
 Save a new dataset containing only observations where life expectancy is greater than 75 years. Then print it.
 
@@ -343,23 +348,52 @@ long_life
 ```
 
 ---
+# Filter examples
+
+Print observations with missing data for life expectancy
+
+```{r, eval=FALSE}
+filter(gapminder, is.na(lifeExp))
+```
+
+--
+
+Save a new dataset with Oceania observations removed
+
+```{r, eval=FALSE}
+no_oceania <- filter(gapminder, continent != 'Oceania')
+```
+
+---
 # Filter practice
 
 > **Type a new heading, "Wrangle Practice"**
 
 > **Type a lower-level heading, "Filter"**
 
-> **Start a new code chunk and name it filter.**
+--
+
+> **Start a new code chunk and name it `filter`.**
 
 --
 
 > **Use `filter` to print all Asia observations**
 
+--
+
 > **Use `filter` to print all 1952 observations**
+
+--
 
 > **Use `filter` to save a new dataset named `oceania` containing only Oceania observations. Then print `oceania`.**
 
+--
+
 > **Knit to HTML and inspect the output.**
+
+--
+
+> **Suppose we decide we do not want to print all of this when knit. Use the code chunk option that suppresses all output.**
 
 ---
 # Conditional and logical operators
@@ -406,12 +440,6 @@ filter(gap_ao, year == 2007)
 ---
 # Filter Examples
 
-Save a new dataset that removes Oceania observations
-
-```{r, eval=FALSE}
-no_oceania <- filter(gapminder, continent != 'Oceania')
-```
-
 Print non-Oceania observations for 1992 or later
 
 ```{r, eval=FALSE, results='hide'}
@@ -421,15 +449,11 @@ filter(gapminder, continent != 'Oceania' & year >= 1992)
 ---
 # Filter practice
 
-> **Start a new code chunk named `filter2`, write code that will filter `gapminder` according to each prompt below and print the resulting table.**
+> **Start a new code chunk named `filter2`**
 
 --
 
 > **Print observations in the Americas in 1952 with a life expectancy lower than 65**
-
---
-
-> **Print all non-Americas observations in 2007 with a GDP per capita greater than or equal to \$7,000. Feel free to use multiple steps.**
 
 --
 
@@ -477,11 +501,19 @@ select(gapminder, -pop)
 
 > **Type a heading the same level as filter titled Select**
 
-> **Start a new code chunk and name it select**
+--
 
-> **Print a table with country, year, and population**
+> **Start a new code chunk and name it `select`**
 
-> **Print a table with country, year, population, life expectancy, and GDP per capita**
+--
+
+> **Print a table of `oceania` containing only country, year, and population variables**
+
+--
+
+> **Print a table of `oceania` with all variables except continent**
+
+--
 
 > **Knit to HTML.**
 
