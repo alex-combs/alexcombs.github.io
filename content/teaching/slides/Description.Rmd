@@ -63,12 +63,12 @@ library(fivethirtyeight)
 
 Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states. Suppose we set out to investigate average salary in Georgia for ourselves. 
 
-We take a sample of 100 college-educated women in Georgia and record the income of each.
+We take a sample of 1,000 college-educated women in Georgia and record the income of each.
 
 --
 
 - What is the unit of analysis in our dataset?
-- What are the variables in our dataset?
+- What is (are) the necessary variable(s) in our dataset?
 - What is the population and sample for this study?
 - What is the parameter and statistic/estimate for this study?
 
@@ -86,11 +86,23 @@ We calculate the average income of all SPIA MPA alumni who graduated two years a
 ---
 # Descriptive vs. inferential
 
-Suppose we want to estimate the percentage of Athens residents who have a valid ID for the next election. We set up booths around UGA campus and ask people if they have a valid ID according to Georgia's election laws. We get 80 responses, and 80% said they have a valid ID.
+Suppose we want to know the percentage of Gwinnett County residents who have a valid ID for the next election.
 
 --
 
-- How might these 80 responses not represent a sample of the population?
+What is the population?
+
+--
+
+We survey those entering the UGA Gwinnett Campus if they have a valid ID according to Georgia's election laws. We get 100 responses, and 80% said they have a valid ID.
+
+--
+
+- Is our result a parameter or an estimate?
+
+--
+
+- Why might we not have a sample size of 100?
 
 ---
 class: inverse, middle, center
@@ -140,7 +152,7 @@ A city has a private high school and a public high school. Each year, all studen
 
 --
 
-After hiring better teachers, the public school is able to raise the test scores of each of its students by 5 percent.
+After hiring better teachers, the public school is able to raise the test scores of each of its students by 5%.
 
 --
 
@@ -178,7 +190,9 @@ ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
   labs(title = 'Weeks of pregnancy in North Carolina') +
   theme_light() +
-  theme(axis.text=element_text(size=16))
+  theme(axis.text=element_text(size=16),
+        axis.title = element_text(size = 16),
+        text = element_text(size = 16))
 ```
 ]
 
@@ -191,7 +205,7 @@ gapminder %>%
   geom_histogram(fill = 'steelblue', color = 'white') +
   labs(title = 'GDP Per Capita') +
   theme_light() +
-  theme(axis.text=element_text(size=16))
+  theme(text=element_text(size=16))
 ```
 ]
 
@@ -208,6 +222,8 @@ sd(ncbirths$weeks)
 IQR(ncbirths$weeks)
 ```
 ]
+
+--
 
 .pull-right[
 ```{r}
@@ -292,7 +308,8 @@ ggplot(data = state_trump,
   labs(x = "Percent of state population white", 
        y = "Percent of population voted for Trump", 
        title = "White density and Trump support in the US") +
-  theme_minimal()
+  theme_minimal() +
+  theme(text=element_text(size=16))
 ```
 ]
 
@@ -304,7 +321,8 @@ ggplot(data = state_trump,
   labs(x = "Percent of white population in poverty", 
        y = "Percent of population voted for Trump", 
        title = "White poverty and Trump support in the US") +
-  theme_minimal()
+  theme_minimal() +
+  theme(text=element_text(size=16))
 ```
 ]
 
@@ -313,33 +331,52 @@ ggplot(data = state_trump,
 ---
 # Correlation
 
-.pull-left[
-```{r, message=FALSE, echo=FALSE, fig.align='center'}
+```{r, message=FALSE, echo=FALSE, fig.align='center', fig.height=5}
 ggplot(data = state_trump, 
        aes(y = share_vote_trump, x = median_house_inc)) + 
   geom_point(color = 'springgreen4', size = 2) + 
   labs(x = "Median household income", 
        y = "Percent of population voted for Trump", 
        title = "Income and Trump support in the US") +
-  theme_minimal()
+  theme_minimal() +
+  theme(text=element_text(size=16))
 ```
-]
-
-.pull-right[
 
 Is the correlation positive or negative?
 
---
+---
+# Correlation
 
-Do you think it is closer to 0 or -1?
+```{r, message=FALSE, echo=FALSE, fig.align='center', fig.height=5}
+ggplot(data = state_trump, 
+       aes(y = share_vote_trump, x = median_house_inc)) + 
+  geom_point(color = 'springgreen4', size = 2) + 
+  labs(x = "Median household income", 
+       y = "Percent of population voted for Trump", 
+       title = "Income and Trump support in the US") +
+  theme_minimal() +
+  theme(text=element_text(size=16))
+```
 
---
+Do you think the correlation coefficient is closer to 0 or -1?
+
+---
+# Correlation
+
+```{r, message=FALSE, echo=FALSE, fig.align='center', fig.height=5}
+ggplot(data = state_trump, 
+       aes(y = share_vote_trump, x = median_house_inc)) + 
+  geom_point(color = 'springgreen4', size = 2) + 
+  labs(x = "Median household income", 
+       y = "Percent of population voted for Trump", 
+       title = "Income and Trump support in the US") +
+  theme_minimal() +
+  theme(text=element_text(size=16))
+```
 
 ```{r}
 cor(state_trump$median_house_inc, state_trump$share_vote_trump)
 ```
-
-]
 
 ---
 # Correlation

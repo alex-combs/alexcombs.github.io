@@ -15,12 +15,9 @@ output:
 ---
 # Objectives
 
-By the end of this lab, you will have learned how to...
-
 - Pivot a wide dataset to long
 - Pivot a long dataset to wide
 - Separate a variable into multiple variables
-- Unite multiple variables to one variable
 
 ```{r setup, include=FALSE}
 library(tidyverse)
@@ -29,15 +26,28 @@ library(gapminder)
 ```
 
 ---
+# Set-up
+
+.pull-left[
+
+> **If using RStudio Cloud, do not create a new project space. Instead, use the project that has all packages installed. Installed packages do not carry over to other project spaces.**
+
+]
+
+.pull-right[
+
+> **Otherwise, create a new project named "rlab4". I recommend locating it in the same parent file as your other RLab folders.**
+
+]
+
+---
 # Setup
-
-> **Start a new project named "rlab4".**
   
-> **Start a R Markdown document**
+> **Start a new R Markdown document and click "OK"**
 
-> **Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
+> **Keep setup code chunk at the top. Change code to `echo=FALSE`**
 
-> **Change YAML to:**
+> **Change YAML:**
 
 ```{r, eval=FALSE}
 ---
@@ -49,10 +59,31 @@ output:
 ---
 ```
 
----
-# Packages
+> **Delete rest of the template.**
 
-> **In the top "setup" code chunk, load the `tidyverse` package**
+---
+# Setup: Packages
+
+> **In the setup code chunk, load the following packages:**
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+---
+# Setup: Data
+
+> **Download the "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv" files from eLC and add to your project folder**
+
+- The "state_finance_2016_wrangled.csv" should be identical to the one you exported during the wrangle practice. You could copy that file over to this folder but is offered on eLC in case you don't trust your version.  
+
+> **In the setup code chunk, import "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv". You do not need to use any import options. Name the saved datasets in your environment the same as the file names.**
+
+```{r, include=FALSE}
+state_finance_2016_wrangled <- read_csv("labs_files/state_finance_2016_wrangled.csv")
+
+ky_private_school_enrollment <- read_csv("labs_files/ky_private_school_enrollment.csv")
+```
 
 ---
 # Tidy data
@@ -68,44 +99,30 @@ Tidy data satisfy three rules:
 ---
 # Tidy data
 
-- Let's revisit the state finance data
-
 > **Insert a heading "Untidy State Finance Data"**
 
-> **Load the `st_fin_16_wrangled.csv` from the in-class activity. Suppress any output R may print.**
+--
 
-- Correct version is available on eLC for download in case you do not trust your copy.
+- Let's show readers a preview of the data
 
-- You can load these data in your setup code chunk or a new code chunk.
-
-```{r, include=FALSE}
-st_fin_16_wrangled <- read_csv('labs_files/st_fin_16_wrangled.csv')
-```
-
----
-# Tidy Data
-
-- Let's show readers a sample of the data
-
-> **In a new code chunk, provide the first 4 rows of `st_fin_16_wrangled`.**
+> **In a new code chunk, provide the first 4 rows of `state_finance_2016_wrangled`.**
 
 ```{r, echo=FALSE}
-st_fin_16_wrangled %>% 
-  head(n = 4) %>% 
+state_finance_2016_wrangled %>% 
+  slice_head(n = 4) %>% 
   kable()
 ```
 
----
-class: inverse, center, middle
+--
 
-# Are these data tidy? Why or why not?
+- Are these data tidy? Why or why not?
 
 ---
 # Untidy Data
 
 ```{r, echo=FALSE}
-st_fin_16_wrangled %>% 
-  head(n=4) %>% 
+state_finance_2016_wrangled %>% 
+  slice_head(n=4) %>% 
   kable()
 ```
 
@@ -121,7 +138,7 @@ st_fin_16_wrangled %>%
 
 --
 
-- Because `finance_type` should be two variables, not one
+- Because `finance_source` should be two variables, not one
 
 ---
 # Long vs. Wide Data
@@ -130,11 +147,11 @@ st_fin_16_wrangled %>%
 
 --
 
-- Is `st_fin_16_wrangled` in long or wide format?
+- Is `state_finance_2016_wrangled` in long or wide format?
 
 ```{r, echo=FALSE}
-st_fin_16_wrangled %>% 
-  head(n=4) %>% 
+state_finance_2016_wrangled %>% 
+  slice_head(n=4) %>% 
   kable()
 ```
 
@@ -162,7 +179,7 @@ kable(uspop, format = 'html')
 ---
 # Tidy State Finance Data
 
-- Our goal is to tidy `st_fin_16_wrangled`
+- Our goal is to tidy `state_finance_2016_wrangled`
 
 - It is long when it should be wide
 
@@ -182,25 +199,25 @@ new_data <- current_data %>%
 # Tidy State Finance Data
 
 ```{r, echo=FALSE}
-st_fin_16_wrangled %>% 
-  head(n=2) %>% 
+state_finance_2016_wrangled %>% 
+  slice_head(n=2) %>% 
   kable()
 ```
 
 > **Insert a heading "Tidy State Finance Data"**
 
-> **Start a code chunk that creates a new dataset `st_fin_16_tidy`**
+> **Start a code chunk. Save a new dataset `state_finance_2016_tidy` that is a copy of `state_finance_2016_wrangled`**
 
 ```{r, eval=FALSE}
-st_fin_16_tidy <- st_fin_16_wrangled %>% 
+state_finance_2016_tidy <- state_finance_2016_wrangled %>% 
 ```
 
 ---
 # Tidy State Finance Data
 
 ```{r, echo=FALSE}
-st_fin_16_wrangled %>% 
-  head(n=2) %>% 
+state_finance_2016_wrangled %>% 
+  slice_head(n=2) %>% 
   kable()
 ```
 
@@ -218,7 +235,7 @@ new_data <- current_data %>%
 # Tidy State Finance Data
 
 ```{r}
-st_fin_16_tidy <- st_fin_16_wrangled %>% 
+state_finance_2016_tidy <- state_finance_2016_wrangled %>% 
   pivot_wider(names_from = finance_source,
               values_from = amount_1000)
 ```
@@ -231,21 +248,20 @@ st_fin_16_tidy <- st_fin_16_wrangled %>%
 > **Provide the reader with top 4 rows of the new dataset.**
 
 ```{r, echo=FALSE}
-st_fin_16_tidy %>% 
-  head(n=4) %>% 
+state_finance_2016_tidy %>% 
+  slice_head(n=4) %>% 
   kable()
 ```
-
 
 ---
 # Changing variable names
 
-- The variable names in our `st_fin_16_tidy` are not ideal.
+- The variable names in our `state_finance_2016_tidy` are not ideal.
 
 > **Change "Total Revenue" to `revenue` and "Total Expenditure" to `expenditure`.**
 
 ```{r, echo=FALSE}
-st_fin_16_tidy <- st_fin_16_tidy %>% 
+state_finance_2016_tidy <- state_finance_2016_tidy %>% 
   rename('revenue' = 'Total Revenue', 
          'expenditure' = 'Total Expenditure')
 ```
@@ -253,16 +269,16 @@ st_fin_16_tidy <- st_fin_16_tidy %>%
 ---
 # Summarize by Group
 
-- Recall in the wrangling activity you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
+- Recall in the wrangle practice you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
 
 > **Now create a new variable that computes the surplus (revenue - expenditure) for each state. Provide a table that lists surplus in descending order for three states with highest surplus.**
 
 ```{r, echo=FALSE}
-st_fin_16_tidy %>% 
+state_finance_2016_tidy %>% 
   mutate(surplus = revenue - expenditure) %>% 
   select(state, surplus) %>% 
   arrange(desc(surplus)) %>% 
-  head(n=3) %>% 
+  slice_head(n=3) %>% 
   kable()
 ```
 
@@ -290,30 +306,10 @@ kable(uspop_tidy)
 ---
 # Untidy Enrollment Data
 
-> **Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder.**
-
-> **Open this file using whatever spreadsheet software is on your computer, or watch me view it on Excel.**
-
----
-# Untidy Enrollment Data
-
-> **Insert a heading "Untidy Enrollment Data"**
-
-> **Import `ky_private_school_enrollment.csv`, suppressing code and output**
-
-> **Name the new dataset `ky_priv_enroll_wide`**
-
-```{r, include=FALSE}
-ky_priv_enroll_wide <- read_csv('labs_files/ky_private_school_enrollment.csv')
-```
-
----
-# Untidy Enrollment Data
-
-> **Provide the reader the first 3 rows of these data, suppressing the code**
+> **Provide the reader the first 3 rows of the `ky_private_school_enrollment`**
 
 ```{r, echo=FALSE}
-head(ky_priv_enroll_wide, n=3) %>% 
+slice_head(ky_private_school_enrollment, n=3) %>% 
   kable()
 ```
 
@@ -332,10 +328,10 @@ uspop_tidy <- uspop %>%
                values_to = 'population')
 ```
 
-> **Create a new dataset called `ky_priv_enroll` that is in long format**
+> **Create a new dataset called `ky_private_enroll_long` that pivots `ky_private_school_enrollment` to long format**
 
 ```{r, include=FALSE}
-ky_priv_enroll <- ky_priv_enroll_wide %>% 
+ky_private_enroll_long <- ky_private_school_enrollment %>% 
   pivot_longer(cols = enroll2000:enroll2010,
                names_to = 'year',
                names_prefix = 'enroll',
@@ -343,9 +339,15 @@ ky_priv_enroll <- ky_priv_enroll_wide %>%
 ```
 
 ---
-class: inverse, center, middle
+# Enrollment Data
 
-# Are these data tidy? Why or why not?
+```{r, echo=FALSE}
+ky_private_enroll_long %>%
+  slice_head(n=3) %>% 
+  kable()
+```
+
+- Are these data tidy? Why or why not?
 
 ---
 # Separating variables
@@ -357,12 +359,12 @@ class: inverse, center, middle
 
 - We should `separate` city_county into city and county
 
-> **Overwrite the `ky_priv_enroll` with `city_county` separated.**
+> **Create a new dataset `ky_priv_enroll_tidy` that separates `city_county` in `ky_private_enroll_long.`**
 
 --
 
 ```{r, warning=FALSE}
-ky_priv_enroll <- ky_priv_enroll %>% 
+ky_priv_enroll_tidy <- ky_private_enroll_long %>% 
   separate(city_county, c('city', 'county'))
 ```
 
@@ -371,11 +373,6 @@ ky_priv_enroll <- ky_priv_enroll %>%
 > **Finally, provide the reader the first 6 rows of these tidy data**
 
 > **Knit to HTML and check that the output looks correct**
-
----
-# Uniting variables
-
-![](labs_files/unite.png)
 
 ---
 # Upload Lab

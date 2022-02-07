@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Data Description
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: September 09, 2021
+### Last updated: February 02, 2022
 
 ---
 
@@ -67,12 +67,12 @@ class: center, middle, inverse, title-slide
 
 Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women, suggesting a college degree provides a better return on investment for women in Georgia than women in other states. Suppose we set out to investigate average salary in Georgia for ourselves. 
 
-We take a sample of 100 college-educated women in Georgia and record the income of each.
+We take a sample of 1,000 college-educated women in Georgia and record the income of each.
 
 --
 
 - What is the unit of analysis in our dataset?
-- What are the variables in our dataset?
+- What is (are) the necessary variable(s) in our dataset?
 - What is the population and sample for this study?
 - What is the parameter and statistic/estimate for this study?
 
@@ -90,11 +90,23 @@ We calculate the average income of all SPIA MPA alumni who graduated two years a
 ---
 # Descriptive vs. inferential
 
-Suppose we want to estimate the percentage of Athens residents who have a valid ID for the next election. We set up booths around UGA campus and ask people if they have a valid ID according to Georgia's election laws. We get 80 responses, and 80% said they have a valid ID.
+Suppose we want to know the percentage of Gwinnett County residents who have a valid ID for the next election.
 
 --
 
-- How might these 80 responses not represent a sample of the population?
+What is the population?
+
+--
+
+We survey those entering the UGA Gwinnett Campus if they have a valid ID according to Georgia's election laws. We get 100 responses, and 80% said they have a valid ID.
+
+--
+
+- Is our result a parameter or an estimate?
+
+--
+
+- Why might we not have a sample size of 100?
 
 ---
 class: inverse, middle, center
@@ -144,7 +156,7 @@ A city has a private high school and a public high school. Each year, all studen
 
 --
 
-After hiring better teachers, the public school is able to raise the test scores of each of its students by 5 percent.
+After hiring better teachers, the public school is able to raise the test scores of each of its students by 5%.
 
 --
 
@@ -223,6 +235,8 @@ IQR(ncbirths$weeks)
 ## [1] 2
 ```
 ]
+
+--
 
 .pull-right[
 
@@ -334,19 +348,21 @@ IQR(gapminder$gdpPercap)
 ---
 # Correlation
 
-.pull-left[
 &lt;img src="Description_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
 
 Is the correlation positive or negative?
 
---
+---
+# Correlation
 
-Do you think it is closer to 0 or -1?
+&lt;img src="Description_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 
---
+Do you think the correlation coefficient is closer to 0 or -1?
+
+---
+# Correlation
+
+&lt;img src="Description_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ```r
@@ -356,8 +372,6 @@ cor(state_trump$median_house_inc, state_trump$share_vote_trump)
 ```
 ## [1] -0.5925995
 ```
-
-]
 
 ---
 # Correlation

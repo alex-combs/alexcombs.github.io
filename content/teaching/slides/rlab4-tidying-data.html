@@ -17,31 +17,41 @@ class: center, middle, inverse, title-slide
 ## RLab 4: Tidying Data
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: September 07, 2021
+### Last updated: February 02, 2022
 
 ---
 
 # Objectives
 
-By the end of this lab, you will have learned how to...
-
 - Pivot a wide dataset to long
 - Pivot a long dataset to wide
 - Separate a variable into multiple variables
-- Unite multiple variables to one variable
 
 
 
 ---
+# Set-up
+
+.pull-left[
+
+&gt; **If using RStudio Cloud, do not create a new project space. Instead, use the project that has all packages installed. Installed packages do not carry over to other project spaces.**
+
+]
+
+.pull-right[
+
+&gt; **Otherwise, create a new project named "rlab4". I recommend locating it in the same parent file as your other RLab folders.**
+
+]
+
+---
 # Setup
-
-&gt; **Start a new project named "rlab4".**
   
-&gt; **Start a R Markdown document**
+&gt; **Start a new R Markdown document and click "OK"**
 
-&gt; **Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
+&gt; **Keep setup code chunk at the top. Change code to `echo=FALSE`**
 
-&gt; **Change YAML to:**
+&gt; **Change YAML:**
 
 
 ```r
@@ -54,10 +64,28 @@ output:
 ---
 ```
 
----
-# Packages
+&gt; **Delete rest of the template.**
 
-&gt; **In the top "setup" code chunk, load the `tidyverse` package**
+---
+# Setup: Packages
+
+&gt; **In the setup code chunk, load the following packages:**
+
+
+```r
+library(tidyverse)
+```
+
+---
+# Setup: Data
+
+&gt; **Download the "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv" files from eLC and add to your project folder**
+
+- The "state_finance_2016_wrangled.csv" should be identical to the one you exported during the wrangle practice. You could copy that file over to this folder but is offered on eLC in case you don't trust your version.  
+
+&gt; **In the setup code chunk, import "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv". You do not need to use any import options. Name the saved datasets in your environment the same as the file names.**
+
+
 
 ---
 # Tidy data
@@ -73,48 +101,36 @@ Tidy data satisfy three rules:
 ---
 # Tidy data
 
-- Let's revisit the state finance data
-
 &gt; **Insert a heading "Untidy State Finance Data"**
 
-&gt; **Load the `st_fin_16_wrangled.csv` from the in-class activity. Suppress any output R may print.**
+--
 
-- Correct version is available on eLC for download in case you do not trust your copy.
+- Let's show readers a preview of the data
 
-- You can load these data in your setup code chunk or a new code chunk.
-
-
-
----
-# Tidy Data
-
-- Let's show readers a sample of the data
-
-&gt; **In a new code chunk, provide the first 4 rows of `st_fin_16_wrangled`.**
+&gt; **In a new code chunk, provide the first 4 rows of `state_finance_2016_wrangled`.**
 
 
-|id |state   | year|finance_source    | amount_1000|
-|:--|:-------|----:|:-----------------|-----------:|
-|01 |Alabama | 2016|Total Revenue     |    30133184|
-|01 |Alabama | 2016|Total Expenditure |    30211453|
-|02 |Alaska  | 2016|Total Revenue     |     8071732|
-|02 |Alaska  | 2016|Total Expenditure |    12436184|
+| id|state   | year|finance_source    | amount_1000|
+|--:|:-------|----:|:-----------------|-----------:|
+|  1|Alabama | 2016|Total Revenue     |    30133184|
+|  1|Alabama | 2016|Total Expenditure |    30211453|
+|  2|Alaska  | 2016|Total Revenue     |     8071732|
+|  2|Alaska  | 2016|Total Expenditure |    12436184|
 
----
-class: inverse, center, middle
+--
 
-# Are these data tidy? Why or why not?
+- Are these data tidy? Why or why not?
 
 ---
 # Untidy Data
 
 
-|id |state   | year|finance_source    | amount_1000|
-|:--|:-------|----:|:-----------------|-----------:|
-|01 |Alabama | 2016|Total Revenue     |    30133184|
-|01 |Alabama | 2016|Total Expenditure |    30211453|
-|02 |Alaska  | 2016|Total Revenue     |     8071732|
-|02 |Alaska  | 2016|Total Expenditure |    12436184|
+| id|state   | year|finance_source    | amount_1000|
+|--:|:-------|----:|:-----------------|-----------:|
+|  1|Alabama | 2016|Total Revenue     |    30133184|
+|  1|Alabama | 2016|Total Expenditure |    30211453|
+|  2|Alaska  | 2016|Total Revenue     |     8071732|
+|  2|Alaska  | 2016|Total Expenditure |    12436184|
 
 - What is the unit of analysis?
 
@@ -128,7 +144,7 @@ class: inverse, center, middle
 
 --
 
-- Because `finance_type` should be two variables, not one
+- Because `finance_source` should be two variables, not one
 
 ---
 # Long vs. Wide Data
@@ -137,15 +153,15 @@ class: inverse, center, middle
 
 --
 
-- Is `st_fin_16_wrangled` in long or wide format?
+- Is `state_finance_2016_wrangled` in long or wide format?
 
 
-|id |state   | year|finance_source    | amount_1000|
-|:--|:-------|----:|:-----------------|-----------:|
-|01 |Alabama | 2016|Total Revenue     |    30133184|
-|01 |Alabama | 2016|Total Expenditure |    30211453|
-|02 |Alaska  | 2016|Total Revenue     |     8071732|
-|02 |Alaska  | 2016|Total Expenditure |    12436184|
+| id|state   | year|finance_source    | amount_1000|
+|--:|:-------|----:|:-----------------|-----------:|
+|  1|Alabama | 2016|Total Revenue     |    30133184|
+|  1|Alabama | 2016|Total Expenditure |    30211453|
+|  2|Alaska  | 2016|Total Revenue     |     8071732|
+|  2|Alaska  | 2016|Total Expenditure |    12436184|
 
 ---
 # Long vs. Wide Data
@@ -180,7 +196,7 @@ class: inverse, center, middle
 ---
 # Tidy State Finance Data
 
-- Our goal is to tidy `st_fin_16_wrangled`
+- Our goal is to tidy `state_finance_2016_wrangled`
 
 - It is long when it should be wide
 
@@ -201,28 +217,28 @@ new_data &lt;- current_data %&gt;%
 # Tidy State Finance Data
 
 
-|id |state   | year|finance_source    | amount_1000|
-|:--|:-------|----:|:-----------------|-----------:|
-|01 |Alabama | 2016|Total Revenue     |    30133184|
-|01 |Alabama | 2016|Total Expenditure |    30211453|
+| id|state   | year|finance_source    | amount_1000|
+|--:|:-------|----:|:-----------------|-----------:|
+|  1|Alabama | 2016|Total Revenue     |    30133184|
+|  1|Alabama | 2016|Total Expenditure |    30211453|
 
 &gt; **Insert a heading "Tidy State Finance Data"**
 
-&gt; **Start a code chunk that creates a new dataset `st_fin_16_tidy`**
+&gt; **Start a code chunk. Save a new dataset `state_finance_2016_tidy` that is a copy of `state_finance_2016_wrangled`**
 
 
 ```r
-st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;% 
+state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;% 
 ```
 
 ---
 # Tidy State Finance Data
 
 
-|id |state   | year|finance_source    | amount_1000|
-|:--|:-------|----:|:-----------------|-----------:|
-|01 |Alabama | 2016|Total Revenue     |    30133184|
-|01 |Alabama | 2016|Total Expenditure |    30211453|
+| id|state   | year|finance_source    | amount_1000|
+|--:|:-------|----:|:-----------------|-----------:|
+|  1|Alabama | 2016|Total Revenue     |    30133184|
+|  1|Alabama | 2016|Total Expenditure |    30211453|
 
 
 ```r
@@ -240,7 +256,7 @@ new_data &lt;- current_data %&gt;%
 
 
 ```r
-st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;% 
+state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;% 
   pivot_wider(names_from = finance_source,
               values_from = amount_1000)
 ```
@@ -253,18 +269,17 @@ st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;%
 &gt; **Provide the reader with top 4 rows of the new dataset.**
 
 
-|id |state    | year| Total Revenue| Total Expenditure|
-|:--|:--------|----:|-------------:|-----------------:|
-|01 |Alabama  | 2016|      30133184|          30211453|
-|02 |Alaska   | 2016|       8071732|          12436184|
-|04 |Arizona  | 2016|      38232376|          42085094|
-|05 |Arkansas | 2016|      21439227|          22910901|
-
+| id|state    | year| Total Revenue| Total Expenditure|
+|--:|:--------|----:|-------------:|-----------------:|
+|  1|Alabama  | 2016|      30133184|          30211453|
+|  2|Alaska   | 2016|       8071732|          12436184|
+|  4|Arizona  | 2016|      38232376|          42085094|
+|  5|Arkansas | 2016|      21439227|          22910901|
 
 ---
 # Changing variable names
 
-- The variable names in our `st_fin_16_tidy` are not ideal.
+- The variable names in our `state_finance_2016_tidy` are not ideal.
 
 &gt; **Change "Total Revenue" to `revenue` and "Total Expenditure" to `expenditure`.**
 
@@ -273,7 +288,7 @@ st_fin_16_tidy &lt;- st_fin_16_wrangled %&gt;%
 ---
 # Summarize by Group
 
-- Recall in the wrangling activity you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
+- Recall in the wrangle practice you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
 
 &gt; **Now create a new variable that computes the surplus (revenue - expenditure) for each state. Provide a table that lists surplus in descending order for three states with highest surplus.**
 
@@ -327,25 +342,7 @@ uspop_tidy &lt;- uspop %&gt;%
 ---
 # Untidy Enrollment Data
 
-&gt; **Download the `ky_private_school_enrollment.csv` file from eLC and add to your project folder.**
-
-&gt; **Open this file using whatever spreadsheet software is on your computer, or watch me view it on Excel.**
-
----
-# Untidy Enrollment Data
-
-&gt; **Insert a heading "Untidy Enrollment Data"**
-
-&gt; **Import `ky_private_school_enrollment.csv`, suppressing code and output**
-
-&gt; **Name the new dataset `ky_priv_enroll_wide`**
-
-
-
----
-# Untidy Enrollment Data
-
-&gt; **Provide the reader the first 3 rows of these data, suppressing the code**
+&gt; **Provide the reader the first 3 rows of the `ky_private_school_enrollment`**
 
 
 |ncesid  |school_name                |state    | county_fips|city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
@@ -370,14 +367,21 @@ uspop_tidy &lt;- uspop %&gt;%
                values_to = 'population')
 ```
 
-&gt; **Create a new dataset called `ky_priv_enroll` that is in long format**
+&gt; **Create a new dataset called `ky_private_enroll_long` that pivots `ky_private_school_enrollment` to long format**
 
 
 
 ---
-class: inverse, center, middle
+# Enrollment Data
 
-# Are these data tidy? Why or why not?
+
+|ncesid  |school_name                |state    | county_fips|city_county          |year | enrollment|
+|:-------|:--------------------------|:--------|-----------:|:--------------------|:----|----------:|
+|1613912 |LANDMARK CHRISTIAN ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |2000 |        153|
+|1613912 |LANDMARK CHRISTIAN ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |2002 |        146|
+|1613912 |LANDMARK CHRISTIAN ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |2004 |        170|
+
+- Are these data tidy? Why or why not?
 
 ---
 # Separating variables
@@ -389,13 +393,13 @@ class: inverse, center, middle
 
 - We should `separate` city_county into city and county
 
-&gt; **Overwrite the `ky_priv_enroll` with `city_county` separated.**
+&gt; **Create a new dataset `ky_priv_enroll_tidy` that separates `city_county` in `ky_private_enroll_long.`**
 
 --
 
 
 ```r
-ky_priv_enroll &lt;- ky_priv_enroll %&gt;% 
+ky_priv_enroll_tidy &lt;- ky_private_enroll_long %&gt;% 
   separate(city_county, c('city', 'county'))
 ```
 
@@ -404,11 +408,6 @@ ky_priv_enroll &lt;- ky_priv_enroll %&gt;%
 &gt; **Finally, provide the reader the first 6 rows of these tidy data**
 
 &gt; **Knit to HTML and check that the output looks correct**
-
----
-# Uniting variables
-
-![](labs_files/unite.png)
 
 ---
 # Upload Lab

@@ -1,0 +1,101 @@
+id,state,year,finance_source,amount_1000
+1,Alabama,2016,Total Revenue,30133184
+1,Alabama,2016,Total Expenditure,30211453
+2,Alaska,2016,Total Revenue,8071732
+2,Alaska,2016,Total Expenditure,12436184
+4,Arizona,2016,Total Revenue,38232376
+4,Arizona,2016,Total Expenditure,42085094
+5,Arkansas,2016,Total Revenue,21439227
+5,Arkansas,2016,Total Expenditure,22910901
+6,California,2016,Total Revenue,322332341
+6,California,2016,Total Expenditure,326837836
+8,Colorado,2016,Total Revenue,31399864
+8,Colorado,2016,Total Expenditure,34596327
+9,Connecticut,2016,Total Revenue,28139072
+9,Connecticut,2016,Total Expenditure,32202351
+10,Delaware,2016,Total Revenue,8083659
+10,Delaware,2016,Total Expenditure,9378887
+12,Florida,2016,Total Revenue,85575636
+12,Florida,2016,Total Expenditure,88220438
+13,Georgia,2016,Total Revenue,45859116
+13,Georgia,2016,Total Expenditure,47866340
+15,Hawaii,2016,Total Revenue,13417567
+15,Hawaii,2016,Total Expenditure,12190221
+16,Idaho,2016,Total Revenue,9401987
+16,Idaho,2016,Total Expenditure,9330807
+17,Illinois,2016,Total Revenue,75492133
+17,Illinois,2016,Total Expenditure,78333676
+18,Indiana,2016,Total Revenue,38687720
+18,Indiana,2016,Total Expenditure,39557565
+19,Iowa,2016,Total Revenue,23715865
+19,Iowa,2016,Total Expenditure,23731772
+20,Kansas,2016,Total Revenue,17609012
+20,Kansas,2016,Total Expenditure,18748715
+21,Kentucky,2016,Total Revenue,29917598
+21,Kentucky,2016,Total Expenditure,35341546
+22,Louisiana,2016,Total Revenue,26842105
+22,Louisiana,2016,Total Expenditure,31444186
+23,Maine,2016,Total Revenue,8987038
+23,Maine,2016,Total Expenditure,9357176
+24,Maryland,2016,Total Revenue,42037052
+24,Maryland,2016,Total Expenditure,44089713
+25,Massachusetts,2016,Total Revenue,60311575
+25,Massachusetts,2016,Total Expenditure,63562063
+26,Michigan,2016,Total Revenue,71188554
+26,Michigan,2016,Total Expenditure,70811041
+27,Minnesota,2016,Total Revenue,44247753
+27,Minnesota,2016,Total Expenditure,46694801
+28,Mississippi,2016,Total Revenue,20880788
+28,Mississippi,2016,Total Expenditure,22247200
+29,Missouri,2016,Total Revenue,33039255
+29,Missouri,2016,Total Expenditure,32778347
+30,Montana,2016,Total Revenue,6862804
+30,Montana,2016,Total Expenditure,7115326
+31,Nebraska,2016,Total Revenue,10881575
+31,Nebraska,2016,Total Expenditure,11026935
+32,Nevada,2016,Total Revenue,16808682
+32,Nevada,2016,Total Expenditure,15315276
+33,New Hampshire,2016,Total Revenue,8343685
+33,New Hampshire,2016,Total Expenditure,7687843
+34,New Jersey,2016,Total Revenue,65689159
+34,New Jersey,2016,Total Expenditure,72617584
+35,New Mexico,2016,Total Revenue,18602071
+35,New Mexico,2016,Total Expenditure,20158082
+36,New York,2016,Total Revenue,185619993
+36,New York,2016,Total Expenditure,195571229
+37,North Carolina,2016,Total Revenue,55216582
+37,North Carolina,2016,Total Expenditure,53857036
+38,North Dakota,2016,Total Revenue,7324343
+38,North Dakota,2016,Total Expenditure,8206370
+39,Ohio,2016,Total Revenue,78331623
+39,Ohio,2016,Total Expenditure,87016871
+40,Oklahoma,2016,Total Revenue,22862875
+40,Oklahoma,2016,Total Expenditure,24950729
+41,Oregon,2016,Total Revenue,32763887
+41,Oregon,2016,Total Expenditure,34305533
+42,Pennsylvania,2016,Total Revenue,90792145
+42,Pennsylvania,2016,Total Expenditure,96439652
+44,Rhode Island,2016,Total Revenue,8201456
+44,Rhode Island,2016,Total Expenditure,8625101
+45,South Carolina,2016,Total Revenue,28937828
+45,South Carolina,2016,Total Expenditure,31630447
+46,South Dakota,2016,Total Revenue,4537220
+46,South Dakota,2016,Total Expenditure,5059935
+47,Tennessee,2016,Total Revenue,31427933
+47,Tennessee,2016,Total Expenditure,32459124
+48,Texas,2016,Total Revenue,144218813
+48,Texas,2016,Total Expenditure,148449673
+49,Utah,2016,Total Revenue,18164518
+49,Utah,2016,Total Expenditure,19630299
+50,Vermont,2016,Total Revenue,6488122
+50,Vermont,2016,Total Expenditure,6763939
+51,Virginia,2016,Total Revenue,51655912
+51,Virginia,2016,Total Expenditure,53747025
+53,Washington,2016,Total Revenue,50774856
+53,Washington,2016,Total Expenditure,53463325
+54,West Virginia,2016,Total Revenue,13906210
+54,West Virginia,2016,Total Expenditure,14523738
+55,Wisconsin,2016,Total Revenue,36853220
+55,Wisconsin,2016,Total Expenditure,38538444
+56,Wyoming,2016,Total Revenue,5914028
+56,Wyoming,2016,Total Expenditure,6351534
