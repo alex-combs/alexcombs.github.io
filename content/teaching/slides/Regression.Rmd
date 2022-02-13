@@ -46,7 +46,8 @@ select(States, -region) %>%
 ggplot(States, aes(x = dollars, y = SATM)) +
   geom_point() +
   labs(x = 'Public ed spending in $1000s per student',
-       y = 'Average SAT Math score')
+       y = 'Average SAT Math score') +
+  theme(text=element_text(size=18))
 ```
 
 ---
@@ -56,7 +57,8 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 ggplot(States, aes(x = dollars, y = SATM)) +
   geom_point() +
   labs(x = 'Public ed spending in $1000s per student',
-       y = 'Average SAT Math score')
+       y = 'Average SAT Math score') +
+  theme(text=element_text(size=18))
 ```
 
 - States that spend more on public education tend to have lower average SAT Math scores among its graduating high school students
@@ -74,7 +76,7 @@ ggplot(States, aes(x = dollars, y = SATM)) +
   labs(x = 'Public ed spending in $1000s per student',
        y = 'Average SAT Math score') +
   theme_minimal() +
-  theme(text = element_text(size=16))
+  theme(text = element_text(size=18))
 ```
 ]
 
@@ -324,7 +326,7 @@ $$\hat{SATM} = 560 - 12.17 \times Dollars$$
 
 --
 
-- If these values for `dollars` are actually observed in the data, we can also check what `SATM` actually equaled. Our regression model will either overestimate or underestimate that actual value of `SATM`.
+- If there are `SATM` scores we can observe for states with these specific values for `dollars`, then we can check by how much our regression model overestimates or underestimates `SATM`.
 
 ---
 # Examining residuals
@@ -360,7 +362,8 @@ class: inverse, center, middle
 
 .pull-left[
 ```{r, echo=FALSE, message=FALSE}
-viz.resid
+viz.resid +
+  theme(text = element_text(size=18))
 ```
 ]
 
@@ -453,7 +456,8 @@ ggplot(States, aes(x = dollars, y = SATM)) +
   geom_point() +
   geom_smooth(method = 'lm', se = FALSE) +
   labs(x = 'Public ed spending in $1000s per student',
-       y = 'Average SAT Math score')
+       y = 'Average SAT Math score') +
+  theme(text = element_text(size=18))
 ```
 ]
 
@@ -463,7 +467,8 @@ ggplot(States, aes(x = percent, y = SATM)) +
   geom_point() +
   geom_smooth(method = 'lm', se = FALSE) +
   labs(x = 'Percent high school graduates taking SAT',
-       y = 'Average SAT Math score')
+       y = 'Average SAT Math score') +
+  theme(text = element_text(size=18))
 ```
 ]
 
@@ -559,7 +564,7 @@ class: inverse, center, middle
 ---
 # Making sense of our results
 
-- So far, states spending more on public education apparently tend to have lower SAT math scores; may stike some as counter-intuitive
+- So far, states spending more on public education apparently tend to have lower SAT math scores; may strike some as counter-intuitive
 
 --
 
@@ -577,7 +582,8 @@ ggplot(States, aes(x = dollars, y = percent)) +
   geom_point() +
   geom_smooth(method = 'lm', se = FALSE) +
   labs(x = 'Public ed spending in $1000s per student',
-       y = 'Percent of graduates taking SAT')
+       y = 'Percent of graduates taking SAT') +
+  theme(text = element_text(size=18))
 ```
 
 ---
@@ -637,11 +643,11 @@ class: inverse, middle, center
 ---
 # Policy Decision
 
-- For now, let's ignore inference and assume these results are causal.
+- For now, let's ignore inference and assume these results are meaningful.
 
 --
 
-- Spending increases average SAT math scores among states, *controlling for percent of high school grads taking SAT*
+- Spending increases average SAT math scores among states, **controlling for percent of high school grads taking SAT**
   
 - But spending seems to increase the percent of SAT participation, which then decreases average SAT math scores
 

@@ -27,11 +27,9 @@ library(knitr)
 ---
 # Setup
 
-> **Start a new project named "rlab5".**
+> **Start a new project following whatever process works best for you.**
   
-> **Start a R Markdown document**
-
-> **Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
+> **Start a R Markdown document. Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
 
 > **Change YAML to:**
 
@@ -53,7 +51,7 @@ output:
 ```{r, message=FALSE, warning=FALSE}
 library(data.table)
 library(tidyverse)
-library(lubridate)
+library(lubridate) # you do not need to install this if tidyverse is already installed
 ```
 
 ---
@@ -125,10 +123,10 @@ summary(covid_ga)
 > **Add and run following code.**
 
 ```{r}
-yesterday <- '2021-09-10'
+yesterday <- '2022-02-13'
 ```
 
-- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data, and we only need to update this code to update any graph we make.
+- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data, and we only need to update `yesterday` to update any graph we make.
 
 ---
 # Viz 1
@@ -198,7 +196,7 @@ covid_ga_5 <- covid_ga %>%
   filter(county %in% c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke'))
 ```
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 covid_ga <- covid_ga %>% 
   mutate(county5 = fct_other(county, 
                              keep = c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')))

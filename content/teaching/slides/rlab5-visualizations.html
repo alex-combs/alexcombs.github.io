@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## RLab 5: Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: September 14, 2021
+### Last updated: February 09, 2022
 
 ---
 
@@ -33,11 +33,9 @@ class: center, middle, inverse, title-slide
 ---
 # Setup
 
-&gt; **Start a new project named "rlab5".**
+&gt; **Start a new project following whatever process works best for you.**
   
-&gt; **Start a R Markdown document**
-
-&gt; **Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
+&gt; **Start a R Markdown document. Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
 
 &gt; **Change YAML to:**
 
@@ -61,7 +59,7 @@ output:
 ```r
 library(data.table)
 library(tidyverse)
-library(lubridate)
+library(lubridate) # you do not need to install this if tidyverse is already installed
 ```
 
 ---
@@ -83,14 +81,14 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 1,715,892
+## Rows: 2,196,965
 ## Columns: 6
-## $ date   &lt;chr&gt; "2020-01-21", "2020-01-22", "2020-01-23", "2020-01-24", "2020-…
-## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "O…
-## $ state  &lt;chr&gt; "Washington", "Washington", "Washington", "Illinois", "Washing…
-## $ fips   &lt;int&gt; 53061, 53061, 53061, 17031, 53061, 6059, 17031, 53061, 4013, 6…
-## $ cases  &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,…
-## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ date   &lt;date&gt; 2020-01-21, 2020-01-22, 2020-01-23, 2020-01-24, 2020-01-24, 20…
+## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "Or…
+## $ state  &lt;chr&gt; "Washington", "Washington", "Washington", "Illinois", "Washingt…
+## $ fips   &lt;int&gt; 53061, 53061, 53061, 17031, 53061, 6059, 17031, 53061, 4013, 60…
+## $ cases  &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, …
+## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
 ```
 
 - Let's focus on Georgia
@@ -104,14 +102,14 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 86,169
+## Rows: 109,849
 ## Columns: 6
-## $ date   &lt;chr&gt; "2020-03-02", "2020-03-03", "2020-03-04", "2020-03-05", "2020-…
-## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
-## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgi…
-## $ fips   &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13135,…
-## $ cases  &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1, 5,…
-## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 20…
+## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cobb…
+## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgia…
+## $ fips   &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13135, …
+## $ cases  &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1, 5, …
+## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
 ```
 
 - We need to tell R to recognize `date` as dates instead of text
@@ -128,14 +126,14 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```
-## Rows: 86,169
+## Rows: 109,849
 ## Columns: 6
-## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 2…
-## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cob…
-## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgi…
-## $ fips   &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13135,…
-## $ cases  &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1, 5,…
-## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
+## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 20…
+## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cobb…
+## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgia…
+## $ fips   &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13135, …
+## $ cases  &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1, 5, …
+## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
 ```
 
 - Now date is stored as a date instead of character
@@ -155,10 +153,10 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```r
-yesterday &lt;- '2021-09-10'
+yesterday &lt;- '2022-02-08'
 ```
 
-- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data, and we only need to update this code to update any graph we make.
+- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data, and we only need to update `yesterday` to update any graph we make.
 
 ---
 # Viz 1
@@ -215,11 +213,6 @@ covid_ga_5 &lt;- covid_ga %&gt;%
 ```
 
 
-```r
-covid_ga &lt;- covid_ga %&gt;% 
-  mutate(county5 = fct_other(county, 
-                             keep = c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke')))
-```
 
 ---
 # Viz 4

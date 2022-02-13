@@ -17,7 +17,7 @@ class: center, middle, inverse, title-slide
 ## Simple &amp; Multiple Regression
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: September 23, 2021
+### Last updated: February 09, 2022
 
 ---
 
@@ -60,7 +60,8 @@ select(States, -region) %&gt;%
 ggplot(States, aes(x = dollars, y = SATM)) +
   geom_point() +
   labs(x = 'Public ed spending in $1000s per student',
-       y = 'Average SAT Math score')
+       y = 'Average SAT Math score') +
+  theme(text=element_text(size=18))
 ```
 
 &lt;img src="Regression_files/figure-html/unnamed-chunk-3-1.png" style="display: block; margin: auto;" /&gt;
@@ -304,13 +305,13 @@ glimpse(States)
 ```
 ## Rows: 51
 ## Columns: 7
-## $ region  &lt;fct&gt; ESC, PAC, MTN, WSC, PAC, MTN, NE, SA, SA, SA, SA, PAC, MTN, E…
-## $ pop     &lt;int&gt; 4041, 550, 3665, 2351, 29760, 3294, 3287, 666, 607, 12938, 64…
-## $ SATV    &lt;int&gt; 470, 438, 445, 470, 419, 456, 430, 433, 409, 418, 401, 404, 4…
-## $ SATM    &lt;int&gt; 514, 476, 497, 511, 484, 513, 471, 470, 441, 466, 443, 481, 5…
-## $ percent &lt;int&gt; 8, 42, 25, 6, 45, 28, 74, 58, 68, 44, 57, 52, 17, 16, 54, 5, …
-## $ dollars &lt;dbl&gt; 3.648, 7.887, 4.231, 3.334, 4.826, 4.809, 7.914, 6.016, 8.210…
-## $ pay     &lt;int&gt; 27, 43, 30, 23, 39, 31, 43, 35, 39, 30, 29, 32, 25, 34, 32, 2…
+## $ region  &lt;fct&gt; ESC, PAC, MTN, WSC, PAC, MTN, NE, SA, SA, SA, SA, PAC, MTN, EN…
+## $ pop     &lt;int&gt; 4041, 550, 3665, 2351, 29760, 3294, 3287, 666, 607, 12938, 647…
+## $ SATV    &lt;int&gt; 470, 438, 445, 470, 419, 456, 430, 433, 409, 418, 401, 404, 46…
+## $ SATM    &lt;int&gt; 514, 476, 497, 511, 484, 513, 471, 470, 441, 466, 443, 481, 50…
+## $ percent &lt;int&gt; 8, 42, 25, 6, 45, 28, 74, 58, 68, 44, 57, 52, 17, 16, 54, 5, 1…
+## $ dollars &lt;dbl&gt; 3.648, 7.887, 4.231, 3.334, 4.826, 4.809, 7.914, 6.016, 8.210,…
+## $ pay     &lt;int&gt; 27, 43, 30, 23, 39, 31, 43, 35, 39, 30, 29, 32, 25, 34, 32, 28…
 ```
 
 ---
@@ -404,7 +405,7 @@ class: inverse, center, middle
 
 --
 
-- If these values for `dollars` are actually observed in the data, we can also check what `SATM` actually equaled. Our regression model will either overestimate or underestimate that actual value of `SATM`.
+- If there are `SATM` scores we can observe for states with these specific values for `dollars`, then we can check by how much our regression model overestimates or underestimates `SATM`.
 
 ---
 # Examining residuals
@@ -828,7 +829,7 @@ class: inverse, center, middle
 ---
 # Making sense of our results
 
-- So far, states spending more on public education apparently tend to have lower SAT math scores; may stike some as counter-intuitive
+- So far, states spending more on public education apparently tend to have lower SAT math scores; may strike some as counter-intuitive
 
 --
 
@@ -1016,11 +1017,11 @@ class: inverse, middle, center
 ---
 # Policy Decision
 
-- For now, let's ignore inference and assume these results are causal.
+- For now, let's ignore inference and assume these results are meaningful.
 
 --
 
-- Spending increases average SAT math scores among states, *controlling for percent of high school grads taking SAT*
+- Spending increases average SAT math scores among states, **controlling for percent of high school grads taking SAT**
   
 - But spending seems to increase the percent of SAT participation, which then decreases average SAT math scores
 
