@@ -4,9 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab5-visualizations_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="rlab5-visualizations_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="rlab5-visualizations_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="rlab5-visualizations_files/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -17,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## RLab 5: Visualizations
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: February 09, 2022
+### Last updated: February 14, 2022
 
 ---
 
@@ -81,7 +79,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 2,196,965
+## Rows: 2,213,233
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-01-21, 2020-01-22, 2020-01-23, 2020-01-24, 2020-01-24, 20…
 ## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "Or…
@@ -102,7 +100,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 109,849
+## Rows: 110,649
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 20…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cobb…
@@ -126,7 +124,7 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```
-## Rows: 109,849
+## Rows: 110,649
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 20…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cobb…
@@ -153,7 +151,7 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```r
-yesterday &lt;- '2022-02-08'
+yesterday &lt;- '2022-02-13'
 ```
 
 - Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data, and we only need to update `yesterday` to update any graph we make.
