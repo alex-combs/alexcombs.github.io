@@ -4,9 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab6-combining-data_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="rlab6-combining-data_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="rlab6-combining-data_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="rlab6-combining-data_files/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -14,16 +12,16 @@
 class: center, middle, inverse, title-slide
 
 # PADP 7120 Data Applications in PA
-## RLab 7: Combining Data
+## RLab 6: Combining Data
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: October 20, 2021
+### Last updated: March 14, 2022
 
 ---
 
 # Objectives
 
-- Learn to perform most common combining data tasks
+- Learn to perform two most common tasks for combining data
 
   - Append
   - Left join
@@ -32,16 +30,16 @@ class: center, middle, inverse, title-slide
 
 # Setup
 
-&gt; **Start a new project, "rlab7".**
-  
-&gt; **Copy or move your RLab5 Rmd to your RLab7 project folder. Change file name to "rlab7_lastname".**
+- For this lab, we will add to the work we did for RLab5 on data visualizations.
 
-&gt; **Change YAML to:**
+&gt; Instead of starting a new project, open your RLab5 project by clicking on the file with extension .Rproj or just open your Rmd file.
+
+&gt; **Consider changing YAML to:**
 
 
 ```r
 ---
-*title: "RLab7: Combining Data"
+*title: "RLab 5 &amp; 6: Visualizations &amp; Combining Data"
 author: "Your Name"
 output:
   html_document:
@@ -92,26 +90,18 @@ ga_county_pop &lt;-
 ![:scale 50%](labs_files/append.png)
 
 ---
-# Excel Append
+# Excel Comparison
 
-- Let's try the combinations today using Excel to compare and better visualize what we are trying to do in R
-  
-&gt; **Download and open the "gapminder_joins.xlsx" file on eLC.**
-
---
-
-- First three tabs contain gapminder data for three different years.
-
-&gt; **Append the three years into the fourth tab `4.gap97_07`.
+- To help us visualize the goal of appending in R, I will demonstrate appending in Excel
 
 ---
 # Append
 
 - Appending is simple to do in something like Excel but can become tedious if you need to append many datasets
 
-- And like always, Excel doesn't allow the process to be replicated
+- And like always, Excel doesn't allow the process to be easily replicated
 
-- R can append datasets with much less effort
+- R can append data with much less effort
 
 ---
 # Append Example
@@ -193,10 +183,12 @@ glimpse(gapminder97_07)
 ## $ gdpPercap &lt;dbl&gt; 635.3414, 3193.0546, 4797.2951, 2277.1409, 10967.2820, 26997…
 ```
 
-- Note that there are now 426 rows in the new dataset (3 x 142)
+- There are now 426 rows in the new dataset (3 x 142)
 
 ---
 # Append Practice
+
+&gt; **Immediately below your setup code chunk, insert a heading like Append**
 
 - You have three `st_fin` datasets with the same layout
 
@@ -207,7 +199,7 @@ glimpse(gapminder97_07)
 ---
 # Append Practice
 
-&gt; **Use `glimpse` to confirm it worked**
+&gt; **Start a new code chunk and use `glimpse` to confirm it worked**
 
 
 ```r
@@ -230,7 +222,9 @@ class: inverse, middle, center
 
 - We need to add code chunks that add these data *before* we start making graphs
 
-&gt; **Find the point in your Rmd where you finished preparing `covid_ga` and before making the first visualization. Add a new code chunk here.**
+&gt; **Find the point in your Rmd where you finished preparing `covid_ga`. Run this code so `covid_ga` is in your environment** 
+
+&gt; **Add a new code chunk here or add to the existing code chunk.**
 
 ---
 # Left Joins
@@ -246,18 +240,14 @@ class: inverse, middle, center
 ---
 # Excel Comparison
 
-- The fifth tab in our Excel file, `gap_pop_US`, supposes we could only find population data for the US from 1952-2007 in intervals of 5 years.
-
-- Suppose `gap97_07` is our primary dataset
-
-&gt; **Use the `gap_USpop_leftjoin` sheet to left join the `gap_pop_US` data to the the `gap97_07` data**
+- To help us visualize the goal of left joins in R, I will demonstrate it in Excel 
 
 ---
 # Excel Comparison
 
 - This left join was manageable because it did not involve much data in the secondary dataset
 
-- Quickly becomes untenable if there were more data we needed to match to the primary dataset
+- Becomes labor intensive and prone to error if there were more data we needed to match to the primary dataset
 
 ---
 # The Key to Joins/Merges
@@ -408,6 +398,9 @@ glimpse(gap_pop_97_07)
 
 
 
+---
+# Left Join Practice
+
 
 ```r
 glimpse(ga_county_pop)
@@ -418,6 +411,21 @@ glimpse(ga_county_pop)
 ## Columns: 2
 ## $ county     &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks"…
 ## $ population &lt;dbl&gt; 18386, 8165, 11164, 3038, 44890, 19234, 83240, 107738, 1670…
+```
+
+```r
+glimpse(covid_ga)
+```
+
+```
+## Rows: 115,129
+## Columns: 6
+## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 20…
+## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cobb…
+## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgia…
+## $ fips   &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13135, …
+## $ cases  &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1, 5, …
+## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
 ```
 
 - What is the variable name(s) of the key between `covid_ga` and `ga_county_pop`?
@@ -431,7 +439,7 @@ glimpse(ga_county_pop)
 
 - Before using a key to join data, make sure they are stored as the same type of variable in both datasets
 
-- How is `county` stored in `covid_ga` and `ga_county_pop`?
+- How is `county` stored in `covid_ga` and `ga_county_pop`? The `glimpse` printout tells us.
 
 &gt; **If different, convert the type of one to match the type in the other dataset.**
 
@@ -452,7 +460,7 @@ glimpse(covid_ga)
 ```
 
 ```
-## Rows: 91,929
+## Rows: 115,129
 ## Columns: 7
 ## $ date       &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06…
 ## $ county     &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "…
@@ -482,15 +490,6 @@ glimpse(covid_ga)
 ![:scale 65%](labs_files/inner_join.png)
 
 - Replace `left_join` with `inner_join` in any of the previous examples
-
----
-# Excel Comparison
-
-- The sheet `gap_le_americas` supposes we could find life expectancy data for only North and South American countries between 1952-2007.
-
-&gt; **Using the `gap_97_07_innerjoin` sheet, try to carry out an inner join between `gap_le_americas` data and the data in the `gap_USpop_leftjoin` sheet.**
-
-- Remember, the result should contain only the observations for which there is a match between both datasets.
 
 ---
 # Other types of joins

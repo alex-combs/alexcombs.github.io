@@ -4,9 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Regression-with-Categories_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="Regression-with-Categories_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="Regression-with-Categories_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="Regression-with-Categories_files/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -17,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## Regression with Categorical Variables
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: September 24, 2021
+### Last updated: March 14, 2022
 
 ---
 
@@ -55,12 +53,12 @@ glimpse(Salaries)
 ```
 ## Rows: 397
 ## Columns: 6
-## $ rank          &lt;fct&gt; Prof, Prof, AsstProf, Prof, Prof, AssocProf, Prof, Prof…
-## $ discipline    &lt;fct&gt; B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, A, A…
-## $ yrs.since.phd &lt;int&gt; 19, 20, 4, 45, 40, 6, 30, 45, 21, 18, 12, 7, 1, 2, 20, …
-## $ yrs.service   &lt;int&gt; 18, 16, 3, 39, 41, 6, 23, 45, 20, 18, 8, 2, 1, 0, 18, 3…
-## $ sex           &lt;fct&gt; Male, Male, Male, Male, Male, Male, Male, Male, Male, F…
-## $ salary        &lt;int&gt; 139750, 173200, 79750, 115000, 141500, 97000, 175000, 1…
+## $ rank          &lt;fct&gt; Prof, Prof, AsstProf, Prof, Prof, AssocProf, Prof, Prof,…
+## $ discipline    &lt;fct&gt; B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, B, A, A,…
+## $ yrs.since.phd &lt;int&gt; 19, 20, 4, 45, 40, 6, 30, 45, 21, 18, 12, 7, 1, 2, 20, 1…
+## $ yrs.service   &lt;int&gt; 18, 16, 3, 39, 41, 6, 23, 45, 20, 18, 8, 2, 1, 0, 18, 3,…
+## $ sex           &lt;fct&gt; Male, Male, Male, Male, Male, Male, Male, Male, Male, Fe…
+## $ salary        &lt;int&gt; 139750, 173200, 79750, 115000, 141500, 97000, 175000, 14…
 ```
 
 - discipline coded as "A" for theoretical and "B" for applied
@@ -185,7 +183,7 @@ get_regression_table(sal_mod)
    &lt;td style="text-align:right;"&gt; 966.617 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; sexMale &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sex: Male &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 9071.800 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 4861.644 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 1.866 &lt;/td&gt;
@@ -350,7 +348,7 @@ get_regression_table(sal_mod2)
    &lt;td style="text-align:right;"&gt; 2665.58 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; sexMale &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; sex: Male &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 20128.63 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 7991.14 &lt;/td&gt;
    &lt;td style="text-align:right;"&gt; 2.52 &lt;/td&gt;
