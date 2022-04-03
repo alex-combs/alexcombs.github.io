@@ -4,9 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Regression-with-nonlinears_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="Regression-with-nonlinears_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="Regression-with-nonlinears_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="Regression-with-nonlinears_files/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -17,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## Regression with Nonlinear Variables
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: October 21, 2021
+### Last updated: April 02, 2022
 
 ---
 
@@ -312,14 +310,14 @@ get_regression_table(log_log) %&gt;%
 
 .pull-left[
 
-|term              | estimate|
-|:-----------------|--------:|
-|intercept         |    3.062|
-|log(gdpPercap)    |    0.112|
-|continentAmericas |    0.133|
-|continentAsia     |    0.110|
-|continentEurope   |    0.166|
-|continentOceania  |    0.152|
+|term                | estimate|
+|:-------------------|--------:|
+|intercept           |    3.062|
+|log(gdpPercap)      |    0.112|
+|continent: Americas |    0.133|
+|continent: Asia     |    0.110|
+|continent: Europe   |    0.166|
+|continent: Oceania  |    0.152|
 ]
 
 .pull-right[
@@ -367,14 +365,14 @@ get_regression_table(lev_log) %&gt;%
 
 .pull-left[
 
-|term              | estimate|
-|:-----------------|--------:|
-|intercept         |    2.317|
-|log(gdpPercap)    |    6.422|
-|continentAmericas |    7.015|
-|continentAsia     |    5.912|
-|continentEurope   |    9.577|
-|continentOceania  |    9.213|
+|term                | estimate|
+|:-------------------|--------:|
+|intercept           |    2.317|
+|log(gdpPercap)      |    6.422|
+|continent: Americas |    7.015|
+|continent: Asia     |    5.912|
+|continent: Europe   |    9.577|
+|continent: Oceania  |    9.213|
 ]
 
 .pull-right[
@@ -420,14 +418,14 @@ get_regression_table(log_lev) %&gt;%
 
 .pull-left[
 
-|term              | estimate|
-|:-----------------|--------:|
-|intercept         |    3.856|
-|gdpPercap         |    0.000|
-|continentAmericas |    0.250|
-|continentAsia     |    0.160|
-|continentEurope   |    0.311|
-|continentOceania  |    0.316|
+|term                | estimate|
+|:-------------------|--------:|
+|intercept           |    3.856|
+|gdpPercap           |    0.000|
+|continent: Americas |    0.250|
+|continent: Asia     |    0.160|
+|continent: Europe   |    0.311|
+|continent: Oceania  |    0.316|
 ]
 
 .pull-right[
@@ -444,94 +442,7 @@ class: inverse, center, middle
 ---
 class: inverse, center, middle
 
-# Time for more practice
-
----
-# Predicting Value of Y
-
-- Everything so far has focused on predicting *change* in `\(y\)`
-
-- If you use `\(ln(y)\)` in your regression, predicted *value* of `\(y\)` will be in units of `\(ln(y)\)`
-
-- How do we return natural log units to original units? Exponentiate.
-
-`$$e^{ln(y)}=y$$`
-
---
-
-
-```r
-log(50)
-```
-
-```
-## [1] 3.912023
-```
-
-
-```r
-exp(3.912023)
-```
-
-```
-## [1] 50
-```
-
----
-# Predicting value of Y
-
-`$$ln(LifeExp)=\beta_0+\beta_1GDPperCap+\beta_2Continent+\epsilon$$`
-.pull-left[
-
-|term              | estimate|
-|:-----------------|--------:|
-|intercept         |    3.856|
-|gdpPercap         |    0.000|
-|continentAmericas |    0.250|
-|continentAsia     |    0.160|
-|continentEurope   |    0.311|
-|continentOceania  |    0.316|
-]
-
-.pull-right[
-- Suppose we want to know the predicted life expectancy of an American country with a GDP per capita of $30,000.
-]
-
----
-# Predicting value of Y
-
-- **Step 1:** Usual calculation
-
-- `\(3.856+30000*0.000007+0.25 = 4.316\)`
-
---
-
-- **Step 2:** Add a correction term `\(\frac{SE^2}{2}\)`
-
-&lt;img src="lectures_files/log-lev-rmse.png" width="1035" /&gt;
-
-- `\(4.316 + \frac{0.158^2}{2} = 4.328\)`
-
---
-
-- **Step 3:** Exponentiate
-
-- `\(e^{4.328}=76\)`
-
----
-# Predicting value of Y
-
-
-```r
-gapminder %&gt;% 
-  filter(continent == 'Americas') %&gt;% 
-  ggplot(aes(x = gdpPercap, y = lifeExp)) +
-    geom_point() +
-*   geom_smooth()
-```
-
-![](Regression-with-nonlinears_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
-
+# Let's practice interpreting regression models using logs
 
 ---
 # Choosing the best model
