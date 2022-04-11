@@ -4,9 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Sampling_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="Sampling_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="Sampling_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="Sampling_files/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -17,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## Sampling
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: October 22, 2021
+### Last updated: April 11, 2022
 
 ---
 
@@ -48,11 +46,11 @@ class: center, middle, inverse, title-slide
 
 
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs        |     1993|       262|         8|       0|     1465|     2521|
-|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs         |     1993|       262|         8|       0|     1465|     2521|
+|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 --
 
@@ -342,11 +340,11 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 `$$MedHHInc = \beta_0 + \beta_1HSDegree + \beta_2 Urbanization + \epsilon$$` 
 
 
-|term      |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:---------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|term       |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
+|:----------|----------:|---------:|---------:|-------:|-----------:|----------:|
+|intercept  | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
+|hs         |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
+|urban: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
 - Now we can apply the concepts to our regression table
 - We took one sample of state data
@@ -357,11 +355,11 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 # Back to regression table
 
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs        |     1993|       262|         8|       0|     1465|     2521|
-|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs         |     1993|       262|         8|       0|     1465|     2521|
+|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 - Therefore, we calculate the standard error (similar to before but math is different)
 - Then calculate the lower and upper bounds of the 95% CI
@@ -370,11 +368,11 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 # Back to the regression table
 
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs        |     1993|       262|         8|       0|     1465|     2521|
-|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs         |     1993|       262|         8|       0|     1465|     2521|
+|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 - Report on the point estimate for `hs` would be something like "On average, as the percent of a state's population with at least a high school degree increases 1 percentage point, median household income tends to increase almost 2,000 dollars."
 
@@ -384,11 +382,11 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 # Back to the regression table
 
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs        |     1993|       262|         8|       0|     1465|     2521|
-|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs         |     1993|       262|         8|       0|     1465|     2521|
+|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 
 ```r
@@ -412,11 +410,11 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 # Back to the regression table
 
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs        |     1993|       262|         8|       0|     1465|     2521|
-|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs         |     1993|       262|         8|       0|     1465|     2521|
+|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 - `\(\beta_1\)` could fall anywhere in the 95% CI with equal likelihood
 
@@ -428,11 +426,11 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 # Back to the regression table
 
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs        |     1993|       262|         8|       0|     1465|     2521|
-|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs         |     1993|       262|         8|       0|     1465|     2521|
+|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 - Even still, our sample could be one of the 5 out of 100 samples where our method of inference is expected to fail to capture `\(\beta_1\)`.
 
@@ -442,11 +440,11 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 # Back to the regression table
 
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs        |     1993|       262|         8|       0|     1465|     2521|
-|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs         |     1993|       262|         8|       0|     1465|     2521|
+|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 
 ```r
