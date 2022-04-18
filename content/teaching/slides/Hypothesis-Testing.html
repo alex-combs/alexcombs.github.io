@@ -4,9 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Hypothesis-Testing_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="Hypothesis-Testing_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="Hypothesis-Testing_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="Hypothesis-Testing_files/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -17,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## Hypothesis Testing
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: November 04, 2021
+### Last updated: April 18, 2022
 
 ---
 
@@ -39,11 +37,11 @@ class: center, middle, inverse, title-slide
 
 
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs        |     1993|       262|         8|       0|     1465|     2521|
-|urbanlow  |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
+|hs         |     1993|       262|         8|       0|     1465|     2521|
+|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
 
 - Our goal is to better understand the `statistic` (less important) and `p_value` columns. 
 
@@ -279,11 +277,11 @@ class: inverse, center, middle
 # Back to regression table
 
 
-|term      |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:---------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|term       |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
+|:----------|----------:|---------:|---------:|-------:|-----------:|----------:|
+|intercept  | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
+|hs         |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
+|urban: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
 - What are the null and alternative hypotheses? What is the result of the test?
 
@@ -295,13 +293,13 @@ class: inverse, center, middle
 # Back to regression table
 
 
-|term      |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:---------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|term       |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
+|:----------|----------:|---------:|---------:|-------:|-----------:|----------:|
+|intercept  | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
+|hs         |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
+|urban: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
-There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately \$1,993 per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between \$1,465 and \$2,521. 
+There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately $1,993 per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between \$1,465 and \$2,521. 
 
 ---
 class: inverse, center, middle
@@ -410,11 +408,11 @@ class: inverse, center, middle
 |&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     |    79.900 - 91.800    |
 
 
-|term      |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:---------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|hs        |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urbanlow  |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|term       |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
+|:----------|----------:|---------:|---------:|-------:|-----------:|----------:|
+|intercept  | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
+|hs         |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
+|urban: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

@@ -321,7 +321,7 @@ get_regression_table(inc_mod) %>%
   kable(digits = 3)
 ```
 
-There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately \$1,993 per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between \$1,465 and \$2,521. 
+There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately $1,993 per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between \$1,465 and \$2,521. 
 
 ---
 class: inverse, center, middle
