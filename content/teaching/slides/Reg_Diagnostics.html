@@ -4,9 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Reg_Diagnostics_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="Reg_Diagnostics_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="Reg_Diagnostics_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="Reg_Diagnostics_files/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -17,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## Regression Diagnostics
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: November 07, 2021
+### Last updated: April 24, 2022
 
 ---
 
@@ -30,36 +28,12 @@ class: center, middle, inverse, title-slide
   - Multicollinearity
   - Outliers, high-leverage, and high-influence
 
----
-# Credible analysis
-
-&lt;img src="lectures_files/credible.png" width="1304" style="display: block; margin: auto;" /&gt;
+- Goal is to have sufficient knowledge to ask good questions and explain consequences if an analyst did not check assumptions
 
 ---
 class: inverse, center, middle
 
 # Classical assumptions of linear regression
-
----
-# Regression is BLUE
-
-- Regression gives us the Best (most precise), Linear, Unbiased, Estimate
-
-- But only if a set of assumptions hold
-
----
-# Concerns
-
-- Our data or regression model choices may cause **LLN** and **CLT** not to work properly for valid inference
-
-- Biased estimates
-  - Systematically higher/lower estimates than the parameter
-
-- Invalid hypothesis test
-  - Inflated chance of false positives or false negatives
-
-- Wider confidence intervals than necessary (i.e., less precision)
-  - Undesirable but tolerable
 
 ---
 # Regression table
@@ -75,16 +49,30 @@ class: inverse, center, middle
 |white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
 |white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
 
-- We finally understand all the information in this table. 
+- We have finally covered all the information in this table. 
 
-- But it could all be wrong if assumptions are violated.
+- But the information could be wrong if regression assumptions are violated.
+
+---
+# Concerns
+
+- Our data or regression model choices may cause **LLN** or **CLT** to fail.
+
+- Biased estimates
+  - Systematically higher/lower estimates than the parameter
+
+- Invalid hypothesis test
+  - Inflated chance of false positives or false negatives
+
+- Wider confidence intervals than necessary (i.e., less precision)
+  - Undesirable but tolerable
 
 ---
 # It's all about residuals
 
 
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Classical regression assumptions
@@ -105,24 +93,20 @@ class: inverse, center, middle
 
 - **E**qual variance in residuals
 
---
-
-- Goal is to have sufficient knowledge to ask good questions and explain consequences if an analyst did not check assumptions
-
 ---
 # Residual vs. Fitted Plot (RVF)
 
 .pull-left[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
-- Assumptions **L**, **N**, and **E** can be observed directly using an RVF plot
+- Assumptions **L**, **N**, and **E** can be observed using an RVF plot (on right).
 
-- We want to see no pattern in the RVF plot points
+- We want to see no *obvious* pattern in the RVF plot points
 
 ---
 # Linear assumption
@@ -309,16 +293,16 @@ plot(trump_mod)
 ---
 # RVF Plot
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
-- We want to see no pattern and a straight red line along 0
+- We want to see no obvious pattern and a relatively straight red line along 0
 
 - Especially useful for evaluating **L**
 
 ---
 # Normal Q-Q
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see points fall approximately along the dotted line
 
@@ -327,7 +311,7 @@ plot(trump_mod)
 ---
 # Scale-Location
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see a straight red line
 
@@ -336,7 +320,7 @@ plot(trump_mod)
 ---
 # Residuals vs. Leverage
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 
 - Useful for identifying high-influence observations
 
@@ -379,7 +363,7 @@ plot(trump_mod)
 plot(trump_mod, 4)
 ```
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-24-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
 
 - Observations 9, 18, 20, and 46 may be worth investigating
 
@@ -512,11 +496,11 @@ get_regression_table(trump_mod_nodc)
 # Comparing regression lines
 
 .pull-left[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 - D.C. (on left) pulls the left of regression line down; forces slope to be greater

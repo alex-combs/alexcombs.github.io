@@ -4,9 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab8-reporting-reg_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="rlab8-reporting-reg_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="rlab8-reporting-reg_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="rlab8-reporting-reg_files/header-attrs-2.11/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -17,7 +15,7 @@ class: center, middle, inverse, title-slide
 ## RLab 9: Reporting Regression Results
 ### Alex Combs
 ### UGA | SPIA | PADP
-### Last updated: November 07, 2021
+### Last updated: April 24, 2022
 
 ---
 
@@ -103,11 +101,11 @@ inc_mod &lt;- lm(median_house_inc ~ share_pop_hs + urbanization, data = state_da
 - We have learned how to produce a standard table of results using `get_regression_table`
 
 
-|term            |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:---------------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept       | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|share_pop_hs    |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urbanizationlow |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|term              |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
+|:-----------------|----------:|---------:|---------:|-------:|-----------:|----------:|
+|intercept         | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
+|share_pop_hs      |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
+|urbanization: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
 - This table is not typically how results are presented
 

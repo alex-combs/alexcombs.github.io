@@ -45,38 +45,12 @@ state_trump <- hate_crimes %>%
   - Multicollinearity
   - Outliers, high-leverage, and high-influence
 
----
-# Credible analysis
-
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('lectures_files/credible.png')
-```
+- Goal is to have sufficient knowledge to ask good questions and explain consequences if an analyst did not check assumptions
 
 ---
 class: inverse, center, middle
 
 # Classical assumptions of linear regression
-
----
-# Regression is BLUE
-
-- Regression gives us the Best (most precise), Linear, Unbiased, Estimate
-
-- But only if a set of assumptions hold
-
----
-# Concerns
-
-- Our data or regression model choices may cause **LLN** and **CLT** not to work properly for valid inference
-
-- Biased estimates
-  - Systematically higher/lower estimates than the parameter
-
-- Invalid hypothesis test
-  - Inflated chance of false positives or false negatives
-
-- Wider confidence intervals than necessary (i.e., less precision)
-  - Undesirable but tolerable
 
 ---
 # Regression table
@@ -93,9 +67,23 @@ get_regression_table(trump_mod) %>%
   kable(digits = 2)
 ```
 
-- We finally understand all the information in this table. 
+- We have finally covered all the information in this table. 
 
-- But it could all be wrong if assumptions are violated.
+- But the information could be wrong if regression assumptions are violated.
+
+---
+# Concerns
+
+- Our data or regression model choices may cause **LLN** or **CLT** to fail.
+
+- Biased estimates
+  - Systematically higher/lower estimates than the parameter
+
+- Invalid hypothesis test
+  - Inflated chance of false positives or false negatives
+
+- Wider confidence intervals than necessary (i.e., less precision)
+  - Undesirable but tolerable
 
 ---
 # It's all about residuals
@@ -138,10 +126,6 @@ trump_mod2.graph
 
 - **E**qual variance in residuals
 
---
-
-- Goal is to have sufficient knowledge to ask good questions and explain consequences if an analyst did not check assumptions
-
 ---
 # Residual vs. Fitted Plot (RVF)
 
@@ -163,9 +147,9 @@ ggplot(trump_mod2.metrics, aes(.fitted, .resid)) +
 ```
 ]
 
-- Assumptions **L**, **N**, and **E** can be observed directly using an RVF plot
+- Assumptions **L**, **N**, and **E** can be observed using an RVF plot (on right).
 
-- We want to see no pattern in the RVF plot points
+- We want to see no *obvious* pattern in the RVF plot points
 
 ---
 # Linear assumption
@@ -366,7 +350,7 @@ plot(trump_mod)
 plot(trump_mod, 1)
 ```
 
-- We want to see no pattern and a straight red line along 0
+- We want to see no obvious pattern and a relatively straight red line along 0
 
 - Especially useful for evaluating **L**
 
