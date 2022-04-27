@@ -1,6 +1,6 @@
 ---
 title: "PADP 7120 Data Applications in PA"
-subtitle: "RLab 10: Forecasting"
+subtitle: "RLab 9: Forecasting"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
 date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
@@ -28,23 +28,13 @@ library(knitr)
 
 ```{r, eval=FALSE}
 ---
-title: "RLab 10: Forecasting"
+title: "RLab 9: Forecasting"
 author: "Your Name"
 output: 
   html_document:
     theme: spacelab
     df_print: paged
 ---
-```
-
----
-# Set-up
-
-> **Download `acc_select_tax_rev` and `us_house_data` from eLC and import**
-
-```{r, include=FALSE}
-acc_taxrev <- read_csv("labs_files/acc_select_tax_rev.csv")
-house_data <- read_csv("labs_files/us_house_data.csv")
 ```
 
 ---
@@ -56,6 +46,23 @@ house_data <- read_csv("labs_files/us_house_data.csv")
 library(tidyverse)
 library(forecast)
 library(fpp2)
+```
+
+---
+# Set-up
+
+> **Download `acc_select_tax_rev`, `us_house_data`, and `start_forecast_data` from eLC and import. You can copy paste the below code in your setup code chunk.**
+
+```{r, include=FALSE}
+acc_taxrev <- read_csv("labs_files/acc_select_tax_rev.csv")
+house_data <- read_csv("labs_files/us_house_data.csv")
+starts_fc <- read_csv("labs_files/starts_forecast_data.csv")
+```
+
+```{r, eval=FALSE}
+acc_taxrev <- read_csv("acc_select_tax_rev.csv")
+house_data <- read_csv("us_house_data.csv")
+starts_fc <- read_csv("starts_forecast_data.csv")
 ```
 
 ---
@@ -217,7 +224,8 @@ freq.table %>%
 > **Set `us_house_data` as a TS object named `ts_house`**
 
 ```{r, eval=FALSE}
-ts_house <- 
+ts_house <- ts(house_data[,-1], start = 1990, end = 2021, 
+                frequency = 4)
 ```
 
 ```{r, include=FALSE}
@@ -230,10 +238,11 @@ ts_house <- ts(house_data[,-1], start = 1990, end = 2021,
 
 - `acc_taxrev` contains select tax revenues for Athens-Clarke County
 
-> **Set `acc_taxrev` as a TS object**
+> **TSet `acc_taxrev` as a TS object.**
 
 ```{r, eval=FALSE}
-ts_taxrev <-
+ts_taxrev <- ts(acc_taxrev[,-1], start = 1992, end = 2020, 
+               frequency = 1)
 ```
 
 ```{r, include=FALSE}
@@ -279,14 +288,13 @@ include_graphics('labs_files/patterns-colfinance.png')
 ---
 # Exploratory plots (line graphs)
 
-- We learned how to make line plots within the `ggplot` package
-- If R knows data is time series, we can generate a line graph using a shortcut
+- If R knows data is time series, we can use `autoplot` to quickly generate some useful graphs.
 
 > **Add and run following code**
 
 ```{r, fig.show='hide'}
 autoplot(ts_house)
-autoplot(ts_house[,1]) # specifies which variable
+autoplot(ts_house[,1]) # specifies variable based on column
 autoplot(ts_house[,2]) 
 autoplot(ts_house[,3])
 autoplot(ts_taxrev)
@@ -295,13 +303,12 @@ autoplot(ts_taxrev)
 ---
 # Exploratory plots (seasonal plots)
 
-- GDP exhibits some seasonality. Here are a few useful plots for seasonal patterns.
+- GDP (column 3) exhibits some seasonality. Here are a few useful plots for seasonal patterns.
 
 > **Add and run following code**
 
 ```{r, eval=FALSE}
 ggseasonplot(ts_house[,3]) 
-#tells R to run on first variable only - sales
 ```
 
 ```{r, eval=FALSE}
@@ -326,7 +333,7 @@ class: inverse, center, middle
 - Models that use past values
 
   - Simple methods: naive, mean, trend
-  - Exponential smoothing (common; we will learn how to use)
+  - Exponential smoothing (common; we will cover this)
   - ARIMA (common; we will not cover)
 
 --
@@ -339,19 +346,15 @@ class: inverse, center, middle
 ---
 # Autocorrelation
 
-- Models using past values rely on autocorrelation
+- Recall the correlation coefficient measures the linear association between two variables
 
 --
 
-- Recall correlation measures the linear association between two variables
+- Models using past values rely on **autocorrelation**: the linear association between a variable and past values of the *same* variable
 
 --
-
-- **Autocorrelation** measures the linear association between a variable and past values of the *same* variable
 
 - If past values are correlated with future values, then the past informs the future
-
---
 
 - **Lag**: term used to refer to a past value
   - The 3rd lag for annual time series value in 2020 is 2017
@@ -374,8 +377,7 @@ ggAcf(usmelec)
 
 - Blue dashed line delineates statistically significant autocorrelation
 
-- Here, values as far back as 2 years significantly correlate with values at a particular time
-
+- Electricity production more than 2 years ago significantly correlate with values at a particular time
 ]
 
 ---
@@ -401,7 +403,7 @@ ggAcf(ts_house[,1]) # applied to first column, price
 
 > **Use `ggAcf` to generate an autocorrelation plot for `sales_use_tax` in the `ts_taxrev` dataset**
 
-```{r, include=FALSE}
+```{r}
 ggAcf(ts_taxrev[,2])
 ```
 
@@ -531,16 +533,19 @@ kable(sum.sales_naive)
 
 > **Use mean and drift forecasts on sales tax for next 3 years**
 
-> **Produce the graph and the numerical results**
-
-```{r, include=FALSE}
+```{r}
 salestax_mean <- meanf(ts_taxrev[,2], h = 3)
 salestax_drift <- rwf(ts_taxrev[,2], drift = TRUE, h = 3)
-
-autoplot(salestax_mean)
-autoplot(salestax_drift)
 ```
 
+> **Produce the graph and the numerical results**
+
+```{r, eval=FALSE}
+autoplot(salestax_mean)
+summary(salestax_mean)
+autoplot(salestax_drift)
+summary(salestax_drift)
+```
 
 ---
 class: inverse, center, middle
@@ -634,15 +639,15 @@ kable(sum.ets_prices)
 ---
 # Practice
 
-> **Use the `ets` function on sales tax for the next 3 years**
+> **Use the `ets` function on sales tax for the next 3 years to produce a graph and table.**
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 ets(ts_taxrev[,2]) %>% 
   forecast(h=3) %>% 
   autoplot()
 ```
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 ets(ts_taxrev[,2]) %>% 
   forecast(h=3) %>% 
   summary()
@@ -674,17 +679,17 @@ class: inverse, center, middle
 ---
 # Evaluating forecasts
 
-- Can use `checkresiduals` to test the validity of our forecast
-
 .pull-left[
 
 ```{r, fig.height=5}
 ets(ts_house[,2]) %>% 
-  checkresiduals()
+  checkresiduals() #<<
 ```
 ]
 
 .pull-right[
+- Can use `checkresiduals` to test validity of forecast
+
 - Also produces the p-value for a hypothesis test (e.g., Ljung-Box) of overall fit
 
 - Null hypothesis is that the model is valid
@@ -695,7 +700,7 @@ ets(ts_house[,2]) %>%
 
 > **Use `checkresiduals` on the drift and ets forecasts for sales tax**
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 checkresiduals(salestax_drift)
 ets(ts_taxrev[,2]) %>% checkresiduals()
 ```
@@ -717,7 +722,7 @@ ets(ts_house[,2]) %>% accuracy()
 
 > **Use `accuracy` to compare drift and ets models for sales tax**
 
-```{r, include=FALSE}
+```{r, eval=FALSE}
 accuracy(salestax_drift)
 ets(ts_taxrev[,2]) %>% accuracy()
 ```
@@ -744,7 +749,7 @@ $$y_t=\beta_0+\beta_1x_t + \beta_3t + \beta_4s_t + \epsilon_t$$
 ---
 # In R
 
-- Let's forecast house starts incorporating price and GDP as explanatory variables
+- Let's forecast housing starts incorporating price and GDP as explanatory variables
 
 > **Add and run below time series linear model**
 
@@ -774,15 +779,9 @@ new_object <- forecast(saved_regression_results,
 ---
 # In R
 
-- Now we can forecast starts in response to changes in explanatory variables
+- Now we can forecast starts in response to changes in explanatory variables using the `starts_fc` data we downloaded from eLC
 
-> **Download `starts_forecast_data` CSV file and add to your project folder. Import**
-
-```{r, include=FALSE}
-starts_forecast_data <- read_csv("labs_files/starts_forecast_data.csv")
-```
-
-- These data suppose a 2% annual increase in prices and GDP over the next 12 quarters
+- These data suppose a 2% annual increase in housing prices and GDP over the next 12 quarters
 
 ---
 # In R
@@ -791,7 +790,7 @@ starts_forecast_data <- read_csv("labs_files/starts_forecast_data.csv")
 
 ```{r}
 reg_starts_forecast <- forecast(reg_starts, 
-                          newdata = starts_forecast_data)
+                          newdata = starts_fc)
 ```
 
 - Now we can report these results same as before. 
