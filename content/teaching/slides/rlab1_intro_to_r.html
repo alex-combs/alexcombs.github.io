@@ -4,43 +4,50 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab1_intro_to_r_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="rlab1_intro_to_r_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="rlab1_intro_to_r_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="rlab1_intro_to_r_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## RLab 1: Intro to R
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: January 04, 2022
+]
+.date[
+### Last updated: August 22, 2022
+]
 
 ---
 
 class: inverse, middle, center
 
-# Does everyone have access to RStudio (need R installed too) or RStudio Cloud?
+# Does everyone have access to RStudio?
 
 ---
 # Objectives
 
-- open and navigate R
-- start an R project to organize your work
-- load data already formatted for R
-- load R packages
-- use R markdown and run code
-- export your R markdown document to HTML
+- Open and navigate RStudio
+- Create an R project to organize our work
+- Load R packages
+- Start an R markdown document and run code
+- Export your R markdown document to HTML
 
 ---
-# RLab Slides
+# How to Follow RLab Slides
 
-- Bullets provide background, explanation, etc.
+- Bullets provide background, concepts, etc.
 
-- Block quote in bold like below denotes a prompt
+- Block quotes in bold like below contain a prompt
 
 &gt; **Do this thing in this block**
 
@@ -52,18 +59,36 @@ summary(cars)
 ```
 
 - Or `in-line code like this`
+
+- You can copy-paste code from slides to your RStudio
+
 ---
 # RLab Process
 
-- Highly likely that you will encounter errors; this is normal
+- I will complete RLabs along with you to help show what to do
+
+- This involves switching between slides and RStudio, blocking one from your view of the screen
+
+- Helps to have the slides open on your computer
+
+- If you need to see something I did previously in RStudio, wait until I switch back to RStudio before asking unless you feel yourself getting lost. 
+
+---
+# RLab Process
+
+- Highly likely that you will encounter errors. This is normal.
 
   - If so and you cannot figure out how to fix, **STOP ME**
   - Troubleshooting can help you and others learn
 
-- First several weeks will likely involve a lot of stopping as I help students. If you are doing fine, resist the temptation to work ahead.
+- First several weeks will likely involve a lot of stopping as I help students. 
+
+- If you are waiting while I help students, resist working ahead.
+
+- Possible I won't know why something isn't working on your computer during class and need to resolve outside of class
 
 ---
-# Starting R
+# Starting RStudio
 
 &gt; **Launch RStudio**
 
@@ -73,24 +98,26 @@ summary(cars)
   - Files and other tabs (bottom-right)
 
 ---
-# File Directory
+# Working Directory
+
+- Working directory is the folder RStudio is currently using to import and export files
 
 &gt; **Type `getwd()` into the console (bottom-left pane) and hit Enter**
 
-- R should return the current file path, such as "/Users/alexcombs/Documents/"
+- R should return a file path, such as "/Users/alexcombs/Documents/"
 
 - When you tell R to look for or save a file, this is the location R uses
 
-- Helps to have a separate folder for each project/assignment that contains all relevant data and documents
+- I recommend using a separate folder for each assignment that contains all necessary data and documents
 
 ---
-# R Projects
+# RStudio Projects
 
-- R Projects are the best way to organize your work
+- RStudio Projects are a good way to organize your work
 
-- Creates a folder for R to work from
+- Creates a folder for RStudio to work from
 
-- Creates a file that you can open and pick up where you left off last time you closed RStudio
+- Places a `.Rproj` in the folder you can open to return to your project
 
 --
 
@@ -103,38 +130,91 @@ summary(cars)
 - R Demo 1 on eLC demonstrates this process in case you forget
 
 ---
+# Changing settings
+
+- Let's change some RStudio settings that should reduce the chance of errors
+
+&gt; **Go to "Tools" in the RStudio menu bar at the top. Click on "Global Options" at the bottom of the menu.**
+
+&gt; **Uncheck all boxes above "Other" and change the "Save workspace to .RData on exit" to Never.** 
+
+
+---
+# Loading Packages
+
+- Many functions in R require us to load a package
+
+- All assignments will include a list of packages you need to complete the work
+
+- The following code loads a package
+
+
+```r
+library(name_of_package)
+```
+
+- We almost always need to load a package named `tidyverse`
+
+&gt; **Run the following code in your console**
+
+
+```r
+library(tidyverse)
+```
+
+---
+# Installing packages
+
+- You must have a package installed in your version of RStudio in order to load it
+
+--
+
+- If RStudio failed to load tidyverse, likely due to not having it installed (or some other package it requires). Error message will tell you a package "does not exist"
+
+--
+
+- The following code will install a package
+
+
+```r
+install.packages("name_of_package")
+```
+
+- Make sure you include quotes around the name
+
+---
+# Loading vs. Installing packages
+
+- Every time you open RStudio, you need to re-load the packages you need
+
+- You only need to install a package once per version of RStudio
+
+- Only install packages using the console. Never install packages inside the R Markdown documents we will use for assignments.
+
+---
 # Some data file types
 
 - Certain software uses file extensions like `.xlsx` for Excel
 
 - A data file that is formatted for R has the extension `.RData` or `.rds`
 
-- A `.csv` file is compatible with virtually any software
+- A `.csv` file is compatible with virtually any statistical software
 
 ---
 # Importing CSV data
 
-&gt; **Download the file titled "states1.csv" from eLC. Leave it wherever your computer saved it (probably Downloads folder). In your console, type:**
+&gt; **Download the file titled "states1.csv" from eLC. Leave it wherever your computer saved it (probably Downloads folder). 
 
 --
 
-
-```r
-library(tidyverse) # Must have tidyverse installed
-```
-
-&gt; **Then hit Enter. Next, type in your console:**
-
---
+&gt; **Provided tidyverse loaded successfully, run the following code in your console:**
 
 
 ```r
 states1 &lt;- read_csv("states1.csv")
 ```
 
-&gt; **Then hit Enter**
-
-- You must use quotes (single or double) anytime you tell R to load or save a file
+- You must use quotes anytime you tell R to load or save a file
 
 ---
 # Our first error (hopefully)
@@ -223,13 +303,15 @@ output: html_document
 
 - Code chunks separate text from R code
 
-- To add a code chunk, you can point-and-click or use the keyboard shortcut `Cmd+Opt+I`
+- To add a code chunk, you can use point-and-click or the keyboard shortcut `Cmd+Opt+I` on Mac, `Ctrl+Alt+I` on Windows
 
-- I will now demonstrate inserting a code chunk and typing some arbitrary arithmetic
+- I will now demonstrate inserting a code chunk and typing some arbitrary math
 
 --
 
-&gt; **At the bottom of your Rmd, insert a code chunk and type some arbitrary arithmetic inside it. Click `Enter` a few times and type another line of arithmetic.**
+&gt; **At the bottom of your Rmd, insert a code chunk and some arbitrary math inside it.**
+
+&gt; **Click `Enter` a few times and type another line of math below the first**
 
 ---
 # Running Code Chunks
@@ -238,57 +320,16 @@ output: html_document
 
 - To run a particular code chunk, click on the play button. This runs ALL of the lines of code in the chunk.
 
-- To run a single line of code, place your cursor on that line and click `Cmd+Enter`
+- To run a single line of code, place your cursor on that line and click `Cmd+Enter` on Mac or `Ctrl+Enter` on Windows
 
 - To run multiple code chunks, use the Run menu at the top of the editor pane
 
 ---
-# Objects
+# Creating an object the environment pane
 
-- Objects are anything you tell R to temporarily save during a session. A dataset, a number, a list of numbers, etc.
-
-- You can save any object to your computer or delete it when you close R. Deleting is fine as long as you saved the code that created the object(s).
-
-- You should already have an object `states1`
-
----
-# Creating an object
-
-&gt; **Add `x &lt;-` to the second line of arbitrary arithmetic in your code chunk like below. Run the code chunk.**
-
-
-```r
-x &lt;- ((5+5)/2)^2
-```
+- Anytime you use the **assignment operator:** `&lt;-`, the result will be saved in your environment pane. You already saved `states1` in your environment.
 
 --
-
-- The `&lt;-` symbol is called the **assignment operator**. It tells R to save the result of the thing on the right side as the name on the left side.
-
-- The keyboard shortcut for the assignment is `Alt-` on PC or `Option-` on Mac.
-
----
-# Why save an object?
-
-- We create an object whenever we want to use it later in the Rmd or save it as a file.
-
-- Suppose you want to know what `x^2` equals.
-
-- You don't need to recreate `x`. You can just square `x` like below.
-
-
-```r
-x^2
-```
-
-```
-## [1] 625
-```
-
-- This becomes very useful when working with multiple datasets, or changing an original dataset
-
----
-# Creating an object
 
 &gt; **Insert another code chunk. Add and run the following code:**
 
@@ -301,16 +342,20 @@ states2 &lt;- select(states1, state, pop_1990)
 
 --
 
-&gt; **Knit your Rmd again.**
+&gt; **Knit your Rmd again. (this should cause a deliberate error)**
 
 ---
 # Our second error
 
 - R cannot find function `select`. But it worked when we ran the line of code.
 
-- When you knit, R runs the code from beginning-to-end and ignores anything you did in the console to load a package or import data.
+--
 
-- If a code chunk in your Rmd depends on something you did in the console, your Rmd won't knit unless we include that code in the Rmd
+- When you knit, R runs the code in your document from beginning-to-end and ignores anything you did in the console to load a package or import data.
+
+--
+
+- If a code chunk in your document depends on something you did in the console, your it won't knit unless we include that code
 
 --
 
@@ -321,11 +366,15 @@ states2 &lt;- select(states1, state, pop_1990)
 
 - R can't find object `states1`, but `states1` is in our environment.
 
-- What is the problem?
+--
+
+- We imported `states1` using the console. It is in our environment. We can use it.
+
+- But there is no code in our document that imports `states1`. When we knit, it is as if we do not have `states1`
 
 --
 
-&gt; **Add `states1 &lt;- read_csv("states1.csv")` in the first code chunk BELOW loading tidyverse because read_csv depends on tidyverse. Try to knit again.**
+&gt; **Add `states1 &lt;- read_csv("states1.csv")` in the first code chunk BELOW loading tidyverse (because read_csv depends on tidyverse). Try to knit again.**
 
 ---
 # Returning to a project
@@ -449,6 +498,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
