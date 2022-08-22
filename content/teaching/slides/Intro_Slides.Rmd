@@ -66,15 +66,13 @@ output:
 
 --
 
-- **Reproducibility**
+- **Reproducibility and Automation**
 
 --
 
-- R is popular
+- R is popular and free
 
-- R is free
-
-- Coding requires deeper thinking about data and statistics than point-and-click
+- Encourages deeper thinking about data and statistics than point-and-click
 
 ---
 # Why learn R
@@ -88,11 +86,6 @@ output:
 - We are always consuming statistics
 
 - Producing helps you be a more critical consumer
-
----
-class: inverse, center, middle
-
-# I want this course to help you be as competitive as possible in your respective job markets through competency in statistics and statistical software.
 
 ---
 
@@ -119,9 +112,8 @@ class: inverse, center, middle
 - Significance
 - Assumptions
 
-**Bonus Skills**
+**Bonus**
 - Forecasting
-- Panel Analysis
 ]
 
 ---
@@ -144,16 +136,11 @@ class: inverse, center, middle
 - Struggling with R is part of the process; do not feel discouraged
 
 ---
+# Course Materials & Assignments
 
-# Course Materials
+- All materials are available on eLC
 
-- All materials are free
-
-- [Readings & RChapters](https://alex-combs.github.io/data-apps-text/)
-  - List of supplemental texts provided in the preface
-
----
-# Course Components & Assignments
+--
 
 - 9 R Chapters (10% of grade)
 
@@ -185,7 +172,7 @@ class: inverse, center, middle
 
 - Graded complete/incomplete if you work on RLab in class
 
-- If you miss class, due by 12:00PM the Wednesday following class. I will grade based on accuracy and completeness to make sure you do not fall behind.
+- If you miss class, due by 12:00PM the Wednesday following class. I will count as incomplete if they are not sufficiently complete and accurate.
 
 ---
 # Problem sets
@@ -232,7 +219,7 @@ class: inverse, center, middle
 
 - Focus on concepts and interpretation of statistical analysis
 
-- No use of R
+- Exams do not require you to use R
 
 ---
 # DataCamp Chapters
@@ -241,9 +228,9 @@ class: inverse, center, middle
 
 - Recommended order provided on course schedule
 
-- Opportunity for extra credit closes on March 22 at 12:00AM
+- Opportunity for extra credit closes on November 21 at 11:59PM
 
-- Logistics and invite link on eLC
+- Invite link on eLC. Use your uga.edu email address to join.
 
 ---
 # Attendance & Office Hours
