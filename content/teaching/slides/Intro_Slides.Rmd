@@ -14,21 +14,23 @@ output:
 ---
 # Outline (Syllabus Review)
 
-1. Why this course
+1. Why this course?
 
 2. Course objectives
 
-3. Topics
+3. Why R?
 
-4. Course materials
+4. Topics
 
-5. Assignments
+5. Course materials
 
-6. Policies
+6. Assignments
+
+7. Other course policies
 
 ---
 
-# Why statistics
+# Why this course
 
 - Data is the raw material of knowledge
 
@@ -54,7 +56,7 @@ output:
 
 ---
 
-# Why learn R
+# Why R
 
 - Adams, et al. (2013) Statistical Software for Curriculum and Careers. Journal of Public Affairs Education.
 
@@ -161,12 +163,12 @@ class: inverse, center, middle
 
 - 2 Exams (30% of grade)
 
-- 16 DataCamp Chapters for up to 7.2 points of extra credit
+- 15 DataCamp Chapters for up to 4.5 points of extra credit
 
 ---
 # R Chapters
 
-- Provide weekly-ish R practice
+- Provide regular practice using R
 
 - Graded complete/incomplete conditional on good faith effort
 
@@ -199,11 +201,13 @@ class: inverse, center, middle
 ---
 # Working on problem sets: Tips
 
-- Designed to be worked on some each week, not all at once
+- Designed to be worked on  each week, not all at once
 
-- Questions do not necessarily progress in the same order as our weekly topics. If you reach a question we haven't covered, there may be questions that follow it we have covered.
+- Questions do not necessarily progress in the same order as our weekly topics. 
 
-- Review the problem set after each class and make note of which questions are related to that week's material
+- If you reach a question we haven't covered, there may be questions that follow it that we have covered.
+
+- Review the problem set after each class and make note of which questions you should be able to answer.
 
 ---
 # Working on problem sets: Groups
@@ -212,14 +216,12 @@ class: inverse, center, middle
 
 - Groups are encouraged to work together simultaneously rather than independently on separate parts of the problem set
 
-- No good way to edit your answers together live like a shared Google Doc. One person will need to take lead on typing. Sharing a screen via Zoom has been useful.
-
 ---
 # Problem set groups
 
 - I will place everyone in a group on eLC even if it is a group of one
 
-- **Email me before our next class meeting on 1/24 if:**
+- **Email me before our class meeting on September 12 if:**
   - you have established a group on your own. Provide the names of the other members.
   - If you would like to work in a group and need my help finding others to work with.
 
@@ -249,11 +251,3 @@ class: inverse, center, middle
 - Attendance not required; no explanation needed unless pertains to missing a deadline
 
 - Link to schedule office hours is on eLC.
-  - Tuesdays 4:30-6:00PM
-  - Wednesdays 4:00-6:00PM
-  - 15-minute meetings, but you can reserve multiple blocks if necessary
-
----
-class: inverse, center, middle
-
-# Questions?
