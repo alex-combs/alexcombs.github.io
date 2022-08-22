@@ -356,8 +356,7 @@ states2 <- select(states1, state, pop_1990)
 
 > **Since you just knitted, everything is saved. Close RStudio.**
 
-- To return to a project, you can open the .Rproj file in your project folder. 
-- RStudio should open right where you left off.
+> **To re-open your project, open the .Rproj file in your project folder.** 
 
 ---
 class: inverse, middle, center
