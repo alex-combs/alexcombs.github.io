@@ -4,20 +4,28 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Data_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="Data_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="Data_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="Data_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## Data
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: January 18, 2022
+]
+.date[
+### Last updated: August 25, 2022
+]
 
 ---
 
@@ -34,20 +42,22 @@ class: center, middle, inverse, title-slide
 ---
 # Rectangular data
 
-- Rectangular data consists of
+- Rectangular data consists
 
-  - Unit of analysis
+  - Observations of a unit of analysis
   - Variables
 
 --
 
-- **Unit of analysis**:  the subject (person, place, or thing) generating the data
+- **Unit of analysis**:  the subject/entity (person, place, or thing) generating the data
 
-- Each row is a record/observation of the unit of analysis
+- Each row contains an observation of a member within the unit of analysis
 
 --
 
-- **Variable**:  a characteristic observed on unit of analysis
+- **Variable**:  a characteristic measured of the member within the unit of analysis
+
+- Each column contains a variable 
 
 ---
 # Rectangular data
@@ -64,17 +74,17 @@ class: center, middle, inverse, title-slide
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Unit of Analysis &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Member 1 of Unit of Analysis &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Unit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Member 2 of Unit of Analysis &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; Unit &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Member 3 of Unit of Analysis &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
    &lt;td style="text-align:left;"&gt; Datum &lt;/td&gt;
   &lt;/tr&gt;
@@ -86,7 +96,7 @@ class: center, middle, inverse, title-slide
 - Each column is (or should be) a **variable**
 
 ---
-# Unit of analysis
+# Identify the unit of analysis
 
 - The unit of analysis is the variable or set of variables that uniquely identifies each row in a data set.
 
@@ -122,7 +132,7 @@ class: center, middle, inverse, title-slide
 &lt;/table&gt;
 
 ---
-# Unit of analysis
+# Identify the unit of analysis
 
 - What is the likely unit of analysis based on the variable names?
 
@@ -154,7 +164,7 @@ class: center, middle, inverse, title-slide
 &lt;/table&gt;
 
 ---
-# Unit of analysis
+# Identify the unit of analysis
 
 - What is the unit of analysis based on the variable names?
 
@@ -188,7 +198,7 @@ class: center, middle, inverse, title-slide
 ---
 class: inverse, middle, center
 
-# Suppose we want to analyze various aspects of homelessness in Atlanta (potential driving factors, demographics, performance metrics, etc.). We need to collect data.
+# Suppose we want to study those who are unhoused in Athens-Clarke County (potential causes or correlates, demographics, performance metrics, etc.). We need to collect data.
 
 ---
 class: inverse, middle, center
@@ -577,6 +587,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

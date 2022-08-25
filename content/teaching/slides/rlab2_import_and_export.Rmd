@@ -75,8 +75,8 @@ library(data.table)
 library(tidyverse) #includes function for importing CSV
 library(readxl) #for importing Excel files
 library(data.table) #for importing from URL
-library(gapminder) #contains example data
-library(fivethirtyeight) #contains example data
+library(gapminder) #contains data we need to use
+library(fivethirtyeight) #contains data we need to use
 ```
 
 ---
@@ -92,28 +92,14 @@ class: inverse, middle, center
 # Data imports
 
 ---
-# R Package data
-
-- R loads with some example datasets already built in
-
-```{r, eval=FALSE}
-slice_head(USArrests, n=4)
-```
-
-```{r, echo=FALSE}
-slice_head(USArrests, n=4) %>% 
-  kable()
-```
-
----
 # Data in R Packages
 
 - Many R packages, like `gapminder` and `fivethirtyeight` include datasets
 
-- We can browse these datasets by going to the "Packages" tab in the bottom-right pane of RStudio
-  - Click on the package that contains the relevant dataset(s)
+- We can browse datasets by going to the "Packages" tab in the bottom-right pane of RStudio
+  - Click on the package that contains the relevant dataset
   - A list of datasets will appear
-  - Click on dataset to learn more about it
+  - Click on a dataset to learn more about it
 
 ---
 # Data in R Packages
@@ -121,8 +107,8 @@ slice_head(USArrests, n=4) %>%
 > **In a new code chunk, add and run the following**
 
 ```{r, eval=FALSE}
-# slice_head() prints the top row(s) of a dataset
-# n=4 prints the top 4 rows
+# slice_head() prints row(s) from the top of a dataset
+# n=4 tells it to print the top 4 rows
 slice_head(gapminder, n=4)
 ```
 
@@ -325,6 +311,28 @@ class: inverse, middle, center
 
 ![](labs_files/output_options.png)
 
+- The minus signs indicate what each option suppresses
+
+---
+# Global code chunk option
+
+- When you start a new Rmd template, it contains a code chunk near the top named "setup" that contains
+
+```{r, eval=FALSE}
+{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+--
+
+- This sets `echo=TRUE` for all code chunks by default
+
+- If you change to `echo=FALSE`, all code chunks will be suppressed by default when you knit.
+
+--
+
+- You can also add `message=FALSE` and `warning=FALSE` to suppress the background information RStudio communicates to you but typically should not be included in knitted document
+
 ---
 class: inverse, middle, center
 
@@ -337,7 +345,17 @@ class: inverse, middle, center
 
 - Provides the opportunity to use code to import many similar files quickly
 
-- Avoid changing the data file in something like Excel before importing it because you or others can't replicate that
+--
+
+- Messy data files present a fork in our workflow
+  - Clean the data some as part of the import, or
+  - Import data as is and clean later
+
+- Which is more efficient depends on the dataset
+
+--
+
+- Avoid changing the data files in something like Excel before importing it because you or others can't replicate that
 
 ---
 # Importing CSV
@@ -364,6 +382,15 @@ anyname <- read_excel("filename.xlsx")
 ```
 
 - Works with both .xls or .xlsx extensions
+
+---
+# Preserve or Clean on Import
+
+- The previous two slides provide all the code needed to import the two most common public data file formats without cleaning the data. 
+
+- If we want to clean the data on import, the best approach for new users is the import window/wizard RStudio provides.
+
+- We will now cover some cleaning we can do with this second option
 
 ---
 # Importing data
@@ -399,7 +426,7 @@ anyname <- read_excel("filename.xlsx")
 
 - R provides the code needed to import the data based on the options we chose
 
-- We need to include this code in our R Markdown or else it won't knit if we have code that requires the data
+- **We need to include this code in our R Markdown or else it won't knit if we have code that requires the data**
 
 --
 
@@ -630,12 +657,12 @@ class: inverse, center, middle
 ---
 # Export data to CSV
 
-- We may want to export data in our environment to CSV for others to use
+- We may want to export data in our environment that we have prepared in RStudio for others to use
 
-- Generic syntax:
+- Generic syntax for exporting data to CSV:
 
 ```{r, eval=FALSE}
-write_csv(name_of_object, 'name_for_new_file.csv')
+write_csv(name_of_object_in_environment, 'name_for_new_file.csv')
 ```
 
 --
@@ -647,10 +674,11 @@ write_csv(name_of_object, 'name_for_new_file.csv')
 
 - Over past two weeks...
 
-- Launch R -> load packages & import data needed to do analysis -> knit to document -> save documents and data for later use
+- Launch RStudio -> load packages & import data needed to do analysis -> knit to document -> save documents and data for later use
 
-- This covers the general procedure of realistically using R 
-- Now just need to add analytical skills
+- This covers the general procedure of realistically using RStudio 
+
+- Now just need to add skills that take us from import to desired export
 
 ---
 # Upload to eLC
