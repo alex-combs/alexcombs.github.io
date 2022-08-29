@@ -112,14 +112,14 @@ kable(generic, format = 'html')
 
 --
 
-- A raw dataset we which to use in software like RStudio should contain one unit of analysis. For example, state totals should be separate from county totals.
+- A raw dataset we wish to use in software like RStudio should contain one unit of analysis. For example, state totals should be separate from county totals.
 
 - Understanding the unit of analysis will help us identify rows or columns that do not belong together.
 
 ---
 class: inverse, middle, center
 
-# Suppose we want to study those who are unhoused in Athens-Clarke County (potential causes or correlates, demographics, performance metrics, etc.). We need to collect data.
+# Suppose we want to study those who are unhoused in Athens-Clarke County (potential causes or correlates, demographics, government performance metrics, etc.). We need to collect data.
 
 ---
 class: inverse, middle, center
