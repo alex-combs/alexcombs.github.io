@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: August 25, 2022
+### Last updated: August 29, 2022
 ]
 
 ---
@@ -194,6 +194,21 @@ class: center, middle, inverse, title-slide
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+
+---
+# Why care about unit of analysis?
+
+- Important to know what level is observed or measured. For example, individuals vs. an aggregation of individuals within a city, county, state, etc.
+
+--
+
+- Spreadsheets will often combine units of analysis. For example, state totals calculated from multiple county totals. This is fine for spreadheets.
+
+--
+
+- A raw dataset we which to use in software like RStudio should contain one unit of analysis. For example, state totals should be separate from county totals.
+
+- Understanding the unit of analysis will help us identify rows or columns that do not belong together.
 
 ---
 class: inverse, middle, center

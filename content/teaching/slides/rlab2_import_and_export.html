@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: August 25, 2022
+### Last updated: August 29, 2022
 ]
 
 ---
@@ -89,12 +89,16 @@ library(gapminder) #contains data we need to use
 library(fivethirtyeight) #contains data we need to use
 ```
 
+- If you receive error message "package does not exist," you need to install it.
+
+- We will wait until all students have necessary packages loaded. For those waiting, please be patient.
+
 ---
 # Set-up: files
 
-&gt; **Download "ncbirths.csv" from eLC and add it to your current project folder**
+&gt; **Download "ncbirths" from eLC and add it to your current project folder**
 
-&gt; **Download "ga_schdist_raw.xlsx" from eLC and add to your "rlab2" project folder.**
+&gt; **Download "ga_schdist_raw" from eLC and add to your "rlab2" project folder.**
 
 ---
 class: inverse, middle, center
@@ -429,9 +433,8 @@ anyname &lt;- read_excel("filename.xlsx")
 - Some notable features of this dataset:
   - Variable names are in the top row
   - Variable names are short
-  - Missing values denoted by "NA"
 
-- This dataset should import nicely
+- This dataset should import nicely without needing additional changes
 
 ---
 # Importing data
@@ -484,26 +487,21 @@ anyname &lt;- read_excel("filename.xlsx")
 ---
 # Importing data
 
-&gt; **Open "ga_schdist_raw.xlsx" with Excel**
+- If we were to open "ga_schdist_raw.xlsx" with spreadsheet software like Excel, we would see this file has some undesirable qualities
+  - At least first 6 rows should be skipped
+  - Variable names are long (OK but inconvenient)
+  - Row 231 may look like data we want to import but it is not. It contains summary information that does not belong in a data set where districts are the unit of analysis.
+  - Additional rows at the bottom that do not contain data
 
 --
 
-- We can see the first 6 rows should be skipped
-
-- Variable names are very long
-
-- At the bottom of the dataset there are rows we do not want to import
-
---
-
-- Note that the information we want to import runs from cell A7 to cell I230
-
-- Or starting at A8 if we want to exclude variable names
+- The information we want to import from "ga_schdist_raw.xlsx" runs from cell A7 to cell I230
+- Or A8 to I230 if we want to skip the long variable names
 
 ---
 # Importing data
 
-&gt; **Back in RStudio, click on "ga_schdist_raw.xlsx" in the file pane, then "Import Dataset..."**
+&gt; **In RStudio, click on "ga_schdist_raw.xlsx" in the file pane, then "Import Dataset..."**
 
 --
 
@@ -511,39 +509,37 @@ anyname &lt;- read_excel("filename.xlsx")
 
 --
 
-&gt; **Uncheck "First Row as Names"**
+&gt; **Uncheck "First Row as Names" because row 8 contains data, not variable names.**
 
 --
 
-&gt; **Note there are numeric variables stored as character. Click on the first one that needs changed and change to numeric.**
+&gt; **There are numeric variables stored as character. Click on each and change to numeric using the dropdown menu.**
 
 --
 
-&gt; **Copy code and paste in code chunk.**
+&gt; **Copy code and paste in the code chunk in your Rmd.**
 
 ---
 # Importing data
 
-&gt; **Delete the code we don't want like before.**
+&gt; **Delete the code we don't want like before (package load, full file path, and View).**
 
 --
 
-- Should look something like...
+- Should look like below
 
 
 ```r
 ga_schdist_raw &lt;- read_excel("ga_schdist_raw.xlsx", 
                              range = "A8:I230", 
                              col_names = FALSE, 
-                             col_types = c("text", "text", "text", "numeric", "text", "text", "text", "text", "text"))
+                             col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
 ```
 
-&gt; **Change the "text" `col_types` following the first "numeric" to numeric**
+&gt; **Run this code to complete import.**
 
 ---
 # Importing data
-
-&gt; **Run this code to complete import.**
 
 - You should have a new object `ga_schdist_raw` in your environment
 
@@ -551,12 +547,12 @@ ga_schdist_raw &lt;- read_excel("ga_schdist_raw.xlsx",
 
 --
 
-- All that's missing now are variable names...
+- All that's missing now are variable names
 
 ---
 # Importing data
 
-- No variable names because `col_names = FALSE`
+- No variable names in our first import because `col_names = FALSE`
 
 
 ```r
@@ -578,11 +574,17 @@ c("district","state","charter","enroll","lep", "iep","frpl","white","expenditure
 
 --
 
-&gt; **Re-run the code to import**
+&gt; **Code should now look like below. If so, run it again to update import.**
 
 
+```r
+ga_schdist_raw &lt;- read_xlsx("labs_files/ga_schdist_raw.xlsx", 
+                            range = "A8:I230",
+                            col_names =  c("district","state","charter","enroll","lep", "iep","frpl","white","expenditures"))
+```
 
---
+---
+# Importing Data
 
 - High initial cost, but now anyone using the same data file can run this code to get a clean import.
 
@@ -600,11 +602,11 @@ c("district","state","charter","enroll","lep", "iep","frpl","white","expenditure
 ---
 # Import from URL
 
-- General syntax:
+- General syntax (requires the data.table package):
 
 
 ```r
-anyname &lt;- fread('url')
+anyname &lt;- fread('url') 
 ```
 
 ---
@@ -620,7 +622,7 @@ anyname &lt;- fread('url')
 
 --
 
-&gt; **Use the `fread()` function to import NYT's state-level coronavirus data**
+&gt; **Use the `fread()` function to import state Coronavirus data linked above.**
 
 
 
@@ -636,11 +638,11 @@ class: inverse, center, middle
 ---
 # Knit to Word
 
-- If Word is installed on your computer, knitting to Word should just work
+- If Word is installed on your computer, knitting to Word should work
 
 &gt; **In the Knit dropdown menu, select "Knit to Word"**
 
-- Then you can change the formatting using Word after you finish the main content using R (text, tables, graphs)
+- Then you can improve the formatting using Word
 
 ---
 # Knit to PDF
@@ -651,11 +653,10 @@ class: inverse, center, middle
 
 
 ```r
-# First
+# In the console pane, type
 install.packages('tinytex') # hit Enter
-# Next
-tinytex::install_tinytex() # hit Enter, this will take a few minutes
-# if you ever need to uninstall TinyTeX, run tinytex::uninstall_tinytex()
+# Next, in the console pane, type
+tinytex::install_tinytex() # hit Enter
 ```
 
 ---
@@ -695,7 +696,7 @@ write_csv(name_of_object_in_environment, 'name_for_new_file.csv')
 
 - Launch RStudio -&gt; load packages &amp; import data needed to do analysis -&gt; knit to document -&gt; save documents and data for later use
 
-- This covers the general procedure of realistically using RStudio 
+- This covers the general workflow of realistically using RStudio 
 
 - Now just need to add skills that take us from import to desired export
 
