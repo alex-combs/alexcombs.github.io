@@ -1,6 +1,6 @@
 ---
 title: "PADP 7120 Data Applications in PA"
-subtitle: "Measurement Validity & Reliability"
+subtitle: "Data Measurement"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
 date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
@@ -33,23 +33,40 @@ library(knitr)
 ![](lectures_files/credible.png)
 
 ---
-# Measurement
+# Measurement Validity
 
 - **Measurement Validity**: The extent to which a variable measures what it is intended to measure.
 
---
+- Are values recorded accurately?
+
+- Do values accurately measure the phenomenon I or others claim they do?
+
+---
+# Measurement Reliability
 
 - **Measurement Reliability**: The extent to which the measurement process or instrument for a variable generates consistent values.
 
+- Regardless of measurement validity, are the values consistent across units and/or time?
+
+- Are differences across units or time real or due to differences in measurement?
+
 ---
-# Measurement
+# Example
+
 
 ![](lectures_files/measure_lines.png)
 
----
-class: inverse, middle, center
 
-# Group discussion
+---
+# More examples
+
+- Property values
+
+- Crime rates
+
+- Test scores
+
+- Survey responses
 
 ---
 # Why does this matter?
