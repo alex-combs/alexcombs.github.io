@@ -33,9 +33,6 @@ class: center, middle, inverse, title-slide
 
 
 
-- Preliminary cleaning
-  - rename variables
-  - change variable type
 - Wrangle verbs
   - extract rows using `filter`
   - extract columns using `select`
@@ -126,154 +123,17 @@ library(gapminder) # for data we will use
 ```
 
 ---
-# Setup: data files
-
-&gt; **Download the "state_finance_2016.csv" file from eLC and add to your project folder**
-
-- "state_finance_2016.csv" is state government finance data downloaded from the Census
-
----
-# Import Data
-
-
-
-&gt; **In the setup code chunk, import "state_finance_2016.csv". Name the data the same as the file name, `state_finance_2016`.**
-
----
 # Preview data
 
 &gt; **Below the setup code chunk, on a new line outside of the code chunk, type a heading titled Raw Data**
 
 --
 
-&gt; **In a new code chunk, use the `glimpse()` function to provide your reader information about `gapminder` and `state_finance_2016`**
+&gt; **In a new code chunk, use the `glimpse()` function to provide your reader information about `gapminder`**
 
 --
 
 &gt; **Name this code chunk like so {r preview}**
-
----
-# Rename variables
-
-- One of the first things we may want to do so the rest of our code is shorter
-
-- Variable names should be as short as possible and most prefer `snake_case_format`
-
-- Previous lab we learned how to rename variables while importing data
-
-
-```r
-ga_schdist_clean &lt;- read_excel("ga_schdist_raw.xlsx", 
-                             range = "A8:I230", 
-*                            col_names = c("district","state","charter","enroll","lep", "iep","frpl","white","expenditures"),
-                             col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
-```
-
----
-# Rename variables
-
-- If we want to rename a variable in data already imported, then:
-
-
-```r
-data_set &lt;- rename(data_set, "new_name" = "current_name", 
-                    "new_name" = "current_name", ...)
-```
-
-- Replace `data_set` with the name of the dataset, `new_name` with the new name you want, and `current_name` with the name of variable you want to change
-
-- Requires quotation marks
-
----
-# Rename variables
-
-- There is a variable named `id_long` in the `state_finance_2016` dataset
-
-- Suppose I wanted to rename `id_long` to `census_code` and **overwrite** the `state_finance_2016` dataset
-
-
-```r
-state_finance_2016 &lt;- rename(state_finance_2016, "census_code" = "id_long")
-```
-
----
-# Rename variables
-
-&gt; **Insert a new code chunk. Name the code chunk `var_rename`.**
-
-&gt; **Rename `id_short` to `id` in the `state_finance_2016` dataset.**
-
-
-
-&gt; **Re-run the `glimpse` command above to see if `rename` worked as expected.**
-
----
-# Convert variable types
-
-- Previous lab we learned how to convert variable types while importing data
-
-
-```r
-ga_schdist_clean &lt;- read_excel("ga_schdist_raw.xlsx", 
-                             range = "A8:I230", 
-                             col_names = c("district","state","charter","enroll","lep", "iep","frpl","white","expenditures"),
-*                            col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
-```
-
----
-# Converting variable types
-
-- Suppose we need to convert a variable after importing data
-
-
-```r
-data_set$variable &lt;- as.newtype(data_set$variable)
-```
-
-- Replace `data_set$variable` accordingly and `as.newtype` to one of the variable type options:
-
---
-
-
-```r
-as.numeric()
-as.character() #text
-as.integer()
-as.factor() #categorical
-as.logical() # converts binary (dummy) variables to True/False
-```
-
----
-# Converting variable types
-
-- The output of `glimpse(state_finance_2016)` shows us that the variable `state` is stored as a character/text variable
-
-- Suppose I wanted R to recognize `state` as a categorical variable
-
-
-```r
-state_finance_2016$state &lt;- as.factor(state_finance_2016$state)
-```
-
---
-
-&gt; **Insert a new code chunk. Name the code chunk `type_convert`.**
-
-- There are two variables in `state_finance_2016` stored as text we want to convert to categorical: `finance_type` and `finance_source`.
-
-&gt; **Convert these two variables to categorical.**
-
----
-# Rename and type conversion recap
-
-- Can rename or convert variables during or after importing the data
-
-- Renaming variables makes code easier to write and read
-
-- Converting variable types is sometimes necessary for certain functions
-  - Can't perform math on a variable stored as character
-  - Specifying categorical variables helps with summary stats and graphs
-  - When combining datasets, we need certain variables to be the same type across datasets
 
 ---
 class: inverse, middle, center
