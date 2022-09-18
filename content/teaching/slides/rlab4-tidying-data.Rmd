@@ -15,8 +15,8 @@ output:
 ---
 # Objectives
 
-- Pivot a wide dataset to long
-- Pivot a long dataset to wide
+- Pivot wide data to long
+- Pivot long data to wide
 - Separate a variable into multiple variables
 
 ```{r setup, include=FALSE}
@@ -43,9 +43,9 @@ library(gapminder)
 ---
 # Setup
   
-> **Start a new R Markdown document and click "OK"**
+> **Start a new R Markdown document**
 
-> **Keep setup code chunk at the top. Change code to `echo=FALSE`**
+> **Keep setup code chunk at the top. Change to `echo=FALSE`**
 
 > **Change YAML:**
 
@@ -74,8 +74,6 @@ library(tidyverse)
 # Setup: Data
 
 > **Download the "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv" files from eLC and add to your project folder**
-
-- The "state_finance_2016_wrangled.csv" should be identical to the one you exported during the wrangle practice. You could copy that file over to this folder but is offered on eLC in case you don't trust your version.  
 
 > **In the setup code chunk, import "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv". You do not need to use any import options. Name the saved datasets in your environment the same as the file names.**
 
@@ -136,14 +134,10 @@ state_finance_2016_wrangled %>%
 
 - Why?
 
---
-
-- Because `finance_source` should be two variables, not one
-
 ---
 # Long vs. Wide Data
 
-- Most tidying issues involve whether a dataset should be long or wide
+- Most tidying issues involve whether a data should be long or wide
 
 --
 
@@ -206,7 +200,7 @@ state_finance_2016_wrangled %>%
 
 > **Insert a heading "Tidy State Finance Data"**
 
-> **Start a code chunk. Save a new dataset `state_finance_2016_tidy` that is a copy of `state_finance_2016_wrangled`**
+> **Start a code chunk. Add the following code that begins to overwrite the original data**
 
 ```{r, eval=FALSE}
 state_finance_2016_tidy <- state_finance_2016_wrangled %>% 
@@ -250,35 +244,6 @@ state_finance_2016_tidy <- state_finance_2016_wrangled %>%
 ```{r, echo=FALSE}
 state_finance_2016_tidy %>% 
   slice_head(n=4) %>% 
-  kable()
-```
-
----
-# Changing variable names
-
-- The variable names in our `state_finance_2016_tidy` are not ideal.
-
-> **Change "Total Revenue" to `revenue` and "Total Expenditure" to `expenditure`.**
-
-```{r, echo=FALSE}
-state_finance_2016_tidy <- state_finance_2016_tidy %>% 
-  rename('revenue' = 'Total Revenue', 
-         'expenditure' = 'Total Expenditure')
-```
-
----
-# Summarize by Group
-
-- Recall in the wrangle practice you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
-
-> **Now create a new variable that computes the surplus (revenue - expenditure) for each state. Provide a table that lists surplus in descending order for three states with highest surplus.**
-
-```{r, echo=FALSE}
-state_finance_2016_tidy %>% 
-  mutate(surplus = revenue - expenditure) %>% 
-  select(state, surplus) %>% 
-  arrange(desc(surplus)) %>% 
-  slice_head(n=3) %>% 
   kable()
 ```
 

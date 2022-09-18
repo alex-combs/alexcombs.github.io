@@ -4,27 +4,35 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab4-tidying-data_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="rlab4-tidying-data_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="rlab4-tidying-data_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="rlab4-tidying-data_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## RLab 4: Tidying Data
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: February 02, 2022
+]
+.date[
+### Last updated: September 18, 2022
+]
 
 ---
 
 # Objectives
 
-- Pivot a wide dataset to long
-- Pivot a long dataset to wide
+- Pivot wide data to long
+- Pivot long data to wide
 - Separate a variable into multiple variables
 
 
@@ -47,9 +55,9 @@ class: center, middle, inverse, title-slide
 ---
 # Setup
   
-&gt; **Start a new R Markdown document and click "OK"**
+&gt; **Start a new R Markdown document**
 
-&gt; **Keep setup code chunk at the top. Change code to `echo=FALSE`**
+&gt; **Keep setup code chunk at the top. Change to `echo=FALSE`**
 
 &gt; **Change YAML:**
 
@@ -80,8 +88,6 @@ library(tidyverse)
 # Setup: Data
 
 &gt; **Download the "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv" files from eLC and add to your project folder**
-
-- The "state_finance_2016_wrangled.csv" should be identical to the one you exported during the wrangle practice. You could copy that file over to this folder but is offered on eLC in case you don't trust your version.  
 
 &gt; **In the setup code chunk, import "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv". You do not need to use any import options. Name the saved datasets in your environment the same as the file names.**
 
@@ -142,14 +148,10 @@ Tidy data satisfy three rules:
 
 - Why?
 
---
-
-- Because `finance_source` should be two variables, not one
-
 ---
 # Long vs. Wide Data
 
-- Most tidying issues involve whether a dataset should be long or wide
+- Most tidying issues involve whether a data should be long or wide
 
 --
 
@@ -224,7 +226,7 @@ new_data &lt;- current_data %&gt;%
 
 &gt; **Insert a heading "Tidy State Finance Data"**
 
-&gt; **Start a code chunk. Save a new dataset `state_finance_2016_tidy` that is a copy of `state_finance_2016_wrangled`**
+&gt; **Start a code chunk. Add the following code that begins to overwrite the original data**
 
 
 ```r
@@ -275,29 +277,6 @@ state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;%
 |  2|Alaska   | 2016|       8071732|          12436184|
 |  4|Arizona  | 2016|      38232376|          42085094|
 |  5|Arkansas | 2016|      21439227|          22910901|
-
----
-# Changing variable names
-
-- The variable names in our `state_finance_2016_tidy` are not ideal.
-
-&gt; **Change "Total Revenue" to `revenue` and "Total Expenditure" to `expenditure`.**
-
-
-
----
-# Summarize by Group
-
-- Recall in the wrangle practice you computed the average `amount_1000` but realized it was meaningless because it combined revenues and expenditures.
-
-&gt; **Now create a new variable that computes the surplus (revenue - expenditure) for each state. Provide a table that lists surplus in descending order for three states with highest surplus.**
-
-
-|state          | surplus|
-|:--------------|-------:|
-|Nevada         | 1493406|
-|North Carolina | 1359546|
-|Hawaii         | 1227346|
 
 ---
 # Wide to Long
@@ -461,6 +440,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
