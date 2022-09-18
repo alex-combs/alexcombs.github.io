@@ -4,18 +4,28 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab5-visualizations_files/header-attrs-2.11/header-attrs.js"></script>
+    <script src="rlab5-visualizations_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## RLab 5: Visualizations
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: February 14, 2022
+]
+.date[
+### Last updated: September 18, 2022
+]
 
 ---
 
@@ -79,7 +89,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 2,213,233
+## Rows: 2,502,832
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-01-21, 2020-01-22, 2020-01-23, 2020-01-24, 2020-01-24, 20…
 ## $ county &lt;chr&gt; "Snohomish", "Snohomish", "Snohomish", "Cook", "Snohomish", "Or…
@@ -100,7 +110,7 @@ covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/maste
 
 
 ```
-## Rows: 110,649
+## Rows: 124,889
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 20…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cobb…
@@ -124,7 +134,7 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 
 ```
-## Rows: 110,649
+## Rows: 124,889
 ## Columns: 6
 ## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 20…
 ## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cobb…
@@ -145,16 +155,19 @@ covid_ga$date &lt;- ymd(covid_ga$date)
 
 --
 
-- Note the latest date with data is yesterday. We will want to focus on the most recent counts, so let's save yesterday's date for easy reference.
+- Note the latest date with data is end_date. We will want to focus on the most recent counts, so let's save end_date's date for easy reference.
 
 &gt; **Add and run following code.**
 
 
+
+
+
 ```r
-yesterday &lt;- '2022-02-13'
+end_date &lt;- '2021-12-31'
 ```
 
-- Now we can add `yesterday` to our code any time we want to filter conditional on the most recent data, and we only need to update `yesterday` to update any graph we make.
+- Now we can add `end_date` to our code any time we want to filter conditional on the most recent data, and we only need to update `end_date` to update any graph we make.
 
 ---
 # Viz 1
@@ -170,7 +183,7 @@ yesterday &lt;- '2022-02-13'
 ---
 # Viz 1
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 2
@@ -179,7 +192,7 @@ yesterday &lt;- '2022-02-13'
 
 --
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 3
@@ -195,7 +208,7 @@ yesterday &lt;- '2022-02-13'
 ---
 # Viz 3
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # County comparison
@@ -232,12 +245,12 @@ covid_ga_5 &lt;- covid_ga %&gt;%
 ---
 # Viz 4
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 5
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 6 &amp; 7
@@ -253,12 +266,12 @@ covid_ga_5 &lt;- covid_ga %&gt;%
 ---
 # Viz 6
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viz 7
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # What's the Problem?
@@ -302,7 +315,7 @@ class: inverse, center, middle
 
 ```r
 covid_ga_5 %&gt;% 
-  filter(date == yesterday) %&gt;% 
+  filter(date == end_date) %&gt;% 
   ggplot(aes(x = county, y = cases)) +
   geom_col() +
 * labs(title = 'Total COVID Cases',
@@ -313,7 +326,7 @@ covid_ga_5 %&gt;%
 ---
 # Titles and axes labels
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Themes
@@ -337,7 +350,7 @@ theme_bw()
 
 ```r
 covid_ga_5 %&gt;% 
-  filter(date == yesterday) %&gt;% 
+  filter(date == end_date) %&gt;% 
   ggplot(aes(x = county, y = cases)) +
   geom_col() +
   labs(title = 'Total COVID Cases',
@@ -349,7 +362,7 @@ covid_ga_5 %&gt;%
 ---
 # Themes
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Text size
@@ -361,7 +374,7 @@ covid_ga_5 %&gt;%
 
 ```r
 covid_ga_5 %&gt;% 
-  filter(date == yesterday) %&gt;% 
+  filter(date == end_date) %&gt;% 
   ggplot(aes(x = county, y = cases)) +
   geom_col() +
   labs(title = 'Total COVID Cases',
@@ -375,7 +388,7 @@ covid_ga_5 %&gt;%
 ---
 # Text size
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Skill Check
@@ -436,6 +449,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
