@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 18, 2022
+### Last updated: September 19, 2022
 ]
 
 ---
@@ -57,7 +57,7 @@ class: center, middle, inverse, title-slide
   
 &gt; **Start a new R Markdown document**
 
-&gt; **Keep setup code chunk at the top. Change to `echo=FALSE`**
+&gt; **Keep setup code chunk at the top. Change to `echo=FALSE`. Following echo, add `warning=FALSE` and `message=FALSE` separated by commas.**
 
 &gt; **Change YAML:**
 
@@ -89,7 +89,7 @@ library(tidyverse)
 
 &gt; **Download the "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv" files from eLC and add to your project folder**
 
-&gt; **In the setup code chunk, import "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv". You do not need to use any import options. Name the saved datasets in your environment the same as the file names.**
+&gt; **In the setup code chunk, import "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv". You do not need to use any import options. Name the objects in your environment the same as the file names.**
 
 
 
@@ -151,11 +151,12 @@ Tidy data satisfy three rules:
 ---
 # Long vs. Wide Data
 
-- Most tidying issues involve whether a data should be long or wide
-
+- Most tidying issues involve data that is too long or too wide
+  - Long if too many rows relative to unit of analysis
+  - Wide if too many columns
 --
 
-- Is `state_finance_2016_wrangled` in long or wide format?
+- Is `state_finance_2016_wrangled` too long or wide?
 
 
 | id|state   | year|finance_source    | amount_1000|
@@ -189,18 +190,18 @@ Tidy data satisfy three rules:
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Are these data in long or wide format?
+- Are these data tidy? Why or why not?
 
 --
 
-- Are these data tidy? Why or why not?
+- Are these data too long or wide?
 
 ---
 # Tidy State Finance Data
 
 - Our goal is to tidy `state_finance_2016_wrangled`
 
-- It is long when it should be wide
+- It is too long, needs to be wider
 
 --
 
@@ -244,26 +245,16 @@ state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;%
 
 
 ```r
-new_data &lt;- current_data %&gt;% 
+state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;% 
   pivot_wider(names_from = column-with-variable-names,
               values_from = column-with-values)
 ```
 
 - Which column contains the names of the new variables we want?
 - Which column contains the values for the new variables?
-&gt; **Add `pivot_wider` to your code chunk according to answers.**
-
----
-# Tidy State Finance Data
+&gt; **Add `pivot_wider` to your code chunk according to answers. Run your code and examine the new data.**
 
 
-```r
-state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;% 
-  pivot_wider(names_from = finance_source,
-              values_from = amount_1000)
-```
-
-&gt; **Run your code and examine the new dataset to see if/how it worked.**
 
 ---
 # Tidy State Finance Data
@@ -300,7 +291,43 @@ state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;%
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+- The variable names contain two variables: pop and year
+- The values for year are *in* the variable name
+- The values in the rows measure pop
 - To tidy wide data to long format, we can use `pivot_longer`
+
+- General code:
+
+
+```r
+new_data &lt;- current_data %&gt;% 
+  pivot_longer(cols = variables_you_want_to_pivot,
+               names_to = 'name_of_new_variable',
+               names_prefix = 'where_to_split_varname',
+               values_to = 'varname_containing_original_values')
+```
+
+---
+# Wide to long
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop1997 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop2002 &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop2007 &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; United States &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 272911760 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 287675526 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 301139947 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 
 
 ```r
@@ -377,14 +404,10 @@ uspop_tidy &lt;- uspop %&gt;%
 --
 
 
-```r
-ky_priv_enroll_tidy &lt;- ky_private_enroll_long %&gt;% 
-  separate(city_county, c('city', 'county'))
-```
 
 --
 
-&gt; **Finally, provide the reader the first 6 rows of these tidy data**
+&gt; **Provide the reader the first 6 rows of these tidy data**
 
 &gt; **Knit to HTML and check that the output looks correct**
 
