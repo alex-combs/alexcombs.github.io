@@ -532,36 +532,74 @@ ggplot(ncbirths, aes(x = weeks, fill = habit)) +
 ---
 # Measures of association
 
-Suppose we want to investigate the association between the weight a mother gains during pregnancy and the weight of the child?
+Suppose we want to investigate the association between the percent of a state population that is white and the percent of a population that voted for Donald Trump.
+
+```{r, include=FALSE}
+state_trump <- hate_crimes %>%
+  mutate(share_white = 1 - share_non_white,
+         urbanization = if_else(share_pop_metro<=0.75, "low", "high")) %>% 
+  select(state, 
+         median_house_inc, 
+         share_pop_hs, 
+         share_white, 
+         share_white_poverty, 
+         share_vote_trump,
+         urbanization) %>%
+  filter(state != "District of Columbia") %>% 
+  mutate_at(vars(share_pop_hs, share_white, share_white_poverty,
+              share_vote_trump), funs(.*100))
+```
 
 .pull-left[
 ```{r, echo=FALSE}
-ncbirths %>% 
-  select(gained, weight) %>% 
-  head(n=8) %>% 
+state_trump %>% 
+  select(share_white, share_vote_trump) %>% 
+  head(n=6) %>% 
   kable(format = 'html')
 ```
 ]
 
 .pull-right[
-```{r, echo=FALSE}
-ggplot(ncbirths, aes(x = gained, y = weight)) +
-  geom_point() +
+```{r, message=FALSE, echo=FALSE, fig.align='center'}
+ggplot(data = state_trump, 
+       aes(y = share_vote_trump, x = share_white)) + 
+  geom_point(color = 'springgreen4', size = 2) + 
+  labs(x = "Percent of state population white", 
+       y = "Percent of population voted for Trump", 
+       title = "White density and Trump support in the US") +
   theme_minimal() +
-  theme(axis.text=element_text(size=16))
+  theme(text=element_text(size=16))
 ```
 ]
 
 ---
 # Measures of association
 
-- The association between two or more variables can be described in terms of
+- Or percent of white population in poverty
+
+```{r, message=FALSE, echo=FALSE, fig.align='center', fig.height=5}
+ggplot(data = state_trump, 
+       aes(y = share_vote_trump, x = share_white_poverty)) + 
+  geom_point(color = 'springgreen4', size = 2) + 
+  labs(x = "Percent of white population in poverty", 
+       y = "Percent of population voted for Trump", 
+       title = "White poverty and Trump support in the US") +
+  theme_minimal() +
+  theme(text=element_text(size=16))
+```
+
+- Units with higher values along the x-axis tend to have higher or lower values along the Y axis. Or no tendency.
+
+---
+# Measures of association
+
+- The association between two variables can be described in terms of
 
 - **Direction:** when one variable increases, does the other variable increase or decrease
 
 - **Strength:** how much do the variables move together in tandem
 
-- **Magnitude:** when one variable increases, for instance, one unit, by how much does the other variable increase or decrease
+- **Magnitude:** when one variable increases a certain amount, how much does the other variable increase or decrease
 
 ---
 # Measures of association
@@ -583,12 +621,45 @@ ggplot(ncbirths, aes(x = gained, y = weight)) +
 
 - No definitive scale; rule of thumb:
   - 0.8: very strong
-  - 0.6: moderately strong
+  - 0.6: strong
+  - 0.4: moderate
   - 0.2: weak
 
-```{r}
-cor(ncbirths$gained, ncbirths$weight)
+---
+# Correlation coefficient
+```{r, message=FALSE, echo=FALSE, fig.align='center', fig.height=5}
+ggplot(data = state_trump, 
+       aes(y = share_vote_trump, x = share_white_poverty)) + 
+  geom_point(color = 'springgreen4', size = 2) + 
+  labs(x = "Percent of white population in poverty", 
+       y = "Percent of population voted for Trump", 
+       title = "White poverty and Trump support in the US") +
+  theme_minimal() +
+  theme(text=element_text(size=16))
 ```
+
+```{r}
+cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
+```
+
+- What is the interpretation?
+
+---
+# Correlation
+
+Percent white population in poverty
+```{r}
+cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
+```
+
+
+Percent population that is white
+```{r}
+cor(state_trump$share_vote_trump, state_trump$share_white)
+```
+
+
+Which correlation is stronger?
 
 ---
 # Limitations of correlation
@@ -602,7 +673,7 @@ cor(ncbirths$gained, ncbirths$weight)
 ---
 class: inverse, middle, center
 
-# Review
+# Review Questions
 
 ---
 # Affected measures
@@ -664,7 +735,7 @@ What effect does this have on the measures of center and spread for the public s
   - Max: 100
 ]
 
-- What story do these numbers tell about test scores between the two schools?
+- What do these numbers tell us about test scores between the two schools? What don't they tell us?
 
 ---
 # Choosing measures
@@ -697,119 +768,6 @@ gapminder %>%
 - Which measures of center and spread should we use or not use for the above distributions?
 
 ---
-# Choosing measures
-
-.pull-left[
-```{r}
-mean(ncbirths$weeks)
-median(ncbirths$weeks)
-sd(ncbirths$weeks)
-IQR(ncbirths$weeks)
-```
-]
-
---
-
-.pull-right[
-```{r}
-mean(gapminder$gdpPercap)
-median(gapminder$gdpPercap)
-sd(gapminder$gdpPercap)
-IQR(gapminder$gdpPercap)
-```
-]
-
----
-# Consider unit of analysis
-
-- **Politician A:** The economy is awful! Thirty states had falling incomes last year.
-
-- **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
-
-- Which politician is lying?
-
----
-# Consider unit of analysis
-
-- Average class size vs. class size for average student
-
-- The former unit of analysis is class size. The latter is student.
-
----
-# Consider unit of analysis
-
-- Suppose PADP has only 5 classes with no student in more than 1 class. 4 classes have 5 students, and 1 class has 100 students
-
-- Average class size
-```{r}
-(100 + 5 + 5 + 5 + 5)/5
-```
-
---
-  
-- Class size experienced by average student
-
-```{r}
-(100*100+20*5)/120
-```
-
----
-# Center is only partial story
-
-- Expensive new public health policy in city increases median life expectancy by only one week. Conclusion is the policy is not cost-effective.
-
---
-
-- Median test scores stay the same despite increase in spending.
-
----
-# Correlation
-
-```{r q1-5, include=FALSE}
-state_trump <- hate_crimes %>%
-  mutate(share_white = 1 - share_non_white,
-         urbanization = if_else(share_pop_metro<=0.75, "low", "high")) %>% 
-  select(state, 
-         median_house_inc, 
-         share_pop_hs, 
-         share_white, 
-         share_white_poverty, 
-         share_vote_trump,
-         urbanization) %>%
-  filter(state != "District of Columbia") %>% 
-  mutate_at(vars(share_pop_hs, share_white, share_white_poverty,
-              share_vote_trump), funs(.*100))
-```
-
-.pull-left[
-```{r q8.1, message=FALSE, echo=FALSE, fig.align='center'}
-ggplot(data = state_trump, 
-       aes(y = share_vote_trump, x = share_white)) + 
-  geom_point(color = 'springgreen4', size = 2) + 
-  labs(x = "Percent of state population white", 
-       y = "Percent of population voted for Trump", 
-       title = "White density and Trump support in the US") +
-  theme_minimal() +
-  theme(text=element_text(size=16))
-```
-]
-
-.pull-right[
-```{r q8.2, message=FALSE, echo=FALSE, fig.align='center'}
-ggplot(data = state_trump, 
-       aes(y = share_vote_trump, x = share_white_poverty)) + 
-  geom_point(color = 'springgreen4', size = 2) + 
-  labs(x = "Percent of white population in poverty", 
-       y = "Percent of population voted for Trump", 
-       title = "White poverty and Trump support in the US") +
-  theme_minimal() +
-  theme(text=element_text(size=16))
-```
-]
-
-- Units with higher values along the x-axis tend to have higher/lower values along the Y axis.
-
----
 # Correlation
 
 ```{r, message=FALSE, echo=FALSE, fig.align='center', fig.height=5}
@@ -823,23 +781,8 @@ ggplot(data = state_trump,
   theme(text=element_text(size=16))
 ```
 
+Unit of analysis is states.
 Is the correlation positive or negative?
-
----
-# Correlation
-
-```{r, message=FALSE, echo=FALSE, fig.align='center', fig.height=5}
-ggplot(data = state_trump, 
-       aes(y = share_vote_trump, x = median_house_inc)) + 
-  geom_point(color = 'springgreen4', size = 2) + 
-  labs(x = "Median household income", 
-       y = "Percent of population voted for Trump", 
-       title = "Income and Trump support in the US") +
-  theme_minimal() +
-  theme(text=element_text(size=16))
-```
-
-Do you think the correlation coefficient is closer to 0 or -1?
 
 ---
 # Correlation
@@ -859,18 +802,7 @@ ggplot(data = state_trump,
 cor(state_trump$median_house_inc, state_trump$share_vote_trump)
 ```
 
----
-# Correlation
-
-- Correlation is not causation. It is a necessary condition but not sufficient.
-
---
-
-- Crime is strongly correlated with ice cream sales.
-
---
-
-- Many such examples [here](https://www.tylervigen.com/spurious-correlations)
+What is the interpretation?
 
 ---
 # Recap

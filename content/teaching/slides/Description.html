@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 18, 2022
+### Last updated: September 19, 2022
 ]
 
 ---
@@ -804,67 +804,70 @@ class: inverse, middle, center
 ---
 # Measures of association
 
-Suppose we want to investigate the association between the weight a mother gains during pregnancy and the weight of the child?
+Suppose we want to investigate the association between the percent of a state population that is white and the percent of a population that voted for Donald Trump.
+
+
 
 .pull-left[
 &lt;table&gt;
  &lt;thead&gt;
   &lt;tr&gt;
-   &lt;th style="text-align:right;"&gt; gained &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; weight &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; share_white &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; share_vote_trump &lt;/th&gt;
   &lt;/tr&gt;
  &lt;/thead&gt;
 &lt;tbody&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 38 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.63 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 63 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 34 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8.00 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 58 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 53 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 76 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 8.44 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 51 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 50 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 15 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 4.69 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 74 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 60 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 52 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 6.94 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 39 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 33 &lt;/td&gt;
   &lt;/tr&gt;
   &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 28 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 7.44 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 75 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 7.56 &lt;/td&gt;
-  &lt;/tr&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:right;"&gt; 9 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 5.81 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 69 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 44 &lt;/td&gt;
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 ]
 
 .pull-right[
-![](Description_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
+&lt;img src="Description_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 # Measures of association
 
-- The association between two or more variables can be described in terms of
+- Or percent of white population in poverty
+
+&lt;img src="Description_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
+
+- Units with higher values along the x-axis tend to have higher or lower values along the Y axis. Or no tendency.
+
+---
+# Measures of association
+
+- The association between two variables can be described in terms of
 
 - **Direction:** when one variable increases, does the other variable increase or decrease
 
 - **Strength:** how much do the variables move together in tandem
 
-- **Magnitude:** when one variable increases, for instance, one unit, by how much does the other variable increase or decrease
+- **Magnitude:** when one variable increases a certain amount, how much does the other variable increase or decrease
 
 ---
 # Measures of association
@@ -886,17 +889,51 @@ Suppose we want to investigate the association between the weight a mother gains
 
 - No definitive scale; rule of thumb:
   - 0.8: very strong
-  - 0.6: moderately strong
+  - 0.6: strong
+  - 0.4: moderate
   - 0.2: weak
+
+---
+# Correlation coefficient
+&lt;img src="Description_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ```r
-cor(ncbirths$gained, ncbirths$weight)
+cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
 ```
 
 ```
-## [1] 0.1660534
+## [1] 0.4872326
 ```
+
+- What is the interpretation?
+
+---
+# Correlation
+
+Percent white population in poverty
+
+```r
+cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
+```
+
+```
+## [1] 0.4872326
+```
+
+
+Percent population that is white
+
+```r
+cor(state_trump$share_vote_trump, state_trump$share_white)
+```
+
+```
+## [1] 0.4220675
+```
+
+
+Which correlation is stronger?
 
 ---
 # Limitations of correlation
@@ -910,7 +947,7 @@ cor(ncbirths$gained, ncbirths$weight)
 ---
 class: inverse, middle, center
 
-# Review
+# Review Questions
 
 ---
 # Affected measures
@@ -972,177 +1009,28 @@ What effect does this have on the measures of center and spread for the public s
   - Max: 100
 ]
 
-- What story do these numbers tell about test scores between the two schools?
+- What do these numbers tell us about test scores between the two schools? What don't they tell us?
 
 ---
 # Choosing measures
 
 .pull-left[
-![](Description_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](Description_files/figure-html/unnamed-chunk-40-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
-&lt;img src="Description_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Description_files/figure-html/unnamed-chunk-41-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 - Which measures of center and spread should we use or not use for the above distributions?
-
----
-# Choosing measures
-
-.pull-left[
-
-```r
-mean(ncbirths$weeks)
-```
-
-```
-## [1] 38.4675
-```
-
-```r
-median(ncbirths$weeks)
-```
-
-```
-## [1] 39
-```
-
-```r
-sd(ncbirths$weeks)
-```
-
-```
-## [1] 2.753802
-```
-
-```r
-IQR(ncbirths$weeks)
-```
-
-```
-## [1] 2
-```
-]
-
---
-
-.pull-right[
-
-```r
-mean(gapminder$gdpPercap)
-```
-
-```
-## [1] 7215.327
-```
-
-```r
-median(gapminder$gdpPercap)
-```
-
-```
-## [1] 3531.847
-```
-
-```r
-sd(gapminder$gdpPercap)
-```
-
-```
-## [1] 9857.455
-```
-
-```r
-IQR(gapminder$gdpPercap)
-```
-
-```
-## [1] 8123.402
-```
-]
-
----
-# Consider unit of analysis
-
-- **Politician A:** The economy is awful! Thirty states had falling incomes last year.
-
-- **Politician B:** Our economy is showing promising gains. Seventy percent of Americans had rising incomes last year.
-
-- Which politician is lying?
-
----
-# Consider unit of analysis
-
-- Average class size vs. class size for average student
-
-- The former unit of analysis is class size. The latter is student.
-
----
-# Consider unit of analysis
-
-- Suppose PADP has only 5 classes with no student in more than 1 class. 4 classes have 5 students, and 1 class has 100 students
-
-- Average class size
-
-```r
-(100 + 5 + 5 + 5 + 5)/5
-```
-
-```
-## [1] 24
-```
-
---
-  
-- Class size experienced by average student
-
-
-```r
-(100*100+20*5)/120
-```
-
-```
-## [1] 84.16667
-```
-
----
-# Center is only partial story
-
-- Expensive new public health policy in city increases median life expectancy by only one week. Conclusion is the policy is not cost-effective.
-
---
-
-- Median test scores stay the same despite increase in spending.
-
----
-# Correlation
-
-
-
-.pull-left[
-&lt;img src="Description_files/figure-html/q8.1-1.png" style="display: block; margin: auto;" /&gt;
-]
-
-.pull-right[
-&lt;img src="Description_files/figure-html/q8.2-1.png" style="display: block; margin: auto;" /&gt;
-]
-
-- Units with higher values along the x-axis tend to have higher/lower values along the Y axis.
-
----
-# Correlation
-
-&lt;img src="Description_files/figure-html/unnamed-chunk-41-1.png" style="display: block; margin: auto;" /&gt;
-
-Is the correlation positive or negative?
 
 ---
 # Correlation
 
 &lt;img src="Description_files/figure-html/unnamed-chunk-42-1.png" style="display: block; margin: auto;" /&gt;
 
-Do you think the correlation coefficient is closer to 0 or -1?
+Unit of analysis is states.
+Is the correlation positive or negative?
 
 ---
 # Correlation
@@ -1158,18 +1046,7 @@ cor(state_trump$median_house_inc, state_trump$share_vote_trump)
 ## [1] -0.5925995
 ```
 
----
-# Correlation
-
-- Correlation is not causation. It is a necessary condition but not sufficient.
-
---
-
-- Crime is strongly correlated with ice cream sales.
-
---
-
-- Many such examples [here](https://www.tylervigen.com/spurious-correlations)
+What is the interpretation?
 
 ---
 # Recap
