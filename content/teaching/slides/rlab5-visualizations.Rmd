@@ -29,7 +29,7 @@ library(knitr)
 
 > **Start a new project following whatever process works best for you.**
   
-> **Start a R Markdown document. Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE.**
+> **Start a R Markdown document. Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE. Add message=FALSE and warning=FALSE.**
 
 > **Change YAML to:**
 
@@ -51,21 +51,22 @@ output:
 ```{r, message=FALSE, warning=FALSE}
 library(data.table)
 library(tidyverse)
-library(lubridate) # you do not need to install this if tidyverse is already installed
 ```
 
 ---
 # County COVID Data
 
-- Let's examine the latest COVID data for every U.S. county
+- Let's examine the latest COVID data for every U.S. county provided by the New York Times
 
 > **Add and run the following code**
 
 ```{r}
-covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv')
 ```
 
-- These data include *cumulative* counts (not daily) of COVID cases and deaths
+- These data include **cumulative** counts (not daily) of COVID cases and deaths from January 1, 2022 to yesterday
+
+- Additional data can be found [here](https://github.com/nytimes/covid-19-data)
 
 ---
 # Some Wrangling
@@ -84,30 +85,6 @@ covid_ga <- covid %>%
 ```
 
 ---
-# Variable Type Conversions
-
-```{r, echo=FALSE}
-glimpse(covid_ga)
-```
-
-- We need to tell R to recognize `date` as dates instead of text
-
-> **Add and run following code that tells R `date` is organized as `y`ear-`m`onth-`d`ay.**
-
-```{r}
-covid_ga$date <- ymd(covid_ga$date)
-```
-
----
-# Variable type conversions
-
-```{r, echo=FALSE}
-glimpse(covid_ga)
-```
-
-- Now date is stored as a date instead of character
-
----
 # Quick Summary
 
 > **Use `summary` to get a quick look at summary stats. Suppress output.**
@@ -118,20 +95,20 @@ summary(covid_ga)
 
 --
 
-- Note the latest date with data is end_date. We will want to focus on the most recent counts, so let's save end_date's date for easy reference.
+- Note the latest date with data is yesterday. We will want to focus on the most recent counts, so let's save end_date's date for easy reference.
 
 > **Add and run following code.**
 
 ```{r, echo=FALSE}
-end_date <- '2021-12-31'
+end_date <- '2022-09-24'
 ```
 
 
 ```{r, eval=FALSE}
-end_date <- '2021-12-31'
+end_date <- '2022-09-25'
 ```
 
-- Now we can add `end_date` to our code any time we want to filter conditional on the most recent data, and we only need to update `end_date` to update any graph we make.
+- Now we can add `end_date` to our code any time we want to include the most recent data. We only need to update `end_date` to update any graph we make.
 
 ---
 # Viz 1
@@ -379,6 +356,49 @@ covid_ga_5 %>%
 ```
 
 ---
+# Scientific Notation
+
+- When numbers are large, R will sometimes display them in scientific notation
+
+- For example, `2e+05` on previous graph is equivalent to 200000 (2 followed by 5 zeros)
+
+- You can disable all scientific notation during the current R session by adding `options(scipen = 999)` as a separate line in your setup code chunk
+
+- Another way is to specify how we want R to display graph labels for each axis
+
+---
+# Scientific Notation
+
+> **Add the new line below to your current code and re-run to see what it did.**
+
+```{r, eval=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
+covid_ga_5 %>% 
+  filter(date == end_date) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::label_comma()) + #<<
+  labs(title = 'Total COVID Cases',
+       x = '',
+       y = 'Number of cases') +
+  theme_minimal()
+```
+
+---
+# Scientific Notation
+
+```{r, echo=FALSE, message=FALSE, fig.width=10, fig.height=8, fig.align='center'}
+covid_ga_5 %>% 
+  filter(date == end_date) %>% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col() +
+  scale_y_continuous(labels = scales::label_comma()) + #<<
+  labs(title = 'Total COVID Cases',
+       x = '',
+       y = 'Number of cases') +
+  theme_minimal()
+```
+
+---
 # Text size
 
 - After using `theme_whatever`, we can control any of the "ink" via `theme()`
@@ -390,6 +410,7 @@ covid_ga_5 %>%
   filter(date == end_date) %>% 
   ggplot(aes(x = county, y = cases)) +
   geom_col() +
+  scale_y_continuous(labels = scales::label_comma()) +
   labs(title = 'Total COVID Cases',
        x = '',
        y = 'Number of cases') +
@@ -406,6 +427,7 @@ covid_ga_5 %>%
   filter(date == end_date) %>% 
   ggplot(aes(x = county, y = cases)) +
   geom_col() +
+  scale_y_continuous(labels = scales::label_comma()) +
   labs(title = 'Total COVID Cases',
        x = '',
        y = 'Number of cases') +
@@ -424,6 +446,7 @@ covid_ga_5 %>%
   filter(date == end_date) %>% 
   ggplot(aes(x = county, y = cases)) +
   geom_col() +
+  scale_y_continuous(labels = scales::label_comma()) +
   labs(title = 'Total COVID Cases Among Selected Georgia Counties',
        x = '',
        y = 'Case Count',
