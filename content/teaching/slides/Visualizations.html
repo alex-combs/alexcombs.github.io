@@ -4,28 +4,75 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Visualizations_files/header-attrs-2.5/header-attrs.js"></script>
-    <link href="Visualizations_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
-    <script src="Visualizations_files/anchor-sections-1.0/anchor-sections.js"></script>
+    <script src="Visualizations_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## Data Visualization
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: September 16, 2021
+]
+.date[
+### Last updated: September 25, 2022
+]
 
 ---
 
 # Outline
 
-- Guidelines of good and bad visualization
+- Choosing the appropriate graph
 
-- Human perception
+- Guidelines of good visualization
+
+
+
+
+---
+# Some Data
+
+
+|major                                       | grad_median|
+|:-------------------------------------------|-----------:|
+|Genetics                                    |       78000|
+|Mathematics                                 |       89000|
+|Engineering And Industrial Management       |      107000|
+|Other Foreign Languages                     |       68000|
+|Social Science Or History Teacher Education |       60000|
+
+- Includes 173 graduate degree majors
+
+---
+# Choosing appropriate graph
+
+- Which graph might we use if we want to visualize the distribution of median pay?
+
+---
+# Histogram
+
+.pull-left[
+![](Visualizations_files/figure-html/unnamed-chunk-3-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+
+```r
+ggplot(college_grad_students, aes(x = grad_median)) +
+  geom_histogram(bins = 30, fill = 'steelblue', color = 'white') +
+  labs(x = 'Median earnings', y = 'Count of graduate majors') +
+  theme_classic()
+```
+]
 
 ---
 # Exploratory vs. explanatory
@@ -40,7 +87,7 @@ class: center, middle, inverse, title-slide
 
 
 .pull-left[
-![](Visualizations_files/figure-html/unnamed-chunk-2-1.png)&lt;!-- --&gt;
+![](Visualizations_files/figure-html/unnamed-chunk-6-1.png)&lt;!-- --&gt;
 ]
 
 .pull-right[
@@ -54,7 +101,7 @@ ggplot(gm_americas, aes(x = gdpPercap, y = lifeExp)) +
 ---
 # An explanatory graph
 .pull-left[
-![](Visualizations_files/figure-html/unnamed-chunk-4-1.png)&lt;!-- --&gt;
+![](Visualizations_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
 ]
 .pull-right[
 
@@ -178,12 +225,24 @@ class: inverse, middle, center
 ---
 # Example
 
-&lt;img src="Visualizations_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+
+```
+## Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider
+## increasing max.overlaps
+```
+
+&lt;img src="Visualizations_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Example
 
-&lt;img src="Visualizations_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+
+```
+## Warning: ggrepel: 1 unlabeled data points (too many overlaps). Consider
+## increasing max.overlaps
+```
+
+&lt;img src="Visualizations_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Decoding categorical visualization
@@ -229,35 +288,15 @@ class: inverse, middle, center
 
 
 
-![](Visualizations_files/figure-html/unnamed-chunk-9-1.png)&lt;!-- --&gt;
-
----
-# Number of counties by state
-
-![](Visualizations_files/figure-html/unnamed-chunk-10-1.png)&lt;!-- --&gt;
-
----
-# Number of counties by state
-
-![](Visualizations_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
-
----
-# Scatterplot
-
-![](Visualizations_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
-
----
-# Scatterplot
-
 ![](Visualizations_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
 
 ---
-# Scatterplot
+# Number of counties by state
 
 ![](Visualizations_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 ---
-# Scatterplot
+# Number of counties by state
 
 ![](Visualizations_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
@@ -270,6 +309,26 @@ class: inverse, middle, center
 # Scatterplot
 
 ![](Visualizations_files/figure-html/unnamed-chunk-17-1.png)&lt;!-- --&gt;
+
+---
+# Scatterplot
+
+![](Visualizations_files/figure-html/unnamed-chunk-18-1.png)&lt;!-- --&gt;
+
+---
+# Scatterplot
+
+![](Visualizations_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+
+---
+# Scatterplot
+
+![](Visualizations_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+---
+# Scatterplot
+
+![](Visualizations_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
@@ -317,6 +376,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

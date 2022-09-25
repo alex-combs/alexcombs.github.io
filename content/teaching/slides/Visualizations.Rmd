@@ -14,9 +14,52 @@ output:
 ---
 # Outline
 
-- Guidelines of good and bad visualization
+- Choosing the appropriate graph
 
-- Human perception
+- Guidelines of good visualization
+
+```{r, include=FALSE}
+library(tidyverse)
+library(fivethirtyeight)
+library(knitr)
+```
+
+
+---
+# Some Data
+
+```{r, echo=FALSE}
+college_grad_students %>% 
+  select(major, grad_median) %>% 
+  slice_sample(n=5) %>% 
+  kable()
+```
+
+- Includes 173 graduate degree majors
+
+---
+# Choosing appropriate graph
+
+- Which graph might we use if we want to visualize the distribution of median pay?
+
+---
+# Histogram
+
+.pull-left[
+```{r, echo=FALSE}
+ggplot(college_grad_students, 
+       aes(x = grad_median)) +
+  geom_histogram(bins = 30)
+```
+]
+
+.pull-right[
+```{r, eval=FALSE}
+ggplot(college_grad_students, 
+       aes(x = grad_median)) +
+  geom_histogram(bins = 30)
+```
+]
 
 ---
 # Exploratory vs. explanatory
