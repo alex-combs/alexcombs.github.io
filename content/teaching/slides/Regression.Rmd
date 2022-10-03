@@ -1,6 +1,6 @@
 ---
 title: "PADP 7120 Data Applications in PA"
-subtitle: "Simple & Multiple Regression"
+subtitle: "Simple & Multiple Linear Regression"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
 date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
@@ -271,6 +271,11 @@ get_regression_table(satm_mod1) %>%
 ```
 
 ---
+class: inverse, center, middle
+
+# Regression Residual
+
+---
 # Recap of population and sample regressions
 
 **Population Model**
@@ -284,10 +289,7 @@ $$SATM=\beta_0+\beta_1Dollars+\epsilon$$
 $$\hat{y}=b_0+b_1x$$
 $$\hat{SATM} = 560 - 12.17 \times Dollars$$
 
----
-class: inverse, center, middle
-
-# What happens to that error term, $\epsilon$, when we move to the sample model?
+- What happens to the error term, $\epsilon$, when we move to the sample model?
 
 ---
 # The residual
@@ -348,14 +350,16 @@ get_regression_points(satm_mod1) %>%
 ---
 class: inverse, center, middle
 
-# Regression draws the line of best fit through observed x-y pairs. What does best fit mean?
+# Goodness-of-fit
 
 ---
 # Ordinary least squares (OLS)
 
-- Standard regression is also known as OLS
+- Regression draws the **line of best fit** through observed data. What does best fit mean?
 
-- Regression uses math you don't need to worry about to determine the intercept and slope of a line that **minimizes the sum of squared residuals (SSR)**
+- Simple linear regression is also known as ordinary least squares (OLS)
+
+- Regression uses calculus and matrix algebra to determine the intercept and slope of a line that minimizes the sum of squared residuals (SSR)
 
 ---
 # OLS
@@ -393,10 +397,7 @@ sum(satm_mod1_points$sq_resid)
 
 - No other line will achieve a sum of squared residuals less than 45,727
 
----
-class: inverse, middle, center
-
-# But how good is the best?
+- But this tells us nothing of *how good* this best fit is
 
 ---
 # Goodness-of-fit
@@ -557,22 +558,31 @@ $$\hat{y}=b_0+b_1x_1+b_2x_2+\dots+b_kx_k$$
 - Especially if those variables affect the explanatory variables currently in our model
 
 ---
-class: inverse, center, middle
-
-# Importance of theory or subject-matter expertise
-
----
 # Making sense of our results
 
-- So far, states spending more on public education apparently tend to have lower SAT math scores; may strike some as counter-intuitive
+- So far, we find states spending more on public education tend to have lower SAT math scores (perhaps counter-intuitive). We also find that states with a higher percent of graduates taking the SAT tend to have lower SAT math scores. What may be going on here?
 
---
+.pull-left[
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+ggplot(States, aes(x = dollars, y = SATM)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = 'Public ed spending in $1000s per student',
+       y = 'Average SAT Math score') +
+  theme(text = element_text(size=18))
+```
+]
 
-- We also see that states with a higher percent of graduates taking the SAT tend to have lower SAT math scores
-
---
-
-- What may be going on here?
+.pull-right[
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+ggplot(States, aes(x = percent, y = SATM)) +
+  geom_point() +
+  geom_smooth(method = 'lm', se = FALSE) +
+  labs(x = 'Percent high school graduates taking SAT',
+       y = 'Average SAT Math score') +
+  theme(text = element_text(size=18))
+```
+]
 
 ---
 # Making sense of our results
@@ -686,7 +696,7 @@ get_regression_table(satm_mod4) %>%
 
 --
 
-- What should be our policy recommendation?
+- Do these results help inform a policy recommendation concerning education spending and scores on college entrance exams?
 
 ---
 class: inverse, middle, center
