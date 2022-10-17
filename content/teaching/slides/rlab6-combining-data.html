@@ -4,18 +4,28 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab6-combining-data_files/header-attrs-2.11/header-attrs.js"></script>
+    <script src="rlab6-combining-data_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## RLab 6: Combining Data
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: March 14, 2022
+]
+.date[
+### Last updated: October 17, 2022
+]
 
 ---
 
@@ -56,7 +66,6 @@ output:
 ```r
 library(tidyverse)
 library(data.table)
-library(lubridate)
 ```
 
 
@@ -70,9 +79,9 @@ library(lubridate)
 
 
 ```r
-st_fin_14 &lt;- 
-st_fin_15 &lt;- 
-st_fin_16 &lt;- 
+st_fin_2014 &lt;- 
+st_fin_2015 &lt;- 
+st_fin_2016 &lt;- 
 ga_county_pop &lt;- 
 ```
 
@@ -89,19 +98,6 @@ ga_county_pop &lt;-
 
 ![:scale 50%](labs_files/append.png)
 
----
-# Excel Comparison
-
-- To help us visualize the goal of appending in R, I will demonstrate appending in Excel
-
----
-# Append
-
-- Appending is simple to do in something like Excel but can become tedious if you need to append many datasets
-
-- And like always, Excel doesn't allow the process to be easily replicated
-
-- R can append data with much less effort
 
 ---
 # Append Example
@@ -188,11 +184,11 @@ glimpse(gapminder97_07)
 ---
 # Append Practice
 
-&gt; **Immediately below your setup code chunk, insert a heading like Append**
+&gt; **Immediately below your setup code chunk, insert a heading "Append"**
 
-- You have three `st_fin` datasets with the same layout
+- You have three `st_fin_year` datasets with the same layout
 
-&gt; **Append them to create a new dataset `st_fin_14_16`**
+&gt; **Append them to create a new dataset `st_fin_2014_2016`**
 
 
 
@@ -203,7 +199,7 @@ glimpse(gapminder97_07)
 
 
 ```r
-glimpse(st_fin_14_16)
+glimpse(st_fin_2014_2016)
 ```
 
 - You should have 150 observations (3 years X 50 states)
@@ -236,18 +232,6 @@ class: inverse, middle, center
 - Observations in the secondary dataset that don't match with the main dataset **are not** added
 
 ![:scale 60%](labs_files/left_join.png)
-
----
-# Excel Comparison
-
-- To help us visualize the goal of left joins in R, I will demonstrate it in Excel 
-
----
-# Excel Comparison
-
-- This left join was manageable because it did not involve much data in the secondary dataset
-
-- Becomes labor intensive and prone to error if there were more data we needed to match to the primary dataset
 
 ---
 # The Key to Joins/Merges
@@ -363,7 +347,7 @@ glimpse(gap_pop_US)
 ---
 # Left Join Example
 
-- What is the key for `gapminder97_07` and `gap_pop_US`?
+- First step is to identify the key(s) for `gapminder97_07` and `gap_pop_US`?
 
 --
 
@@ -399,7 +383,7 @@ glimpse(gap_pop_97_07)
 
 
 ---
-# Left Join Practice
+# Left Join Practice: What is the key
 
 
 ```r
@@ -418,32 +402,31 @@ glimpse(covid_ga)
 ```
 
 ```
-## Rows: 115,129
+## Rows: 46,240
 ## Columns: 6
-## $ date   &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06, 20…
-## $ county &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "Cobb…
+## $ date   &lt;date&gt; 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01, 20…
+## $ county &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks", "B…
 ## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgia…
-## $ fips   &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 13135, …
-## $ cases  &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1, 5, …
-## $ deaths &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, …
+## $ fips   &lt;int&gt; 13001, 13003, 13005, 13007, 13009, 13011, 13013, 13015, 13017, …
+## $ cases  &lt;int&gt; 3607, 1627, 2720, 394, 7127, 2986, 16328, 22953, 3323, 3611, 27…
+## $ deaths &lt;int&gt; 108, 39, 64, 14, 203, 71, 206, 376, 111, 72, 673, 86, 89, 75, 7…
 ```
-
-- What is the variable name(s) of the key between `covid_ga` and `ga_county_pop`?
-
---
-
-- `county` (not ideal to match using text but it's all we have)
 
 ---
 # Variable Type Mismatch
 
 - Before using a key to join data, make sure they are stored as the same type of variable in both datasets
 
-- How is `county` stored in `covid_ga` and `ga_county_pop`? The `glimpse` printout tells us.
+- The glimpse output tells us how each variable is stored. Is the key stored differently across the two datasets?
 
-&gt; **If different, convert the type of one to match the type in the other dataset.**
+--
+
+- For example, if `county` was stored as a factor variable in `covid_ga` and as a character variable in `ga_county_pop`, we could change county to factor in `ga_county_pop` like so.
 
 
+```r
+ga_county_pop$county &lt;- as.factor(ga_county_pop$county)
+```
 
 ---
 # Left Join Practice
@@ -460,15 +443,15 @@ glimpse(covid_ga)
 ```
 
 ```
-## Rows: 115,129
+## Rows: 46,240
 ## Columns: 7
-## $ date       &lt;date&gt; 2020-03-02, 2020-03-03, 2020-03-04, 2020-03-05, 2020-03-06…
-## $ county     &lt;chr&gt; "Fulton", "Fulton", "Fulton", "Fulton", "Fulton", "Polk", "…
+## $ date       &lt;date&gt; 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01…
+## $ county     &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks"…
 ## $ state      &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Geo…
-## $ fips       &lt;int&gt; 13121, 13121, 13121, 13121, 13121, 13233, 13067, 13121, 131…
-## $ cases      &lt;int&gt; 2, 2, 2, 2, 2, 1, 1, 4, 1, 1, 1, 3, 5, 1, 1, 1, 4, 2, 1, 1,…
-## $ deaths     &lt;int&gt; 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,…
-## $ population &lt;dbl&gt; 1063937, 1063937, 1063937, 1063937, 1063937, 42613, 760141,…
+## $ fips       &lt;int&gt; 13001, 13003, 13005, 13007, 13009, 13011, 13013, 13015, 130…
+## $ cases      &lt;int&gt; 3607, 1627, 2720, 394, 7127, 2986, 16328, 22953, 3323, 3611…
+## $ deaths     &lt;int&gt; 108, 39, 64, 14, 203, 71, 206, 376, 111, 72, 673, 86, 89, 7…
+## $ population &lt;dbl&gt; 18386, 8165, 11164, 3038, 44890, 19234, 83240, 107738, 1670…
 ```
 
 ---
@@ -480,7 +463,7 @@ glimpse(covid_ga)
 
 - We will continue this project in the next lab
 
-&gt; **Upload your Rmd to eLC. You do not need to upload what you did in the Excel file.**
+&gt; **Upload your Rmd to eLC.**
 
 ---
 # Other types of joins
@@ -547,6 +530,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

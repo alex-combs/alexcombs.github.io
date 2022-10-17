@@ -48,22 +48,20 @@ output:
 ```{r, eval=FALSE}
 library(tidyverse)
 library(data.table)
-library(lubridate)
 ```
 
 ```{r, include=FALSE}
 library(data.table)
 library(tidyverse)
-library(lubridate)
 
-covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
+covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv')
 
 covid_ga <- covid %>% 
   filter(state == 'Georgia')
 
-covid_ga$date <- ymd(covid_ga$date)
+#covid_ga$date <- ymd(covid_ga$date)
 
-yesterday <- '2022-03-13'
+yesterday <- '2022-10-16'
 
 #covid_ga$county <- as.factor(covid_ga$county)
 ```
@@ -76,9 +74,9 @@ yesterday <- '2022-03-13'
 > **In your setup code chunk, import the four data files.**
 
 ```{r, eval=FALSE}
-st_fin_14 <- 
-st_fin_15 <- 
-st_fin_16 <- 
+st_fin_2014 <- 
+st_fin_2015 <- 
+st_fin_2016 <- 
 ga_county_pop <- 
 ```
 
@@ -89,9 +87,9 @@ st_fin_16 <- read_csv("st_fin_2016.csv")
 ```
 
 ```{r, include=FALSE}
-st_fin_14 <- read_csv("labs_files/st_fin_2014.csv")
-st_fin_15 <- read_csv("labs_files/st_fin_2015.csv")
-st_fin_16 <- read_csv("labs_files/st_fin_2016.csv")
+st_fin_2014 <- read_csv("labs_files/st_fin_2014.csv")
+st_fin_2015 <- read_csv("labs_files/st_fin_2015.csv")
+st_fin_2016 <- read_csv("labs_files/st_fin_2016.csv")
 ```
 
 ---
@@ -103,19 +101,6 @@ st_fin_16 <- read_csv("labs_files/st_fin_2016.csv")
 
 ![:scale 50%](labs_files/append.png)
 
----
-# Excel Comparison
-
-- To help us visualize the goal of appending in R, I will demonstrate appending in Excel
-
----
-# Append
-
-- Appending is simple to do in something like Excel but can become tedious if you need to append many datasets
-
-- And like always, Excel doesn't allow the process to be easily replicated
-
-- R can append data with much less effort
 
 ---
 # Append Example
@@ -177,14 +162,14 @@ glimpse(gapminder97_07)
 ---
 # Append Practice
 
-> **Immediately below your setup code chunk, insert a heading like Append**
+> **Immediately below your setup code chunk, insert a heading "Append"**
 
-- You have three `st_fin` datasets with the same layout
+- You have three `st_fin_year` datasets with the same layout
 
-> **Append them to create a new dataset `st_fin_14_16`**
+> **Append them to create a new dataset `st_fin_2014_2016`**
 
 ```{r, include=FALSE}
-st_fin_14_16 <- bind_rows(st_fin_16, st_fin_15, st_fin_14)
+st_fin_2014_2016 <- bind_rows(st_fin_2016, st_fin_2015, st_fin_2014)
 ```
 
 ---
@@ -193,7 +178,7 @@ st_fin_14_16 <- bind_rows(st_fin_16, st_fin_15, st_fin_14)
 > **Start a new code chunk and use `glimpse` to confirm it worked**
 
 ```{r, eval=FALSE}
-glimpse(st_fin_14_16)
+glimpse(st_fin_2014_2016)
 ```
 
 - You should have 150 observations (3 years X 50 states)
@@ -226,18 +211,6 @@ class: inverse, middle, center
 - Observations in the secondary dataset that don't match with the main dataset **are not** added
 
 ![:scale 60%](labs_files/left_join.png)
-
----
-# Excel Comparison
-
-- To help us visualize the goal of left joins in R, I will demonstrate it in Excel 
-
----
-# Excel Comparison
-
-- This left join was manageable because it did not involve much data in the secondary dataset
-
-- Becomes labor intensive and prone to error if there were more data we needed to match to the primary dataset
 
 ---
 # The Key to Joins/Merges
@@ -334,7 +307,7 @@ glimpse(gap_pop_US)
 ---
 # Left Join Example
 
-- What is the key for `gapminder97_07` and `gap_pop_US`?
+- First step is to identify the key(s) for `gapminder97_07` and `gap_pop_US`?
 
 --
 
@@ -362,29 +335,25 @@ ga_county_pop <- read_csv('labs_files/ga_county_pop.csv')
 ```
 
 ---
-# Left Join Practice
+# Left Join Practice: What is the key
 
 ```{r}
 glimpse(ga_county_pop)
 glimpse(covid_ga)
 ```
 
-- What is the variable name(s) of the key between `covid_ga` and `ga_county_pop`?
-
---
-
-- `county` (not ideal to match using text but it's all we have)
-
 ---
 # Variable Type Mismatch
 
 - Before using a key to join data, make sure they are stored as the same type of variable in both datasets
 
-- How is `county` stored in `covid_ga` and `ga_county_pop`? The `glimpse` printout tells us.
+- The glimpse output tells us how each variable is stored. Is the key stored differently across the two datasets?
 
-> **If different, convert the type of one to match the type in the other dataset.**
+--
 
-```{r, include=FALSE, eval=FALSE}
+- For example, if `county` was stored as a factor variable in `covid_ga` and as a character variable in `ga_county_pop`, we could change county to factor in `ga_county_pop` like so.
+
+```{r, eval=FALSE}
 ga_county_pop$county <- as.factor(ga_county_pop$county)
 ```
 
@@ -413,7 +382,7 @@ glimpse(covid_ga)
 
 - We will continue this project in the next lab
 
-> **Upload your Rmd to eLC. You do not need to upload what you did in the Excel file.**
+> **Upload your Rmd to eLC.**
 
 ---
 # Other types of joins
