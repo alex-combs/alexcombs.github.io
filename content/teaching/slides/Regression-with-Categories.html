@@ -4,18 +4,28 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Regression-with-Categories_files/header-attrs-2.11/header-attrs.js"></script>
+    <script src="Regression-with-Categories_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## Regression with Categorical Variables
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: March 14, 2022
+]
+.date[
+### Last updated: October 17, 2022
+]
 
 ---
 
@@ -36,7 +46,9 @@ class: center, middle, inverse, title-slide
 
 .font120[$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$]
 
-- Any of the explanatory variables could be categorical
+- Any number of explanatory variables could be categorical
+
+  - Represents a sort of treatment variable
 
 - The outcome could be categorical as well
 
@@ -196,6 +208,8 @@ get_regression_table(sal_mod)
 
 `$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$`
 
+- Note that for the way these data are coded, Sex = 1 for Male and 0 for Female
+
 ---
 # Interpreting results
 
@@ -205,7 +219,7 @@ get_regression_table(sal_mod)
 
 --
 
-- What is the standard interpretation for the `Sex` coefficient?
+- What is the standard interpretation for the `Sex` coefficient? Recall that Sex=1 for Male and 0 for Female.
 
 ---
 # Interpreting results
@@ -220,7 +234,7 @@ get_regression_table(sal_mod)
 
 --
 
-- If slopes are parallel, then the predicted change must be the same.
+- We forced the slopes to be parallel. Therefore, the predicted change must be the same across all groups.
 
 ---
 # Interpreting results
@@ -296,12 +310,12 @@ ggplot(Salaries,
 `$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Sex + \beta_3YrsEmp*Sex + \epsilon$$`
 
 - `\(\beta_3\)` tells us how the slopes compare
-  - For Sex = 1, the marginal effect of years on salary is `\(\beta_1+\beta_3\)`
+  - For Sex = 1 (male), the marginal effect of years on salary is `\(\beta_1+\beta_3\)`
   - For Sex = 0 (female), it is `\(\beta_1\)`
 
 - `\(\beta_2\)` tells us how the intercepts compare
-  - For Sex = 1, intercept is `\(\beta_0+\beta_2\)`
-  - For Sex = 0, it is `\(\beta_0\)`
+  - For Sex = 1 (male), intercept is `\(\beta_0+\beta_2\)`
+  - For Sex = 0 (female), it is `\(\beta_0\)`
 
 ---
 # Running an interaction model
@@ -367,6 +381,8 @@ get_regression_table(sal_mod2)
   &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
+
+`$$\hat{Sal}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$`
 
 ---
 # Interpreting an interaction model
@@ -457,7 +473,7 @@ class: inverse, middle, center
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Suppose we want to know how these variables might affect the probability of divorce among married or previously married individuals
+- Suppose we want to know how these variables might affect the probability of divorce among married or previously married individuals (Income is in $1,000s)
 
 ---
 # Running an LPM
@@ -525,6 +541,8 @@ get_regression_table(div_mod)
 &lt;/tbody&gt;
 &lt;/table&gt;
 
+`$$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$`
+
 ---
 # Interpreting an LPM
 
@@ -534,23 +552,11 @@ get_regression_table(div_mod)
 
 --
 
-- All else equal, each child reduces the probability of divorce by 18 **percentage points**, on average.
+- Probability is expressed units of percent. Remember that a unit change in percent probability is a **percentage point** change.
 
 --
 
 - What is the probability of divorce for someone 27 years old making 50,000 and has 0 children?
-
---
-
-
-```r
-0.38 + 0.4*1 + 0.001*50 - 0.18*0
-```
-
-```
-## [1] 0.83
-```
-- The probability of divorce for someone with this profile is 83%, on average.
 
 ---
 class: inverse, middle, center
@@ -604,6 +610,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

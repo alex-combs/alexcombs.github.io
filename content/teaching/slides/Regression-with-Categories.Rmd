@@ -36,7 +36,9 @@ options(scipen = 999)
 
 .font120[$$y=\beta_0+\beta_1x_1+\beta_2x_2+\dots+\beta_kx_k+\epsilon$$]
 
-- Any of the explanatory variables could be categorical
+- Any number of explanatory variables could be categorical
+
+  - Represents a sort of treatment variable
 
 - The outcome could be categorical as well
 
@@ -160,6 +162,8 @@ get_regression_table(sal_mod) %>%
 
 $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
+- Note that for the way these data are coded, Sex = 1 for Male and 0 for Female
+
 ---
 # Interpreting results
 
@@ -169,7 +173,7 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
 --
 
-- What is the standard interpretation for the `Sex` coefficient?
+- What is the standard interpretation for the `Sex` coefficient? Recall that Sex=1 for Male and 0 for Female.
 
 ---
 # Interpreting results
@@ -184,7 +188,7 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
 --
 
-- If slopes are parallel, then the predicted change must be the same.
+- We forced the slopes to be parallel. Therefore, the predicted change must be the same across all groups.
 
 ---
 # Interpreting results
@@ -264,12 +268,12 @@ $$\hat{y} = (b_0 + b_2) + (b_1+b_3)x$$
 $$Salary=\beta_0+\beta_1YrsEmp+\beta_2Sex + \beta_3YrsEmp*Sex + \epsilon$$
 
 - $\beta_3$ tells us how the slopes compare
-  - For Sex = 1, the marginal effect of years on salary is $\beta_1+\beta_3$
+  - For Sex = 1 (male), the marginal effect of years on salary is $\beta_1+\beta_3$
   - For Sex = 0 (female), it is $\beta_1$
 
 - $\beta_2$ tells us how the intercepts compare
-  - For Sex = 1, intercept is $\beta_0+\beta_2$
-  - For Sex = 0, it is $\beta_0$
+  - For Sex = 1 (male), intercept is $\beta_0+\beta_2$
+  - For Sex = 0 (female), it is $\beta_0$
 
 ---
 # Running an interaction model
@@ -286,6 +290,8 @@ get_regression_table(sal_mod2)
 get_regression_table(sal_mod2) %>% 
   kable(format = 'html', digits = 2)
 ```
+
+$$\hat{Sal}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$
 
 ---
 # Interpreting an interaction model
@@ -341,7 +347,7 @@ head(divorce, n=5) %>%
   kable(format = 'html')
 ```
 
-- Suppose we want to know how these variables might affect the probability of divorce among married or previously married individuals
+- Suppose we want to know how these variables might affect the probability of divorce among married or previously married individuals (Income is in $1,000s)
 
 ---
 # Running an LPM
@@ -360,6 +366,8 @@ get_regression_table(div_mod) %>%
   kable(format = 'html')
 ```
 
+$$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$
+
 ---
 # Interpreting an LPM
 
@@ -369,18 +377,11 @@ $$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$
 
 --
 
-- All else equal, each child reduces the probability of divorce by 18 **percentage points**, on average.
+- Probability is expressed units of percent. Remember that a unit change in percent probability is a **percentage point** change.
 
 --
 
 - What is the probability of divorce for someone 27 years old making 50,000 and has 0 children?
-
---
-
-```{r}
-0.38 + 0.4*1 + 0.001*50 - 0.18*0
-```
-- The probability of divorce for someone with this profile is 83%, on average.
 
 ---
 class: inverse, middle, center
