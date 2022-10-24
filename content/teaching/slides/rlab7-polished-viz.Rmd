@@ -15,7 +15,9 @@ output:
 ---
 # Objectives
 
-- Cover a few ways to improve graphs
+- Incorporate the data we combined in previous RLab to generate more accurate graphs
+
+- Cover a few more ways to improve graphs
 
 ---
 # Setup
@@ -29,22 +31,21 @@ output:
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
 library(tidyverse)
 library(data.table)
-library(lubridate)
-covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties.csv')
-ga_county_pop <- read_csv("/Users/alexcombs/Documents/Website/web-work/content/teaching/slides/labs_files/ga_county_pop.csv")
+covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv')
+ga_county_pop <- read_csv('labs_files/ga_county_pop.csv')
 ```
 
 ```{r, include=FALSE}
 covid_ga <- covid %>% 
   filter(state == 'Georgia')
 
-covid_ga$date <- ymd(covid_ga$date)
+#covid_ga$date <- ymd(covid_ga$date)
 ```
 
 ```{r, include=FALSE}
 summary(covid_ga)
 
-yesterday <- '2022-02-15'
+yesterday <- '2022-10-23'
 ```
 
 ```{r, include=FALSE}
@@ -56,7 +57,7 @@ covid_ga <- covid_ga %>%
 ---
 # Adjusting for Population
 
-- We realized that it is somewhat misleading to compare counts of COVID cases and/or deaths across counties of different populations
+- We realized that it is misleading to compare counts of COVID cases and/or deaths across counties of different populations
 
 --
 
@@ -69,19 +70,11 @@ covid_ga <- covid_ga %>%
 
 - Our population variable is in single units.
 
-- We need to create a new variable for population in 100,000s. How? 
-
---
-
-- Dividing population by 100,000. 
+- First, could create a new variable for population in 100,000s. How? 
 
 --
 
 - Then, we need to create cases and deaths per 100,000. How?
-
---
-
-- Dividing cases and deaths by this new measure of population in 100,000s
 
 ---
 # Adjusting for Population
@@ -304,7 +297,7 @@ covid_ga %>%
   ggplot(aes(x = deaths)) +
   geom_histogram(fill = 'steelblue', color = 'white') +
   labs(title = 'Total COVID Cases in GA Counties',
-       subtitle = 'As of 3/20/22',
+       subtitle = 'As of October 23, 2022',
        x = 'Total Deaths',
        y = 'Counties') +
   scale_x_log10(labels = scales::comma_format()) +
@@ -369,7 +362,7 @@ covid_ga %>%
   ggplot(aes(x = deaths)) +
   geom_boxplot(fill = 'springgreen4') +
   labs(title = 'Total County COVID Deaths',
-       subtitle = 'March 20, 2022', x = 'Total Deaths') +
+       subtitle = 'October 23, 2022', x = 'Total Deaths') +
   theme_classic() +
   theme(axis.ticks.y = element_blank(),
         axis.line.y = element_blank(),
@@ -385,7 +378,7 @@ covid_ga %>%
   ggplot(aes(x = deaths)) +
   geom_boxplot(fill = 'springgreen4') + #<<
   labs(title = 'Total County COVID Deaths', #<<
-       subtitle = 'March 20, 2022', x = 'Total Deaths') + #<<
+       subtitle = 'October 23, 2022', x = 'Total Deaths') + #<<
   theme_classic() + #<<
   theme(axis.ticks.y = element_blank(),
         axis.line.y = element_blank(),
@@ -411,7 +404,7 @@ covid_ga %>%
   ggplot(aes(x = deaths)) +
   geom_boxplot(fill = 'springgreen4') +
   labs(title = 'Total County COVID Deaths',
-       subtitle = 'March 20, 2022', x = 'Total Deaths') +
+       subtitle = 'October 23, 2022', x = 'Total Deaths') +
   theme_classic() +
   theme(axis.ticks.y = element_blank(),
         axis.line.y = element_blank(),
@@ -498,7 +491,7 @@ covid_ga_5 %>%
 ---
 # Viz 7
 
-> **Update our first line graph to use cases per 100,000 people. Run the code.**
+> **Update first line graph to use cases per 100,000 people.**
 
 ```{r, echo=FALSE, fig.width=9, fig.height=7}
 covid_ga_5 %>% 
@@ -527,18 +520,18 @@ ggsave("covid_ga_case_trends.png", width = 8, height = 6)
 - Can export as .jpeg, .tiff, .eps, .pdf, and more
 
 ---
-# Improving Dates Along Axis
+# Changing how dates are displayed
 
-- Suppose we want the x axis to display every fourth month
+- Suppose we want the x axis to display the full name of every other month
 
-> **Add the following to Viz 7. Be sure to include the `+` at the end.**
+> **Add the following to Viz 7.**
 
 ```{r, fig.width=7, fig.height=5}
 covid_ga_5 %>%
   ggplot(aes(x = date, y = cases_rate, color = county)) +
   geom_line() +
-  scale_x_date(date_breaks = '4 month', #<<
-               labels = scales::date_format('%b%y')) + #<<
+  scale_x_date(date_breaks = '2 month', #<<
+               labels = scales::date_format('%B')) + #<<
   labs(title = 'Total COVID Cases Among Selected Georgia Counties',
        x = '',
        y = 'Cases per 100,000',
@@ -551,20 +544,13 @@ covid_ga_5 %>%
 ---
 # Adding Reference Lines
 
-- Suppose we want to provide a visual marker for the beginning of UGA's Fall and Spring semesters during the pandemic.
+- Suppose we want to provide a visual marker for the beginning of UGA's Fall 2022 semester.
 
-> **Add the following to Viz 7. If typing manually, copy and paste once finished with the first `geom_vline`, then change the date.**
+> **Add the following to Viz 7.**
 
 ```{r, eval=FALSE, fig.width=9, fig.height=7}
-
-  geom_vline(xintercept = date('2020-08-15'),
-             color = 'black', linetype = 'dashed') + 
-  geom_vline(xintercept = date('2021-01-11'),
-             color = 'black', linetype = 'dashed') + 
-  geom_vline(xintercept = date('2021-08-15'), 
-             color = 'black', linetype = 'dashed') + 
-  geom_vline(xintercept = date('2022-01-10'), 
-             color = 'black', linetype = 'dashed') 
+  geom_vline(xintercept = as.Date('2022-08-15'),
+             color = 'black', linetype = 'dashed')
 ```
 
 ---
@@ -574,8 +560,8 @@ covid_ga_5 %>%
 covid_ga_5 %>%
   ggplot(aes(x = date, y = cases_rate, color = county)) +
   geom_line() +
-  scale_x_date(date_breaks = '4 month', #<<
-               labels = scales::date_format('%b%y')) + #<<
+  scale_x_date(date_breaks = '2 month', #<<
+               labels = scales::date_format('%B')) + #<<
   labs(title = 'Total COVID Cases Among Selected Georgia Counties',
        x = '',
        y = 'Cases per 100,000',
@@ -583,17 +569,8 @@ covid_ga_5 %>%
   theme_minimal() +
   theme(axis.text=element_text(size=12),
         title = element_text(size=12)) +
-  geom_vline(xintercept = date('2020-08-15'),#<<
-             color = 'black', #<<
-             linetype = 'dashed') + #<<
-  geom_vline(xintercept = date('2021-01-11'),#<<
-             color = 'black', #<<
-             linetype = 'dashed') + #<<
-  geom_vline(xintercept = date('2021-08-15'), #<<
-             color = 'black', #<<
-             linetype = 'dashed') +
-  geom_vline(xintercept = date('2022-01-10'), 
-             color = 'black', linetype = 'dashed')#<<
+  geom_vline(xintercept = as.Date("2022-08-15"),
+             color = 'black', linetype = 'dashed') #<<
 ```
 
 ---
@@ -609,31 +586,16 @@ covid_ga_5 %>%
        color = 'County', x = '',
        y = 'Deaths per 100,000 population') +
   theme_minimal() +
-  scale_x_date(date_breaks = '4 month', 
-               labels = scales::date_format('%b%y')) +
-  geom_vline(xintercept = date('2020-08-15'), 
-             color = 'black', 
-             linetype = 'dashed') +
-  geom_vline(xintercept = date('2021-01-11'),
-             color = 'black', 
-             linetype = 'dashed') +
-  geom_vline(xintercept = date('2021-08-15'),
-             color = 'black',
-             linetype = 'dashed') + #<<
-  geom_vline(xintercept = date('2022-01-10'), #<<
-             color = 'black', #<<
-             linetype = 'dashed')
+  scale_x_date(date_breaks = '2 month', 
+               labels = scales::date_format('%B')) +
+  geom_vline(xintercept = as.Date('2022-8-15'),
+             color = 'black', linetype = 'dashed')
 ```
 
 ---
 class: inverse, middle, center
 
 # The rank of county cases is not the same as the rank of county deaths. Why?
-
----
-class: inverse, middle, center
-
-# Do the last two graphs suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths in Clarke County?
 
 ---
 # Upload Rmd

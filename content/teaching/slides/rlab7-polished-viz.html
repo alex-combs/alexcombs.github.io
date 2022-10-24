@@ -4,24 +4,36 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab7-polished-viz_files/header-attrs-2.11/header-attrs.js"></script>
+    <script src="rlab7-polished-viz_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## RLab 7: Data Viz 2
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: March 16, 2022
+]
+.date[
+### Last updated: October 24, 2022
+]
 
 ---
 
 # Objectives
 
-- Cover a few ways to improve graphs
+- Incorporate the data we combined in previous RLab to generate more accurate graphs
+
+- Cover a few more ways to improve graphs
 
 ---
 # Setup
@@ -43,7 +55,7 @@ class: center, middle, inverse, title-slide
 ---
 # Adjusting for Population
 
-- We realized that it is somewhat misleading to compare counts of COVID cases and/or deaths across counties of different populations
+- We realized that it is misleading to compare counts of COVID cases and/or deaths across counties of different populations
 
 --
 
@@ -56,19 +68,11 @@ class: center, middle, inverse, title-slide
 
 - Our population variable is in single units.
 
-- We need to create a new variable for population in 100,000s. How? 
-
---
-
-- Dividing population by 100,000. 
+- First, could create a new variable for population in 100,000s. How? 
 
 --
 
 - Then, we need to create cases and deaths per 100,000. How?
-
---
-
-- Dividing cases and deaths by this new measure of population in 100,000s
 
 ---
 # Adjusting for Population
@@ -289,7 +293,7 @@ covid_ga %&gt;%
   ggplot(aes(x = deaths)) +
 * geom_boxplot(fill = 'springgreen4') +
 * labs(title = 'Total County COVID Deaths',
-*      subtitle = 'March 20, 2022', x = 'Total Deaths') +
+*      subtitle = 'October 23, 2022', x = 'Total Deaths') +
 * theme_classic() +
   theme(axis.ticks.y = element_blank(),
         axis.line.y = element_blank(),
@@ -373,7 +377,7 @@ covid_ga_5 %&gt;%
 ---
 # Viz 7
 
-&gt; **Update our first line graph to use cases per 100,000 people. Run the code.**
+&gt; **Update first line graph to use cases per 100,000 people.**
 
 ![](rlab7-polished-viz_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
 
@@ -392,19 +396,19 @@ ggsave("covid_ga_case_trends.png", width = 8, height = 6)
 - Can export as .jpeg, .tiff, .eps, .pdf, and more
 
 ---
-# Improving Dates Along Axis
+# Changing how dates are displayed
 
-- Suppose we want the x axis to display every fourth month
+- Suppose we want the x axis to display the full name of every other month
 
-&gt; **Add the following to Viz 7. Be sure to include the `+` at the end.**
+&gt; **Add the following to Viz 7.**
 
 
 ```r
 covid_ga_5 %&gt;%
   ggplot(aes(x = date, y = cases_rate, color = county)) +
   geom_line() +
-* scale_x_date(date_breaks = '4 month',
-*              labels = scales::date_format('%b%y')) +
+* scale_x_date(date_breaks = '2 month',
+*              labels = scales::date_format('%B')) +
   labs(title = 'Total COVID Cases Among Selected Georgia Counties',
        x = '',
        y = 'Cases per 100,000',
@@ -419,20 +423,14 @@ covid_ga_5 %&gt;%
 ---
 # Adding Reference Lines
 
-- Suppose we want to provide a visual marker for the beginning of UGA's Fall and Spring semesters during the pandemic.
+- Suppose we want to provide a visual marker for the beginning of UGA's Fall 2022 semester.
 
-&gt; **Add the following to Viz 7. If typing manually, copy and paste once finished with the first `geom_vline`, then change the date.**
+&gt; **Add the following to Viz 7.**
 
 
 ```r
-  geom_vline(xintercept = date('2020-08-15'),
-             color = 'black', linetype = 'dashed') + 
-  geom_vline(xintercept = date('2021-01-11'),
-             color = 'black', linetype = 'dashed') + 
-  geom_vline(xintercept = date('2021-08-15'), 
-             color = 'black', linetype = 'dashed') + 
-  geom_vline(xintercept = date('2022-01-10'), 
-             color = 'black', linetype = 'dashed') 
+  geom_vline(xintercept = as.Date('2022-08-15'),
+             color = 'black', linetype = 'dashed')
 ```
 
 ---
@@ -451,11 +449,6 @@ covid_ga_5 %&gt;%
 class: inverse, middle, center
 
 # The rank of county cases is not the same as the rank of county deaths. Why?
-
----
-class: inverse, middle, center
-
-# Do the last two graphs suggest bringing students, faculty, and staff back to UGA had an effect on COVID cases/deaths in Clarke County?
 
 ---
 # Upload Rmd
@@ -509,6 +502,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
