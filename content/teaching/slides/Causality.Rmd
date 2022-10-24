@@ -18,6 +18,13 @@ output:
 library(tidyverse)
 library(moderndive)
 library(knitr)
+
+load("lectures_files/evaluation.RData")
+
+hisp <- evaluation %>% 
+  filter(round==1) %>% 
+  select(health_expenditures, treatment_locality, age_hh, educ_hh, dirtfloor, bathroom, hospital_distance)
+
 set.seed(123)
 options(scipen = 999)
 ```
@@ -43,7 +50,7 @@ options(scipen = 999)
 
 --
 
-- What would have happened in this alternate reality is referred to as the **counterfactual**
+- **Counterfactual:** The unobserved outcome from an alternate reality. 
 
 ---
 # Potential outcomes
@@ -69,7 +76,7 @@ options(scipen = 999)
 
 --
   
-- Use **quasi-experimental** design that leverages some convenient context of the treatment allowing us to claim it is as good as randomized
+- Use **quasi-experimental** methods that use a feature of the treatment that allows us to claim it is as good as randomized
 
 --
   
@@ -89,6 +96,22 @@ include_graphics('lectures_files/credible.png')
 
 - Does a change in $x$ cause a change in $y$?
 
+- Is the estimate biased? Is our estimate systematically higher or lower than the truth?
+
+---
+# Internal validity
+
+- Impact of health insurance subsidies on out-of-pocket health care expenditures.
+
+```{r, echo=FALSE}
+mod1 <- lm(health_expenditures ~ treatment_locality, data = hisp)
+
+get_regression_table(mod1) %>% 
+  kable(digits = 2)
+```
+
+- We are concerned whether this estimate is accurate. In other words, does the model eliminate bias?
+
 ---
 # Criteria for causation
 
@@ -101,22 +124,26 @@ include_graphics('lectures_files/credible.png')
 ---
 # Correlation between X and Y
 
-- If you run a regression and the coefficient is statistically significant (we haven't covered significance yet), you have established correlation that is unlikely random
+- If you run a regression and the estimate is statistically significant (we haven't covered significance yet), you have established correlation that is unlikely due to random variation
 
 - But many things correlate that share no causal relationship
 
 ---
 # Temporal Precedence
 
-- Easiest to claim for discrete events with a pre and post
+- Cause must occur before its effect
 
+--
+
+- Easiest to claim for discrete events with a pre and post
   - Marijuana legalization on health outcomes
-  
-  - Stimulus check on spending/saving
+  - Child tax credit expansion on child poverty
 
 --
 
 - Without a clear pre and post period, harder to eliminate **reverse causality**
+  - Crime rates and police funding
+  - GDP and life expectancy
 
 ---
 # No plausible alternative explanation
@@ -157,8 +184,6 @@ $$Happiness=\beta_0+\beta_1Age+\beta_2Income+\epsilon$$
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('lectures_files/dag15.png')
 ```
-
-
 
 ---
 # Backdoor path
@@ -350,7 +375,7 @@ $$Y=\beta_0+\beta_1C+\epsilon$$
 
 --
 
-- Now we should think of all the factors that affect earnings and/or going to college
+- Now we should identify any other factors that affect earnings and/or going to college
 
 - Suppose we identify three factors: 
   - Parent's education $PE$ 
@@ -461,6 +486,22 @@ include_graphics('lectures_files/dag11.png', dpi = 150)
 ]
 
 ---
+# Direction of OVB
+
+- Suppose you or someone else has identified an omitted variable that causes bias.
+
+- All is not necessarily lost. Results may still be useful.
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/dag_ovbdirect.png', dpi = 150)
+```
+
+- If influence of $Z$ is in same direction: bias is positive
+- If influence of $Z$ is in opposite directions: bias is negative
+
+- Key question: Is the bias pushing my result toward 0 or away from 0?
+
+---
 class: inverse, center, middle
 
 # Let's practice using DAGs
@@ -513,6 +554,8 @@ head(collider_bias, n = 4) %>%
   select(Treatment, Outcome, Collider) %>% 
   kable(digits = 0)
 ```
+
+- Sample includes 2,500 observations
 
 ---
 # Seeing Collider Bias
@@ -626,7 +669,8 @@ selection_bias %>%
   geom_smooth(method = "lm", se = FALSE) + 
   labs(title = 'Effect of absences on GPA',
        subtitle = 'Sample of At-Risk Students') +
-  theme_minimal()
+  theme_minimal() + 
+  theme(text = element_text(size=18))
 ```
 
 ]
@@ -659,7 +703,8 @@ selection_bias %>%
   geom_smooth(method = "lm", se = FALSE) + 
   labs(title = 'Effect of absences on GPA',
        subtitle = 'Sample of Students Not At-Risk') +
-  theme_minimal()
+  theme_minimal() +
+  theme(text = element_text(size=18))
 ```
 
 ]
@@ -691,7 +736,8 @@ selection_bias %>%
   geom_smooth(method = "lm", se = FALSE) + 
   labs(title = 'Effect of absences on GPA',
        subtitle = 'All Students') +
-  theme_minimal()
+  theme_minimal() +
+  theme(text = element_text(size=18))
 ```
 
 ]
@@ -718,18 +764,15 @@ selection_bias %>%
   geom_smooth(method = "lm", se = FALSE) +
   geom_smooth(aes(x = absent, y = gpa, color = as.factor(at_risk)), method = "lm", se = FALSE) +
   labs(color = "At-Risk") +
-  theme_minimal()
+  theme_minimal() +
+  theme(text = element_text(size=18))
 ```
 
 
 ---
 # Recap
 
-- What would be the ideal experiment and how does my analysis differ?
-
---
-
-- Is my theoretical claim credible? Can I claim there is no OVB?
+- Is my claim about the relationship between a cause and effect credible? Can I claim there is no OVB?
 
 --
 
@@ -738,20 +781,19 @@ selection_bias %>%
 ---
 # External validity
 
-- **External validity (generalizability):** can results of research be applied beyond the groups or context being studied?
+- **External validity (generalizability):** can results be applied beyond the groups or context that were studied?
 
 --
 
-- Are those in my sample systematically different than those in the population?
+- Are those in my sample representative of the population? Did the program select or recipients self-select in unrepresentative ways?
 
-- Probably, but if not, can generalize to population.
+- Are there reasons to suspect location or time matter and results may not apply elsewhere or at later times?
 
 --
 
-- If different, was my sample drawn from a collider?
+- If you cannot claim sample represents population, possible you can claim sample represents a subset of the population that is larger than the sample.
 
-  - Yes. Then all backdoors are not closed.
-  - No. Then may be able to generalize to the subgroup my sample represents. (Example: effect of job training on participants instead of any unemployed person)
+- Example: Effect of job training on participants instead of any unemployed person. Known as **treatment on the treated**.
 
 ---
 # Causal inference models
@@ -765,4 +807,4 @@ include_graphics('lectures_files/dag14.png', dpi = 150)
 - Random assignment is often difficult to achieve in social sciences
 
 - There are quasi-experimental regression techniques that arguably achieve the same break from the error term as if random
-  - Difference-in-differences, regression discontinuity, instrumental variables, synthetic control, fixed effects, propensity score matching
+  - Difference-in-differences, regression discontinuity, instrumental variables, synthetic control, propensity score matching
