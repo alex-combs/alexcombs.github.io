@@ -4,18 +4,28 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Sampling_files/header-attrs-2.11/header-attrs.js"></script>
+    <script src="Sampling_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## Sampling
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: April 11, 2022
+]
+.date[
+### Last updated: November 14, 2022
+]
 
 ---
 
@@ -84,7 +94,7 @@ class: center, middle, inverse, title-slide
 
 - How precise is our estimate? Is it useful?
 
-`$$[\hat{\theta}-?, \hat{\theta}+?]$$`
+- Inference involves a range of plausible values.
 
 - The larger the range needed to confidently capture the parameter, the less useful it is.
 
@@ -103,7 +113,7 @@ class: center, middle, inverse, title-slide
 
 --
 
-4. We calculate the standard deviation of the sampling distribution, a.k.a. **standard error**, and construct **confidence intervals** based on the **68-95-99 rule**.
+4. We calculate the standard deviation of the sampling distribution, **standard error**, and construct **confidence intervals** based on the **68-95-99 rule**.
 
 ---
 # Law of Large Numbers (LLN)
@@ -291,7 +301,7 @@ class: inverse, center, middle
 ---
 # Confidence interval
 
-A 95% confidence interval **does not** mean there is a 95% probability that it captures the parameter. It either does or it does not.
+A 95% confidence interval **does not** mean there is a 95% probability that it captures the parameter.
 
 --
 
@@ -526,6 +536,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

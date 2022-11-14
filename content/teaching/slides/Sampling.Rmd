@@ -104,7 +104,7 @@ $$E(\hat{\theta}) = \theta  ?$$
 
 - How precise is our estimate? Is it useful?
 
-$$[\hat{\theta}-?, \hat{\theta}+?]$$
+- Inference involves a range of plausible values.
 
 - The larger the range needed to confidently capture the parameter, the less useful it is.
 
@@ -123,7 +123,7 @@ $$[\hat{\theta}-?, \hat{\theta}+?]$$
 
 --
 
-4. We calculate the standard deviation of the sampling distribution, a.k.a. **standard error**, and construct **confidence intervals** based on the **68-95-99 rule**.
+4. We calculate the standard deviation of the sampling distribution, **standard error**, and construct **confidence intervals** based on the **68-95-99 rule**.
 
 ---
 # Law of Large Numbers (LLN)
@@ -311,7 +311,7 @@ $$SE_{\bar{x}}=\frac{s}{\sqrt{n}}$$
 ---
 # Confidence interval
 
-A 95% confidence interval **does not** mean there is a 95% probability that it captures the parameter. It either does or it does not.
+A 95% confidence interval **does not** mean there is a 95% probability that it captures the parameter.
 
 --
 
@@ -325,6 +325,8 @@ We saw that our one CI was successful because we knew the parameter. In reality,
 # A look at 100 CIs
 
 ```{r, message=FALSE, warning=FALSE, include=FALSE}
+set.seed(657)
+
 salaries <- tibble(ID = c(1:100000), 
                    salary = rnorm(100000, 70000, 9000))
 
