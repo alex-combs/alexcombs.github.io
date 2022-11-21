@@ -70,11 +70,11 @@ class: inverse, center, middle
 ---
 # Hypotheses and p-values
 
-**Hypothesis test:** "Is my result so unlikely that I can conclude with a sufficient level of confidence that there is evidence in support of my hypothesis?"
+**Hypothesis test** asks the following question: "Is my result so unlikely that I can conclude with a sufficient level of confidence that there is evidence in support of my hypothesis?"
 
 **p-value:** the probability of obtaining my result or more extreme in a world where the **null hypothesis** is actually true.
 
-- The p-value helps us answer the hypothesis test
+- The p-value enables us to answer the hypothesis test
 
 ---
 # Structure of hypothesis test
@@ -120,6 +120,8 @@ ggplot(promotions, aes(x = gender, fill = decision)) +
 ---
 # Example
 
+What are our null and alternative hypotheses for this analysis?
+
 $H_A$:  
 
 
@@ -136,13 +138,13 @@ $H_0$:
 1. If results reject the null, then
 
   - We found statistically significant evidence that $P_M-P_F \neq 0$
-  - Result of 0.3 is too improbable to be random noise
+  - Means the result of 0.3 is too improbable to be due to random noise
 
 --
 
 2. If results fail to reject the null
   - We did not find statistically significant evidence that $P_M-P_F \neq 0$
-  - Result of 0.3 is not improbable enough
+  - Means result of 0.3 is not improbable enough
   - $P_M-P_F\lesseqqgtr0$ ; we don't know which
   
 --
@@ -165,7 +167,7 @@ include_graphics('lectures_files/hypotest-tables.png')
 
 --
 
-- Our estimate is a scientific guess around which we construct a range of plausible values we assume captures the parameter
+- Our estimate of 0.3 is a scientific guess around which we construct a range of plausible values we assume captures the parameter
 
 --
 
@@ -321,7 +323,7 @@ get_regression_table(inc_mod) %>%
   kable(digits = 3)
 ```
 
-There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately $1,993 per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between \$1,465 and \$2,521. 
+There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately 1,993 dollars per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between 1,465 and 2,521. 
 
 ---
 class: inverse, center, middle
@@ -340,6 +342,10 @@ class: inverse, center, middle
 --
 
 3. Do the bounds of the confidence interval for the explanatory variable potentially change my answer?
+
+--
+
+- What is considered a meaningful change is somewhat subjective.
   
 ---
 # Example 1
@@ -354,9 +360,13 @@ include_graphics('lectures_files/prac-sig1.png')
 
 - Typical change (standard deviation) in property tax is $4
 
+--
+
 - Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
 
-- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200)...practically significant!
+--
+
+- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200). Practically significant.
 
 ---
 # Example 2
@@ -366,15 +376,14 @@ include_graphics('lectures_files/prac-sig2.png')
 ```
 
 - SD for property tax is now 0.04 instead of 4
+
 - Is the property tax result practically significant?
 
 --
 
-- Typical change in property tax is now $0.04
-
 - Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
 
-- Confidence intervals do not change this conclusion.
+- Based on confidence interval, max increase is $5.60. Probably not meaningful.
 
 ---
 # Example 3
@@ -383,14 +392,13 @@ include_graphics('lectures_files/prac-sig2.png')
 include_graphics('lectures_files/prac-sig3.png')
 ```
 
-- SD of property tax back to 4 but CI has changed
-- Is the property tax result practically significant?
+- SD of property tax back to 4. Predicted change same as in Example 1: $400
+
+- But confidence interval has changed. Is the property tax result practically significant?
 
 --
 
-- Same as first example and would definitely be practically significant if not for the 95% CI being so close to 0.
-
-- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance is questionable in this case.
+- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance could be questioned in this case.
 
 ---
 # Example 4
@@ -400,13 +408,15 @@ include_graphics('lectures_files/prac-sig4.png')
 ```
 
 - Estimate and CI for property tax has changed
+
 - Is the property tax result practically significant?
 
 --
 
 - Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
+--
 
-- Rare for statistical insignificance to have practical significance.
+- Lack of statistical significance usually means lack of practical significance. However...
 
 ---
 # Example 5
@@ -416,13 +426,12 @@ include_graphics('lectures_files/prac-sig5.png')
 ```
 
 - Estimate and CI has changed again
-- Is the property tax result practically significant?
 
 --
 
-- The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
+- Even though statistically insignificant, the CI is very precise around 0.
 
-- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.
+- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. This is still useful.
 
 ---
 # Practical significance from PS3
@@ -432,7 +441,7 @@ sum.ps3 <- arsenal::tableby(~ med_inc + hs, data = state_trump)
 ```
 
 ```{r, echo=FALSE, results='asis'}
-summary(sum.ps3)
+summary(sum.ps3, digits=0)
 ```
 
 ```{r, echo=FALSE}
