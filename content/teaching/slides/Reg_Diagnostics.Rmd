@@ -64,10 +64,12 @@ trump_mod <- lm(share_vote_trump ~ white + white_pov,
 
 ```{r, echo=FALSE}
 get_regression_table(trump_mod) %>% 
-  kable(digits = 2)
+  kable()
 ```
 
-- We have finally covered all the information in this table. 
+- We now understand all the information in this table. 
+
+--
 
 - But the information could be wrong if regression assumptions are violated.
 
@@ -86,7 +88,7 @@ get_regression_table(trump_mod) %>%
   - Undesirable but tolerable
 
 ---
-# It's all about residuals
+# Valid Assumptions Depend on Residuals
 
 ```{r, include=FALSE}
 trump_mod.metrics <- augment(trump_mod)
@@ -112,7 +114,9 @@ trump_mod2.graph
 
 - LINE
 
-- **L**inear relationship between $x$s and $y$ (or nonlinear relationship included appropriately)
+- **L**inear relationship between $x$ and $y$ 
+
+  - Or proper inclusion of a nonlinear relationship
 
 --
 
@@ -147,9 +151,9 @@ ggplot(trump_mod2.metrics, aes(.fitted, .resid)) +
 ```
 ]
 
-- Assumptions **L**, **N**, and **E** can be observed using an RVF plot (on right).
+- Assumptions **L**, **N**, and **E** can be inspected using an RVF plot (on right).
 
-- We want to see no *obvious* pattern in the RVF plot points
+- We want to see no obvious pattern in the RVF plot points
 
 ---
 # Linear assumption
@@ -225,9 +229,9 @@ include_graphics('lectures_files/heteroskedasticity.png')
 
 --
 
-- Evaluating **I** requires an understanding of how sample was collected
+- Evaluating **I** requires an understanding of how observations in the data are related to each other
 
-- Independence is hard to achieve unless sample was truly random
+- Independence is hard to achieve unless sample is random
 
 ---
 # Consequences
@@ -243,15 +247,14 @@ include_graphics('lectures_files/heteroskedasticity.png')
 # Solutions
 
 - Violation of **L** or **N**
-  - Modify the regression model
+  - Include quadratic or log transformations
 
 - Violation of **E**
   - Log transform the outcome variable
   - Statistical correction outside scope of class (robust standard errors)
 
 - Violation of **I**
-  - Obtain a better sample
-  - Control for the variables related to non-randomness
+  - Control for the variables that capture how observations are related to each other
   - Statistical correction outside scope of class (clustered standard errors)
 
 ---
@@ -264,22 +267,23 @@ class: inverse, center, middle
 
 - When two explanatory variables are strongly correlated with each other
 
-- Since regression computes the association between an $x$ and $y$, **controlling for all other $x$s**, multicollinearity can mask statistically significant associations between those $x$s and the $y$.
+- Since regression computes the association between an $x$ and $y$, **controlling for all other $x$s**, multicollinearity can mask statistically significant associations between an $x$ and $y$.
 
 --
 
-- Multicollinearity can cause false negatives
+- In other words, multicollinearity can cause false negatives
 
 ---
 # Multicollinearity
 
 - Detection
   - If two variables have a correlation stronger than +/- 0.8, multicollinearity might be a problem
-  - Variance Inflation Factor (VIF) > 10 is another method
+  - Variance Inflation Factor (VIF) is another method
+    - A VIF greater than 10 indicates multicollinearity may be a problem
 
 - Solutions
-  - Combine the collinear variables into a single index variable
-  - If one variable is really important to your RQ, drop the other. Be careful not to introduce OVB!
+  - Combine the variables into a single index variable
+  - If one variable is really important to the analysis, exclude the variables correlated to it. Be careful not to introduce omitted variable bias.
 
 ---
 class: inverse, center, middle
@@ -318,7 +322,7 @@ $$TrumpVote = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$
 
 ```{r, echo=FALSE}
 get_regression_table(trump_mod) %>% 
-  kable(digits = 2)
+  kable()
 ```
 
 - We got our initial results. 
@@ -420,21 +424,6 @@ plot(trump_mod, 4)
 
 - Observations 9, 18, 20, and 46 may be worth investigating
 
----
-# Precise Cook's distance
-
-```{r, eval=FALSE}
-library(broom)
-augment(trump_mod) %>% 
-  arrange(desc(.cooksd))
-```
-
-```{r, echo=FALSE}
-trump_mod.metrics %>%
-  select(-white, -white_pov) %>%
-  arrange(desc(.cooksd)) %>% 
-  kable(digits = 3)
-```
 
 ---
 # Identifying an observation
@@ -450,10 +439,12 @@ state_trump[c(9,18,20,46), ] %>%
   kable()
 ```
 
-- D.C. probably warrants exclusion. Oters probably do not.
+- D.C. probably warrants exclusion.
 
 ---
 # Influencer?
+
+- Can create a new dataset that excludes DC, then run the regression using the new dataset
 
 ```{r}
 state_trump_nodc <- state_trump %>%
@@ -467,24 +458,34 @@ trump_mod_nodc <- lm(share_vote_trump ~ white + white_pov,
 get_regression_table(trump_mod_nodc)
 ```
 
-```{r, echo=FALSE}
-get_regression_table(trump_mod_nodc) %>% 
-  kable(digits = 2)
-```
-
-- Need to compare this to the initial results
-
 ---
-# Results including DC
+# Comparing results
+
+- Including DC
 
 ```{r, echo=FALSE}
 get_regression_table(trump_mod) %>% 
-  kable(digits = 2)
+  kable()
 ```
 
-- Estimates changed.
+- Excluding DC
 
-- Meaningfully? Probably not. Nothing changed with respect to the sign and statistical significance of each estimate. The confidence intervals mostly overlap.
+```{r, echo=FALSE}
+get_regression_table(trump_mod_nodc) %>% 
+  kable()
+```
+
+---
+# Influencer?
+
+- Whether change in results is meaningful can be subjective
+
+- Obvious meaningful changes:
+  - Change in statistical significance
+  - Estimates change between positive and negative
+  - Changes validity of LINE assumptions
+
+- Consider whether it makes sense to include or exclude certain observations
 
 ---
 # Comparing regression lines
@@ -517,7 +518,7 @@ ggplot(data = state_trump_nodc,
 ```
 ]
 
-- D.C. (on left) pulls the left of regression line down; forces slope to be greater
+- D.C. (on left) pulls the left of regression line down; causing slope to be steeper
 
 ---
 # Statistical test on assumptions

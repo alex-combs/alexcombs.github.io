@@ -4,24 +4,36 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab8-reporting-reg_files/header-attrs-2.11/header-attrs.js"></script>
+    <script src="rlab8-reporting-reg_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
-## RLab 9: Reporting Regression Results
+]
+.subtitle[
+## RLab 8: Reporting Regression Results
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: April 24, 2022
+]
+.date[
+### Last updated: November 28, 2022
+]
 
 ---
 
-# Objectives
+# Outline
 
-- Report regression results using tables and graphs in a realistic and professional way
+- Report regression results using tables and graphs in a more realistic and professional way
+
+- This lab involves a lot of copying-and-pasting of code. You want to have these slides open on your computer. 
 
 
 
@@ -35,7 +47,7 @@ class: center, middle, inverse, title-slide
 
 ```r
 ---
-title: "RLab 9: Reporting Regression Results"
+title: "RLab 8: Reporting Regression Results"
 author: "Your Name"
 output: 
   html_document:
@@ -47,7 +59,7 @@ output:
 ---
 # Setup
 
-&gt; **In setup code chunk, set the global echo to `FALSE` and load following packages**
+&gt; **In setup code chunk, load following packages**
 
 
 ```r
@@ -81,7 +93,12 @@ state_data &lt;- hate_crimes %&gt;%
 ---
 # Setup
 
-&gt; **Download and import "teacher_ratings.csv" from eLC. Name the data set whatever you want.**
+&gt; **Download "teacher_ratings.csv" from eLC. Import data in your setup code chunk.**
+
+
+```r
+teacher_ratings &lt;- read_csv("teacher_ratings.csv")
+```
 
 ---
 # Revisiting PS3 Regression
@@ -107,7 +124,7 @@ inc_mod &lt;- lm(median_house_inc ~ share_pop_hs + urbanization, data = state_da
 |share_pop_hs      |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
 |urbanization: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
 
-- This table is not typically how results are presented
+- This table is fine but not typically how results are presented
 
 ---
 # Better Regression Tables
@@ -136,7 +153,8 @@ stargazer(inc_mod,
           covariate.labels=c("Percent High School", 
                              "Low Urbanization"),
           keep.stat=c("n"), # reports number of observations
-          digits = 2) # limits results to two decimals
+          digits = 0, # sets the number of decimals to report
+          digits.extra = 3) # number of decimals if rounding results in 0
 ```
 
 ---
@@ -154,7 +172,8 @@ stargazer(inc_mod,
           covariate.labels=c("Percent High School", 
                              "Low Urbanization"),
 *         keep.stat=c("n","rsq","ser"),
-          digits.extra = 2)
+          digits = 0,
+          digits.extra = 3)
 ```
 
 ---
@@ -171,7 +190,8 @@ stargazer(inc_mod, ci=TRUE, ci.separator = " : ",
           covariate.labels=c("Percent High School", 
                              "Low Urbanization"),
           keep.stat=c("n","rsq","ser"),
-          digits.extra = 2,
+          digits = 0,
+          digits.extra = 3,
 *         out = "inc_mod.htm")
 ```
 
@@ -180,12 +200,12 @@ stargazer(inc_mod, ci=TRUE, ci.separator = " : ",
 ---
 class: inverse, center, middle
 
-# For presentations, we often want to use graphs instead of tables.
+# For presentations, we may want to use graphs instead of tables.
 
 ---
 # Visualizing Regression
 
-- We already know one option using `ggplot`
+- One option is to use `ggplot`
 
 .pull-left[
 
@@ -203,13 +223,13 @@ ggplot(state_data,
 ]
 
 .pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-11-1.png" width="99%" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-12-1.png" width="99%" /&gt;
 ]
 
 ---
 # Visualizing Regression Line
 
-- `ggplot` can visualize only simple regression models that include:
+- `ggplot` can visualize regression models that include:
 
   - **ONE** numerical explanatory variable
   - **ONE** categorical explanatory variable (with or without interaction)
@@ -224,14 +244,16 @@ ggplot(state_data,
 `$$Eval = \beta_0 + \beta_1Beauty + \beta_2Age \\ +\beta_3Female + \beta_4Beauty \times Female + \epsilon$$`
 
 
-&gt; **In a new code chunk, add and run the below code. Remember to change the data to what you named it.**
+&gt; **In a new code chunk, add and run the below code.**
 
 
 ```r
-mod1 &lt;- lm(course_eval ~ beauty, data = all_data)
-mod2 &lt;- lm(course_eval ~ beauty + age + female, data = all_data)
-mod3 &lt;- lm(course_eval ~ beauty + age + female + beauty*female, data = all_data)
+mod1 &lt;- lm(course_eval ~ beauty, data = teacher_ratings)
+mod2 &lt;- lm(course_eval ~ beauty + age + female, data = teacher_ratings)
+mod3 &lt;- lm(course_eval ~ beauty + age + female + beauty*female, data = teacher_ratings)
 ```
+
+
 
 ---
 # Visualizing Regression
@@ -245,7 +267,7 @@ mod3 &lt;- lm(course_eval ~ beauty + age + female + beauty*female, data = all_da
 |female        |    0.106|     0.196|     0.539|   0.590|   -0.279|    0.491|
 |beauty:female |   -0.070|     0.042|    -1.677|   0.094|   -0.153|    0.012|
 
-- We can't visualize the relationship between evals and beauty controlling for age using `ggplot`
+- We can't visualize the relationship between ratings and beauty controlling for age using `ggplot`
 
 ---
 # Visualizing Regression
@@ -259,7 +281,7 @@ mod3 &lt;- lm(course_eval ~ beauty + age + female + beauty*female, data = all_da
 effect_plot(mod3, pred = beauty, plot.points = TRUE)
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing Regression Line
@@ -273,16 +295,16 @@ effect_plot(mod3, pred = beauty, plot.points = TRUE)
 interact_plot(mod3, pred = beauty, modx = female, plot.points = TRUE)
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing Coefficients
 
-- Common to visualize the coefficients instead of using a table or regression lines. 
+- May want to visualize the estimates instead of using a table or regression lines. 
 
 &gt; **Add following code in a new code chunk.**
 
-.pull-left[
+
 
 ```r
 plot_summs(mod3, 
@@ -291,11 +313,8 @@ plot_summs(mod3,
                      "Female" = "female",
                      "Beauty X Female" = "beauty:female"))
 ```
-]
 
-.pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
-]
+
 
 ---
 # Multiple models in same table
@@ -384,6 +403,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable

@@ -1,6 +1,6 @@
 ---
 title: "PADP 7120 Data Applications in PA"
-subtitle: "RLab 9: Reporting Regression Results"
+subtitle: "RLab 8: Reporting Regression Results"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
 date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
@@ -13,9 +13,11 @@ output:
       countIncrementalSlides: false
       highlightLines: true
 ---
-# Objectives
+# Outline
 
-- Report regression results using tables and graphs in a realistic and professional way
+- Report regression results using tables and graphs in a more realistic and professional way
+
+- This lab involves a lot of copying-and-pasting of code. You want to have these slides open on your computer. 
 
 ```{r, include=FALSE}
 library(tidyverse)
@@ -38,7 +40,7 @@ library(rockchalk)
 
 ```{r, eval=FALSE}
 ---
-title: "RLab 9: Reporting Regression Results"
+title: "RLab 8: Reporting Regression Results"
 author: "Your Name"
 output: 
   html_document:
@@ -50,7 +52,7 @@ output:
 ---
 # Setup
 
-> **In setup code chunk, set the global echo to `FALSE` and load following packages**
+> **In setup code chunk, load following packages**
 
 ```{r, eval=FALSE}
 library(tidyverse)
@@ -82,7 +84,11 @@ state_data <- hate_crimes %>%
 ---
 # Setup
 
-> **Download and import "teacher_ratings.csv" from eLC. Name the data set whatever you want.**
+> **Download "teacher_ratings.csv" from eLC. Import data in your setup code chunk.**
+
+```{r, eval=FALSE}
+teacher_ratings <- read_csv("teacher_ratings.csv")
+```
 
 ---
 # Revisiting PS3 Regression
@@ -105,7 +111,7 @@ get_regression_table(inc_mod) %>%
   kable()
 ```
 
-- This table is not typically how results are presented
+- This table is fine but not typically how results are presented
 
 ---
 # Better Regression Tables
@@ -133,7 +139,8 @@ stargazer(inc_mod,
           covariate.labels=c("Percent High School", 
                              "Low Urbanization"),
           keep.stat=c("n"), # reports number of observations
-          digits = 2) # limits results to two decimals
+          digits = 0, # sets the number of decimals to report
+          digits.extra = 3) # number of decimals if rounding results in 0
 ```
 
 ---
@@ -150,7 +157,8 @@ stargazer(inc_mod,
           covariate.labels=c("Percent High School", 
                              "Low Urbanization"),
           keep.stat=c("n","rsq","ser"), #<<
-          digits.extra = 2)
+          digits = 0,
+          digits.extra = 3)
 ```
 
 ---
@@ -166,7 +174,8 @@ stargazer(inc_mod, ci=TRUE, ci.separator = " : ",
           covariate.labels=c("Percent High School", 
                              "Low Urbanization"),
           keep.stat=c("n","rsq","ser"),
-          digits.extra = 2,
+          digits = 0,
+          digits.extra = 3,
           out = "inc_mod.htm") #<<
 ```
 
@@ -175,12 +184,12 @@ stargazer(inc_mod, ci=TRUE, ci.separator = " : ",
 ---
 class: inverse, center, middle
 
-# For presentations, we often want to use graphs instead of tables.
+# For presentations, we may want to use graphs instead of tables.
 
 ---
 # Visualizing Regression
 
-- We already know one option using `ggplot`
+- One option is to use `ggplot`
 
 .pull-left[
 ```{r, eval=FALSE}
@@ -213,7 +222,7 @@ ggplot(state_data,
 ---
 # Visualizing Regression Line
 
-- `ggplot` can visualize only simple regression models that include:
+- `ggplot` can visualize regression models that include:
 
   - **ONE** numerical explanatory variable
   - **ONE** categorical explanatory variable (with or without interaction)
@@ -230,9 +239,15 @@ $$Eval = \beta_0 + \beta_1Beauty + \beta_2Age \\ +\beta_3Female + \beta_4Beauty 
 load("labs_files/teach_beauty.RData")
 ```
 
-> **In a new code chunk, add and run the below code. Remember to change the data to what you named it.**
+> **In a new code chunk, add and run the below code.**
 
-```{r}
+```{r, eval=FALSE}
+mod1 <- lm(course_eval ~ beauty, data = teacher_ratings)
+mod2 <- lm(course_eval ~ beauty + age + female, data = teacher_ratings)
+mod3 <- lm(course_eval ~ beauty + age + female + beauty*female, data = teacher_ratings)
+```
+
+```{r, echo=FALSE}
 mod1 <- lm(course_eval ~ beauty, data = all_data)
 mod2 <- lm(course_eval ~ beauty + age + female, data = all_data)
 mod3 <- lm(course_eval ~ beauty + age + female + beauty*female, data = all_data)
@@ -246,7 +261,7 @@ get_regression_table(mod3) %>%
   kable()
 ```
 
-- We can't visualize the relationship between evals and beauty controlling for age using `ggplot`
+- We can't visualize the relationship between ratings and beauty controlling for age using `ggplot`
 
 ---
 # Visualizing Regression
@@ -273,11 +288,11 @@ interact_plot(mod3, pred = beauty, modx = female, plot.points = TRUE)
 ---
 # Visualizing Coefficients
 
-- Common to visualize the coefficients instead of using a table or regression lines. 
+- May want to visualize the estimates instead of using a table or regression lines. 
 
 > **Add following code in a new code chunk.**
 
-.pull-left[
+
 ```{r, eval=FALSE}
 plot_summs(mod3, 
            coefs = c("Beauty" = "beauty", 
@@ -285,17 +300,8 @@ plot_summs(mod3,
                      "Female" = "female",
                      "Beauty X Female" = "beauty:female"))
 ```
-]
 
-.pull-right[
-```{r, echo=FALSE, message=FALSE, fig.align='center'}
-plot_summs(mod3, 
-           coefs = c("Beauty" = "beauty", 
-                     "Age" = "age", 
-                     "Female" = "female",
-                     "Beauty X Female" = "beauty:female"))
-```
-]
+
 
 ---
 # Multiple models in same table

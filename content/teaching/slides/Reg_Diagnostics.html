@@ -4,18 +4,28 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Reg_Diagnostics_files/header-attrs-2.11/header-attrs.js"></script>
+    <script src="Reg_Diagnostics_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## Regression Diagnostics
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: April 24, 2022
+]
+.date[
+### Last updated: November 28, 2022
+]
 
 ---
 
@@ -45,11 +55,13 @@ class: inverse, center, middle
 
 |term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
 |:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |    10.93|      6.53|      1.68|     0.1|    -2.19|    24.05|
-|white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
-|white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
+|intercept |   10.933|     6.526|     1.675|   0.100|   -2.189|   24.054|
+|white     |    0.264|     0.081|     3.239|   0.002|    0.100|    0.428|
+|white_pov |    2.181|     0.543|     4.014|   0.000|    1.089|    3.274|
 
-- We have finally covered all the information in this table. 
+- We now understand all the information in this table. 
+
+--
 
 - But the information could be wrong if regression assumptions are violated.
 
@@ -68,7 +80,7 @@ class: inverse, center, middle
   - Undesirable but tolerable
 
 ---
-# It's all about residuals
+# Valid Assumptions Depend on Residuals
 
 
 
@@ -79,7 +91,9 @@ class: inverse, center, middle
 
 - LINE
 
-- **L**inear relationship between `\(x\)`s and `\(y\)` (or nonlinear relationship included appropriately)
+- **L**inear relationship between `\(x\)` and `\(y\)` 
+
+  - Or proper inclusion of a nonlinear relationship
 
 --
 
@@ -104,9 +118,9 @@ class: inverse, center, middle
 &lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
-- Assumptions **L**, **N**, and **E** can be observed using an RVF plot (on right).
+- Assumptions **L**, **N**, and **E** can be inspected using an RVF plot (on right).
 
-- We want to see no *obvious* pattern in the RVF plot points
+- We want to see no obvious pattern in the RVF plot points
 
 ---
 # Linear assumption
@@ -168,9 +182,9 @@ class: inverse, center, middle
 
 --
 
-- Evaluating **I** requires an understanding of how sample was collected
+- Evaluating **I** requires an understanding of how observations in the data are related to each other
 
-- Independence is hard to achieve unless sample was truly random
+- Independence is hard to achieve unless sample is random
 
 ---
 # Consequences
@@ -186,15 +200,14 @@ class: inverse, center, middle
 # Solutions
 
 - Violation of **L** or **N**
-  - Modify the regression model
+  - Include quadratic or log transformations
 
 - Violation of **E**
   - Log transform the outcome variable
   - Statistical correction outside scope of class (robust standard errors)
 
 - Violation of **I**
-  - Obtain a better sample
-  - Control for the variables related to non-randomness
+  - Control for the variables that capture how observations are related to each other
   - Statistical correction outside scope of class (clustered standard errors)
 
 ---
@@ -207,22 +220,23 @@ class: inverse, center, middle
 
 - When two explanatory variables are strongly correlated with each other
 
-- Since regression computes the association between an `\(x\)` and `\(y\)`, **controlling for all other `\(x\)`s**, multicollinearity can mask statistically significant associations between those `\(x\)`s and the `\(y\)`.
+- Since regression computes the association between an `\(x\)` and `\(y\)`, **controlling for all other `\(x\)`s**, multicollinearity can mask statistically significant associations between an `\(x\)` and `\(y\)`.
 
 --
 
-- Multicollinearity can cause false negatives
+- In other words, multicollinearity can cause false negatives
 
 ---
 # Multicollinearity
 
 - Detection
   - If two variables have a correlation stronger than +/- 0.8, multicollinearity might be a problem
-  - Variance Inflation Factor (VIF) &gt; 10 is another method
+  - Variance Inflation Factor (VIF) is another method
+    - A VIF greater than 10 indicates multicollinearity may be a problem
 
 - Solutions
-  - Combine the collinear variables into a single index variable
-  - If one variable is really important to your RQ, drop the other. Be careful not to introduce OVB!
+  - Combine the variables into a single index variable
+  - If one variable is really important to the analysis, exclude the variables correlated to it. Be careful not to introduce omitted variable bias.
 
 ---
 class: inverse, center, middle
@@ -262,9 +276,9 @@ class: inverse, center, middle
 
 |term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
 |:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |    10.93|      6.53|      1.68|     0.1|    -2.19|    24.05|
-|white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
-|white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
+|intercept |   10.933|     6.526|     1.675|   0.100|   -2.189|   24.054|
+|white     |    0.264|     0.081|     3.239|   0.002|    0.100|    0.428|
+|white_pov |    2.181|     0.543|     4.014|   0.000|    1.089|    3.274|
 
 - We got our initial results. 
 
@@ -367,70 +381,6 @@ plot(trump_mod, 4)
 
 - Observations 9, 18, 20, and 46 may be worth investigating
 
----
-# Precise Cook's distance
-
-
-```r
-library(broom)
-augment(trump_mod) %&gt;% 
-  arrange(desc(.cooksd))
-```
-
-
-| share_vote_trump| .fitted|  .resid|  .hat| .sigma| .cooksd| .std.resid|
-|----------------:|-------:|-------:|-----:|------:|-------:|----------:|
-|                4|  29.418| -25.418| 0.146|  8.326|   0.516|     -3.008|
-|               33|  57.541| -24.541| 0.068|  8.466|   0.187|     -2.779|
-|               45|  61.112| -16.112| 0.070|  8.915|   0.084|     -1.827|
-|               63|  70.435|  -7.435| 0.221|  9.160|   0.080|     -0.921|
-|               70|  52.986|  17.014| 0.042|  8.888|   0.053|      1.901|
-|               53|  39.989|  13.011| 0.064|  9.032|   0.049|      1.470|
-|               53|  39.320|  13.680| 0.054|  9.012|   0.045|      1.538|
-|               60|  47.041|  12.959| 0.052|  9.036|   0.039|      1.455|
-|               62|  50.277|  11.723| 0.046|  9.075|   0.028|      1.312|
-|               33|  40.851|  -7.851| 0.087|  9.164|   0.026|     -0.898|
-|               65|  49.891|  15.109| 0.024|  8.969|   0.023|      1.672|
-|               57|  47.305|   9.695| 0.054|  9.127|   0.023|      1.090|
-|               64|  52.986|  11.014| 0.042|  9.095|   0.022|      1.231|
-|               34|  47.639| -13.639| 0.028|  9.019|   0.022|     -1.512|
-|               63|  54.253|   8.747| 0.051|  9.149|   0.017|      0.982|
-|               37|  48.044| -11.044| 0.033|  9.096|   0.017|     -1.228|
-|               41|  52.265| -11.265| 0.023|  9.092|   0.012|     -1.246|
-|               38|  48.765| -10.765| 0.020|  9.105|   0.010|     -1.189|
-|               58|  52.407|   5.593| 0.065|  9.204|   0.009|      0.632|
-|               51|  44.280|   6.720| 0.040|  9.188|   0.008|      0.750|
-|               50|  44.017|   5.983| 0.043|  9.199|   0.007|      0.669|
-|               40|  47.375|  -7.375| 0.027|  9.178|   0.006|     -0.817|
-|               69|  66.002|   2.998| 0.116|  9.231|   0.005|      0.349|
-|               55|  47.446|   7.554| 0.021|  9.175|   0.005|      0.835|
-|               40|  42.768|  -2.768| 0.103|  9.233|   0.004|     -0.320|
-|               46|  41.572|   4.428| 0.045|  9.219|   0.004|      0.496|
-|               60|  56.627|   3.373| 0.046|  9.229|   0.002|      0.377|
-|               39|  42.820|  -3.820| 0.035|  9.225|   0.002|     -0.425|
-|               58|  56.241|   1.759| 0.131|  9.238|   0.002|      0.206|
-|               61|  58.545|   2.455| 0.068|  9.235|   0.002|      0.278|
-|               30|  31.213|  -1.213| 0.199|  9.240|   0.002|     -0.148|
-|               35|  37.209|  -2.209| 0.065|  9.236|   0.001|     -0.250|
-|               47|  49.750|  -2.750| 0.041|  9.233|   0.001|     -0.307|
-|               45|  43.470|   1.530| 0.112|  9.239|   0.001|      0.178|
-|               48|  51.139|  -3.139| 0.027|  9.231|   0.001|     -0.348|
-|               42|  45.001|  -3.001| 0.025|  9.232|   0.001|     -0.332|
-|               45|  42.556|   2.444| 0.036|  9.235|   0.001|      0.272|
-|               48|  50.612|  -2.612| 0.025|  9.234|   0.001|     -0.289|
-|               57|  54.710|   2.290| 0.031|  9.236|   0.001|      0.254|
-|               59|  57.084|   1.916| 0.042|  9.238|   0.001|      0.214|
-|               47|  48.025|  -1.025| 0.116|  9.241|   0.001|     -0.119|
-|               41|  42.486|  -1.486| 0.057|  9.240|   0.001|     -0.167|
-|               51|  49.100|   1.900| 0.027|  9.238|   0.000|      0.211|
-|               57|  58.210|  -1.210| 0.049|  9.241|   0.000|     -0.136|
-|               52|  53.584|  -1.584| 0.028|  9.239|   0.000|     -0.176|
-|               49|  50.612|  -1.612| 0.025|  9.239|   0.000|     -0.178|
-|               42|  40.973|   1.027| 0.041|  9.241|   0.000|      0.115|
-|               52|  52.986|  -0.986| 0.042|  9.241|   0.000|     -0.110|
-|               57|  56.486|   0.514| 0.054|  9.242|   0.000|      0.058|
-|               44|  44.403|  -0.403| 0.037|  9.242|   0.000|     -0.045|
-|               49|  49.170|  -0.170| 0.055|  9.242|   0.000|     -0.019|
 
 ---
 # Identifying an observation
@@ -450,10 +400,12 @@ state_trump[c(9,18,20,46), ]
 |Maine                |   51710| 90.2|    91|        12|               45|low   |
 |Vermont              |   60708| 91.0|    94|        10|               33|low   |
 
-- D.C. probably warrants exclusion. Oters probably do not.
+- D.C. probably warrants exclusion.
 
 ---
 # Influencer?
+
+- Can create a new dataset that excludes DC, then run the regression using the new dataset
 
 
 ```r
@@ -469,41 +421,51 @@ trump_mod_nodc &lt;- lm(share_vote_trump ~ white + white_pov,
 get_regression_table(trump_mod_nodc)
 ```
 
+---
+# Comparing results
+
+- Including DC
+
 
 |term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
 |:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |    18.86|      6.41|      2.94|    0.00|     5.97|    31.75|
-|white     |     0.21|      0.08|      2.79|    0.01|     0.06|     0.36|
-|white_pov |     1.77|      0.51|      3.47|    0.00|     0.74|     2.80|
+|intercept |   10.933|     6.526|     1.675|   0.100|   -2.189|   24.054|
+|white     |    0.264|     0.081|     3.239|   0.002|    0.100|    0.428|
+|white_pov |    2.181|     0.543|     4.014|   0.000|    1.089|    3.274|
 
-- Need to compare this to the initial results
+- Excluding DC
+
+
+|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept |   18.859|     6.407|     2.943|   0.005|    5.969|   31.748|
+|white     |    0.212|     0.076|     2.791|   0.008|    0.059|    0.364|
+|white_pov |    1.770|     0.510|     3.471|   0.001|    0.744|    2.797|
 
 ---
-# Results including DC
+# Influencer?
 
+- Whether change in results is meaningful can be subjective
 
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |    10.93|      6.53|      1.68|     0.1|    -2.19|    24.05|
-|white     |     0.26|      0.08|      3.24|     0.0|     0.10|     0.43|
-|white_pov |     2.18|      0.54|      4.01|     0.0|     1.09|     3.27|
+- Obvious meaningful changes:
+  - Change in statistical significance
+  - Estimates change between positive and negative
+  - Changes validity of LINE assumptions
 
-- Estimates changed.
-
-- Meaningfully? Probably not. Nothing changed with respect to the sign and statistical significance of each estimate. The confidence intervals mostly overlap.
+- Consider whether it makes sense to include or exclude certain observations
 
 ---
 # Comparing regression lines
 
 .pull-left[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
-- D.C. (on left) pulls the left of regression line down; forces slope to be greater
+- D.C. (on left) pulls the left of regression line down; causing slope to be steeper
 
 ---
 # Statistical test on assumptions
@@ -598,6 +560,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
