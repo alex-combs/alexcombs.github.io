@@ -4,18 +4,28 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab10-forecasting_files/header-attrs-2.11/header-attrs.js"></script>
+    <script src="rlab10-forecasting_files/header-attrs-2.14/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
     <textarea id="source">
 class: center, middle, inverse, title-slide
 
+.title[
 # PADP 7120 Data Applications in PA
+]
+.subtitle[
 ## RLab 9: Forecasting
+]
+.author[
 ### Alex Combs
+]
+.institute[
 ### UGA | SPIA | PADP
-### Last updated: April 27, 2022
+]
+.date[
+### Last updated: December 05, 2022
+]
 
 ---
 
@@ -142,15 +152,15 @@ ts_data &lt;- ts(data[,-1],
 
 | year| quarter| value|
 |----:|-------:|-----:|
-| 2016|       1|    53|
-| 2016|       2|    33|
+| 2016|       1|    39|
+| 2016|       2|    62|
 
 
 
 | year| quarter| value|
 |----:|-------:|-----:|
-| 2020|       3|    51|
-| 2020|       4|    61|
+| 2020|       3|    46|
+| 2020|       4|    56|
 
 
 ```r
@@ -170,14 +180,14 @@ ts_quarterly &lt;- ts(quarterly[,-1],
 | year| month| value|
 |----:|-----:|-----:|
 | 2016|     1|    38|
-| 2016|     2|    54|
+| 2016|     2|    58|
 
 
 
 | year| month| value|
 |----:|-----:|-----:|
-| 2020|    11|    53|
-| 2020|    12|    53|
+| 2020|    11|    48|
+| 2020|    12|    63|
 
 
 ```r
@@ -196,15 +206,15 @@ ts_monthly &lt;- ts(monthly[,-1],
 
 | year| value|
 |----:|-----:|
-| 2000|    36|
-| 2002|    42|
+| 2000|    63|
+| 2002|    57|
 
 
 
 | year| value|
 |----:|-----:|
-| 2018|    47|
-| 2020|    56|
+| 2018|    48|
+| 2020|    46|
 
 
 ```r
@@ -958,6 +968,19 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
     deleted = true;
   });
 })();
+// add `data-at-shortcutkeys` attribute to <body> to resolve conflicts with JAWS
+// screen reader (see PR #262)
+(function(d) {
+  let res = {};
+  d.querySelectorAll('.remark-help-content table tr').forEach(tr => {
+    const t = tr.querySelector('td:nth-child(2)').innerText;
+    tr.querySelectorAll('td:first-child .key').forEach(key => {
+      const k = key.innerText;
+      if (/^[a-z]$/.test(k)) res[k] = t;  // must be a single letter (key)
+    });
+  });
+  d.body.setAttribute('data-at-shortcutkeys', JSON.stringify(res));
+})(document);
 (function() {
   "use strict"
   // Replace <script> tags in slides area to make them executable
