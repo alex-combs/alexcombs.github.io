@@ -66,7 +66,7 @@ output:
 
 --
 
-- **Reproducibility and Automation**
+- Reproducibility and Automation
 
 --
 
@@ -83,7 +83,7 @@ output:
 
 - Both sides need to communicate
 
-- We are always consuming statistics
+- We are constantly consuming statistics or information drawn from a statistical analysis
 
 - Producing helps you be a more critical consumer
 
@@ -112,12 +112,12 @@ output:
 - Significance
 - Assumptions
 
-**Bonus**
+**Bonus?**
 - Forecasting
 ]
 
 ---
-# Complementary R Skills
+# Complementary Data App Skills
 
 - Workflow
 - Import data
@@ -144,13 +144,13 @@ output:
 
 - 9 R Chapters (10% of grade)
 
-- 10 R Labs (10% of grade)
+- 9 R Labs (10% of grade)
 
 - 4 Problem sets (50% of grade)
 
 - 2 Exams (30% of grade)
 
-- 15 DataCamp Chapters for up to 4.5 points of extra credit
+- 15 DataCamp Chapters for up to 4.0 points of extra credit
 
 ---
 # R Chapters
@@ -172,7 +172,9 @@ output:
 
 - Graded complete/incomplete if you work on RLab in class
 
-- If you miss class, due by 12:00PM the Wednesday following class. I will count as incomplete if they are not sufficiently complete and accurate.
+- If you miss class, due by 12:00PM the Wednesday following class. In this case, I will check for completeness to avoid students falling behind.
+
+- Answers posted after 12PM Wednesday
 
 ---
 # Problem sets
@@ -208,9 +210,9 @@ output:
 
 - I will place everyone in a group on eLC even if it is a group of one
 
-- **Email me before our class meeting on September 12 if:**
-  - you have established a group on your own. Provide the names of the other members.
-  - If you would like to work in a group and need my help finding others to work with.
+- If you would like to work in a group and need my help finding others to work with, email me before our class meeting on **January 17**
+
+- If you have established a group on your own, someone email me the names of the members by **January 24**
 
 ---
 # Exams
@@ -228,9 +230,11 @@ output:
 
 - Recommended order provided on course schedule
 
-- Opportunity for extra credit closes on November 21 at 11:59PM
+- Opportunity for extra credit closes on April 11 at 11:59PM
 
-- Invite link on eLC. Use your uga.edu email address to join.
+- Invite link on eLC. Use your uga.edu email address to join
+
+- Be sure the chapters you complete are the ones that count toward extra credit
 
 ---
 # Attendance & Office Hours
