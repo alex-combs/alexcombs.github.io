@@ -38,7 +38,7 @@ output:
 
 --
 
-- **Variable**:  a characteristic measured of the member within the unit of analysis
+- **Variable**:  a characteristic measured of each member of the unit of analysis
 
 - Each column contains a variable 
 

@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab1_intro_to_r_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="rlab1_intro_to_r_files/header-attrs-2.19/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: August 22, 2022
+### Last updated: January 10, 2023
 ]
 
 ---
@@ -78,10 +78,10 @@ summary(cars)
 
 - Highly likely that you will encounter errors. This is normal.
 
-  - If so and you cannot figure out how to fix, **STOP ME**
+  - If so and you cannot figure out how to fix, let me know
   - Troubleshooting can help you and others learn
 
-- First several weeks will likely involve a lot of stopping as I help students. 
+- First few weeks may involve frequent stopping as I help students 
 
 - If you are waiting while I help students, resist working ahead.
 
@@ -192,18 +192,9 @@ install.packages("name_of_package")
 - Only install packages using the console. Never install packages inside the R Markdown documents we will use for assignments.
 
 ---
-# Some data file types
-
-- Certain software uses file extensions like `.xlsx` for Excel
-
-- A data file that is formatted for R has the extension `.RData` or `.rds`
-
-- A `.csv` file is compatible with virtually any statistical software
-
----
 # Importing CSV data
 
-&gt; **Download the file titled "states1.csv" from eLC. Leave it wherever your computer saved it (probably Downloads folder). 
+&gt; **Download the file titled "states1.csv" from eLC. Leave it wherever your computer saved it (probably Downloads folder).**
 
 --
 
@@ -233,7 +224,7 @@ Execution halted
 ---
 # Moving a file to our project
 
-- Remember, R looks for files in your project folder
+- Remember, R looks for files in your project folder or your current working directory (`getwd()`) if not working in a project
 
 - R is saying it can't find the file we just told it to import because it is in our downloads folder, not our project folder
 
@@ -265,12 +256,12 @@ Execution halted
 
 &gt; **Start an R Markdown (.Rmd) document. When the dialog box appears, just hit OK.**
 
-- Let's review the template. It is informative.
+- By default, an Rmd loads as a template. The template information is informative for beginners.
 
 ---
 # Knit
 
-- Knit refers to taking the combination of text and code and knitting it into a HTML, PDF, Word doc, etc.
+- Knit refers to taking the combination of text and code and knitting it into a HTML, PDF, Word doc, slides, etc.
 
 - Should see a knit button at the top of the editor pane. Clicking it will knit your document.
 
@@ -278,7 +269,7 @@ Execution halted
   
 --
 
-&gt; **Knit your Rmd document. R will ask you to name it first. Name it "test" (or whatever you want).**
+&gt; **Knit your Rmd document. R will ask you to name it first. Name it "test".**
 
 ---
 # YAML header
@@ -305,13 +296,13 @@ output: html_document
 
 - To add a code chunk, you can use point-and-click or the keyboard shortcut `Cmd+Opt+I` on Mac, `Ctrl+Alt+I` on Windows
 
-- I will now demonstrate inserting a code chunk and typing some arbitrary math
+- I will now demonstrate inserting a code chunk and typing some arbitrary arithmetic
 
 --
 
-&gt; **At the bottom of your Rmd, insert a code chunk and some arbitrary math inside it.**
+&gt; **At the bottom of your Rmd, insert a code chunk and add some arbitrary arithmetic inside it.**
 
-&gt; **Click `Enter` a few times and type another line of math below the first**
+&gt; **Click `Enter` a few times and type another line of arithmetic below the first**
 
 ---
 # Running Code Chunks
@@ -327,7 +318,7 @@ output: html_document
 ---
 # Creating an object the environment pane
 
-- Anytime you use the **assignment operator:** `&lt;-`, the result will be saved in your environment pane. You already saved `states1` in your environment.
+- Anytime you use the **assignment operator,** `&lt;-`, the result will be saved in your environment pane. You already saved `states1` in your environment using `&lt;-`.
 
 --
 
@@ -342,7 +333,7 @@ states2 &lt;- select(states1, state, pop_1990)
 
 --
 
-&gt; **Knit your Rmd again. (this should cause a deliberate error)**
+&gt; **Knit your Rmd again. (this should cause an intentional error)**
 
 ---
 # Our second error
@@ -351,11 +342,11 @@ states2 &lt;- select(states1, state, pop_1990)
 
 --
 
-- When you knit, R runs the code in your document from beginning-to-end and ignores anything you did in the console to load a package or import data.
+- When you knit, R runs the code in your Rmd from beginning-to-end and ignores anything you did in the console to load a package or import data. Your Rmd needs to be self-contained.
 
 --
 
-- If a code chunk in your document depends on something you did in the console, your it won't knit unless we include that code
+- If a code chunk in your document depends on something you did in the console, it won't knit unless we include that code
 
 --
 
@@ -370,7 +361,7 @@ states2 &lt;- select(states1, state, pop_1990)
 
 - We imported `states1` using the console. It is in our environment. We can use it.
 
-- But there is no code in our document that imports `states1`. When we knit, it is as if we do not have `states1`
+- But there is no code in our Rmd document that imports `states1`. When we knit, it is as if we do not have `states1` imported
 
 --
 
@@ -381,7 +372,7 @@ states2 &lt;- select(states1, state, pop_1990)
 
 &gt; **Since you just knitted, everything is saved. Close RStudio.**
 
-&gt; **To re-open your project, open the .Rproj file in your project folder.** 
+&gt; **To re-open your project, find the .Rproj file on your computers file manager and open it.** 
 
 ---
 class: inverse, middle, center
@@ -410,9 +401,9 @@ class: inverse, middle, center
 
 &gt; **Add a code chunk** 
 
-&gt; **Inside the code chunk, write some arbitrary math**
+&gt; **Inside the code chunk, add some arbitrary arithmetic**
 
-&gt; **Assign the result to an object named `math`**
+&gt; **Save the result of the arithmetic as an object named `math` using the assignment operator**
 
 ---
 # Some of my R skills
