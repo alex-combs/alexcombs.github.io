@@ -19,8 +19,7 @@ output:
 
   - included in a R package
   - csv and Excel
-  - directly from url
-  
+
 - Export R Markdown
 
   - change YAML to print nicer tables
@@ -35,23 +34,12 @@ library(readxl)
 library(gapminder) 
 library(knitr)
 library(fivethirtyeight)
-library(data.table)
 ```
 
 ---
 # Set-up
 
-.pull-left[
-
-> **If using RStudio Cloud, do not create a new project. Instead, use the project you created for RLab1 where you already installed `tidyverse`. Installed packages do not carry over to other project spaces.**
-
-]
-
-.pull-right[
-
-> **Otherwise, create a new project named "rlab2". I recommend locating it in the same parent file as your rlab1 project folder.**
-
-]
+> **Create a new project named "rlab2". I recommend locating it in the same parent file as your rlab1 project.**
 
 ---
 # Set-up
@@ -65,23 +53,16 @@ library(data.table)
 ---
 # Set-up: packages
 
-- Remember that a package will not load if it is not installed.
-
---
-
-> **In the setup code chunk at the top, use the code below to load the following packages.**
+> **In the setup code chunk at the top, add the below code. Run this code to load packages.**
 
 ```{r, eval=FALSE}
 library(tidyverse) #includes function for importing CSV
 library(readxl) #for importing Excel files
-library(data.table) #for importing from URL
 library(gapminder) #contains data we need to use
 library(fivethirtyeight) #contains data we need to use
 ```
 
 - If you receive error message "package does not exist," you need to install it.
-
-- We will wait until all students have necessary packages loaded. For those waiting, please be patient.
 
 ---
 # Set-up: files
@@ -108,12 +89,12 @@ class: inverse, middle, center
 ---
 # Data in R Packages
 
-> **In a new code chunk, add and run the following**
+> **In a _new code chunk_, add and run the following**
 
 ```{r, eval=FALSE}
+slice_head(gapminder, n=4)
 # slice_head() prints row(s) from the top of a dataset
 # n=4 tells it to print the top 4 rows
-slice_head(gapminder, n=4)
 ```
 
 ```{r, echo=FALSE}
@@ -121,7 +102,7 @@ slice_head(gapminder, n=4) %>%
   kable()
 ```
 
-- This is one way to provide a preview of the data for a reader
+- This is one way to provide a preview of the data
 
 ---
 # Data in R Packages
@@ -158,7 +139,7 @@ gap_preview #<<
 
 --
 
-> **Insert a new code chunk and add the following code**
+> **Insert a _new code chunk_ and add the following code**
 
 ```{r, eval=FALSE}
 hc <- hate_crimes
@@ -178,7 +159,7 @@ hc <- hate_crimes
 ---
 class: inverse, middle, center
 
-# Printing tables.
+# Printing tables
 
 ---
 # Printing tables
@@ -186,8 +167,8 @@ class: inverse, middle, center
 - We have made two tables that will print when we knit using the code:
 
 ```{r, eval=FALSE}
-gap_preview
-slice_head(hc, n=4)
+gap_preview # prints saved object in environment
+slice_head(hc, n=4) # prints result without saving anything
 ```
 
 - There is enough horizontal space for all `gap_preview` variables to display but not for all `hc` variables
@@ -195,28 +176,28 @@ slice_head(hc, n=4)
 ---
 # Printing tables
 
-- We can improve how all tables print
+- We can improve how all tables print when knit by changing the YAML
 
-> **Change the YAML to the following:**
+> **Change the YAML to the example below. Make sure you indent correctly.**
 
 ```{r, eval=FALSE}
 ---
 title: "RLab2: Import & Export"
 author: "Alex Combs"
-output: #no space after colon #<<
-  html_document: #tab indent #<<
-    df_print: kable #tab indent #<<
+output:
+  html_document:
+    df_print: kable
 ---
 ```
 
 > **Knit to HTML**
 
-- The `gap_preview` table should look better but the `hc` table still runs off the page.
+- `gap_preview` table looks better but `hc` table runs off the page
 
 ---
 # Printing tables
 
-> **Change the `df_print` option in your YAML like so:**
+> **Change `df_print` option in YAML according to highlighted line:**
 
 ```{r, eval=FALSE}
 ---
@@ -235,8 +216,6 @@ output:
 ---
 # YAML themes
 
-- Several [themes](https://bootswatch.com/3/) available to change the appearance of your HTML output
-
 > **Add the highlighted lines to your YAML, then knit to HTML**
 
 ```{r, eval=FALSE}
@@ -246,17 +225,16 @@ author: "Alex Combs"
 output:
   html_document:
     df_print: paged
-    theme: spacelab #<<
-    highlight: tango #<<
+    theme: slate #<<
 ---
 ```
 
-- More info on formatting HTML [here](https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style) if interested
+-If interested, more info on [themes](https://bootswatch.com/3/) and [document formatting](https://bookdown.org/yihui/rmarkdown/html-document.html#appearance-and-style)
 
 ---
 class: inverse, middle, center
 
-# Code chunk options.
+# Code chunk options
 
 ---
 # Code chunk options
@@ -335,7 +313,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 --
 
-- You can also add `message=FALSE` and `warning=FALSE` to suppress the background information RStudio communicates to you but typically should not be included in knitted document
+- You can also add `message=FALSE` and `warning=FALSE` to suppress the background information RStudio prints but should not be included in the export
 
 ---
 class: inverse, middle, center
@@ -345,17 +323,15 @@ class: inverse, middle, center
 ---
 # Importing data
 
-- Organizations publish data files in a variety of (inconvenient) formats and tend to use a consistent format across files and time
+- Organizations publish data files in a variety of formats that may be inconvenient but tend to use a consistent format across files and time
 
 - Provides the opportunity to use code to import many similar files quickly
 
 --
 
-- Messy data files present a fork in our workflow
+- Messy data files present a choice in our workflow
   - Clean the data some as part of the import, or
   - Import data as is and clean later
-
-- Which is more efficient depends on the dataset
 
 --
 
@@ -385,7 +361,7 @@ any_name <- read_csv("filename.csv")
 anyname <- read_excel("filename.xlsx")
 ```
 
-- Works with both .xls or .xlsx extensions
+- Works with both .xls or .xlsx file extensions
 
 ---
 # Preserve or Clean on Import
@@ -407,7 +383,7 @@ anyname <- read_excel("filename.xlsx")
   - Variable names are in the top row
   - Variable names are short
 
-- This dataset should import nicely without needing additional changes
+- This dataset doesn't need changes
 
 ---
 # Importing data
@@ -427,22 +403,28 @@ anyname <- read_excel("filename.xlsx")
 ---
 # Importing data
 
-- R provides the code needed to import the data based on the options we chose
+- The RStudio import window in the bottom-right provides the code needed to import the data based on the options we chose
 
-- **We need to include this code in our R Markdown or else it won't knit if we have code that requires the data**
+- **Important:** You must paste this code in your Rmd or else it won't knit if you use code that requires the data
 
 --
 
-> **Copy the code. Hit Cancel. Paste the code into a new code chunk.**
+> **Copy the code. Hit Cancel. Paste code in the setup code chunk**
 
 ---
 # Importing data
 
 > **Change the import code based on the following:**
 
-  - We don't need the first line since we already loaded `tidyverse`
-  - R uses the full file path, but we don't want to use that because others will have to change it
-  - We don't want the last line `View` because it usually causes an error when knit
+--
+
+> **Delete loading of packages since we already loaded `tidyverse`, which includes the function to import CSV.**
+
+> **Delete the file path and include only the file name.**
+
+> **Delete the last line containing `View` because it often causes an error when knit**
+
+--
 
 > **Run the code to import the data**
 
@@ -460,15 +442,14 @@ anyname <- read_excel("filename.xlsx")
 ---
 # Importing data
 
-- If we were to open "ga_schdist_raw.xlsx" with spreadsheet software like Excel, we would see this file has some undesirable qualities
+- The "ga_schdist_raw.xlsx" data has some undesirable qualities
   - At least first 6 rows should be skipped
-  - Variable names are long (OK but inconvenient)
-  - Row 231 may look like data we want to import but it is not. It contains summary information that does not belong in a data set where districts are the unit of analysis.
-  - Additional rows at the bottom that do not contain data
+  - Variable names are very long
+  - Row 231 and below contain information we don't want to import
 
 --
 
-- The information we want to import from "ga_schdist_raw.xlsx" runs from cell A7 to cell I230
+- If we opened with spreadsheet software, we would see that the data we want to import "ga_schdist_raw.xlsx" runs from cell A7 to cell I230
 - Or A8 to I230 if we want to skip the long variable names
 
 ---
@@ -478,11 +459,7 @@ anyname <- read_excel("filename.xlsx")
 
 --
 
-> **Notice there is a "Range" option in the bottom left. Enter `A8:I230`.**
-
---
-
-> **Uncheck "First Row as Names" because row 8 contains data, not variable names.**
+> **Notice there is a "Range" option in the bottom left. Enter `A7:I230`.**
 
 --
 
@@ -490,7 +467,7 @@ anyname <- read_excel("filename.xlsx")
 
 --
 
-> **Copy code and paste in the code chunk in your Rmd.**
+> **Copy code and paste in the _setup code chunk_**
 
 ---
 # Importing data
@@ -503,8 +480,8 @@ anyname <- read_excel("filename.xlsx")
 
 ```{r, eval=FALSE}
 ga_schdist_raw <- read_excel("ga_schdist_raw.xlsx", 
-                             range = "A8:I230", 
-                             col_names = FALSE, 
+                             range = "A7:I230", 
+                             col_names = TRUE, 
                              col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
 ```
 
@@ -513,113 +490,89 @@ ga_schdist_raw <- read_excel("ga_schdist_raw.xlsx",
 ---
 # Importing data
 
-- You should have a new object `ga_schdist_raw` in your environment
+- You should have a new object `ga_schdist_raw` in your environment that you can click on to view
 
-> **Click on `ga_schdist_raw` to view the data.**
-
---
-
-- All that's missing now are variable names
+- Variable names are long but this dataset is ready to use
 
 ---
-# Importing data
+# Renaming variables
 
-- No variable names in our first import because `col_names = FALSE`
+- May not *have* to rename variables; typing long variables can be inconvenient but R's auto complete feature saves time
+
+- Recommend renaming variables if they contain a blank space (e.g. "free lunch")
+
+--
 
 ```{r, eval=FALSE}
-ga_schdist_raw <- read_excel("ga_schdist_raw.xlsx", 
-                             range = "A8:I230", 
-                             col_names = FALSE, #<<
-                             col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
+dataset <- rename(dataset, new_name=old_name, new_name=old_name,...)
 ```
 
 ---
-# Importing data
+# Renaming variables
 
-> **Replace `FALSE` with below code**
+Step 1: Get a list of current variables you can copy-paste to code chunk
 
 ```{r, eval=FALSE}
-c("district","state","charter","enroll","lep", "iep","frpl","white","expenditures")
+names(dataset)
 ```
 
---
+> **Add `names(ga_schdist_raw)` to the _bottom of setup code chunk_ and run**
 
-> **Code should now look like below. If so, run it again to update import.**
-
-```{r}
-ga_schdist_raw <- read_xlsx("labs_files/ga_schdist_raw.xlsx", 
-                            range = "A8:I230",
-                            col_names =  c("district","state","charter","enroll","lep", "iep","frpl","white","expenditures"))
-```
+> **Copy-paste output to the same code chunk**
 
 ---
-# Importing Data
+# Renaming variables
 
-- High initial cost, but now anyone using the same data file can run this code to get a clean import.
+Step 2: Add the necessary `rename()` code around the list of current variable names
 
-- Can also use code to import the same data for different time periods. Just change the file name accordingly.
-
----
-# Import from URL
-
--  If data updates frequently, we don't want to download a new version every time.
-
-- If a large dataset is publicly available, we don't want to save it to our computer.
-
-- Lots of data are saved to the web and accessible via a url. We can import directly from the url.
-
----
-# Import from URL
-
-- General syntax (requires the data.table package):
+> **Add following code**
 
 ```{r, eval=FALSE}
-anyname <- fread('url') 
+ga_schdist_raw <- rename(ga_schdist_raw, list_of_current_variables)
 ```
+
+--
+
+Step 3: Rename each variable within the `rename()` function
 
 ---
-# Import from URL
+# Renaming variables
 
-[Coronavirus case count](https://www.nytimes.com/interactive/2020/us/coronavirus-us-cases.html)
-
-- New York Times made the data publicly available on GitHub
-
-[Data repository](https://github.com/nytimes/covid-19-data)
-
-- The url for the raw state-level data is [here](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv)
-
---
-
-> **Use the `fread()` function to import state Coronavirus data linked above.**
-
-```{r, eval=FALSE, include=FALSE}
-covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-states.csv')
+```{r, eval=FALSE}
+ga_schdist_raw <- rename(ga_schdist_raw,
+      district= "Agency Name",
+      state="State Name [District] Latest available year",
+      charter="Agency Charter Status [District] 2015-16",
+      enroll="Total Students, All Grades (Excludes AE) [District] 2015-16",
+      lep="Limited English Proficient (LEP) / English Language Learners (ELL) [District] 2015-16",
+      iep="Individualized Education Program Students [District] 2015-16",
+      frpl="Free and Reduced Lunch Students [Public School] 2015-16",
+      white="White Students [District] 2015-16",
+      expenditures="Total Expenditures (TOTALEXP) [District Finance] 2015-16")
 ```
 
---
+- Potentially high cost up front
 
-> **Set eval=FALSE so the data does not load every time we knit.**
+- But now this code can be used for every identical or similar dataset
 
 ---
 class: inverse, center, middle
 
-# Exporting to Word and PDF
+# Exporting Document and Data
 
 ---
 # Knit to Word
 
 - If Word is installed on your computer, knitting to Word should work
 
-> **In the Knit dropdown menu, select "Knit to Word"**
+- Good way to get all text, graphs, and tables in a final Word document
 
-- Then you can improve the formatting using Word
+- Will likely need to change some style and formatting
 
 ---
 # Knit to PDF
 
-- In order to knit to PDF, your computer needs a copy of a program called LaTeX
-
-- If you want, you can install a light version of LaTeX within RStudio. 
+- If you want to knit to PDF, you can install a light version of LaTeX within RStudio. 
 
 ```{r, eval=FALSE}
 # In the console pane, type
@@ -627,20 +580,6 @@ install.packages('tinytex') # hit Enter
 # Next, in the console pane, type
 tinytex::install_tinytex() # hit Enter
 ```
-
----
-# Knit to PDF
-
-- There are packages you can download that offer templates that will format your PDFs into research papers or reports so you don't have to learn LaTeX formatting.
-
-- If interested, check out
-  - [rticles](https://github.com/rstudio/rticles)
-  - `install.packages("stevetemplates")`
-
----
-class: inverse, center, middle
-
-# Exporting data to CSV
 
 ---
 # Export data to CSV
@@ -655,20 +594,17 @@ write_csv(name_of_object_in_environment, 'name_for_new_file.csv')
 
 --
 
-> **Export the `ga_schdist_raw` object to a csv file. Name the file "ga_schdist_clean"**
+> **Export the `ga_schdist_raw` object to a csv file. Name the file "ga_schdist_clean.csv"**
 
 ---
 # Recap
 
-- Over past two weeks...
+- We have now covered the basic workflow of most data application projects
 
 - Launch RStudio -> load packages & import data needed to do analysis -> knit to document -> save documents and data for later use
 
-- This covers the general workflow of realistically using RStudio 
-
 - Now just need to add skills that take us from import to desired export
 
----
-# Upload to eLC
+--
 
-- Upload your Rmd to the RLab assignment dropbox on eLC.
+> **Upload your Rmd to the RLab assignment dropbox on eLC.**
