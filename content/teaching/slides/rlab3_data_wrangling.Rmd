@@ -735,7 +735,7 @@ gapminder %>%
 ---
 # Upload Rmd
 
-- Upload your .Rmd to eLC
+> **Upload your .Rmd to eLC**
 
 ---
 class: inverse, middle, center
