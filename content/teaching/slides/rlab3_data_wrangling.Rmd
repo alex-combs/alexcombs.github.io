@@ -37,54 +37,33 @@ ga_schdist_clean <- read_csv("labs_files/ga_schdist_clean.csv")
 ---
 # Why learn data wrangling
 
-  
-- Create a table we want to print in a report
 
-- We need to clean original data for analysis
-  
---
+- Change original data to help achieve our goal
 
-- 80/20 rule: About 80% of time spent on analysis goes toward preparing data 
+- Create a table we want to include in a report
 
 - Learning statistics is not as useful if you can't prepare data
 
-- Software like R can save you a lot of time.
-
 ---
-# Goals
+# Realistic Expectations
 
-- This lab covers a lot
+- Cleaning data is not fun (to most ppl) and can involve many steps. 
 
-- You are not expected to memorize all the information
+- This lab covers a lot of information.
+
+- The expectation is not to memorize everything.
 
 --
 
-- Our goal is to start with original data and understand the steps or functions that will get to the desired result
+- Our goal is to be able to start with original data have an idea of the functions needed to get to the desired result
 
-- If you understand the steps/functions needed, looking up the code or copying previous code is fairly easy
-
----
-# Set-up
-
-.pull-left[
-
-> **If using RStudio Cloud, do not create a new project. Instead, use the project you created for where you already installed `tidyverse`. Installed packages do not carry over to other project spaces.**
-
-]
-
-.pull-right[
-
-> **Otherwise, create a new project named "rlab3". I recommend locating it in the same parent file as your other RLab folders.**
-
-]
+- If you understand the steps/functions, searching for examples or copying previous work is easy
 
 ---
-# Setup
+# Set up
+
+> **Create a new project named "rlab3" and start new R Markdown document.**
   
-> **Start a new R Markdown document and click "OK"**
-
-> **Keep setup code chunk at the top. Change the global option to `echo=FALSE`**
-
 > **Change YAML:**
 
 ```{r, eval=FALSE}
@@ -97,51 +76,25 @@ output:
 ---
 ```
 
+> **Keep setup code chunk at the top. Change the global option to `echo=FALSE, message=FALSE, warning=FALSE`**
+
 > **Delete rest of the template.**
 
 ---
-# Setup: packages
+# Set up: Packages
 
 > **In the setup code chunk, load the following packages:**
 
 ```{r, eval=FALSE}
 library(tidyverse) # handles virtually all wrangling tasks
 library(readxl) # to import Excel
-library(knitr) # may need to install this
 library(gapminder) # for data we will use
 ```
-
----
-# Preview data
-
-> **Below the setup code chunk, on a new line outside of the code chunk, type a heading titled Raw Data**
-
---
-
-> **In a new code chunk, use the `glimpse()` function to provide your reader information about `gapminder`**
-
---
-
-> **Name this code chunk like so {r preview}**
 
 ---
 class: inverse, middle, center
 
 # Wrangle verbs
-
----
-# Wrangle motivation and choices
-
-- Two motivations
-  - Print an informative table in our report when we knit
-  - Change the original data to aid our analysis
-
---
-
-- Three options when considering what to do with the result of our wrangling
-  - Print the result without saving it
-  - Save the result
-  - Print and save the result
 
 ---
 # Practice Data
@@ -156,15 +109,26 @@ gapminder %>%
 
 - Continents & years included
 
-```{r}
+```{r, echo=FALSE}
 levels(gapminder$continent)
 unique(gapminder$year)
 ```
 
 ---
+# Preview data
+
+> **Below the setup code chunk, on a new line outside of the code chunk, type a heading Preview**
+
+> **Insert a new code chunk. Name this code chunk {r preview}**
+
+> **Provide a preview of the data using `slice_head()` to print the first four rows.**
+
+---
 # Filter
 
 ![](labs_files/filter.png)
+
+- Keeps or removes rows based on criteria you specify
 
 - General syntax:
 
@@ -172,11 +136,24 @@ unique(gapminder$year)
 filter(data_set, criteria) #prints the result
 filtered_data_set <- filter(data_set, criteria) #saves result
 filtered_data_set # prints the saved result in the above line
-(filtered_data_set <- filter(data_set, criteria)) #prints and saves the result
 ```
 
 ---
-# Filter example
+# Specifying criteria
+
+- We can tell R to keep rows that meet a criterion
+
+  - "If equal to" `==`
+  - "If not equal to" `!=`
+  - "If greater than, less than, or equal to" `>, <, >=, <=`
+  - "If missing values for" `is.na()`
+
+- We can specify multiple criteria
+  - "And" `&`
+  - "Or" `|`
+
+---
+# Filter examples
 
 Print all observations where year equals 2007
 
@@ -194,7 +171,7 @@ filter(gapminder, continent == 'Africa')
 
 --
 
-Save a new dataset containing only observations where life expectancy is greater than 75 years. Then print it.
+Save a new dataset containing only observations where life expectancy is greater than 75 years, then print the saved result.
 
 ```{r, eval=FALSE}
 long_life <- filter(gapminder, lifeExp > 75)
@@ -204,7 +181,7 @@ long_life
 ---
 # Filter examples
 
-Print observations with missing data for life expectancy
+Print observations missing values for life expectancy
 
 ```{r, eval=FALSE}
 filter(gapminder, is.na(lifeExp))
@@ -231,40 +208,23 @@ no_oceania <- filter(gapminder, continent != 'Oceania')
 
 --
 
-> **Use `filter` to print all Asia observations**
+> **Use `filter` to save new dataset named `asia` containing all Asia observations**
 
 --
 
-> **Use `filter` to print all 1952 observations**
+> **On new line, use `filter` to save new dataset named `gap1952` containing all 1952 observations**
 
 --
 
-> **Use `filter` to save a new dataset named `oceania` containing only Oceania observations. Then print `oceania`.**
+> **On new line, use `filter` to save a new dataset named `oceania` containing only Oceania observations. Then print `oceania`.**
 
 --
 
 > **Knit to HTML and inspect the output.**
 
---
-
-> **The Asia and 1952 tables are very long. Use the code chunk option that suppresses all output.**
 
 ---
-# Conditional and logical operators
-
-- We may want to filter on multiple criteria
-
-- Conditionals
-  - "If equal to" `==`
-  - "If not equal to" `!=`
-  - "If greater than, less than, or equal to" `>, <, >=, <=`
-
-- Logicals
-  - "And" `&`
-  - "Or" `|`
-
----
-# Filter examples
+# Filter examples (multiple criteria)
 
 Print all Africa observations for 2007
 
@@ -282,18 +242,6 @@ filter(gapminder, continent == 'Africa' | continent == 'Oceania')
 
 --
 
-Print all Africa and Oceania observations for 2007
-
-```{r, eval=FALSE, results='hide'}
-filter(gapminder, (continent == 'Africa' | continent == 'Oceania') & year == 2007)
-#OR
-gap_ao <- filter(gapminder, continent == 'Africa' | continent == 'Oceania')
-filter(gap_ao, year == 2007)
-```
-
----
-# Filter Examples
-
 Print non-Oceania observations for 1992 or later
 
 ```{r, eval=FALSE, results='hide'}
@@ -307,7 +255,7 @@ filter(gapminder, continent != 'Oceania' & year >= 1992)
 
 --
 
-> **Print observations in the Americas in 1952 with a life expectancy lower than 65**
+> **Print a table containing countries only in the Americas with a life expectancy lower than 65 in year 1952**
 
 --
 
@@ -353,7 +301,7 @@ select(gapminder, -pop)
 ---
 # Select practice
 
-> **Type a heading the same level as Filter titled Select**
+> **Insert a heading named Select**
 
 --
 
@@ -361,24 +309,24 @@ select(gapminder, -pop)
 
 --
 
-> **Print a table of `oceania` containing only `country`, `year`, and `pop`**
+> **You have an dataset saved named `oceania`. Use select to print a table of `oceania` containing only `country`, `year`, and `pop`**
 
 --
 
-> **Print a table of `oceania` with all variables except `continent`**
+> **On separate line, use select to print a table of `oceania` with all variables except `continent`**
 
 --
 
 > **Knit to HTML.**
 
 ---
-# Subsetting
+# Manual subsetting
 
-- `filter` & `select` keep/remove rows and columns based on intelligent criteria (e.g., keep if lifeExp < 65)
+- `filter` & `select` subsets data based on intelligent criteria (e.g., keep if lifeExp < 65)
 
-- **Subsetting** is a way to keep/remove rows and columns based on their positions in a dataset (e.g. remove first row)
+- Can manually subset data, or keep/remove rows and columns based on their positions in a dataset (e.g. remove first row)
 
-- Sometimes easier to use subsetting 
+- Sometimes easier to manually subset
 
 ---
 # Subsetting
@@ -394,14 +342,14 @@ new_dataset <- dataset[row number(s) to keep or remove,
 
 ```{r, eval=FALSE}
 new_dataset <- dataset[5, 2]
-# this saves the 5th row and 2nd column in a new dataset
+# this saves the 5th row and 2nd column to a new dataset
 ```
 
 --
 
 ```{r, eval=FALSE}
 new_dataset <- dataset[-5, -2]
-# this drops 5th row and 2nd column
+# this drops 5th row and 2nd column and saves the result
 ```
 
 --
@@ -414,9 +362,9 @@ new_dataset <- dataset[c(-3,-5), c(1:10)]
 ---
 # Subsetting example
 
-Suppose I want to print first two rows of `gapminder`
+Suppose I want to print first two rows of `gapminder` and keep all columns
 
-```{r}
+```{r, eval=FALSE}
 gapminder[c(1:2),]
 ```
 
@@ -429,7 +377,7 @@ gapminder_subset <- gapminder[-1, -6]
 ---
 # Subsetting practice
 
-> **Type a heading the same level as Select titled Subset**
+> **Insert a heading named Subset**
 
 > **Start a new code chunk and name it subset.**
 
@@ -439,7 +387,7 @@ gapminder_subset <- gapminder[-1, -6]
 
 --
 
-> **Save a new dataset named `gap_subset` where you remove the first, ninth, and thirteenth rows, and keep columns 1-4**
+> **Save a new dataset named `gap_subset` where you remove the first, ninth, and thirteenth rows, and keep columns 1-4.**
 
 --
 
@@ -453,53 +401,38 @@ gapminder_subset <- gapminder[-1, -6]
 - Generic syntax
 
 ```{r, eval=FALSE}
-dataset <- mutate(dataset, var_name = some_math_function)
+dataset <- mutate(dataset, var_name = any_formula)
 ```
 
 - Only a single `=` is used because we are assigning value
 
-- If `var_name` is an existing variable, `mutate` will overwrite it
+- If `var_name` is an existing variable, `mutate` will replace it
 
-- Otherwise, `mutate` will add a new variable to the data
+- Otherwise, `mutate` will add a new variable
 
 ---
 # Mutate examples
 
-Print table with `pop`ulation rescaled from ones to millions
+Replace `pop`ulation rescaled from ones to millions
 
-```{r, results='hide'}
-mutate(gapminder, pop = pop/1000000)
+```{r, eval=FALSE}
+gapminder <- mutate(gapminder, pop = pop/1000000)
 ```
 
 --
 
-Print table with new variable `pop_millions` that rescales `pop` to millions
+Add a new variable `pop_millions` that rescales `pop` to millions
 
-```{r, results='hide'}
-mutate(gapminder, pop_millions = pop/1000000)
+```{r, eval=FALSE}
+gapminder <- mutate(gapminder, pop_millions = pop/1000000)
 ```
 
 --
 
-Save new dataset with a variable equal to global, all-time life expectancy
+Save new dataset with a variable equal to average life expectancy among all observations
 
 ```{r, eval=FALSE}
 gapminder2 <- mutate(gapminder, avg_lifeExp = mean(lifeExp))
-```
-
----
-# Mutate examples
-
-Save new dataset `gapminder3` with new variable named `lifeExp_deviation` equal to how much above/below country is from `avg_lifeExp`
-
-```{r, eval=FALSE}
-# using gapminder2 and avg_lifeExp created on previous slide
-gapminder3 <- mutate(gapminder2, 
-                     lifeExp_deviation = lifeExp - avg_lifeExp)
-
-#or using original data
-gapminder3 <- mutate(gapminder, 
-                     lifeExp_deviation = lifeExp - mean(lifeExp))
 ```
 
 ---
@@ -510,8 +443,7 @@ Can create multiple variables at a time separated by commas
 ```{r, eval=FALSE}
 gapminder3 <- mutate(gapminder,
                      pop_millions = pop/1000000,
-                     avg_lifeExp = mean(lifeExp),
-                     deviation_lifeExp = lifeExp - avg_lifeExp)
+                     avg_lifeExp = mean(lifeExp))
 ```
 
 ---
@@ -521,23 +453,26 @@ gapminder3 <- mutate(gapminder,
 
 --
 
-> **Create a new dataset `gapminder07` containing only observations in 2007**
+> **First, save a new dataset `gapminder07` containing only observations for 2007**
 
 --
+
+- Our data contain a variable, `gdpPercap`, for GDP per capita but suppose we want GDP also
 
 > **On a new line, create a new variable `gdp` equal to a country's GDP and save it to `gapminder07`**
 
---
+---
+# Practice continued
 
-> **In the *same* mutate function, create `global_gdp` equal to the `sum()` of all `gdp`s.**
-
---
-
-> **In the *same* mutate function, create `pct_gdp` equal to each country's percent of `global_gdp`.**
+> **In the *same* mutate function, create a second variable, `global_gdp`, equal to the `sum()` of all `gdp`s.**
 
 --
 
-> **Print a table containing only observations where `pct_gdp` is greater than or equal to 10. Knit to HTML**
+> **In the *same* mutate function, create a third variable, `pct_gdp`, equal to each country's percent of `global_gdp`.**
+
+--
+
+> **Print a table that displays only the country name and percent of global gdp where `pct_gdp` is greater than or equal to 10.**
 
 ---
 # Arrange
@@ -574,10 +509,10 @@ arrange(gapminder, desc(lifeExp))
 
 --
 
-Rearrange existing data to use later
+Rearrange and replace existing data
 
 ```{r, eval=FALSE}
-gapminder3 <- (gapminder3, deviation_lifeExp)
+gapminder <- (gapminder, lifeExp)
 ```
 
 
@@ -594,10 +529,6 @@ gapminder3 <- (gapminder3, deviation_lifeExp)
 
 > **Print a table of the first 10 rows**
 
---
-
-> **Knit to HTML**
-
 ---
 class: inverse, middle, center
 
@@ -610,7 +541,7 @@ class: inverse, middle, center
 
 - Makes code easier to read and write
 
-- Keyboard shortcut is Cmd+Shift+M or Ctrl+Shift+M
+- Keyboard shortcut is `Cmd+Shift+M` or `Ctrl+Shift+M`
 
 .pull-left[
 
@@ -641,13 +572,13 @@ dataset <- dataset %>%
 ---
 # Pipe example
 
-Suppose I want to print a table of the top five countries with respect to percent of global GDP in 2007. **Without piping:**
+Suppose I want to print a table of the top five countries with respect to percent of global GDP in 2007. **Without using %>%:**
 
 ```{r, eval=FALSE}
 #Filter gapminder
 gapminder07 <- filter(gapminder, year == 2007)
 
-#Add needed variables to gapminder07
+#Add variables to gapminder07
 gapminder07 <- mutate(gapminder07, 
                      gdp = gdpPercap*pop,
                      global_gdp = sum(gdp),
@@ -664,7 +595,7 @@ slice_head(gdp_table, n = 5)
 ---
 # Pipe example
 
-To print same table with piping:
+To print same table with `%>%`:
 
 ```{r, eval=FALSE}
 gapminder %>% 
@@ -677,7 +608,7 @@ gapminder %>%
   slice_head(n=5)
 ```
 
-- Don't specify the data inside each verb
+- Don't specify the data inside each verb because that is being piped from the first line
 
 - Don't have to save the result each step of the way; no `gapminder07` or `gdp_table` needed.
 
@@ -690,45 +621,15 @@ gapminder %>%
 
 --
 
-> **Use the pipe operator to save a new dataset `gapminder52` that contains only 1952 observations and add the GDP variables we created earlier (copy and paste from earlier)**
+> **Use the pipe operator to save a new dataset `gapminder52` that contains only 1952 observations and add the GDP variables we created earlier (consider copy-and-paste)**
 
 --
 
-> **On a new line, use piping to print a table of `gapminder52` that includes only `country` and `pct_gdp`, arranged in descending order and only the top 5 countries.**
+> **On a new line, use pipe operator to print a table of `gapminder52` that includes only `country` and `pct_gdp`, arranged in descending order and only the first 5 countries.**
 
 --
 
 > **Knit to HTML**
-
----
-# Kable options for tables
-
-- The `kable()` function, part of the `knitr` package, is a quick way to format tables.
-
-- Three useful options:
-  - `digits = #` sets the number of digits to the right of the decimal
-  - `format.args = list(big.mark = ',')` inserts commas
-  - `col.names =` renames the columns
-  - `caption =` provides a table title
-
----
-# Kable example
-
-> **Add a heading "Kable Table"**
-
-> **Start a new code chunk and name it kable. Add the following code.**
-
-```{r, eval=FALSE}
-gapminder52 %>% 
-  select(country, pct_gdp) %>% 
-  arrange(desc(pct_gdp)) %>% 
-  slice_head(n=5) %>% 
-  kable(digits = 1,
-        col.names = c('Country', 'Percent of Global GDP'),
-        caption = 'Largest Economies in 1952')
-```
-
-> **Knit to HTML.**
 
 ---
 class: inverse, middle, center
@@ -749,7 +650,7 @@ summarize(data_set, "Name of column" = function(variable),
 
 - Where `function` is one of many possible summary functions
 
-- Useful for reporting a few summary stats in a nicely formatted table
+- Useful for reporting a few summary stats
 
 ---
 # Summarize example
@@ -760,9 +661,7 @@ Suppose I want to report median life expectancy and GDP per capita in 2007
 gapminder %>% 
   filter(year == 2007) %>% 
   summarize("Median Life Expectancy" = median(lifeExp),
-            "Median GDP per Capita" = median(gdpPercap)) %>% 
-  kable(digits = 0,
-        format.args = list(big.mark = ',')) # Inserts commas
+            "Median GDP per Capita" = median(gdpPercap))
 ```
 
 ```{r, echo=FALSE}
@@ -781,7 +680,7 @@ gapminder %>%
 
 > **Start a new code chunk and name it summarize**
 
-> **Use `gapminder52` to print a table with the `min`imum, `median`, and `max`imum for `pct_gdp` in 1952. Give the columns names and report numbers with one decimal point.**
+> **Use `gapminder52` to print a table with the `min`imum, `median`, and `max`imum for `pct_gdp` in 1952. Name columns accordingly.**
 
 ---
 # Group By
@@ -808,8 +707,7 @@ gapminder %>%
   filter(year == 2007) %>% 
   group_by(continent) %>% #<<
   summarize('Median Life Expectancy' = median(lifeExp),
-            'Median GDP per Capita' = median(gdpPercap)) %>% 
-  kable(digits = 0, format.args = list(big.mark = ','))
+            'Median GDP per Capita' = median(gdpPercap))
 ```
 
 ```{r, echo=FALSE, message=FALSE}
@@ -828,9 +726,9 @@ gapminder %>%
 
 > **Start a new code chunk and name it groupby.**
 
-> **Copy and paste your code that made the Summarize table**
+> **Copy and paste your code that made the summary table**
 
-> **Change the table so it reports the statistics by each year**
+> **Change the table so it reports these summary statistics by each year**
 
 > **Knit**
 
@@ -838,3 +736,42 @@ gapminder %>%
 # Upload Rmd
 
 - Upload your .Rmd to eLC
+
+---
+class: inverse, middle, center
+
+# Optional Reference: Formatting tables
+
+---
+# Kable options for tables
+
+- The `kable()` function, part of the `knitr` package, is a quick way to format tables.
+
+```{r, eval=FALSE}
+library(knitr)
+```
+
+- Three useful options:
+  - `digits = #` sets the number of digits to the right of the decimal
+  - `format.args = list(big.mark = ',')` inserts commas
+  - `col.names =` renames the columns
+  - `caption =` provides a table title
+
+---
+# Kable example
+
+> **Add a heading "Kable Table"**
+
+> **Start a new code chunk and name it kable. Add the following code.**
+
+```{r, eval=FALSE}
+gapminder52 %>% 
+  select(country, pct_gdp) %>% 
+  arrange(desc(pct_gdp)) %>% 
+  slice_head(n=5) %>% 
+  kable(digits = 1,
+        col.names = c('Country', 'Percent of Global GDP'),
+        caption = 'Largest Economies in 1952')
+```
+
+> **Knit to HTML to see difference in table format**
