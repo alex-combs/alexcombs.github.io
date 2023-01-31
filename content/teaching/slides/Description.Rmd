@@ -35,13 +35,38 @@ library(fivethirtyeight)
 ]
 
 ---
+# Population vs. Sample
+
+- **Population:** all members of a specified group pertaining to a research question
+
+  - A population can be any size based on our research question
+  
+  - If we can observe the population, all we need to do is describe it to reach useful conclusions
+
+--
+
+- **Sample:** a subset of that population
+
+- We can describe a sample or a population
+
+- If we cannot observe the population, we take a sample and use inferential statistics to reach useful conclusions about that population
+
+---
 # Descriptive vs. inferential
 
-- Suppose we survey UGA alumni 2 years after completing their MPA to examine employment and earnings outcomes.
-- What conclusions might we make using the results?
+Suppose we survey UGA alumni 2 years after completing their MPA to examine employment and earnings outcomes.
+
+- Who *could* be the population for this survey?
+
+---
+# Descriptive vs. inferential
+
+Suppose the population of our survey is all recent MPA graduates.
+
+--
 
 .pull-left[
-**Descriptive**
+**Descriptive Questions**
 
 - What is the average income of respondents?
 - What percent of respondents are employed?
@@ -52,34 +77,12 @@ library(fivethirtyeight)
 --
 
 .pull-right[
-**Inferential**
+**Inferential Questions**
 
 - What is the average income for MPA grads 2 years after graduation?
 - Does an MPA increase employment over a Bachelor's?
 - Does an MPA increase income?
 ]
-
----
-# Population vs. Sample
-
-- **Population:** all members of a specified group pertaining to a research question
-
-  - A population can be any size based on our research question
-
-- **Sample:** a subset of that population
-
---
-
-- We can describe a sample or a population
-
-- Inference uses a sample to make educated, scientific guesses about an unobserved population
-
----
-# Population vs. Sample
-
-- Survey of UGA alumni 2 years after completing their MPA to examine employment and earnings outcomes.
-
-- Who might be the population?
 
 ---
 # Parameter vs. statistic
@@ -96,24 +99,19 @@ library(fivethirtyeight)
 ---
 # Back to Survey Example
 
-- Suppose we survey UGA alumni 2 years after completing their MPA to examine employment and earnings outcomes.
+Suppose our survey finds that the median income of UGA MPA alumni 2 years following graduation is $75,000
 
-- Suppose our population of interest is all UGA MPA alumni 2 years following degree completion.
-
---
-
-- We report that our MPA graduates have a median income of $60,000. Is this a sample statistic/estimate or a population parameter?
+- Is this a sample statistic or a population parameter?
 
 ---
 # Descriptive vs. inferential
 
-Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for all college-educated women. This suggests a college degree provides a better return on investment for women in Georgia than women in other states. 
+Suppose we are told the average salary of college-educated women in Georgia is greater than the national average for college-educated women. 
 
-Suppose we set out to investigate average salary in Georgia for ourselves. We take a sample of 1,000 college-educated women in Georgia and record the income of each.
+Suppose we set out to confirm the average salary in Georgia for ourselves. We survey a sample of 1,000 college-educated women in Georgia and record their income.
 
 --
 
-- What is the unit of analysis in our data?
 - What is the population and sample?
 - What is the parameter and statistic/estimate?
 
@@ -128,7 +126,7 @@ What is the population?
 
 --
 
-We survey those entering Baldwin Hall if they have a valid ID according to Georgia's election laws. We get 100 responses, and 80% said they have a valid ID.
+We survey people entering Baldwin Hall if they have a valid ID according to Georgia's election laws. We get 100 responses, and 80% said they have a valid ID.
 
 --
 
@@ -136,12 +134,12 @@ We survey those entering Baldwin Hall if they have a valid ID according to Georg
 
 --
 
-- Why might we not have a sample size of 100?
+- Why might we have a sample size less than 100?
 
 ---
 class: inverse, middle, center
 
-# Data description describes distributions.
+# Data description
 
 
 ---
@@ -149,12 +147,12 @@ class: inverse, middle, center
 
 - A distribution shows the (possible) values for a variable and how often they occur.
 
-- Weeks of pregnancy for live births in North Carolina.
+- Weeks of pregnancy for births in North Carolina.
 
 ```{r, echo=FALSE, fig.align='center', fig.height=5}
 ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
-  labs(title = 'Weeks of pregnancy in North Carolina') +
+  labs(title = 'Weeks of pregnancy for births in North Carolina') +
   theme_light() +
   theme(axis.text=element_text(size=16))
 ```
@@ -258,9 +256,9 @@ kable(x, format = 'html')
 ---
 # Mean vs. median vs. mode
 
-- Measures of center are our way of communicating the *typical* value of a distribution.
+- We use measures of center to communicate the *typical* value of a distribution.
 
-- Which measure best conveys the typical value depends on the data.
+- Which measure best conveys what is typical depends on the distribution.
 
 ![](lectures_files/center.png)
 
@@ -268,13 +266,11 @@ kable(x, format = 'html')
 ---
 # Mean vs. median vs. mode
 
-- Mean is sensitive to extreme values
-
-- Median is not sensitive to extreme values
+- Mean is sensitive to extreme values, median is not
 
 - Median is better to use when a distribution is skewed
 
-- Mode is rarely used for continuous variables, usually used for the frequency of categorical variables
+- Mode is can be used for discrete or categorical variables
 
 ---
 # Mean vs. median vs. mode
@@ -329,11 +325,6 @@ class: inverse, middle, center
 # Measures of spread
 
 ---
-class: inverse, middle, center
-
-# Measures of center tell us one point inside the distribution. They give us no sense by how much and how frequently values deviate above and below the center.
-
----
 # Measures of spread
 
 - **Variance:** the average squared deviation from the mean
@@ -345,51 +336,21 @@ class: inverse, middle, center
 - **Range:** the difference between the maximum and minimum values
 
 ---
-# Variance
-
-- Subtract mean from each value, square the deviation, add up deviation, divide by count of values minus 1
-
-```{r, include=FALSE}
-xvar <- x %>% 
-  mutate(deviation = variable - mean(variable), squared_dev = deviation^2)
-```
-
-.pull-left[
-```{r, echo=FALSE}
-kable(xvar, format = 'html')
-```
-]
-.pull-right[
-```{r}
-sum(xvar$squared_dev)
-sum(xvar$squared_dev)/4
-var(xvar$variable)
-```
-]
-
----
 # Standard deviation (SD)
 
-- Variance is important in statistics, but it makes no sense as a descriptive measure of spread because it is in squared units
+- Variance is important but makes no sense as a descriptive measure of spread
 
-- If our original variable were dollars, the variance says that on average variable deviates from the mean by 10 squared dollars
-
-- Standard deviation is the square root of variance, returns us to the original unit of the variable
-
-```{r}
-sqrt(10)
-```
-
-- On average, `variable` deviates from its mean by 3.2 units
-
----
-# Standard deviation (SD)
+--
 
 ```{r}
 var(ncbirths$weeks)
 ```
 
 - On average, weeks pregnant deviates from the average by 7.6 squared weeks. Huh?
+
+--
+
+- Standard deviation is the square root of variance, returns us to the original variable
 
 ```{r}
 sd(ncbirths$weeks)
@@ -400,7 +361,7 @@ sd(ncbirths$weeks)
 ---
 # Interquartile range (IQR)
 
-- Divide the distribution into 4 equal parts 
+- Divide the distribution into 4 equal parts
 - Each dividing value is the 25th, 50th, and 75th percentiles
 - IQR is the difference between 25th and 75th percentiles
 
@@ -410,12 +371,20 @@ quantile(ncbirths$weeks, c(.25, .5, .75))
 
 - What is the IQR for weeks pregnant?
 
+--
+
+```{r}
+IQR(ncbirths$weeks)
+```
+
 ---
 # SD vs. IQR
 
-- SD and IQR are our way of describing the typical deviation of a distribution from its center
-- SD is based on the mean, so it is also sensitive to extreme values
-- IQR is based on percentiles like median, so it is not sensitive to extreme values
+- We use SD and IQR to communicate the typical deviation of a distribution from its center
+- SD is based on the mean; sensitive to extreme values
+- IQR uses percentiles; not sensitive to extreme values
+
+--
 
 .pull-left[
 ```{r, echo=FALSE}
@@ -480,17 +449,15 @@ IQR(gapminder$gdpPercap)
 # Range
 
 .pull-left[
-- Indicates the greatest extent to which the variable changes?
+- Describes the greatest extent to which the variable changes
 
-- Or the possible or plausible values of this variable?
+- Or the possible values of the variable
 
-- Or how different are the most different values?
+- Or how different are the most different observations
 ]
 
 .pull-right[
 ```{r}
-range(x$variable)
-range(xextreme$variable)
 range(ncbirths$weeks)
 range(gapminder$gdpPercap)
 ```
@@ -499,21 +466,7 @@ range(gapminder$gdpPercap)
 ---
 class: inverse, middle, center
 
-# When deciding between mean and median, standard deviation and IQR, consider whether extreme values are distractions or an important part of the story.
-
----
-class: inverse, middle, center
-
 # Measures of Association
-
----
-# Measures of association
-
-- Instead of describing the distribution of one variable, now describing conditional distributions
-
-- What does the distribution of one variable look like *given* a value within another variable's distribution
-
-- Requires at least two variables: usually some explanatory variable (x) and a response variable (y)
 
 ---
 # Conditional distributions
@@ -532,7 +485,7 @@ ggplot(ncbirths, aes(x = weeks, fill = habit)) +
 ---
 # Measures of association
 
-Suppose we want to investigate the association between the percent of a state population that is white and the percent of a population that voted for Donald Trump.
+Suppose we want to investigate the association between the percent of a state population that is white and the percent of the state population that voted for Donald Trump.
 
 ```{r, include=FALSE}
 state_trump <- hate_crimes %>%
@@ -595,16 +548,16 @@ ggplot(data = state_trump,
 
 - The association between two variables can be described in terms of
 
-- **Direction:** when one variable increases, does the other variable increase or decrease
+- **Direction:** when one variable increases, does the other variable *tend* to increase or decrease
 
-- **Strength:** how much do the variables move together in tandem
+- **Strength:** how closely do the variables move together
 
 - **Magnitude:** when one variable increases a certain amount, how much does the other variable increase or decrease
 
 ---
 # Measures of association
 
-- **Covariance:** measures **direction** of association between between two variables
+- **Covariance:** measures **direction** of association between two variables
 
 - **Correlation coefficient:** measures **direction** and **strength** of association between two variables
 

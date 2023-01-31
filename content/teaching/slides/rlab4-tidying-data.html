@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab4-tidying-data_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="rlab4-tidying-data_files/header-attrs-2.19/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 19, 2022
+### Last updated: January 30, 2023
 ]
 
 ---
@@ -38,27 +38,10 @@ class: center, middle, inverse, title-slide
 
 
 ---
-# Set-up
+# Set up
 
-.pull-left[
-
-&gt; **If using RStudio Cloud, do not create a new project space. Instead, use the project that has all packages installed. Installed packages do not carry over to other project spaces.**
-
-]
-
-.pull-right[
-
-&gt; **Otherwise, create a new project named "rlab4". I recommend locating it in the same parent file as your other RLab folders.**
-
-]
-
----
-# Setup
+&gt; **Create a new project named "rlab4" and start new R Markdown document.**
   
-&gt; **Start a new R Markdown document**
-
-&gt; **Keep setup code chunk at the top. Change to `echo=FALSE`. Following echo, add `warning=FALSE` and `message=FALSE` separated by commas.**
-
 &gt; **Change YAML:**
 
 
@@ -71,6 +54,8 @@ output:
     df_print: paged
 ---
 ```
+
+&gt; **Keep setup code chunk at the top. Change the global option to `echo=FALSE, message=FALSE, warning=FALSE`**
 
 &gt; **Delete rest of the template.**
 
@@ -107,25 +92,13 @@ Tidy data satisfy three rules:
 ---
 # Tidy data
 
-&gt; **Insert a heading "Untidy State Finance Data"**
+&gt; **Insert a heading "Raw State Finance Data"**
 
 --
-
-- Let's show readers a preview of the data
 
 &gt; **In a new code chunk, provide the first 4 rows of `state_finance_2016_wrangled`.**
 
 
-| id|state   | year|finance_source    | amount_1000|
-|--:|:-------|----:|:-----------------|-----------:|
-|  1|Alabama | 2016|Total Revenue     |    30133184|
-|  1|Alabama | 2016|Total Expenditure |    30211453|
-|  2|Alaska  | 2016|Total Revenue     |     8071732|
-|  2|Alaska  | 2016|Total Expenditure |    12436184|
-
---
-
-- Are these data tidy? Why or why not?
 
 ---
 # Untidy Data
@@ -138,15 +111,7 @@ Tidy data satisfy three rules:
 |  2|Alaska  | 2016|Total Revenue     |     8071732|
 |  2|Alaska  | 2016|Total Expenditure |    12436184|
 
-- What is the unit of analysis?
-
---
-
-- There are two rows per observation (unit of analysis)
-
---
-
-- Why?
+- Is this state finance data tidy?
 
 ---
 # Long vs. Wide Data
@@ -156,7 +121,7 @@ Tidy data satisfy three rules:
   - Wide if too many columns
 --
 
-- Is `state_finance_2016_wrangled` too long or wide?
+- Is this state finance data too long or wide?
 
 
 | id|state   | year|finance_source    | amount_1000|
@@ -169,7 +134,7 @@ Tidy data satisfy three rules:
 ---
 # Long vs. Wide Data
 
-- Here is a different example that is very common.
+- Here is another common data organization
 
 &lt;table&gt;
  &lt;thead&gt;
@@ -190,7 +155,7 @@ Tidy data satisfy three rules:
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- Are these data tidy? Why or why not?
+- Are these data tidy?
 
 --
 
@@ -205,15 +170,15 @@ Tidy data satisfy three rules:
 
 --
 
-- To achieve this, we can use the `pivot_wider` function
+- To widen data, we can use the `pivot_wider` function
 
 - General syntax:
 
 
 ```r
 new_data &lt;- current_data %&gt;% 
-  pivot_wider(names_from = column-with-variable-names,
-              values_from = column-with-values)
+  pivot_wider(names_from = column-containing-variable-names,
+              values_from = column-containing-values)
 ```
 
 ---
@@ -227,7 +192,7 @@ new_data &lt;- current_data %&gt;%
 
 &gt; **Insert a heading "Tidy State Finance Data"**
 
-&gt; **Start a code chunk. Add the following code that begins to overwrite the original data**
+&gt; **Start a code chunk. Add the following code that begins to save a new dataset**
 
 
 ```r
@@ -246,8 +211,8 @@ state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;%
 
 ```r
 state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;% 
-  pivot_wider(names_from = column-with-variable-names,
-              values_from = column-with-values)
+  pivot_wider(names_from = column-containing-variable-names,
+              values_from = column-containing-values)
 ```
 
 - Which column contains the names of the new variables we want?
@@ -291,9 +256,9 @@ state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;%
 &lt;/tbody&gt;
 &lt;/table&gt;
 
-- The variable names contain two variables: pop and year
-- The values for year are *in* the variable name
-- The values in the rows measure pop
+- The variable names contain two variables: `pop` and `year`
+- The values for `year` are *in* the variable name
+- The values measure `pop`
 - To tidy wide data to long format, we can use `pivot_longer`
 
 - General code:
@@ -301,10 +266,10 @@ state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;%
 
 ```r
 new_data &lt;- current_data %&gt;% 
-  pivot_longer(cols = variables_you_want_to_pivot,
-               names_to = 'name_of_new_variable',
-               names_prefix = 'where_to_split_varname',
-               values_to = 'varname_containing_original_values')
+  pivot_longer(cols = columns_you_want_to_pivot,
+               names_to = 'name_of_new_var_from_column',
+               names_prefix = 'where_to_split_column',
+               values_to = 'name_for_var_with_values')
 ```
 
 ---
@@ -346,21 +311,35 @@ uspop_tidy &lt;- uspop %&gt;%
 |United States |2007 |  301139947|
 
 ---
-# Untidy Enrollment Data
+# Wide to Long Example
 
-&gt; **Provide the reader the first 3 rows of the `ky_private_school_enrollment`**
+Preview of `ky_private_school_enrollment`
 
 
-|ncesid  |school_name                |state    | county_fips|city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
-|:-------|:--------------------------|:--------|-----------:|:--------------------|----------:|----------:|----------:|----------:|----------:|----------:|
-|1613912 |LANDMARK CHRISTIAN ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        153|        146|        170|        184|        156|        119|
-|1649825 |ST-FRANCIS HIGH SCHOOL     |KENTUCKY |       21111|LOUISVILLE JEFFERSON |        130|        121|        125|         NA|         NA|         NA|
-|1649836 |ST JOHNS ACADEMY           |KENTUCKY |       21111|LOUISVILLE JEFFERSON |         NA|         16|         NA|         NA|         NA|         NA|
+|ncesid  |state    |city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
+|:-------|:--------|:--------------------|----------:|----------:|----------:|----------:|----------:|----------:|
+|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |        153|        146|        170|        184|        156|        119|
+|1649825 |KENTUCKY |LOUISVILLE JEFFERSON |        130|        121|        125|         NA|         NA|         NA|
+|1649836 |KENTUCKY |LOUISVILLE JEFFERSON |         NA|         16|         NA|         NA|         NA|         NA|
+
+- Years span from 2000 to 2010 for even years
 
 ---
 # Untidy Enrollment Data
 
-- We need to take the `enrollyear` columns and name them to a new variable `year` and send the values to a variable we will name `enrollment`
+&gt; **Provide your reader the first 3 rows of the `ky_private_school_enrollment`**
+
+
+|ncesid  |state    |city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
+|:-------|:--------|:--------------------|----------:|----------:|----------:|----------:|----------:|----------:|
+|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |        153|        146|        170|        184|        156|        119|
+|1649825 |KENTUCKY |LOUISVILLE JEFFERSON |        130|        121|        125|         NA|         NA|         NA|
+|1649836 |KENTUCKY |LOUISVILLE JEFFERSON |         NA|         16|         NA|         NA|         NA|         NA|
+
+---
+# Untidy Enrollment Data
+
+- We need to take the `enroll####` columns and name them to a new variable `year` and send the values to a variable we will name `enrollment`
 
 - Recall how this was done for the `uspop` data
 
@@ -381,13 +360,13 @@ uspop_tidy &lt;- uspop %&gt;%
 # Enrollment Data
 
 
-|ncesid  |school_name                |state    | county_fips|city_county          |year | enrollment|
-|:-------|:--------------------------|:--------|-----------:|:--------------------|:----|----------:|
-|1613912 |LANDMARK CHRISTIAN ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |2000 |        153|
-|1613912 |LANDMARK CHRISTIAN ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |2002 |        146|
-|1613912 |LANDMARK CHRISTIAN ACADEMY |KENTUCKY |       21111|LOUISVILLE JEFFERSON |2004 |        170|
+|ncesid  |state    |city_county          |year | enrollment|
+|:-------|:--------|:--------------------|:----|----------:|
+|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |2000 |        153|
+|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |2002 |        146|
+|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |2004 |        170|
 
-- Are these data tidy? Why or why not?
+- Are these data tidy?
 
 ---
 # Separating variables
@@ -397,24 +376,28 @@ uspop_tidy &lt;- uspop %&gt;%
 ---
 # Tidy Enrollment Data
 
-- We should `separate` city_county into city and county
-
 &gt; **Create a new dataset `ky_priv_enroll_tidy` that separates `city_county` in `ky_private_enroll_long.`**
-
---
-
-
-
---
 
 &gt; **Provide the reader the first 6 rows of these tidy data**
 
-&gt; **Knit to HTML and check that the output looks correct**
+--
+
+
+|ncesid  |state    |city       |county    |year | enrollment|
+|:-------|:--------|:----------|:---------|:----|----------:|
+|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2000 |        153|
+|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2002 |        146|
+|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2004 |        170|
+|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2006 |        184|
+|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2008 |        156|
+|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2010 |        119|
 
 ---
 # Upload Lab
 
-- Upload your .Rmd file to eLC
+&gt; **Knit to HTML and check that the output looks correct**
+
+&gt; **Upload your .Rmd file to eLC**
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

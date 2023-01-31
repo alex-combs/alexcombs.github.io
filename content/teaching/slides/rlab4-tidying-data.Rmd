@@ -26,27 +26,10 @@ library(gapminder)
 ```
 
 ---
-# Set-up
+# Set up
 
-.pull-left[
-
-> **If using RStudio Cloud, do not create a new project space. Instead, use the project that has all packages installed. Installed packages do not carry over to other project spaces.**
-
-]
-
-.pull-right[
-
-> **Otherwise, create a new project named "rlab4". I recommend locating it in the same parent file as your other RLab folders.**
-
-]
-
----
-# Setup
+> **Create a new project named "rlab4" and start new R Markdown document.**
   
-> **Start a new R Markdown document**
-
-> **Keep setup code chunk at the top. Change to `echo=FALSE`. Following echo, add `warning=FALSE` and `message=FALSE` separated by commas.**
-
 > **Change YAML:**
 
 ```{r, eval=FALSE}
@@ -58,6 +41,8 @@ output:
     df_print: paged
 ---
 ```
+
+> **Keep setup code chunk at the top. Change the global option to `echo=FALSE, message=FALSE, warning=FALSE`**
 
 > **Delete rest of the template.**
 
@@ -97,23 +82,17 @@ Tidy data satisfy three rules:
 ---
 # Tidy data
 
-> **Insert a heading "Untidy State Finance Data"**
+> **Insert a heading "Raw State Finance Data"**
 
 --
 
-- Let's show readers a preview of the data
-
 > **In a new code chunk, provide the first 4 rows of `state_finance_2016_wrangled`.**
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 state_finance_2016_wrangled %>% 
   slice_head(n = 4) %>% 
   kable()
 ```
-
---
-
-- Are these data tidy? Why or why not?
 
 ---
 # Untidy Data
@@ -124,15 +103,7 @@ state_finance_2016_wrangled %>%
   kable()
 ```
 
-- What is the unit of analysis?
-
---
-
-- There are two rows per observation (unit of analysis)
-
---
-
-- Why?
+- Is this state finance data tidy?
 
 ---
 # Long vs. Wide Data
@@ -142,7 +113,7 @@ state_finance_2016_wrangled %>%
   - Wide if too many columns
 --
 
-- Is `state_finance_2016_wrangled` too long or wide?
+- Is this state finance data too long or wide?
 
 ```{r, echo=FALSE}
 state_finance_2016_wrangled %>% 
@@ -153,7 +124,7 @@ state_finance_2016_wrangled %>%
 ---
 # Long vs. Wide Data
 
-- Here is a different example that is very common.
+- Here is another common data organization
 
 ```{r, echo=FALSE}
 uspop <- gapminder %>% 
@@ -165,7 +136,7 @@ uspop <- gapminder %>%
 kable(uspop, format = 'html')
 ```
 
-- Are these data tidy? Why or why not?
+- Are these data tidy?
 
 --
 
@@ -180,14 +151,14 @@ kable(uspop, format = 'html')
 
 --
 
-- To achieve this, we can use the `pivot_wider` function
+- To widen data, we can use the `pivot_wider` function
 
 - General syntax:
 
 ```{r, eval=FALSE}
 new_data <- current_data %>% 
-  pivot_wider(names_from = column-with-variable-names,
-              values_from = column-with-values)
+  pivot_wider(names_from = column-containing-variable-names,
+              values_from = column-containing-values)
 ```
 
 ---
@@ -201,7 +172,7 @@ state_finance_2016_wrangled %>%
 
 > **Insert a heading "Tidy State Finance Data"**
 
-> **Start a code chunk. Add the following code that begins to overwrite the original data**
+> **Start a code chunk. Add the following code that begins to save a new dataset**
 
 ```{r, eval=FALSE}
 state_finance_2016_tidy <- state_finance_2016_wrangled %>% 
@@ -218,8 +189,8 @@ state_finance_2016_wrangled %>%
 
 ```{r, eval=FALSE}
 state_finance_2016_tidy <- state_finance_2016_wrangled %>% 
-  pivot_wider(names_from = column-with-variable-names,
-              values_from = column-with-values)
+  pivot_wider(names_from = column-containing-variable-names,
+              values_from = column-containing-values)
 ```
 
 - Which column contains the names of the new variables we want?
@@ -250,19 +221,19 @@ state_finance_2016_tidy %>%
 kable(uspop, format = 'html')
 ```
 
-- The variable names contain two variables: pop and year
-- The values for year are *in* the variable name
-- The values in the rows measure pop
+- The variable names contain two variables: `pop` and `year`
+- The values for `year` are *in* the variable name
+- The values measure `pop`
 - To tidy wide data to long format, we can use `pivot_longer`
 
 - General code:
 
 ```{r, eval=FALSE}
 new_data <- current_data %>% 
-  pivot_longer(cols = variables_you_want_to_pivot,
-               names_to = 'name_of_new_variable',
-               names_prefix = 'where_to_split_varname',
-               values_to = 'varname_containing_original_values')
+  pivot_longer(cols = columns_you_want_to_pivot,
+               names_to = 'name_of_new_var_from_column',
+               names_prefix = 'where_to_split_column',
+               values_to = 'name_for_var_with_values')
 ```
 
 ---
@@ -285,19 +256,33 @@ kable(uspop_tidy)
 ```
 
 ---
-# Untidy Enrollment Data
+# Wide to Long Example
 
-> **Provide the reader the first 3 rows of the `ky_private_school_enrollment`**
+Preview of `ky_private_school_enrollment`
 
 ```{r, echo=FALSE}
 slice_head(ky_private_school_enrollment, n=3) %>% 
+  select(-school_name, -county_fips) %>% 
+  kable()
+```
+
+- Years span from 2000 to 2010 for even years
+
+---
+# Untidy Enrollment Data
+
+> **Provide your reader the first 3 rows of the `ky_private_school_enrollment`**
+
+```{r, echo=FALSE}
+slice_head(ky_private_school_enrollment, n=3) %>% 
+  select(-school_name, -county_fips) %>% 
   kable()
 ```
 
 ---
 # Untidy Enrollment Data
 
-- We need to take the `enrollyear` columns and name them to a new variable `year` and send the values to a variable we will name `enrollment`
+- We need to take the `enroll####` columns and name them to a new variable `year` and send the values to a variable we will name `enrollment`
 
 - Recall how this was done for the `uspop` data
 
@@ -313,6 +298,7 @@ uspop_tidy <- uspop %>%
 
 ```{r, include=FALSE}
 ky_private_enroll_long <- ky_private_school_enrollment %>% 
+  select(-school_name, -county_fips) %>% 
   pivot_longer(cols = enroll2000:enroll2010,
                names_to = 'year',
                names_prefix = 'enroll',
@@ -328,7 +314,7 @@ ky_private_enroll_long %>%
   kable()
 ```
 
-- Are these data tidy? Why or why not?
+- Are these data tidy?
 
 ---
 # Separating variables
@@ -338,24 +324,22 @@ ky_private_enroll_long %>%
 ---
 # Tidy Enrollment Data
 
-- We should `separate` city_county into city and county
-
 > **Create a new dataset `ky_priv_enroll_tidy` that separates `city_county` in `ky_private_enroll_long.`**
-
---
-
-```{r, include=FALSE, warning=FALSE}
-ky_priv_enroll_tidy <- ky_private_enroll_long %>% 
-  separate(city_county, c('city', 'county'))
-```
-
---
 
 > **Provide the reader the first 6 rows of these tidy data**
 
-> **Knit to HTML and check that the output looks correct**
+--
+
+```{r, echo=FALSE, warning=FALSE}
+ky_private_enroll_long %>% 
+  separate(city_county, c('city', 'county')) %>% 
+  slice_head(n=6) %>% 
+  kable()
+```
 
 ---
 # Upload Lab
 
-- Upload your .Rmd file to eLC
+> **Knit to HTML and check that the output looks correct**
+
+> **Upload your .Rmd file to eLC**
