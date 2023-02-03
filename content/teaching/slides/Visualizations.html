@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Visualizations_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="Visualizations_files/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,14 +24,14 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 25, 2022
+### Last updated: February 03, 2023
 ]
 
 ---
 
 # Outline
 
-- Choosing the appropriate graph
+- Choosing the appropriate graphs
 
 - Guidelines of good visualization
 
@@ -42,13 +42,13 @@ class: center, middle, inverse, title-slide
 # Some Data
 
 
-|major                                       | grad_median|
-|:-------------------------------------------|-----------:|
-|Genetics                                    |       78000|
-|Mathematics                                 |       89000|
-|Engineering And Industrial Management       |      107000|
-|Other Foreign Languages                     |       68000|
-|Social Science Or History Teacher Education |       60000|
+|major                                                             | grad_median|
+|:-----------------------------------------------------------------|-----------:|
+|Electrical Engineering Technology                                 |       85000|
+|Anthropology And Archeology                                       |       65000|
+|Materials Engineering And Materials Science                       |       92000|
+|Electrical, Mechanical, And Precision Technologies And Production |       62000|
+|Library Science                                                   |       52000|
 
 - Includes 173 graduate degree majors
 
@@ -67,10 +67,9 @@ class: center, middle, inverse, title-slide
 .pull-right[
 
 ```r
-ggplot(college_grad_students, aes(x = grad_median)) +
-  geom_histogram(bins = 30, fill = 'steelblue', color = 'white') +
-  labs(x = 'Median earnings', y = 'Count of graduate majors') +
-  theme_classic()
+ggplot(college_grad_students, 
+       aes(x = grad_median)) +
+  geom_histogram(bins = 30)
 ```
 ]
 

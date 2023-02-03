@@ -14,7 +14,7 @@ output:
 ---
 # Outline
 
-- Choosing the appropriate graph
+- Choosing the appropriate graphs
 
 - Guidelines of good visualization
 
