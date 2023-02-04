@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab5-visualizations_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="rlab5-visualizations_files/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,28 +24,25 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 25, 2022
+### Last updated: February 04, 2023
 ]
 
 ---
 
 # Objectives
 
-- Create graphs that are appropriate based on data and intended message
+- Choose appropriate graphs
 
-- Make some basic improvements to default graphs
+- Basic guidelines of good visualization
 
+- Create graphs and make simple improvements
 
 
 
 ---
-# Setup
+# Set up
 
-&gt; **Start a new project following whatever process works best for you.**
-  
-&gt; **Start a R Markdown document. Keep the setup code chunk at the top but delete the rest of the template. Change echo to FALSE. Add message=FALSE and warning=FALSE.**
-
-&gt; **Change YAML to:**
+&gt; **Create a new project named "rlab5" and start new R Markdown document Change YAML and global options. Delete template.**
 
 
 ```r
@@ -54,342 +51,675 @@ title: "RLab5: Data Viz"
 author: "Your Name"
 output:
   html_document:
+    theme: spacelab
     df_print: paged
+    fig_width: 6.5
+    fig_height: 4.5
+    fig_align: "center"
 ---
 ```
 
 ---
-# Setup
+# Setup: Packages
 
-&gt; **In the top "setup" code chunk, load the following packages.**
+&gt; **In the setup code chunk, load the following packages:**
 
 
 ```r
-library(data.table)
 library(tidyverse)
 ```
 
 ---
-# County COVID Data
+# Setup: Data
 
-- Let's examine the latest COVID data for every U.S. county provided by the New York Times
+&gt; **Download the four CSV files on eLC and add to project folder:**
 
-&gt; **Add and run the following code**
+&gt; **`cod_research_funding.csv`**
 
+&gt; **`fbi_gun_deaths.csv`**
 
-```r
-covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-2022.csv')
-```
+&gt; **`guns_manufatured.csv`**
 
-- These data include **cumulative** counts (not daily) of COVID cases and deaths from January 1, 2022 to yesterday
+&gt; **`nhanes_2012.csv`**
 
-- Additional data can be found [here](https://github.com/nytimes/covid-19-data)
-
----
-# Some Wrangling
-
-
-```
-## Rows: 869,132
-## Columns: 6
-## $ date   &lt;date&gt; 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01, 20…
-## $ county &lt;chr&gt; "Autauga", "Baldwin", "Barbour", "Bibb", "Blount", "Bullock", "…
-## $ state  &lt;chr&gt; "Alabama", "Alabama", "Alabama", "Alabama", "Alabama", "Alabama…
-## $ fips   &lt;int&gt; 1001, 1003, 1005, 1007, 1009, 1011, 1013, 1015, 1017, 1019, 102…
-## $ cases  &lt;int&gt; 11018, 39911, 3860, 4533, 11256, 1676, 3613, 23411, 6171, 3385,…
-## $ deaths &lt;int&gt; 160, 593, 81, 95, 198, 46, 102, 532, 147, 65, 173, 30, 88, 69, …
-```
-
-- Let's focus on Georgia
-
-&gt; **Create a new dataset called `covid_ga` that contains only counties in Georgia**
-
-
-
----
-# Quick Summary
-
-&gt; **Use `summary` to get a quick look at summary stats. Suppress output.**
-
-
-
---
-
-- Note the latest date with data is yesterday. We will want to focus on the most recent counts, so let's save end_date's date for easy reference.
-
-&gt; **Add and run following code.**
-
-
+&gt; **Import data**
 
 
 
 ```r
-end_date &lt;- '2022-09-25'
-```
-
-- Now we can add `end_date` to our code any time we want to include the most recent data. We only need to update `end_date` to update any graph we make.
-
----
-# Viz 1
-
-- Suppose we are asked for the distribution of cumulative county cases in GA for the most recent available date.
-
-- What kind of graph should we use?
-
---
-
-&gt; **In a new code chunk, write code to generate the correct graph.**
-
----
-# Viz 1
-
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-10-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Viz 2
-
-&gt; **In a new code chunk, write code to generate another histogram for cumulative deaths during the most recent date.**
-
---
-
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-11-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Viz 3
-
-- Suppose we are asked to visualize the distribution of cumulative county deaths during the most recent date that includes visual markers for descriptive statistics and outliers
-
-- Which graph should we use?
-
---
-
-&gt; **In a new code chunk, write code to generate the correct graph.**
-
----
-# Viz 3
-
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# County comparison
-
-- Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
-
-&gt; **Copy and paste below code to create a new data set that includes only these counties.**
-
-
-```r
-covid_ga_5 &lt;- covid_ga %&gt;% 
-  filter(county %in% c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke'))
+cod_research_funding &lt;-
+fbi_gun_deaths &lt;-
+guns_manufactured &lt;- 
+nhanes &lt;- 
 ```
 
 
 
 ---
-# Viz 4
+class: inverse, middle, center
 
-- Suppose we are asked to compare cumulative cases as of the most recent day in the data across our 5 counties.
-
-- What kind of visualization could/should we use?
-
---
-
-- Bar graph. But both `geom_bar` or `geom_col` make bar graphs. Which should we use?
-
---
-
-- Counts are already aggregated. Therefore, we should use `geom_col`.
-
-&gt; **Generate a bar graph for cumulative cases during the most recent date across our 5 counties. Make another for deaths.**
+# Choosing Graphs
 
 ---
-# Viz 4
+# Choosing graphs
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
+Which of the following is appropriate to graph a single categorical variable?
 
----
-# Viz 5
-
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Viz 6 &amp; 7
-
-- Suppose we want to compare the trends in cases and deaths for our 5 counties over the time span of our data.
-
-- Which graph should we use?
-
---
-
-&gt; **Generate the appropriate graph each for cases and deaths over the time span in the data for our 5 counties. Give each county its own line. To do so, you will need to include a third `aes`thetic in addition to `x` and `y`.**
+- Histogram
+- Bar chart
+- Boxplot
+- Scatterplot
 
 ---
-# Viz 6
+# Choosing graphs
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+Which of the following is appropriate to graph a single continuous variable?
 
----
-# Viz 7
-
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# What's the Problem?
-
-- All of our comparisons between counties have been somewhat flawed or potentially misleading. Why?
-
---
-
-- We haven't adjusted for county population. If our goal is to compare spread of COVID-19 across counties, we need to account for the underlying population.
-
---
-
-- Therefore, we need to compute rates; cases and/or deaths *per* some standard number of people. But these data do not include county population.
-
-- We need more data to add to these data. We'll learn how to combine data in the next lab.
+- Histogram
+- Bar chart
+- Boxplot
+- Scatterplot
 
 ---
-class: inverse, center, middle
+# Choosing graphs
 
-# Let's cover some ways to make basic improvements to our graphs.
+Which of the following is appropriate to graph two categorical variables?
 
----
-# Basic improvements
-
-- Titles and axis labels
-- Themes
-- Text size
+- Histogram
+- Bar chart
+- Boxplot
+- Scatterplot
 
 ---
-# Improving Viz 4
+# Choosing graphs
 
-&gt; **Find your code for Viz 4 (bar graph of cases for 5 counties) and copy it to a new code chunk.**
+Which of the following is appropriate to graph two continuous variable?
+
+- Histogram
+- Bar chart
+- Boxplot
+- Scatterplot
+
 
 ---
-# Titles and axis labels
+# Choosing graphs
 
-- Titles and all axis labels are controlled by `labs`
+Which of the following is appropriate to graph a continuous variable by levels of a categorical variable?
 
-&gt; **Add the lines below to your graph.**
+- Pie chart
+- Bar chart
+- Boxplot
+- Scatterplot
+
+---
+# Choosing graphs
+
+Which graph is not recommended?
+
+---
+class: inverse, middle, center
+
+# Basic Guidelines of Good Graphs
+
+---
+# Guidelines
+
+- Appropriate graph given variable types
+
+- Accessible; stand-alone
+
+- Don't distort perception
+
+- Avoid uninformative decoration (aka chart junk)
+
+- Minimize "ink"
+
+---
+# Example
+
+.center[
+![](labs_files/lifeExp.png)
+]
+
+---
+# Example
+
+.center[
+![:scale 80%](lectures_files/monstrouscosts.png)
+]
+
+---
+# Distortion
+
+- Law school enrollment trend
+
+.center[
+![](lectures_files/lawaxes.png)
+]
+
+---
+# Possible distortion
+
+.center[
+![](lectures_files/showzero.png)
+]
+
+---
+# Example
+
+.center[
+![:scale 70%](lectures_files/badstackbars.png)
+]
+
+- Is D greater in 2011 or 2012?
+
+- Is C greater in 2010 or 2011?
+
+- Dodged/grouped bar chart usually better
+
+---
+# Decoding numerical visualization
+
+.center[
+![](lectures_files/encode1.png)
+]
+
+---
+# Find the blue circle
+
+.center[
+![:scale 40%](lectures_files/bluecirc1.png)
+]
+---
+# Find the blue circle
+.center[
+![:scale 40%](lectures_files/bluecirc2.png)
+]
+
+---
+# Find the blue circle
+.center[
+![:scale 40%](lectures_files/bluecirc3.png)
+]
+
+---
+# Find the blue circle
+.center[
+![:scale 40%](lectures_files/bluecirc4.png)
+]
+
+---
+# Find the blue circle
+.center[
+![:scale 40%](lectures_files/bluecirc5.png)
+]
+
+---
+# Decoding categorical visualization
+
+.center[
+![:scale 70%](lectures_files/encode2.png)
+]
+
+---
+class: inverse, middle, center
+
+# Creating Graphs
+
+---
+# Grammar of graphics
+
+- General syntax for all default graphs
 
 
 ```r
-covid_ga_5 %&gt;% 
-  filter(date == end_date) %&gt;% 
-  ggplot(aes(x = county, y = cases)) +
-  geom_col() +
-* labs(title = 'Total COVID Cases',
-*      x = '',
-*      y = 'Number of cases')
+dataset %&gt;% 
+  ggplot(aes(...)) +
+    geom_type()
+```
+
+- Replace `dataset` with the data in your environment
+- Add `aes`thetics based on the variables and type of graph intended
+- Replace `type` with the type of graph intended
+
+---
+# Grammar of graphics
+
+- **Many** options in ggplot
+
+- Can result in long chunks of code
+
+- Ability to reproduce graphs or copy code
+
+---
+class: inverse, middle, center
+
+# Single Categorical Variable
+
+---
+# Gun use in the US
+
+- The `nhanes` data contains a variable `gun.use` with "Yes" or "No" indicating whether the respondent has ever used a firearm.
+
+- Suppose we want to graph the number  yes or no. Which graph should we use?
+
+--
+
+- Which `geom` function should we use? 
+
+---
+# Gun use in the US
+
+&gt; **Create the following graph**
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+
+---
+# Gun use in the US
+
+- Common to have `NA` in survey data. Sometimes okay to drop.
+
+&gt; **Insert `drop_na(gun.use)` prior to using the `ggplot` function**
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+
+---
+# Gun use in the US
+
+- **Save this graph as an object**
+
+
+```r
+gun_use &lt;- nhanes %&gt;% 
+  drop_na(gun.use) %&gt;% 
+  ggplot(aes(x = gun.use)) +
+  geom_bar()
+```
+
+&gt; **Export this graph**
+
+
+```r
+ggsave('gun_use.png')
 ```
 
 ---
-# Titles and axes labels
+# Gun use in the US
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Themes
-
-- R comes with numerous default themes to change the look of graphs
+&gt; **Include axis labels using `labs()`**
 
 
 ```r
-theme_classic()
-theme_minimal()
-theme_void()
-theme_bw()
-# and more
+gun_use +
+  labs(x = 'Gun use', y = 'Number of respondents')
 ```
 
----
-# Themes
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
 
-&gt; **Add the new line below to your current code and re-run to see what it did.**
+---
+# Gun use in the US
+
+- **Change graph "ink" using `theme_...()` such as `theme_minimal()`**
 
 
 ```r
-covid_ga_5 %&gt;% 
-  filter(date == end_date) %&gt;% 
-  ggplot(aes(x = county, y = cases)) +
-  geom_col() +
-  labs(title = 'Total COVID Cases',
-       x = '',
-       y = 'Number of cases') +
-* theme_minimal()
+gun_use +
+  labs(x = 'Gun use', y = 'Number of respondents') +
+  theme_minimal()
 ```
 
----
-# Themes
-
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 ---
-# Scientific Notation
+# Gun use in the US
 
-- When numbers are large, R will sometimes display them in scientific notation
-
-- For example, `2e+05` on previous graph is equivalent to 200000 (2 followed by 5 zeros)
-
-- You can disable all scientific notation during the current R session by adding `options(scipen = 999)` as a separate line in your setup code chunk
-
-- Another way is to specify how we want R to display graph labels for each axis
-
----
-# Scientific Notation
-
-&gt; **Add the new line below to your current code and re-run to see what it did.**
+- **Fill bars with different colors**
 
 
 ```r
-covid_ga_5 %&gt;% 
-  filter(date == end_date) %&gt;% 
-  ggplot(aes(x = county, y = cases)) +
-  geom_col() +
-* scale_y_continuous(labels = scales::label_comma()) +
-  labs(title = 'Total COVID Cases',
-       x = '',
-       y = 'Number of cases') +
+nhanes %&gt;% 
+  drop_na(gun.use) %&gt;% 
+* ggplot(aes(x = gun.use, fill = gun.use)) +
+  geom_bar() +
+  labs(x = 'Gun use', y = 'Number of respondents') +
+  theme_minimal()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
+
+---
+# Gun use in the US
+
+&gt; **Control colors**
+
+
+```r
+nhanes %&gt;% 
+  drop_na(gun.use) %&gt;% 
+  ggplot(aes(x = gun.use, fill = gun.use)) +
+  geom_bar() +
+* scale_fill_manual(values = c('grey', 'steelblue'), guide = FALSE) +
+  labs(x = 'Gun use', y = 'Number of respondents') +
+  theme_minimal()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
+
+---
+# Gun use in the US
+
+&gt; **In an new code chunk, create another bar chart that displays percent**
+
+
+```r
+nhanes %&gt;% 
+  drop_na(gun.use) %&gt;% 
+  ggplot(aes(x = gun.use, 
+*            y = 100*(..count..)/sum(..count..),
+             fill = gun.use)) +
+  geom_bar() +
+  scale_fill_manual(values = c('grey', 'steelblue'), guide = FALSE) +
+  labs(x = 'Gun use', y = 'Percent of respondents') +
   theme_minimal()
 ```
 
 ---
-# Scientific Notation
+# Skill check
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+&gt; **Create a bar chart for the `sex` variable in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
 
 ---
-# Text size
+class: inverse, middle, center
 
-- After using `theme_whatever`, we can control any of the "ink" via `theme()`
+# Single Continuous Variable
 
-&gt; **Add new lines below to your current code and re-run to see what it did**
+---
+# Cause of death research funding
+
+- The `cod_research_funding` data contains a variable `funding` that is continuous.
+
+- Suppose we want to graph the distribution of `funding`. Which graph should we use?
+
+--
+
+- Which `geom_...()` function should we use?
+
+---
+# COD research funding
+
+&gt; **Try to create the following graph (colors need not match)**
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+
+---
+# Adjusting bins or binwidth
+
+- RStudio sometimes suggests we adjust `bins` or `binwidth`
+
+- Default is 30 bins. This is too many for 30 observations.
+
+&gt; **Let's adjust the number of bins to 10**
+
+---
+# Adjusting bins or binwidth
 
 
 ```r
-covid_ga_5 %&gt;% 
-  filter(date == end_date) %&gt;% 
-  ggplot(aes(x = county, y = cases)) +
-  geom_col() +
-  scale_y_continuous(labels = scales::label_comma()) +
-  labs(title = 'Total COVID Cases',
-       x = '',
-       y = 'Number of cases') +
-  theme_minimal() +
-* theme(axis.text=element_text(size=16),
-*       title = element_text(size=16))
+cod_research_funding %&gt;% 
+  ggplot(aes(x = funding)) +
+* geom_histogram(bins = 10,
+                 fill = 'springgreen4', color = 'black') +
+  labs(y = 'Causes of Death', x = 'Research funding, 2004-2015') +
+  theme_minimal()
 ```
 
 ---
-# Text size
+# Dealing with large values
 
-&lt;img src="rlab5-visualizations_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+- R will display large numbers in scientific notation
+
+- We can turn this off during an RStudio session
+
+&gt; **Add the following to your setup code chunk and run it. Then, rerun your histogram.**
+
+
+```r
+options(scipen = 999)
+```
 
 ---
-# Skill Check
+# Dealing with large values
 
-&gt; **Use labels, themes, and text size to improve Viz 7**
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
 
+---
+# Dealing with large values
+
+- x-axis is overcrowded with unnecessary zeros
+
+- How can we get rid of these so it shows 5, 10, 15, and 20?
+
+&gt; **Change code accordingly**
+
+---
+# Dealing with large values
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+
+---
+# COD research funding
+
+- What is another option for graphing the distribution of a single continuous variable that also shows certain descriptive statistics?
+
+&gt; **In a new code chunk, copy-and-paste the code you used to make the final histogram. Change the code to create this other graph.**
+
+---
+# COD research funding
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+
+---
+class: inverse, middle, center
+
+# Graphing Two Variables
+
+---
+# Combination of variable type
+
+- Two categorical: 
+  - Stacked bar chart 
+  - Grouped/dodged bar chart
+
+- One categorical, one numeric: 
+  - Bar chart that displays total by category
+  - Bar chart or point chart displaying summary stat by category (later lab)
+  - Overlapping histograms by category (later lab)
+  - Boxplots by category
+
+- Two numeric:
+  - Scatterplot
+  - Line graph
+
+---
+# Stacked bar chart
+
+&gt; **In a new code chunk, copy-and-paste code that created the bar chart displaying gun use percentages**
+
+- How might we change the code to make the following graph?
+
+&gt; **Make this change**
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+
+---
+# Grouped/dodged bar chart
+
+&gt; **Find the line in your code `geom_bar()`**
+
+&gt; **Change to `geom_bar(position = "dodge")`**
+
+&gt; **Re-run code**
+
+---
+# Grouped/dodged bar chart
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+
+- Note percentages add to 100 for all respondents, not within each sex (later lab)
+
+---
+# Barchart by category
+
+- `fbi_gun_deaths` data contain `number` of annual homicides by `weapons` for `year`s 2012-2016
+
+- Let's create a bar chart of `number` by `weapons` for `year` 2016
+
+&gt; **Start a new code chunk**
+
+
+```r
+fbi_gun_deaths %&gt;% 
+  ___(___) %&gt;%    #&lt;&lt; what goes here?
+  ggplot(aes(___)) +
+    geom____()
+```
+
+---
+# Barchart by category
+
+- Each cell contains the value we want to use as the height of the bar. No adding across rows needed.
+
+- Which `geom` do we use in this case, `geom_bar()` or `geom_col()`?
+
+&gt; **Add this to the code chunk**
+
+---
+# Barchart by category
+
+- Need to fill in the `aes`thetic
+
+- Which variable should map to which axis?
+
+&gt; **Complete the code and run**
+
+---
+# Barchart by category
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+
+- Can fill each bar with different color, add labels, and change ink just like before
+
+---
+# Barchart by category
+
+&gt; **Add `fill=weapons` inside `aes()` and re-run**
+
+--
+
+&gt; **Change `y=weapons` to `y = reorder(weapons, number)` and re-run**
+
+---
+# Barchart by category
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+---
+# Boxplots by category
+
+- Useful for showing the distribution of a numeric variable by levels of a categorical variable
+
+- Suppose we wanted to display the distribution of homicides 2012-2016 for each weapon
+
+&gt; **In a new code chunk, copy-and-paste the code you used to create the previous bar chart**
+
+- How should we change this code to get boxplots by weapon?
+
+&gt; **Make these changes and run code**
+
+---
+# Boxplots by category
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+
+---
+# Scatterplot
+
+- Association between two numeric variables, especially continuous variables
+
+- Discrete variables may cause points on scatterplot to be overcrowded
+
+- Suppose we wanted to explore the association between `mortality_rate_per_100k` and research `funding` in the `cod_research_funding` data
+
+---
+# Scatterplot
+
+&gt; **Add new code chunk and complete code**
+
+
+```r
+cod_research_funding %&gt;% 
+  ___(___(___)) +
+  ___()
+```
+
+---
+# Scatterplot
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+
+---
+# Adding a regression line
+
+**Add `geom_smooth(method = "lm")` the your code and rerun**
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+
+
+---
+# Dealing with skewed variables
+
+
+```r
+cod_research_funding %&gt;% 
+  ggplot(aes(x = mortality_rate_per_100k, y = funding)) +
+  geom_point() +
+  geom_smooth(method = 'lm') +
+* scale_x_log10() +
+* scale_y_log10()
+```
+
+---
+# Dealing with skewed variables
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+
+---
+# Line graph
+
+- Useful for plotting change in numeric variable over time
+
+- Suppose we want to graph `num_guns` manufactured over `Year`s by `gun_type` using the `guns_manufactured` data
+
+---
+# Line graph
+
+&gt; **In new code chunk, complete code below and run**
+
+
+```r
+guns_manufactured %&gt;% 
+  ___(___(___)) +
+  ___()
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
+
+---
+# Line graph
+
+- Could use `linetype` instead of `color`
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
 
 
 ---
