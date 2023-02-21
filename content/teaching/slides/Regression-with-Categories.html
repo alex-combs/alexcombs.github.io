@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Regression-with-Categories_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="Regression-with-Categories_files/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: October 17, 2022
+### Last updated: February 21, 2023
 ]
 
 ---
@@ -118,6 +118,12 @@ ggplot(Salaries,
 
 ---
 # Visualizing Parallel Slopes
+
+
+```
+## Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.
+## ℹ Please use `linewidth` instead.
+```
 
 &lt;img src="Regression-with-Categories_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -254,11 +260,6 @@ get_regression_table(sal_mod)
 ---
 class: inverse, middle, center
 
-# Let's practice another example using a parallel slopes model.
-
----
-class: inverse, middle, center
-
 # We aren't required to force the slopes to be parallel. Could allow the effect of years employed to differ between male and female professors.
 
 ---
@@ -310,7 +311,7 @@ ggplot(Salaries,
 `$$Salary=\beta_0+\beta_1YrsEmp+\beta_2Sex + \beta_3YrsEmp*Sex + \epsilon$$`
 
 - `\(\beta_3\)` tells us how the slopes compare
-  - For Sex = 1 (male), the marginal effect of years on salary is `\(\beta_1+\beta_3\)`
+  - For Sex = 1 (male), the association between years and salary is `\(\beta_1+\beta_3\)`
   - For Sex = 0 (female), it is `\(\beta_1\)`
 
 - `\(\beta_2\)` tells us how the intercepts compare
@@ -409,7 +410,7 @@ get_regression_table(sal_mod2)
 ---
 class: inverse, middle, center
 
-# Let's practice another example using interactions. 
+# Let's practice using another example on eLC
 
 ---
 class: inverse, middle, center

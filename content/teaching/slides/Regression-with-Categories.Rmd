@@ -208,11 +208,6 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 ---
 class: inverse, middle, center
 
-# Let's practice another example using a parallel slopes model.
-
----
-class: inverse, middle, center
-
 # We aren't required to force the slopes to be parallel. Could allow the effect of years employed to differ between male and female professors.
 
 ---
@@ -268,7 +263,7 @@ $$\hat{y} = (b_0 + b_2) + (b_1+b_3)x$$
 $$Salary=\beta_0+\beta_1YrsEmp+\beta_2Sex + \beta_3YrsEmp*Sex + \epsilon$$
 
 - $\beta_3$ tells us how the slopes compare
-  - For Sex = 1 (male), the marginal effect of years on salary is $\beta_1+\beta_3$
+  - For Sex = 1 (male), the association between years and salary is $\beta_1+\beta_3$
   - For Sex = 0 (female), it is $\beta_1$
 
 - $\beta_2$ tells us how the intercepts compare
@@ -318,7 +313,7 @@ $$\hat{Sal}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$
 ---
 class: inverse, middle, center
 
-# Let's practice another example using interactions. 
+# Let's practice using another example on eLC
 
 ---
 class: inverse, middle, center
