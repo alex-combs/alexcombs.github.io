@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab6-combining-data_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="rlab6-combining-data_files/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: October 17, 2022
+### Last updated: March 14, 2023
 ]
 
 ---
@@ -37,30 +37,25 @@ class: center, middle, inverse, title-slide
   - Left join
 
 ---
+# Set up
 
-# Setup
-
-- For this lab, we will add to the work we did for RLab5 on data visualizations.
-
-&gt; Instead of starting a new project, open your RLab5 project by clicking on the file with extension .Rproj or just open your Rmd file.
-
-&gt; **Consider changing YAML to:**
+&gt; **Create a new project named "rlab6" and start new R Markdown document. Change YAML and global options. Delete template.**
 
 
 ```r
 ---
-*title: "RLab 5 &amp; 6: Visualizations &amp; Combining Data"
+title: "RLab 6: Combining Data"
 author: "Your Name"
 output:
   html_document:
-    df_print: paged
+    df_print: kable
 ---
 ```
 
 ---
 # Setup
 
-&gt; **Reload the packages that should already be in your Rmd:**
+&gt; **Load the following packages**
 
 
 ```r
@@ -212,15 +207,121 @@ class: inverse, middle, center
 # Left joining data
 
 ---
-# Where to add code
+# County COVID Data
 
-- Now we're ready to add data to the `covid_ga` data from the previous lab in order to make better comparisons across counties.
+- Let's explore the COVID [data](https://github.com/nytimes/covid-19-data) for every U.S. county provided by the New York Times
 
-- We need to add code chunks that add these data *before* we start making graphs
+- Raw data for most recent 30 days available [here](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-recent.csv)
 
-&gt; **Find the point in your Rmd where you finished preparing `covid_ga`. Run this code so `covid_ga` is in your environment** 
+&gt; **Insert a heading "Left Join"**
 
-&gt; **Add a new code chunk here or add to the existing code chunk.**
+&gt; **In a new code chunk, add and run the following code which uses the url containing the raw data to import into R.**
+
+
+```r
+covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-recent.csv')
+```
+
+- These data include **cumulative** counts (not daily) of COVID cases and deaths
+
+---
+# Some Wrangling
+
+
+```
+## Rows: 97,709
+## Columns: 6
+## $ date   &lt;IDate&gt; 2023-02-12, 2023-02-12, 2023-02-12, 2023-02-12, 2023-02-12, 2…
+## $ county &lt;chr&gt; "Autauga", "Baldwin", "Barbour", "Bibb", "Blount", "Bullock", "…
+## $ state  &lt;chr&gt; "Alabama", "Alabama", "Alabama", "Alabama", "Alabama", "Alabama…
+## $ fips   &lt;int&gt; 1001, 1003, 1005, 1007, 1009, 1011, 1013, 1015, 1017, 1019, 102…
+## $ cases  &lt;int&gt; 19630, 69344, 7387, 8012, 18488, 3002, 6478, 40979, 10746, 6701…
+## $ deaths &lt;int&gt; 230, 723, 112, 109, 261, 54, 132, 674, 176, 134, 225, 63, 114, …
+```
+
+- Let's focus on Georgia
+
+&gt; **Create a new dataset called `covid_ga` that contains only counties in Georgia**
+
+
+
+---
+# Quick Summary
+
+&gt; **Use `summary` to get a quick look at summary stats.**
+
+
+
+--
+
+- Most recent data is as of yesterday. Let's use filter to include only yesterday's data.
+
+&gt; **Add to your existing code and re-run**
+
+
+```r
+covid_ga &lt;- covid %&gt;% 
+  filter(state == 'Georgia' &amp; date=='2023-03-13')
+```
+
+---
+# County comparison
+
+- Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
+
+&gt; **Copy and paste below code to create a new data set that includes only these counties.**
+
+
+```r
+covid_ga_5 &lt;- covid_ga %&gt;% 
+  filter(county %in% c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke'))
+```
+
+---
+# County comparison
+
+- Suppose we want to compare cumulative cases as of the most recent day in the data across these 5 counties.
+
+&gt; **Generate a bar graph using the following code.**
+
+
+```r
+covid_ga_5 %&gt;% 
+  ggplot(aes(x = county, y = cases)) +
+  geom_col()
+```
+
+&gt; **Make another bar graph for deaths**
+
+---
+# County comparison
+
+- Cases
+
+&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# County comparison
+
+- Deaths
+
+&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# County comparison
+
+- Why are these county comparisons misleading?
+
+---
+# County comparison
+
+- We haven't adjusted for county population.
+
+- Therefore, we need to compute rates; cases and/or deaths per some standard number of people. 
+
+- But the raw data do not include county population
+
+- We need to `left_join` county population data to the COVID data
 
 ---
 # Left Joins
@@ -402,14 +503,14 @@ glimpse(covid_ga)
 ```
 
 ```
-## Rows: 46,240
+## Rows: 160
 ## Columns: 6
-## $ date   &lt;date&gt; 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01, 20…
+## $ date   &lt;IDate&gt; 2023-03-13, 2023-03-13, 2023-03-13, 2023-03-13, 2023-03-13, 2…
 ## $ county &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks", "B…
 ## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgia…
 ## $ fips   &lt;int&gt; 13001, 13003, 13005, 13007, 13009, 13011, 13013, 13015, 13017, …
-## $ cases  &lt;int&gt; 3607, 1627, 2720, 394, 7127, 2986, 16328, 22953, 3323, 3611, 27…
-## $ deaths &lt;int&gt; 108, 39, 64, 14, 203, 71, 206, 376, 111, 72, 673, 86, 89, 75, 7…
+## $ cases  &lt;int&gt; 5278, 2453, 4104, 654, 11214, 4625, 26075, 35543, 5023, 5881, 4…
+## $ deaths &lt;int&gt; 136, 58, 82, 15, 262, 101, 291, 488, 125, 96, 836, 111, 116, 10…
 ```
 
 ---
@@ -429,13 +530,26 @@ ga_county_pop$county &lt;- as.factor(ga_county_pop$county)
 ```
 
 ---
+# Where to add code
+
+&gt; **Find where you created `covid_ga`.** 
+
+&gt; **Add a new code chunk immediately below the code chunk that created `covid_ga`**
+
+---
 # Left Join Practice
 
-&gt; **Now we are ready to join `ga_county_pop` to `covid_ga`. Give it a shot. Overwrite `covid_ga` instead of creating a new dataset.**
+&gt; **Left join `ga_county_pop` to `covid_ga`. Overwrite `covid_ga`.**
 
 
 
-&gt; **Use `glimpse` on our updated dataset**
+
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  ___(___, ___ = '___')
+```
+
+&gt; **Use `glimpse` on our updated data**
 
 
 ```r
@@ -443,25 +557,55 @@ glimpse(covid_ga)
 ```
 
 ```
-## Rows: 46,240
+## Rows: 160
 ## Columns: 7
-## $ date       &lt;date&gt; 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01, 2022-01-01…
+## $ date       &lt;IDate&gt; 2023-03-13, 2023-03-13, 2023-03-13, 2023-03-13, 2023-03-1…
 ## $ county     &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks"…
 ## $ state      &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Geo…
 ## $ fips       &lt;int&gt; 13001, 13003, 13005, 13007, 13009, 13011, 13013, 13015, 130…
-## $ cases      &lt;int&gt; 3607, 1627, 2720, 394, 7127, 2986, 16328, 22953, 3323, 3611…
-## $ deaths     &lt;int&gt; 108, 39, 64, 14, 203, 71, 206, 376, 111, 72, 673, 86, 89, 7…
+## $ cases      &lt;int&gt; 5278, 2453, 4104, 654, 11214, 4625, 26075, 35543, 5023, 588…
+## $ deaths     &lt;int&gt; 136, 58, 82, 15, 262, 101, 291, 488, 125, 96, 836, 111, 116…
 ## $ population &lt;dbl&gt; 18386, 8165, 11164, 3038, 44890, 19234, 83240, 107738, 1670…
 ```
 
 ---
-# Recap
+# Adjusting for Population
 
-- In one chunk of code, we had R merge each county's population to all of the rows for that county in our COVID data
+&gt; **Insert a new code chunk below the left join that added population to `covid_ga`. Add three new variables: `pop100K`, `cases_rate`, and `deaths_rate`.**
 
-- We are now ready to compute normalized rates and visualize comparisons
 
-- We will continue this project in the next lab
+```r
+covid_ga &lt;- covid_ga %&gt;% 
+  ___(pop100K = ___,
+         cases_rate = ___, 
+         deaths_rate = ___)
+```
+
+
+
+
+
+---
+# Update bar graphs
+
+&gt; **Finally re-run the code that created the `covid_ga_5`**
+
+
+
+&gt; **Next, add a new code chunk below the bar graphs you made. Copy-and-paste bar graph code. Modify the code to include new variables.**
+
+---
+# Updated bar graphs
+
+&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-41-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Updated bar graphs
+
+&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-42-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Upload
 
 &gt; **Upload your Rmd to eLC.**
 
