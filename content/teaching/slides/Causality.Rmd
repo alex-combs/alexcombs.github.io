@@ -19,12 +19,6 @@ library(tidyverse)
 library(moderndive)
 library(knitr)
 
-load("lectures_files/evaluation.RData")
-
-hisp <- evaluation %>% 
-  filter(round==1) %>% 
-  select(health_expenditures, treatment_locality, age_hh, educ_hh, dirtfloor, bathroom, hospital_distance)
-
 set.seed(123)
 options(scipen = 999)
 ```
@@ -101,16 +95,17 @@ include_graphics('lectures_files/credible.png')
 ---
 # Internal validity
 
-- Impact of health insurance subsidies on out-of-pocket health care expenditures.
+- A criminal justice analyst explores potential factors that affect the likelihood of recidivism 
+
+$$ReOffense = \beta_0 + \beta_1Age + \beta_2Sex + \epsilon$$
 
 ```{r, echo=FALSE}
-mod1 <- lm(health_expenditures ~ treatment_locality, data = hisp)
+recidivism <- tibble("Variable" = c("Intercept", "Age", "Sex"), "Estimates" = c(1.370, -0.036, 0.250))
 
-get_regression_table(mod1) %>% 
-  kable(digits = 2)
+kable(recidivism, digits = 3)
 ```
 
-- We are concerned whether this estimate is accurate. In other words, does the model eliminate bias?
+- Internal validity concerns whether these estimates are accurate or biased. And if biased, does it limit our ability to make useful conclusions?
 
 ---
 # Criteria for causation
@@ -502,6 +497,46 @@ include_graphics('lectures_files/dag_ovbdirect.png', dpi = 150)
 - Key question: Is the bias pushing my result toward 0 or away from 0?
 
 ---
+# Recap
+
+- Is my claim about the relationship between a cause and effect credible? Can I claim there is no OVB?
+
+--
+
+- If so, internally valid. Now we can consider **external validity**.
+
+---
+# External validity
+
+- **External validity (generalizability):** can results be applied beyond the groups or context that were studied?
+
+--
+
+- Are those in my sample representative of the population? Did the program select or recipients self-select in unrepresentative ways?
+
+- Are there reasons to suspect location or time matter and results may not apply elsewhere or at later times?
+
+--
+
+- If you cannot claim sample represents population, possible you can claim sample represents a subset of the population that is larger than the sample.
+
+- Example: Effect of job training on participants instead of any unemployed person. Known as **treatment on the treated**.
+
+---
+# Causal inference models
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/dag14.png', dpi = 150)
+```
+
+- Random assignment breaks any OVB from the error term
+
+- Random assignment is often difficult to achieve in social sciences
+
+- There are quasi-experimental regression techniques that arguably achieve the same break from the error term as if random
+  - Difference-in-differences, regression discontinuity, instrumental variables, synthetic control, propensity score matching
+
+---
 class: inverse, center, middle
 
 # Let's practice using DAGs
@@ -509,7 +544,7 @@ class: inverse, center, middle
 ---
 class: inverse, center, middle
 
-# Collider Bias Revisited
+# Supplemtary Slides: Collider Bias Revisited
 
 ---
 # Collider bias
@@ -768,43 +803,3 @@ selection_bias %>%
   theme(text = element_text(size=18))
 ```
 
-
----
-# Recap
-
-- Is my claim about the relationship between a cause and effect credible? Can I claim there is no OVB?
-
---
-
-- If so, internally valid. Now we can consider **external validity**.
-
----
-# External validity
-
-- **External validity (generalizability):** can results be applied beyond the groups or context that were studied?
-
---
-
-- Are those in my sample representative of the population? Did the program select or recipients self-select in unrepresentative ways?
-
-- Are there reasons to suspect location or time matter and results may not apply elsewhere or at later times?
-
---
-
-- If you cannot claim sample represents population, possible you can claim sample represents a subset of the population that is larger than the sample.
-
-- Example: Effect of job training on participants instead of any unemployed person. Known as **treatment on the treated**.
-
----
-# Causal inference models
-
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('lectures_files/dag14.png', dpi = 150)
-```
-
-- Random assignment breaks any OVB from the error term
-
-- Random assignment is often difficult to achieve in social sciences
-
-- There are quasi-experimental regression techniques that arguably achieve the same break from the error term as if random
-  - Difference-in-differences, regression discontinuity, instrumental variables, synthetic control, propensity score matching
