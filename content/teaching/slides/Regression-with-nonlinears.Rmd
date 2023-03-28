@@ -153,7 +153,7 @@ $$y=\beta_0+\beta_1x_1+\beta_2x_1^2+\epsilon$$
 
 - We run the regression model and obtain some estimates for our sample model
 
-$$\hat{y}=b_0+b_1x+b_2x_1^2$$
+$$\hat{y}=b_0+b_1x_1+b_2x_1^2$$
 
 --
 
@@ -167,9 +167,21 @@ $$\hat{y}=b_0+b_1x+b_2x_1^2$$
   - At what value of $x$ is $y$ at its maximum or minimum?
 
 ---
-# Quadratic regression
+# Linear vs. Quadratic unit change
 
-$$\hat{y}=b_0+b_1x+b_2x_1^2$$
+**Linear**
+
+$$\hat{y}=b_0+b_1x_1$$
+
+- What is the change in $y$ from a unit-change in $x_1$?
+
+$$\Delta \hat{y} = b_1$$
+
+--
+
+**Quadratic**
+
+$$\hat{y}=b_0+b_1x_1+b_2x_1^2$$
 
 - What is the change in $y$ from a unit-change in $x$?
 
@@ -177,7 +189,10 @@ $$\Delta \hat{y} = b_1+2b_2x_1$$
 
 - Depends on the starting value of $x$
 
---
+---
+# Finding Max or Min
+
+$$\hat{y}=b_0+b_1x_1+b_2x_1^2$$
 
 - At what value of $x$ is $y$ at its maximum or minimum?
 
@@ -433,7 +448,7 @@ get_regression_table(log_log) %>%
 
 - How do we interpret `log(gdpPercap)` coefficient?
 
-- On average, a life expectancy is predicted to increase 0.11% with each 1% increase in GDP per capita, all else equal.
+- On average, life expectancy is predicted to increase 0.11% with each 1% increase in GDP per capita, all else equal.
 
 ]
 
@@ -551,8 +566,7 @@ log_lev <- lm(log(lifeExp) ~ gdpPercap + continent,
 # Log-level Model in R
 
 ```{r, eval=FALSE}
-get_regression_table(log_lev) %>% 
-  select(term, estimate)
+get_regression_table(log_lev)
 ```
 
 .pull-left[
@@ -594,13 +608,29 @@ get_regression_table(log_lev) %>%
 ]
 
 ---
+# Recap
+
+- **Quadratic**: $b+2bx$ unit change in $y$ given a 1-unit increase in $x$
+
+- **Max or min**: $y$ is at its max or min at $x = \frac{-b}{2b}$
+
+- **Log-log**: $b$ percent change in $y$ given a 1% increase in $x$ 
+
+- **Level-log**: $b \times 100$ unit change in $y$ given a 1% increase in $x$
+
+- **Log-level**: $\frac{b}{100}$ percent change in $y$ given a 1-unit increase in $x$
+
+---
 # Choosing the best model
 
-- You can't compare models that use ln(y) to models that do not based on the goodness of fit values our results produce.
+- Can't compare models that use $ln(y)=\dots$ to models that use $y=\dots$ based on $R^2$ or $RMSE$.
+
+  - Can compare log-log and log-level
+  - Can compare level-level and level-log
 
 - Converting goodness of fit measures to be comparable is beyond scope of this course.
 
-- Instead, use scatterplots and your best judgment to decide whether to log transform.
+- Instead, use scatter plots and your best judgment to decide between $ln(y)=\dots$ and $y=\dots$
 
 ---
 class: inverse, center, middle
