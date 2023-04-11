@@ -23,20 +23,9 @@ library(knitr)
 set.seed(123)
 options(scipen = 999)
 
-state_trump <- hate_crimes %>%
-  mutate(share_white = 1 - share_non_white,
-         urbanization = if_else(share_pop_metro<=0.75, "low", "high")) %>% 
-  select(state, 
-         median_house_inc, 
-         share_pop_hs, 
-         share_white, 
-         share_white_poverty, 
-         share_vote_trump,
-         urbanization) %>%
-  filter(state != "District of Columbia") %>% 
-  mutate_at(vars(share_pop_hs, share_white, share_white_poverty,
-              share_vote_trump), funs(.*100)) %>% 
-  select(med_inc = median_house_inc, hs = share_pop_hs, urban = urbanization)
+hisp_data <- read_csv("lectures_files/health_insurance_subsidy.csv")
+
+hisp_data <- rename(hisp_data, treatment = treatment_locality)
 ```
 
 - Hypothesis testing
@@ -48,16 +37,15 @@ state_trump <- hate_crimes %>%
 ---
 # Regression table
 
-$$MedHHInc = \beta_0 + \beta_1HSDegree + \beta_2 Urbanization + \epsilon$$ 
+$$HealthExpenditure = \beta_0 + \beta_1TreatmentLocality + \epsilon$$
 
 ```{r, include=FALSE}
-inc_mod <- lm(med_inc ~ hs + urban, 
-              data = state_trump)
+mod1 <- lm(health_expenditures ~ treatment, data = hisp_data)
 ```
 
 ```{r, echo=FALSE}
-get_regression_table(inc_mod) %>% 
-  kable(digits = 0)
+get_regression_table(mod1) %>% 
+  kable(digits = c(2,2,0,6,2,2))
 ```
 
 - Our goal is to better understand the `statistic` (less important) and `p_value` columns. 
@@ -152,13 +140,6 @@ $H_0$:
 - Can *never* conclude males and females *are* promoted equally $P_M-P_F = 0$ from a hypothesis test. This is equivalent to accepting the null.
 
 ---
-# Hypothesis test conclusions
-
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('lectures_files/hypotest-tables.png')
-```
-
----
 # What If We're Wrong
 
 - Suppose our estimate of $P_M-P_F=?$, $p_M-p_F=0.3$, is so unlikely that we reject the null 
@@ -213,7 +194,7 @@ include_graphics('lectures_files/hypotest-tables.png')
 ---
 class: inverse, center, middle
 
-# How do we know the probability of our result in a null world with one sample and not knowing if we live in a world where the null is true or not?
+# How do we know the probability of our result in a world where the null is true without knowing which world we live in?
 
 ---
 # Null distribution
@@ -305,25 +286,43 @@ include_graphics('lectures_files/nulldist.png')
 # Back to regression table
 
 ```{r, echo=FALSE}
-get_regression_table(inc_mod) %>% 
-  kable(digits = 3)
+get_regression_table(mod1) %>% 
+  kable(digits = 2)
 ```
 
 - What are the null and alternative hypotheses? What is the result of the test?
 
-- How many standard errors are our estimates from the center of the null distribution?
+- How many standard errors is our estimate from the center (0) of the null distribution?
 
-- What is the probability of obtaining our estimates or more extreme in a world where the null is true?
+- What is the probability of obtaining our estimates or more extreme in a world where the null is true (treatment = 0)?
 
 ---
 # Back to regression table
 
 ```{r, echo=FALSE}
-get_regression_table(inc_mod) %>% 
-  kable(digits = 3)
+get_regression_table(mod1) %>% 
+  kable(digits = 2)
 ```
 
-There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately 1,993 dollars per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between 1,465 and 2,521. 
+There is statistically significant evidence that the health insurance subsidy reduced out-of-pocket expenditures on health care. On average, expenditures among treated households declined about $6 dollars per person. 
+
+---
+# Another example
+
+$$Pr(Treatment=1) = \beta_0 + \beta_1Age + \beta_2Educ + \beta_3DirtFloor + \beta_4Bathroom + beta_5HospDist + \epsilon$$
+
+```{r, include=FALSE}
+hisp_data <- hisp_data %>% 
+  mutate(treatment = if_else(treatment == 'Yes', 1, 0))
+
+mod3 <- lm(treatment ~ + age_hh + educ_hh + dirtfloor + bathroom + hospital_distance, data = hisp_data)
+```
+
+```{r, echo=FALSE}
+get_regression_table(mod3) %>% 
+  kable(digits = c(3,3,2,3,3,3))
+```
+
 
 ---
 class: inverse, center, middle
@@ -331,9 +330,9 @@ class: inverse, center, middle
 # Practical significance
 
 ---
-# Practical significance questions
+# Practical significance steps
 
-1. What is the typical change in the explanatory variable associated with the statistically significant estimate?
+1. What is the typical change in the explanatory variable of interest?
 
 --
 
@@ -341,111 +340,27 @@ class: inverse, center, middle
 
 --
 
-3. Do the bounds of the confidence interval for the explanatory variable potentially change my answer?
+3. Do the bounds of the confidence interval for the explanatory variable potentially change the answer to step 2?
 
 --
 
 - What is considered a meaningful change is somewhat subjective.
-  
----
-# Example 1
-
-```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
-include_graphics('lectures_files/prac-sig1.png')
-```
-
-- Is the property tax result practically significant?
-
---
-
-- Typical change (standard deviation) in property tax is $4
-
---
-
-- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
-
---
-
-- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200). Practically significant.
 
 ---
-# Example 2
 
-```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
-include_graphics('lectures_files/prac-sig2.png')
-```
-
-- SD for property tax is now 0.04 instead of 4
-
-- Is the property tax result practically significant?
-
---
-
-- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
-
-- Based on confidence interval, max increase is $5.60. Probably not meaningful.
-
----
-# Example 3
-
-```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
-include_graphics('lectures_files/prac-sig3.png')
-```
-
-- SD of property tax back to 4. Predicted change same as in Example 1: $400
-
-- But confidence interval has changed. Is the property tax result practically significant?
-
---
-
-- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance could be questioned in this case.
-
----
-# Example 4
-
-```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
-include_graphics('lectures_files/prac-sig4.png')
-```
-
-- Estimate and CI for property tax has changed
-
-- Is the property tax result practically significant?
-
---
-
-- Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
---
-
-- Lack of statistical significance usually means lack of practical significance. However...
-
----
-# Example 5
-
-```{r, echo=FALSE, fig.align='center', out.height='33%', out.width='66%'}
-include_graphics('lectures_files/prac-sig5.png')
-```
-
-- Estimate and CI has changed again
-
---
-
-- Even though statistically insignificant, the CI is very precise around 0.
-
-- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. This is still useful.
-
----
 # Practical significance from PS3
 
 ```{r, include=FALSE}
-sum.ps3 <- arsenal::tableby(~ med_inc + hs, data = state_trump)
+sum.ps3 <- arsenal::tableby( ~ health_expenditures + treatment, data = hisp_data)
 ```
 
 ```{r, echo=FALSE, results='asis'}
-summary(sum.ps3, digits=0)
+summary(sum.ps3, digits=0, test=FALSE)
 ```
 
 ```{r, echo=FALSE}
-get_regression_table(inc_mod) %>% 
+get_regression_table(mod1) %>% 
   kable(digits = 3)
 ```
+
 

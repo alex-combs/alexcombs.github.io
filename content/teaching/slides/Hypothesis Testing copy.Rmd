@@ -644,3 +644,10 @@ include_graphics('lectures_files/prac-sig5.png')
 - The exception to the rule on the previous slide. Even though statistically insignificant, the CI is very precise around 0.
 
 - A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. Still useful.
+
+---
+# Hypothesis test conclusions
+
+```{r, echo=FALSE, fig.align='center'}
+include_graphics('lectures_files/hypotest-tables.png')
+```

@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Hypothesis-Testing_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="Hypothesis-Testing_files/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: November 21, 2022
+### Last updated: April 11, 2023
 ]
 
 ---
@@ -42,16 +42,15 @@ class: center, middle, inverse, title-slide
 ---
 # Regression table
 
-`$$MedHHInc = \beta_0 + \beta_1HSDegree + \beta_2 Urbanization + \epsilon$$` 
+`$$HealthExpenditure = \beta_0 + \beta_1TreatmentLocality + \epsilon$$`
 
 
 
 
-|term       | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:----------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept  |  -115383|     22643|        -5|       0|  -160935|   -69830|
-|hs         |     1993|       262|         8|       0|     1465|     2521|
-|urban: low |    -6541|      1801|        -4|       0|   -10165|    -2918|
+|term           | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:--------------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept      |    20.06|         0|   123.322|       0|    19.75|    20.38|
+|treatment: Yes |    -6.41|         0|   -27.850|       0|    -6.86|    -5.96|
 
 - Our goal is to better understand the `statistic` (less important) and `p_value` columns. 
 
@@ -140,11 +139,6 @@ What are our null and alternative hypotheses for this analysis?
 - Can *never* conclude males and females *are* promoted equally `\(P_M-P_F = 0\)` from a hypothesis test. This is equivalent to accepting the null.
 
 ---
-# Hypothesis test conclusions
-
-&lt;img src="lectures_files/hypotest-tables.png" width="1079" style="display: block; margin: auto;" /&gt;
-
----
 # What If We're Wrong
 
 - Suppose our estimate of `\(P_M-P_F=?\)`, `\(p_M-p_F=0.3\)`, is so unlikely that we reject the null 
@@ -199,7 +193,7 @@ What are our null and alternative hypotheses for this analysis?
 ---
 class: inverse, center, middle
 
-# How do we know the probability of our result in a null world with one sample and not knowing if we live in a world where the null is true or not?
+# How do we know the probability of our result in a world where the null is true without knowing which world we live in?
 
 ---
 # Null distribution
@@ -289,29 +283,45 @@ class: inverse, center, middle
 # Back to regression table
 
 
-|term       |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:----------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept  | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|hs         |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urban: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|term           | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:--------------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept      |    20.06|      0.16|    123.32|       0|    19.75|    20.38|
+|treatment: Yes |    -6.41|      0.23|    -27.85|       0|    -6.86|    -5.96|
 
 - What are the null and alternative hypotheses? What is the result of the test?
 
-- How many standard errors are our estimates from the center of the null distribution?
+- How many standard errors is our estimate from the center (0) of the null distribution?
 
-- What is the probability of obtaining our estimates or more extreme in a world where the null is true?
+- What is the probability of obtaining our estimates or more extreme in a world where the null is true (treatment = 0)?
 
 ---
 # Back to regression table
 
 
-|term       |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:----------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept  | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|hs         |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urban: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|term           | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:--------------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept      |    20.06|      0.16|    123.32|       0|    19.75|    20.38|
+|treatment: Yes |    -6.41|      0.23|    -27.85|       0|    -6.86|    -5.96|
 
-There is statistically significant evidence that high school attainment is positively associated with median income in states. On average, state median income increases approximately 1,993 dollars per 1 percentage point increase in the population with at least a high school degree, controlling for urbanicity. Using 95% confidence intervals, a 1 p.p. increase in high school attainment is associated with an increase of median income between 1,465 and 2,521. 
+There is statistically significant evidence that the health insurance subsidy reduced out-of-pocket expenditures on health care. On average, expenditures among treated households declined about $6 dollars per person. 
+
+---
+# Another example
+
+`$$Pr(Treatment=1) = \beta_0 + \beta_1Age + \beta_2Educ + \beta_3DirtFloor + \beta_4Bathroom + beta_5HospDist + \epsilon$$`
+
+
+
+
+|term              | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:-----------------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept         |    0.477|      0.03|    18.486|   0.000|    0.427|    0.528|
+|age_hh            |   -0.001|      0.00|    -2.024|   0.043|   -0.002|    0.000|
+|educ_hh           |    0.000|      0.00|     0.134|   0.894|   -0.004|    0.004|
+|dirtfloor         |    0.023|      0.01|     2.179|   0.029|    0.002|    0.044|
+|bathroom          |   -0.004|      0.01|    -0.418|   0.676|   -0.025|    0.016|
+|hospital_distance |    0.000|      0.00|     3.676|   0.000|    0.000|    0.001|
+
 
 ---
 class: inverse, center, middle
@@ -319,9 +329,9 @@ class: inverse, center, middle
 # Practical significance
 
 ---
-# Practical significance questions
+# Practical significance steps
 
-1. What is the typical change in the explanatory variable associated with the statistically significant estimate?
+1. What is the typical change in the explanatory variable of interest?
 
 --
 
@@ -329,109 +339,34 @@ class: inverse, center, middle
 
 --
 
-3. Do the bounds of the confidence interval for the explanatory variable potentially change my answer?
+3. Do the bounds of the confidence interval for the explanatory variable potentially change the answer to step 2?
 
 --
 
 - What is considered a meaningful change is somewhat subjective.
-  
----
-# Example 1
-
-&lt;img src="lectures_files/prac-sig1.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- Is the property tax result practically significant?
-
---
-
-- Typical change (standard deviation) in property tax is $4
-
---
-
-- Predicted change in average rent from a 1 SD increase in property tax is $400 (4 X 100), or at least 240 (4 X 60).
-
---
-
-- At least a 24% increase relative to the mean of rent (240/1000) and 120% of SD in rent (240/200). Practically significant.
 
 ---
-# Example 2
 
-&lt;img src="lectures_files/prac-sig2.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- SD for property tax is now 0.04 instead of 4
-
-- Is the property tax result practically significant?
-
---
-
-- Predicted change in average rent from 1 SD increase in property tax = $4. Not practically significant.
-
-- Based on confidence interval, max increase is $5.60. Probably not meaningful.
-
----
-# Example 3
-
-&lt;img src="lectures_files/prac-sig3.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- SD of property tax back to 4. Predicted change same as in Example 1: $400
-
-- But confidence interval has changed. Is the property tax result practically significant?
-
---
-
-- Effect of a 1 SD increase in property tax could be as small as $8. Practical significance could be questioned in this case.
-
----
-# Example 4
-
-&lt;img src="lectures_files/prac-sig4.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- Estimate and CI for property tax has changed
-
-- Is the property tax result practically significant?
-
---
-
-- Result is statistically insignificant. Effect of property tax is anywhere between -40 and 60, including 0. 
---
-
-- Lack of statistical significance usually means lack of practical significance. However...
-
----
-# Example 5
-
-&lt;img src="lectures_files/prac-sig5.png" width="66%" height="33%" style="display: block; margin: auto;" /&gt;
-
-- Estimate and CI has changed again
-
---
-
-- Even though statistically insignificant, the CI is very precise around 0.
-
-- A 1 SD increase in property tax ranges between -2.40 and 10.40 dollars. Plausible values do not translate to a meaningful change in average rent. This is still useful.
-
----
 # Practical significance from PS3
 
 
 
 
-|                            | Overall (N=50) |
-|:---------------------------|:--------------:|
-|**med_inc**                 |                |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) |  54963 (9109)  |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     | 35521 - 76165  |
-|**hs**                      |                |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) |     87 (3)     |
-|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     |    80 - 92     |
+|                            | Overall (N=9914) |
+|:---------------------------|:----------------:|
+|**health_expenditures**     |                  |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) |     17 (12)      |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     |     0 - 117      |
+|**treatment**               |                  |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Mean (SD) |      1 (1)       |
+|&amp;nbsp;&amp;nbsp;&amp;nbsp;Range     |      0 - 1       |
 
 
-|term       |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
-|:----------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept  | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|hs         |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urban: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|term           | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
+|:--------------|--------:|---------:|---------:|-------:|--------:|--------:|
+|intercept      |   20.064|     0.163|   123.322|       0|   19.745|   20.383|
+|treatment: Yes |   -6.406|     0.230|   -27.850|       0|   -6.857|   -5.955|
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
