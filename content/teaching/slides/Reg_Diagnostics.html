@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Reg_Diagnostics_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="Reg_Diagnostics_files/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: November 28, 2022
+### Last updated: April 17, 2023
 ]
 
 ---
@@ -80,7 +80,7 @@ class: inverse, center, middle
   - Undesirable but tolerable
 
 ---
-# Valid Assumptions Depend on Residuals
+# Assumptions Depend on Residuals
 
 
 
@@ -343,7 +343,7 @@ plot(trump_mod)
 ---
 # Cook's distance
 
-- Cook's distance is the most common measure for identifying high-influence observations
+- Cook's distance is a common measure for identifying high-influence observations
 
 - One rule of thumb is that an observation has high influence if Cook's distance exceeds...
 
@@ -478,7 +478,7 @@ gvlma(trump_mod)
 
 &lt;img src="lectures_files/gvlma1.png" width="1064" style="display: block; margin: auto;" /&gt;
 
-- Global Stat: Overall test of your model
+- Global Stat: Holistic test of assumptions
 - Skewness: Primary test of **N**; secondary test for influence
 - Kurtosis: Primary test for influence; secondary test of **N**
 - Link Function: Test of **L**
@@ -512,7 +512,7 @@ vif(trump_mod_nodc)
 ##  1.043766  1.043766
 ```
 
-- Nothing greater than 10; no multicollinearity
+- Nothing greater than 10; multicollinearity not a problem
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

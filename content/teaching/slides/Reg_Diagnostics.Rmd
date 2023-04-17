@@ -88,7 +88,7 @@ get_regression_table(trump_mod) %>%
   - Undesirable but tolerable
 
 ---
-# Valid Assumptions Depend on Residuals
+# Assumptions Depend on Residuals
 
 ```{r, include=FALSE}
 trump_mod.metrics <- augment(trump_mod)
@@ -101,7 +101,7 @@ trump_mod2.metrics <- augment(trump_mod2)
 trump_mod2.graph <- ggplot(trump_mod2.metrics, aes(white, share_vote_trump)) +
   geom_point() +
   stat_smooth(method = lm, se = FALSE) +
-  geom_segment(aes(xend = white, yend = .fitted), color = "red", size = 0.3) +
+  geom_segment(aes(xend = white, yend = .fitted), color = "red", linewidth = 0.3) +
   theme_minimal() +
   labs(y = 'Trump Vote',
        x = 'Pct. White')
@@ -143,7 +143,7 @@ trump_mod2.graph
 ```{r, echo=FALSE, message=FALSE, fig.align='center'}
 ggplot(trump_mod2.metrics, aes(.fitted, .resid)) +
   geom_point() +
-  geom_segment(aes(xend = .fitted, yend = 0), color = "red", size = 0.3) +
+  geom_segment(aes(xend = .fitted, yend = 0), color = "red", linewidth = 0.3) +
   geom_hline(yintercept = 0, color = 'red') +
   theme_minimal() +
   labs(y = 'Residuals',
@@ -394,7 +394,7 @@ plot(trump_mod, 5)
 ---
 # Cook's distance
 
-- Cook's distance is the most common measure for identifying high-influence observations
+- Cook's distance is a common measure for identifying high-influence observations
 
 - One rule of thumb is that an observation has high influence if Cook's distance exceeds...
 
@@ -532,7 +532,7 @@ gvlma(trump_mod)
 include_graphics('lectures_files/gvlma1.png')
 ```
 
-- Global Stat: Overall test of your model
+- Global Stat: Holistic test of assumptions
 - Skewness: Primary test of **N**; secondary test for influence
 - Kurtosis: Primary test for influence; secondary test of **N**
 - Link Function: Test of **L**
@@ -560,4 +560,4 @@ library(car)
 vif(trump_mod_nodc)
 ```
 
-- Nothing greater than 10; no multicollinearity
+- Nothing greater than 10; multicollinearity not a problem

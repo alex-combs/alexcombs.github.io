@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab8-reporting-reg_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="rlab8-reporting-reg_files/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: November 28, 2022
+### Last updated: April 17, 2023
 ]
 
 ---
@@ -65,12 +65,10 @@ output:
 ```r
 library(tidyverse)
 library(moderndive)
-library(knitr)
 library(fivethirtyeight)
-library(carData)
 library(stargazer) # for better regression tables
 library(jtools) # for better regression visualizations
-library(interactions) # for regression viz with interactions
+library(interactions) # for better regression visualizations
 ```
 
 ---
@@ -85,32 +83,21 @@ state_data &lt;- hate_crimes %&gt;%
   mutate(urbanization = if_else(share_pop_metro&lt;=0.75, "low", "high")) %&gt;% 
   select(state, 
          median_house_inc, 
-         share_pop_hs, 
+         share_pop_hs,
+         share_unemp_seas,
          urbanization) %&gt;%
-  mutate(share_pop_hs = share_pop_hs*100)
-```
-
----
-# Setup
-
-&gt; **Download "teacher_ratings.csv" from eLC. Import data in your setup code chunk.**
-
-
-```r
-teacher_ratings &lt;- read_csv("teacher_ratings.csv")
+  mutate(share_pop_hs = share_pop_hs*100,
+         share_unemp_seas = share_unemp_seas*100)
 ```
 
 ---
 # Revisiting PS3 Regression
 
-`$$MedInc = \beta_0 + \beta_1 \%HS + \beta_2Urban + \epsilon$$`
+`$$MedInc = \beta_0 + \beta_1 \%HS + \beta_2Urbanization + \beta_3Unemp + \epsilon$$`
 
-&gt; **Add and run following code in a new code chunk**
+&gt; **In a new code chunk, add code that runs the above regression model.**
 
 
-```r
-inc_mod &lt;- lm(median_house_inc ~ share_pop_hs + urbanization, data = state_data)
-```
 
 ---
 # Reporting Results
@@ -120,14 +107,15 @@ inc_mod &lt;- lm(median_house_inc ~ share_pop_hs + urbanization, data = state_da
 
 |term              |   estimate| std_error| statistic| p_value|    lower_ci|   upper_ci|
 |:-----------------|----------:|---------:|---------:|-------:|-----------:|----------:|
-|intercept         | -115382.50| 22643.377|    -5.096|   0.000| -160935.103| -69829.905|
-|share_pop_hs      |    1993.18|   262.416|     7.595|   0.000|    1465.267|   2521.093|
-|urbanization: low |   -6541.47|  1801.233|    -3.632|   0.001|  -10165.082|  -2917.857|
+|intercept         | -93885.933| 32564.060|    -2.883|   0.006| -159433.985| -28337.880|
+|share_pop_hs      |   1804.975|   333.078|     5.419|   0.000|    1134.524|   2475.427|
+|urbanization: low |  -6845.794|  1834.261|    -3.732|   0.001|  -10537.969|  -3153.619|
+|share_unemp_seas  |  -1017.102|  1105.597|    -0.920|   0.362|   -3242.552|   1208.349|
 
 - This table is fine but not typically how results are presented
 
 ---
-# Better Regression Tables
+# Regression Tables
 
 - Regression results tables usually include:
   - estimate
@@ -140,7 +128,7 @@ inc_mod &lt;- lm(median_house_inc ~ share_pop_hs + urbanization, data = state_da
 - Sometimes include confidence intervals instead of standard error
 
 ---
-# Better Regression Tables
+# Regression Tables
 
 &gt; **In a new code chunk, add below code. Include the code chunk option `results='asis'`. Knit to HTML.**
 
@@ -151,7 +139,8 @@ stargazer(inc_mod,
           title="Regression Results",
           dep.var.labels=c("Median Household Income"),
           covariate.labels=c("Percent High School", 
-                             "Low Urbanization"),
+                             "Low Urbanization",
+                             "Unemployment Rate"),
           keep.stat=c("n"), # reports number of observations
           digits = 0, # sets the number of decimals to report
           digits.extra = 3) # number of decimals if rounding results in 0
@@ -170,7 +159,8 @@ stargazer(inc_mod,
           title="Regression Results",
           dep.var.labels=c("Median Household Income"),
           covariate.labels=c("Percent High School", 
-                             "Low Urbanization"),
+                             "Low Urbanization",
+                             "Unemployment Rate"),
 *         keep.stat=c("n","rsq","ser"),
           digits = 0,
           digits.extra = 3)
@@ -188,7 +178,8 @@ stargazer(inc_mod, ci=TRUE, ci.separator = " : ",
           title="Regression Results",
           dep.var.labels=c("Median Household Income"),
           covariate.labels=c("Percent High School", 
-                             "Low Urbanization"),
+                             "Low Urbanization",
+                             "Unemployment Rate"),
           keep.stat=c("n","rsq","ser"),
           digits = 0,
           digits.extra = 3,
@@ -223,7 +214,7 @@ ggplot(state_data,
 ]
 
 .pull-right[
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-12-1.png" width="99%" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-11-1.png" width="99%" /&gt;
 ]
 
 ---
@@ -236,120 +227,52 @@ ggplot(state_data,
 
 --
 
-- If we controlled for one more numerical variable, our `ggplot` graph would not show the relationship between income and percent high school **controlling for the other variable**
+- `ggplot` cannot show us the relationship between education and income between high and low urbanization controlling for unemployment rate
 
 ---
-# Revisiting Teacher Evals
-
-`$$Eval = \beta_0 + \beta_1Beauty + \beta_2Age \\ +\beta_3Female + \beta_4Beauty \times Female + \epsilon$$`
-
-
-&gt; **In a new code chunk, add and run the below code.**
-
-
-```r
-mod1 &lt;- lm(course_eval ~ beauty, data = teacher_ratings)
-mod2 &lt;- lm(course_eval ~ beauty + age + female, data = teacher_ratings)
-mod3 &lt;- lm(course_eval ~ beauty + age + female + beauty*female, data = teacher_ratings)
-```
-
-
-
----
-# Visualizing Regression
-
-
-|term          | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:-------------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept     |    3.643|     0.215|    16.923|   0.000|    3.220|    4.066|
-|beauty        |    0.125|     0.029|     4.244|   0.000|    0.067|    0.183|
-|age           |   -0.002|     0.003|    -0.776|   0.438|   -0.008|    0.003|
-|female        |    0.106|     0.196|     0.539|   0.590|   -0.279|    0.491|
-|beauty:female |   -0.070|     0.042|    -1.677|   0.094|   -0.153|    0.012|
-
-- We can't visualize the relationship between ratings and beauty controlling for age using `ggplot`
-
----
-# Visualizing Regression
-
-- `effect_plot` from the `jtools` package can
+# Visualizing Regression (effect_plot)
 
 &gt; **Add below code in a new code chunk**
 
 
 ```r
-effect_plot(mod3, pred = beauty, plot.points = TRUE)
+effect_plot(inc_mod, pred = share_pop_hs, plot.points = TRUE, data = state_data,
+            y.label = "Median household income", x.label = "% High School or Above")
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-17-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
-# Visualizing Regression Line
+# Visualizing Regression
 
-- To include Female, `interact_plot` from `interactions` package 
+- To include urbanization, can use `interact_plot` from `interactions` package 
 
 &gt; **In a new code chunk, add below code**
 
 
 ```r
-interact_plot(mod3, pred = beauty, modx = female, plot.points = TRUE)
+interact_plot(inc_mod, pred = share_pop_hs, modx = urbanization, plot.points = TRUE, data = state_data,
+            y.label = "Median household income", x.label = "% High School or Above")
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing Coefficients
 
-- May want to visualize the estimates instead of using a table or regression lines. 
+- May want to visualize the estimates instead of using a table. 
 
 &gt; **Add following code in a new code chunk.**
 
 
-
 ```r
-plot_summs(mod3, 
-           coefs = c("Beauty" = "beauty", 
-                     "Age" = "age", 
-                     "Female" = "female",
-                     "Beauty X Female" = "beauty:female"))
+plot_coefs(inc_mod)
 ```
 
-
+![](rlab8-reporting-reg_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 ---
-# Multiple models in same table
-
-&gt; **Add below code in a new code chunk. Include `results='asis'` option.**
-
-
-```r
-*stargazer(mod1, mod2, mod3,
-          ci = TRUE, ci.separator = " : ",
-          type="html",
-          title="Regression Results",
-          dep.var.labels=c("Course evaluation score"),
-          covariate.labels=c("Professor beauty", 
-                             "Professor age", 
-                             "Professor female",
-                             "Beauty X Female"),
-          keep.stat=c("n","adj.rsq","ser"),
-          digits = 2,
-          notes = "95% confidence intervals in parentheses.",
-          notes.align = "l")
-```
-
----
-# Multiple models
-
-&gt; **Add below code in a new code chunk**
-
-
-```r
-plot_summs(mod1, mod2, 
-           coefs = c("Beauty" = "beauty", 
-                     "Age" = "age", 
-                     "Female" = "female"))
-```
+# Wrap up
 
 &gt; **Knit to HTML. Let's examine what all this code did.**
 
