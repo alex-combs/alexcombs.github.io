@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab10-forecasting_files/header-attrs-2.14/header-attrs.js"></script>
+    <script src="rlab10-forecasting_files/header-attrs-2.20/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: December 05, 2022
+### Last updated: April 24, 2023
 ]
 
 ---
@@ -86,26 +86,6 @@ starts_fc &lt;- read_csv("starts_forecast_data.csv")
 - Evaluate and choose between forecast models
 
 ---
-# Forecasts
-
-&lt;img src="labs_files/hurricaneforecast.png" width="1231" style="display: block; margin: auto;" /&gt;
-
----
-# Forecasts
-
-&lt;img src="labs_files/hurricanespag.png" width="1121" style="display: block; margin: auto;" /&gt;
-
----
-# Forecasts
-
-&lt;img src="labs_files/tourismspag.png" width="1135" style="display: block; margin: auto;" /&gt;
-
----
-# Forecasts
-
-&lt;img src="labs_files/tourismforecast.png" width="1105" style="display: block; margin: auto;" /&gt;
-
----
 # Steps of forecasting
 
 1. Preliminary/exploratory analysis
@@ -152,15 +132,15 @@ ts_data &lt;- ts(data[,-1],
 
 | year| quarter| value|
 |----:|-------:|-----:|
-| 2016|       1|    39|
-| 2016|       2|    62|
+| 2016|       1|    35|
+| 2016|       2|    34|
 
 
 
 | year| quarter| value|
 |----:|-------:|-----:|
-| 2020|       3|    46|
-| 2020|       4|    56|
+| 2020|       3|    55|
+| 2020|       4|    71|
 
 
 ```r
@@ -179,15 +159,15 @@ ts_quarterly &lt;- ts(quarterly[,-1],
 
 | year| month| value|
 |----:|-----:|-----:|
-| 2016|     1|    38|
-| 2016|     2|    58|
+| 2016|     1|    32|
+| 2016|     2|    63|
 
 
 
 | year| month| value|
 |----:|-----:|-----:|
-| 2020|    11|    48|
-| 2020|    12|    63|
+| 2020|    11|    42|
+| 2020|    12|    40|
 
 
 ```r
@@ -206,15 +186,15 @@ ts_monthly &lt;- ts(monthly[,-1],
 
 | year| value|
 |----:|-----:|
-| 2000|    63|
-| 2002|    57|
+| 2000|    31|
+| 2002|    37|
 
 
 
 | year| value|
 |----:|-----:|
-| 2018|    48|
-| 2020|    46|
+| 2018|    45|
+| 2020|    64|
 
 
 ```r
@@ -257,7 +237,7 @@ ts_house &lt;- ts(house_data[,-1], start = 1990, end = 2021,
 
 - `acc_taxrev` contains select tax revenues for Athens-Clarke County
 
-&gt; **TSet `acc_taxrev` as a TS object.**
+&gt; **Set `acc_taxrev` as a TS object.**
 
 
 ```r
@@ -290,7 +270,7 @@ ts_taxrev &lt;- ts(acc_taxrev[,-1], start = 1992, end = 2020,
 ---
 # Patterns
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Patterns
@@ -310,37 +290,13 @@ autoplot(ts_house)
 ```
 
 ```r
-autoplot(ts_house[,1]) # specifies variable based on column
-```
-
-```r
-autoplot(ts_house[,2]) 
-```
-
-```r
-autoplot(ts_house[,3])
+autoplot(ts_house[,2]) # specifies variable based on column
 ```
 
 ```r
 autoplot(ts_taxrev)
 ```
 
----
-# Exploratory plots (seasonal plots)
-
-- GDP (column 3) exhibits some seasonality. Here are a few useful plots for seasonal patterns.
-
-&gt; **Add and run following code**
-
-
-```r
-ggseasonplot(ts_house[,3]) 
-```
-
-
-```r
-ggsubseriesplot(ts_house[,3])
-```
 
 ---
 class: inverse, center, middle
@@ -359,7 +315,7 @@ class: inverse, center, middle
 
 - Models that use past values
 
-  - Simple methods: naive, mean, trend
+  - Simple: naive, mean, trend
   - Exponential smoothing (common; we will cover this)
   - ARIMA (common; we will not cover)
 
@@ -368,7 +324,7 @@ class: inverse, center, middle
 - Regression-adjusted models incorporate explanatory variables
 
   - Useful for forecasts based on scenarios
-  - Example: predicted median home price if house starts increase 2% each year
+  - Example: predicted housing starts if median price increases 2% each year
 
 ---
 # Autocorrelation
@@ -390,21 +346,21 @@ class: inverse, center, middle
 # Autocorrelation Plot
 
 .pull-left[
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ```r
 ggAcf(usmelec)
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
 
 - Blue dashed line delineates statistically significant autocorrelation
 
-- Electricity production more than 2 years ago significantly correlate with values at a particular time
+- Past electricity production significantly correlates with production at a particular time
 ]
 
 ---
@@ -421,10 +377,10 @@ ggAcf(usmelec)
 
 
 ```r
-ggAcf(ts_house[,1]) # applied to first column, price
+ggAcf(ts_house[,2]) # applied to first column, price
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 
 - Home price is definitely not white noise
 
@@ -434,11 +390,6 @@ ggAcf(ts_house[,1]) # applied to first column, price
 &gt; **Use `ggAcf` to generate an autocorrelation plot for `sales_use_tax` in the `ts_taxrev` dataset**
 
 
-```r
-ggAcf(ts_taxrev[,2])
-```
-
-![](rlab10-forecasting_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
 
 ---
 # Simple Forecasting Models
@@ -521,7 +472,7 @@ starts_snaive &lt;- snaive(ts_house[,2], h = 12)
 autoplot(starts_meanf)
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-41-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viewing forecasts in R
@@ -533,7 +484,7 @@ autoplot(starts_meanf)
 autoplot(starts_drift)
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-42-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viewing forecasts in R
@@ -543,7 +494,7 @@ autoplot(starts_drift)
 autoplot(starts_naive)
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-43-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-37-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Viewing forecasts in R
@@ -553,7 +504,7 @@ autoplot(starts_naive)
 autoplot(starts_snaive)
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-44-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-38-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Reporting plausible ranges
@@ -666,11 +617,11 @@ ets(ts_house[,1]) %&gt;%
   autoplot()
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-54-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-48-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-- Note that `ets` has fit a model with `M`ultiplicative error, `Ad`amped trend, and `A`dditive seasonality
+- `ets` has fit a model with `M`ultiplicative error, `Ad`amped trend, and `A`dditive seasonality
 ]
 ---
 # Exponential smoothing in R
@@ -745,7 +696,15 @@ class: inverse, center, middle
 ---
 # Evaluating forecasts
 
-.pull-left[
+- Can use `checkresiduals` to test validity of forecast
+
+- Also produces the p-value for a hypothesis test (e.g., Ljung-Box) of overall fit
+
+- Null hypothesis is that the model is valid
+
+---
+# Evaluating forecasts
+
 
 
 ```r
@@ -753,7 +712,7 @@ ets(ts_house[,2]) %&gt;%
 * checkresiduals()
 ```
 
-![](rlab10-forecasting_files/figure-html/unnamed-chunk-60-1.png)&lt;!-- --&gt;
+![](rlab10-forecasting_files/figure-html/unnamed-chunk-54-1.png)&lt;!-- --&gt;
 
 ```
 ## 
@@ -764,15 +723,6 @@ ets(ts_house[,2]) %&gt;%
 ## 
 ## Model df: 2.   Total lags used: 8
 ```
-]
-
-.pull-right[
-- Can use `checkresiduals` to test validity of forecast
-
-- Also produces the p-value for a hypothesis test (e.g., Ljung-Box) of overall fit
-
-- Null hypothesis is that the model is valid
-]
 
 ---
 # Evaluating forecasts
@@ -799,7 +749,7 @@ accuracy(starts_drift)
 
 ```
 ##                         ME     RMSE      MAE        MPE     MAPE     MASE
-## Training set -6.784884e-14 219.2919 163.3715 -0.3608953 6.035225 0.438771
+## Training set -7.449238e-14 219.2919 163.3715 -0.3608953 6.035225 0.438771
 ##                   ACF1
 ## Training set 0.1412264
 ```
@@ -881,7 +831,7 @@ new_object &lt;- forecast(saved_regression_results,
 
 - Now we can forecast starts in response to changes in explanatory variables using the `starts_fc` data we downloaded from eLC
 
-- These data suppose a 2% annual increase in housing prices and GDP over the next 12 quarters
+- These data assume a 2% annual increase in housing prices and GDP over the next 12 quarters
 
 ---
 # In R
@@ -907,19 +857,7 @@ autoplot(reg_starts_forecast)
 summary(reg_starts_forecast)
 ```
 
----
-# Recap
 
-- Thorough coverage of time series and forecasting is its own course
-
---
-
-- Key concepts
-  - Patterns
-  - Autocorrelation
-  - White noise
-  - Conditions for valid forecast
-  - Difference between using past values vs. explanatory variables
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

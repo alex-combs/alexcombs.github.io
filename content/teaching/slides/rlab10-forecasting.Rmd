@@ -76,34 +76,6 @@ starts_fc <- read_csv("starts_forecast_data.csv")
 - Evaluate and choose between forecast models
 
 ---
-# Forecasts
-
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('labs_files/hurricaneforecast.png')
-```
-
----
-# Forecasts
-
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('labs_files/hurricanespag.png')
-```
-
----
-# Forecasts
-
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('labs_files/tourismspag.png')
-```
-
----
-# Forecasts
-
-```{r, echo=FALSE, fig.align='center'}
-include_graphics('labs_files/tourismforecast.png')
-```
-
----
 # Steps of forecasting
 
 1. Preliminary/exploratory analysis
@@ -238,7 +210,7 @@ ts_house <- ts(house_data[,-1], start = 1990, end = 2021,
 
 - `acc_taxrev` contains select tax revenues for Athens-Clarke County
 
-> **TSet `acc_taxrev` as a TS object.**
+> **Set `acc_taxrev` as a TS object.**
 
 ```{r, eval=FALSE}
 ts_taxrev <- ts(acc_taxrev[,-1], start = 1992, end = 2020, 
@@ -294,26 +266,10 @@ include_graphics('labs_files/patterns-colfinance.png')
 
 ```{r, fig.show='hide'}
 autoplot(ts_house)
-autoplot(ts_house[,1]) # specifies variable based on column
-autoplot(ts_house[,2]) 
-autoplot(ts_house[,3])
+autoplot(ts_house[,2]) # specifies variable based on column
 autoplot(ts_taxrev)
 ```
 
----
-# Exploratory plots (seasonal plots)
-
-- GDP (column 3) exhibits some seasonality. Here are a few useful plots for seasonal patterns.
-
-> **Add and run following code**
-
-```{r, eval=FALSE}
-ggseasonplot(ts_house[,3]) 
-```
-
-```{r, eval=FALSE}
-ggsubseriesplot(ts_house[,3])
-```
 
 ---
 class: inverse, center, middle
@@ -332,7 +288,7 @@ class: inverse, center, middle
 
 - Models that use past values
 
-  - Simple methods: naive, mean, trend
+  - Simple: naive, mean, trend
   - Exponential smoothing (common; we will cover this)
   - ARIMA (common; we will not cover)
 
@@ -341,7 +297,7 @@ class: inverse, center, middle
 - Regression-adjusted models incorporate explanatory variables
 
   - Useful for forecasts based on scenarios
-  - Example: predicted median home price if house starts increase 2% each year
+  - Example: predicted housing starts if median price increases 2% each year
 
 ---
 # Autocorrelation
@@ -377,7 +333,7 @@ ggAcf(usmelec)
 
 - Blue dashed line delineates statistically significant autocorrelation
 
-- Electricity production more than 2 years ago significantly correlate with values at a particular time
+- Past electricity production significantly correlates with production at a particular time
 ]
 
 ---
@@ -393,7 +349,7 @@ ggAcf(usmelec)
 - Can use `ggAcf` to generate an autocorrelation plot of home price
 
 ```{r, fig.align='center', fig.height=4}
-ggAcf(ts_house[,1]) # applied to first column, price
+ggAcf(ts_house[,2]) # applied to first column, price
 ```
 
 - Home price is definitely not white noise
@@ -403,7 +359,7 @@ ggAcf(ts_house[,1]) # applied to first column, price
 
 > **Use `ggAcf` to generate an autocorrelation plot for `sales_use_tax` in the `ts_taxrev` dataset**
 
-```{r}
+```{r, include=FALSE}
 ggAcf(ts_taxrev[,2])
 ```
 
@@ -615,7 +571,7 @@ ets(ts_house[,1]) %>%
 ]
 
 .pull-right[
-- Note that `ets` has fit a model with `M`ultiplicative error, `Ad`amped trend, and `A`dditive seasonality
+- `ets` has fit a model with `M`ultiplicative error, `Ad`amped trend, and `A`dditive seasonality
 ]
 ---
 # Exponential smoothing in R
@@ -679,21 +635,20 @@ class: inverse, center, middle
 ---
 # Evaluating forecasts
 
-.pull-left[
-
-```{r, fig.height=5}
-ets(ts_house[,2]) %>% 
-  checkresiduals() #<<
-```
-]
-
-.pull-right[
 - Can use `checkresiduals` to test validity of forecast
 
 - Also produces the p-value for a hypothesis test (e.g., Ljung-Box) of overall fit
 
 - Null hypothesis is that the model is valid
-]
+
+---
+# Evaluating forecasts
+
+
+```{r, fig.height=4}
+ets(ts_house[,2]) %>% 
+  checkresiduals() #<<
+```
 
 ---
 # Evaluating forecasts
@@ -781,7 +736,7 @@ new_object <- forecast(saved_regression_results,
 
 - Now we can forecast starts in response to changes in explanatory variables using the `starts_fc` data we downloaded from eLC
 
-- These data suppose a 2% annual increase in housing prices and GDP over the next 12 quarters
+- These data assume a 2% annual increase in housing prices and GDP over the next 12 quarters
 
 ---
 # In R
@@ -802,16 +757,4 @@ autoplot(reg_starts_forecast)
 summary(reg_starts_forecast)
 ```
 
----
-# Recap
 
-- Thorough coverage of time series and forecasting is its own course
-
---
-
-- Key concepts
-  - Patterns
-  - Autocorrelation
-  - White noise
-  - Conditions for valid forecast
-  - Difference between using past values vs. explanatory variables
