@@ -1,6 +1,6 @@
 ---
 title: "PADP 7120 Data Applications in PA"
-subtitle: "RLab 4: Tidying Data"
+subtitle: "RLab 4: Data Wrangling Part 2"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
 date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
@@ -10,336 +10,289 @@ output:
     nature:
       beforeInit: "macros.js"
       highlightStyle: github
+      highlightLines: true
       countIncrementalSlides: false
-      highlightlines: true
 ---
-# Objectives
-
-- Pivot wide data to long
-- Pivot long data to wide
-- Separate a variable into multiple variables
+# Outline
 
 ```{r setup, include=FALSE}
 library(tidyverse)
-library(knitr)
+library(readxl)
 library(gapminder)
+library(knitr)
 ```
+
+- More wrangling
+  - combine functions using the pipe operator `%>%`
+  - provide descriptive statistics using `summarize` and `group_by`
 
 ---
 # Set up
 
-> **Create a new project named "rlab4" and start new R Markdown document.**
-  
-> **Change YAML:**
+> **Open your RLab 3 project file**
+
+> **From the files pane, open your RLab 3 Rmd file**
+
+> **Move cursor to bottom of file and use "Run" menu to run all code chunks above**
+
+---
+# Review
+
+- In last R Lab, we learned:
+  - Keep/remove rows using `filter`
+  - Keep/remove columns using `select`
+  - Create new or change existing variables using `mutate`
+  - Reorder rows based on ascending or descending values of a variable using `arrange`
+  - Print a sample of our data using `slice_head` or `slice_tail`
+
+---
+class: inverse, middle, center
+
+# Combining Wrangle Verbs
+
+---
+# Pipe operator %>%
+
+- Allows us to run multiple commands, sequentially feeding the result of the previous line of code to the next
+
+- Makes code easier to read and write
+
+- Keyboard shortcut is `Cmd+Shift+M` or `Ctrl+Shift+M`
+
+.pull-left[
+
+Prints the result
 
 ```{r, eval=FALSE}
----
-title: "RLab4: Tidying Data"
-author: "Your Name"
-output:
-  html_document:
-    df_print: paged
----
+dataset %>% 
+  filter(___) %>% 
+  select(___) %>% 
+  mutate(___) %>% 
+  arrange(___)
 ```
+]
 
-> **Keep setup code chunk at the top. Change the global option to `echo=FALSE, message=FALSE, warning=FALSE`**
+.pull-right[
 
-> **Delete rest of the template.**
-
----
-# Setup: Packages
-
-> **In the setup code chunk, load the following packages:**
+Saves the result
 
 ```{r, eval=FALSE}
-library(tidyverse)
+dataset <- dataset %>% 
+  filter(___) %>% 
+  select(___) %>% 
+  mutate(___) %>% 
+  arrange(___)
+```
+]
+
+---
+# Pipe example
+
+Suppose I want to print a table of the top five countries with respect to percent of global GDP in 2007. **Without using %>%:**
+
+```{r, eval=FALSE}
+#Filter gapminder
+gapminder07 <- filter(gapminder, year == 2007)
+
+#Add variables to gapminder07
+gapminder07 <- mutate(gapminder07, 
+                     gdp = gdpPercap*pop,
+                     global_gdp = sum(gdp),
+                     pct_gdp = (gdp/global_gdp)*100)
+
+#Create dataset according to desired table
+gdp_table <- select(gapminder07, country, pct_gdp)
+gdp_table <- arrange(gdp_table, desc(pct_gdp))
+
+#Print table
+slice_head(gdp_table, n = 5)
 ```
 
 ---
-# Setup: Data
+# Pipe example
 
-> **Download the "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv" files from eLC and add to your project folder**
+To print same table with `%>%`:
 
-> **In the setup code chunk, import "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv". You do not need to use any import options. Name the objects in your environment the same as the file names.**
-
-```{r, include=FALSE}
-state_finance_2016_wrangled <- read_csv("labs_files/state_finance_2016_wrangled.csv")
-
-ky_private_school_enrollment <- read_csv("labs_files/ky_private_school_enrollment.csv")
+```{r, eval=FALSE}
+gapminder %>% 
+  filter(year == 2007) %>% 
+  mutate(gdp = gdpPercap*pop,
+         global_gdp = sum(gdp),
+         pct_gdp = (gdp/global_gdp)*100) %>% 
+  select(country, pct_gdp) %>% 
+  arrange(desc(pct_gdp)) %>% 
+  slice_head(n=5)
 ```
 
----
-# Tidy data
+- Don't specify the data inside each verb because that is being piped from the first line
 
-Tidy data satisfy three rules:
-
-- Each variable has its own column
-- Each observation (unit of analysis) has its own row
-- Each value (datum) has its own cell
-
-![](labs_files/tidy.png)
+- Don't have to save the result each step of the way; no `gapminder07` or `gdp_table` needed.
 
 ---
-# Tidy data
+# Pipe operator practice
 
-> **Insert a heading "Raw State Finance Data"**
+> **Add a heading "Pipe Operator"**
+
+> **Start a new code chunk and name it pipe.**
 
 --
 
-> **In a new code chunk, provide the first 4 rows of `state_finance_2016_wrangled`.**
-
-```{r, include=FALSE}
-state_finance_2016_wrangled %>% 
-  slice_head(n = 4) %>% 
-  kable()
-```
-
----
-# Untidy Data
-
-```{r, echo=FALSE}
-state_finance_2016_wrangled %>% 
-  slice_head(n=4) %>% 
-  kable()
-```
-
-- Is this state finance data tidy?
-
----
-# Long vs. Wide Data
-
-- Most tidying issues involve data that is too long or too wide
-  - Long if too many rows relative to unit of analysis
-  - Wide if too many columns
---
-
-- Is this state finance data too long or wide?
-
-```{r, echo=FALSE}
-state_finance_2016_wrangled %>% 
-  slice_head(n=4) %>% 
-  kable()
-```
-
----
-# Long vs. Wide Data
-
-- Here is another common data organization
-
-```{r, echo=FALSE}
-uspop <- gapminder %>% 
-  filter(country == 'United States' & year >= 1997) %>% 
-  select(country, year, pop) %>% 
-  pivot_wider(names_from = year, names_prefix = 'pop', values_from = pop) 
-
- 
-kable(uspop, format = 'html')
-```
-
-- Are these data tidy?
+> **Use the pipe operator to save a new dataset `gapminder52` that contains only 1952 observations and add the GDP variables we created earlier (consider copy-and-paste)**
 
 --
 
-- Are these data too long or wide?
-
----
-# Tidy State Finance Data
-
-- Our goal is to tidy `state_finance_2016_wrangled`
-
-- It is too long, needs to be wider
+> **On a new line, use pipe operator to print a table of `gapminder52` that includes only `country` and `pct_gdp`, arranged in descending order and only the first 5 countries.**
 
 --
 
-- To widen data, we can use the `pivot_wider` function
+> **Knit to HTML**
 
-- General syntax:
+---
+class: inverse, middle, center
+
+# Summarize & Group By
+
+---
+# Summarize
+
+![](labs_files/summarize.png)
+
+- Generic syntax
 
 ```{r, eval=FALSE}
-new_data <- current_data %>% 
-  pivot_wider(names_from = column-containing-variable-names,
-              values_from = column-containing-values)
+summarize(data_set, "Name of column" = function(variable),
+          "Name of column" = function(variable),...)
 ```
+
+- Where `function` is one of many possible summary functions
+
+- Useful for reporting a few summary stats
 
 ---
-# Tidy State Finance Data
+# Summarize example
 
-```{r, echo=FALSE}
-state_finance_2016_wrangled %>% 
-  slice_head(n=2) %>% 
-  kable()
-```
-
-> **Insert a heading "Tidy State Finance Data"**
-
-> **Start a code chunk. Add the following code that begins to save a new dataset**
+Suppose I want to report median life expectancy and GDP per capita in 2007
 
 ```{r, eval=FALSE}
-state_finance_2016_tidy <- state_finance_2016_wrangled %>% 
+gapminder %>% 
+  filter(year == 2007) %>% 
+  summarize("Median Life Expectancy" = median(lifeExp),
+            "Median GDP per Capita" = median(gdpPercap))
+```
+
+```{r, echo=FALSE}
+gapminder %>% 
+  filter(year == 2007) %>% 
+  summarize('Median Life Expectancy' = median(lifeExp),
+            'Median GDP per Capita' = median(gdpPercap)) %>% 
+  kable(digits = 0,
+        format.args = list(big.mark = ','))
 ```
 
 ---
-# Tidy State Finance Data
+# Summarize practice
 
-```{r, echo=FALSE}
-state_finance_2016_wrangled %>% 
-  slice_head(n=2) %>% 
-  kable()
-```
+> **Add a heading "Summarize"**
+
+> **Start a new code chunk and name it summarize**
+
+> **Use `gapminder52` to print a table with the `min`imum, `median`, and `max`imum for `pct_gdp` in 1952. Name columns accordingly.**
+
+---
+# Group By
+
+![](labs_files/group_by.png)
+
+- General syntax
 
 ```{r, eval=FALSE}
-state_finance_2016_tidy <- state_finance_2016_wrangled %>% 
-  pivot_wider(names_from = column-containing-variable-names,
-              values_from = column-containing-values)
+data_set %>% 
+  group_by(grouping_variable) %>% 
+  summarize(name = function(variable))
 ```
 
-- Which column contains the names of the new variables we want?
-- Which column contains the values for the new variables?
-> **Add `pivot_wider` to your code chunk according to answers. Run your code and examine the new data.**
-
-```{r, include=FALSE}
-state_finance_2016_tidy <- state_finance_2016_wrangled %>% 
-  pivot_wider(names_from = finance_source,
-              values_from = amount_1000)
-```
+- Year and categorical variables are common grouping variables
 
 ---
-# Tidy State Finance Data
+# Group by example
 
-> **Provide the reader with top 4 rows of the new dataset.**
-
-```{r, echo=FALSE}
-state_finance_2016_tidy %>% 
-  slice_head(n=4) %>% 
-  kable()
-```
-
----
-# Wide to Long
-
-```{r, echo=FALSE}
-kable(uspop, format = 'html')
-```
-
-- The variable names contain two variables: `pop` and `year`
-- The values for `year` are *in* the variable name
-- The values measure `pop`
-- To tidy wide data to long format, we can use `pivot_longer`
-
-- General code:
+Median life expectancy and GDP per capita in 2007 **by continent**
 
 ```{r, eval=FALSE}
-new_data <- current_data %>% 
-  pivot_longer(cols = columns_you_want_to_pivot,
-               names_to = 'name_of_new_var_from_column',
-               names_prefix = 'where_to_split_column',
-               values_to = 'name_for_var_with_values')
+gapminder %>% 
+  filter(year == 2007) %>% 
+  group_by(continent) %>% #<<
+  summarize('Median Life Expectancy' = median(lifeExp),
+            'Median GDP per Capita' = median(gdpPercap))
+```
+
+```{r, echo=FALSE, message=FALSE}
+gapminder %>% 
+  filter(year == 2007) %>% 
+  group_by(continent) %>% #<<
+  summarize('Median Life Expectancy' = median(lifeExp),
+            'Median GDP per Capita' = median(gdpPercap)) %>% 
+  kable(digits = 0, format.args = list(big.mark = ','))
 ```
 
 ---
-# Wide to long
+# Group by practice
 
-```{r, echo=FALSE}
-kable(uspop, format = 'html')
-```
+> **Add a heading "Group By"**
 
-```{r}
-uspop_tidy <- uspop %>% 
-  pivot_longer(cols = pop1997:pop2007,
-               names_to = 'year',
-               names_prefix = 'pop',
-               values_to = 'population')
-```
+> **Start a new code chunk and name it groupby.**
 
-```{r, echo=FALSE}
-kable(uspop_tidy)
-```
+> **Copy and paste your code that made the summary table**
+
+> **Change the table so it reports these summary statistics by each year**
+
+> **Knit**
 
 ---
-# Wide to Long Example
+# Upload Rmd
 
-Preview of `ky_private_school_enrollment`
-
-```{r, echo=FALSE}
-slice_head(ky_private_school_enrollment, n=3) %>% 
-  select(-school_name, -county_fips) %>% 
-  kable()
-```
-
-- Years span from 2000 to 2010 for even years
+> **Upload your .Rmd to eLC**
 
 ---
-# Untidy Enrollment Data
+class: inverse, middle, center
 
-> **Provide your reader the first 3 rows of the `ky_private_school_enrollment`**
-
-```{r, echo=FALSE}
-slice_head(ky_private_school_enrollment, n=3) %>% 
-  select(-school_name, -county_fips) %>% 
-  kable()
-```
+# Optional Reference: Formatting tables
 
 ---
-# Untidy Enrollment Data
+# Kable options for tables
 
-- We need to take the `enroll####` columns and name them to a new variable `year` and send the values to a variable we will name `enrollment`
-
-- Recall how this was done for the `uspop` data
+- The `kable()` function, part of the `knitr` package, is a quick way to format tables.
 
 ```{r, eval=FALSE}
-uspop_tidy <- uspop %>% 
-  pivot_longer(cols = pop1997:pop2007,
-               names_to = 'year',
-               names_prefix = 'pop',
-               values_to = 'population')
+library(knitr)
 ```
 
-> **Create a new dataset called `ky_private_enroll_long` that pivots `ky_private_school_enrollment` to long format**
+- Three useful options:
+  - `digits = #` sets the number of digits to the right of the decimal
+  - `format.args = list(big.mark = ',')` inserts commas
+  - `col.names =` renames the columns
+  - `caption =` provides a table title
 
-```{r, include=FALSE}
-ky_private_enroll_long <- ky_private_school_enrollment %>% 
-  select(-school_name, -county_fips) %>% 
-  pivot_longer(cols = enroll2000:enroll2010,
-               names_to = 'year',
-               names_prefix = 'enroll',
-               values_to = 'enrollment')
+---
+# Kable example
+
+> **Add a heading "Kable Table"**
+
+> **Start a new code chunk and name it kable. Add the following code.**
+
+```{r, eval=FALSE}
+gapminder52 %>% 
+  select(country, pct_gdp) %>% 
+  arrange(desc(pct_gdp)) %>% 
+  slice_head(n=5) %>% 
+  kable(digits = 1,
+        col.names = c('Country', 'Percent of Global GDP'),
+        caption = 'Largest Economies in 1952')
 ```
 
----
-# Enrollment Data
-
-```{r, echo=FALSE}
-ky_private_enroll_long %>%
-  slice_head(n=3) %>% 
-  kable()
-```
-
-- Are these data tidy?
+> **Knit to HTML to see difference in table format**
 
 ---
-# Separating variables
+# Upload
 
-![](labs_files/separate.png)
-
----
-# Tidy Enrollment Data
-
-> **Create a new dataset `ky_priv_enroll_tidy` that separates `city_county` in `ky_private_enroll_long.`**
-
-> **Provide the reader the first 6 rows of these tidy data**
-
---
-
-```{r, echo=FALSE, warning=FALSE}
-ky_private_enroll_long %>% 
-  separate(city_county, c('city', 'county')) %>% 
-  slice_head(n=6) %>% 
-  kable()
-```
-
----
-# Upload Lab
-
-> **Knit to HTML and check that the output looks correct**
-
-> **Upload your .Rmd file to eLC**
+> **Upload Rmd document to eLC**

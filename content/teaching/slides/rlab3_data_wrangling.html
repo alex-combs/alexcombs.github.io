@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab3_data_wrangling_files/header-attrs-2.19/header-attrs.js"></script>
+    <script src="rlab3_data_wrangling_files/header-attrs-2.23/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # PADP 7120 Data Applications in PA
 ]
 .subtitle[
-## RLab 3: Data Wrangling
+## RLab 3: Data Wrangling Part 1
 ]
 .author[
 ### Alex Combs
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: January 24, 2023
+### Last updated: August 11, 2023
 ]
 
 ---
@@ -38,10 +38,7 @@ class: center, middle, inverse, title-slide
   - extract columns using `select`
   - create new or change existing variables using `mutate`
   - reorder rows using `arrange`
-- Other
-  - print top or bottom rows using `slice_head` and `slice_tail`
-  - combine functions using the pipe operator `%&gt;%`
-  - provide descriptive stats using `summarize` and `group_by`
+  - print top or bottom rows of data using `slice_head` and `slice_tail`
 
 ---
 # Why learn data wrangling
@@ -347,86 +344,6 @@ select(gapminder, -pop)
 &gt; **Knit to HTML.**
 
 ---
-# Manual subsetting
-
-- `filter` &amp; `select` subsets data based on intelligent criteria (e.g., keep if lifeExp &lt; 65)
-
-- Can manually subset data, or keep/remove rows and columns based on their positions in a dataset (e.g. remove first row)
-
-- Sometimes easier to manually subset
-
----
-# Subsetting
-
-General syntax
-
-
-```r
-new_dataset &lt;- dataset[row number(s) to keep or remove, 
-                   column number(s) to keep or remove]
-```
-
---
-
-
-```r
-new_dataset &lt;- dataset[5, 2]
-# this saves the 5th row and 2nd column to a new dataset
-```
-
---
-
-
-```r
-new_dataset &lt;- dataset[-5, -2]
-# this drops 5th row and 2nd column and saves the result
-```
-
---
-
-
-```r
-new_dataset &lt;- dataset[c(-3,-5), c(1:10)]
-# this drops 3rd and 5th rows, and keeps columns 1-10
-```
-
----
-# Subsetting example
-
-Suppose I want to print first two rows of `gapminder` and keep all columns
-
-
-```r
-gapminder[c(1:2),]
-```
-
-Or remove first row and sixth column and save it as a new object
-
-
-```r
-gapminder_subset &lt;- gapminder[-1, -6]
-```
-
----
-# Subsetting practice
-
-&gt; **Insert a heading named Subset**
-
-&gt; **Start a new code chunk and name it subset.**
-
---
-
-&gt; **Print only the first row and all columns of `gapminder`**
-
---
-
-&gt; **Save a new dataset named `gap_subset` where you remove the first, ninth, and thirteenth rows, and keep columns 1-4.**
-
---
-
-&gt; **Knit to HTML**
-
----
 # Mutate
 
 ![](labs_files/mutate.png)
@@ -572,257 +489,13 @@ gapminder &lt;- (gapminder, lifeExp)
 &gt; **Print a table of the first 10 rows**
 
 ---
-class: inverse, middle, center
+# Upload
 
-# Combining Wrangle Verbs
+&gt; **Knit your Rmd and review the output**
 
----
-# Pipe operator %&gt;%
+&gt; **Upload Rmd document to eLC**
 
-- Allows us to run multiple commands, sequentially feeding the result of the previous line of code to the next
 
-- Makes code easier to read and write
-
-- Keyboard shortcut is `Cmd+Shift+M` or `Ctrl+Shift+M`
-
-.pull-left[
-
-Prints the result
-
-
-```r
-dataset %&gt;% 
-  filter(___) %&gt;% 
-  select(___) %&gt;% 
-  mutate(___) %&gt;% 
-  arrange(___)
-```
-]
-
-.pull-right[
-
-Saves the result
-
-
-```r
-dataset &lt;- dataset %&gt;% 
-  filter(___) %&gt;% 
-  select(___) %&gt;% 
-  mutate(___) %&gt;% 
-  arrange(___)
-```
-]
-
----
-# Pipe example
-
-Suppose I want to print a table of the top five countries with respect to percent of global GDP in 2007. **Without using %&gt;%:**
-
-
-```r
-#Filter gapminder
-gapminder07 &lt;- filter(gapminder, year == 2007)
-
-#Add variables to gapminder07
-gapminder07 &lt;- mutate(gapminder07, 
-                     gdp = gdpPercap*pop,
-                     global_gdp = sum(gdp),
-                     pct_gdp = (gdp/global_gdp)*100)
-
-#Create dataset according to desired table
-gdp_table &lt;- select(gapminder07, country, pct_gdp)
-gdp_table &lt;- arrange(gdp_table, desc(pct_gdp))
-
-#Print table
-slice_head(gdp_table, n = 5)
-```
-
----
-# Pipe example
-
-To print same table with `%&gt;%`:
-
-
-```r
-gapminder %&gt;% 
-  filter(year == 2007) %&gt;% 
-  mutate(gdp = gdpPercap*pop,
-         global_gdp = sum(gdp),
-         pct_gdp = (gdp/global_gdp)*100) %&gt;% 
-  select(country, pct_gdp) %&gt;% 
-  arrange(desc(pct_gdp)) %&gt;% 
-  slice_head(n=5)
-```
-
-- Don't specify the data inside each verb because that is being piped from the first line
-
-- Don't have to save the result each step of the way; no `gapminder07` or `gdp_table` needed.
-
----
-# Pipe operator practice
-
-&gt; **Add a heading "Pipe Operator"**
-
-&gt; **Start a new code chunk and name it pipe.**
-
---
-
-&gt; **Use the pipe operator to save a new dataset `gapminder52` that contains only 1952 observations and add the GDP variables we created earlier (consider copy-and-paste)**
-
---
-
-&gt; **On a new line, use pipe operator to print a table of `gapminder52` that includes only `country` and `pct_gdp`, arranged in descending order and only the first 5 countries.**
-
---
-
-&gt; **Knit to HTML**
-
----
-class: inverse, middle, center
-
-# Summarize &amp; Group By
-
----
-# Summarize
-
-![](labs_files/summarize.png)
-
-- Generic syntax
-
-
-```r
-summarize(data_set, "Name of column" = function(variable),
-          "Name of column" = function(variable),...)
-```
-
-- Where `function` is one of many possible summary functions
-
-- Useful for reporting a few summary stats
-
----
-# Summarize example
-
-Suppose I want to report median life expectancy and GDP per capita in 2007
-
-
-```r
-gapminder %&gt;% 
-  filter(year == 2007) %&gt;% 
-  summarize("Median Life Expectancy" = median(lifeExp),
-            "Median GDP per Capita" = median(gdpPercap))
-```
-
-
-| Median Life Expectancy| Median GDP per Capita|
-|----------------------:|---------------------:|
-|                     72|                 6,124|
-
----
-# Summarize practice
-
-&gt; **Add a heading "Summarize"**
-
-&gt; **Start a new code chunk and name it summarize**
-
-&gt; **Use `gapminder52` to print a table with the `min`imum, `median`, and `max`imum for `pct_gdp` in 1952. Name columns accordingly.**
-
----
-# Group By
-
-![](labs_files/group_by.png)
-
-- General syntax
-
-
-```r
-data_set %&gt;% 
-  group_by(grouping_variable) %&gt;% 
-  summarize(name = function(variable))
-```
-
-- Year and categorical variables are common grouping variables
-
----
-# Group by example
-
-Median life expectancy and GDP per capita in 2007 **by continent**
-
-
-```r
-gapminder %&gt;% 
-  filter(year == 2007) %&gt;% 
-* group_by(continent) %&gt;%
-  summarize('Median Life Expectancy' = median(lifeExp),
-            'Median GDP per Capita' = median(gdpPercap))
-```
-
-
-|continent | Median Life Expectancy| Median GDP per Capita|
-|:---------|----------------------:|---------------------:|
-|Africa    |                     53|                 1,452|
-|Americas  |                     73|                 8,948|
-|Asia      |                     72|                 4,471|
-|Europe    |                     79|                28,054|
-|Oceania   |                     81|                29,810|
-
----
-# Group by practice
-
-&gt; **Add a heading "Group By"**
-
-&gt; **Start a new code chunk and name it groupby.**
-
-&gt; **Copy and paste your code that made the summary table**
-
-&gt; **Change the table so it reports these summary statistics by each year**
-
-&gt; **Knit**
-
----
-# Upload Rmd
-
-&gt; **Upload your .Rmd to eLC**
-
----
-class: inverse, middle, center
-
-# Optional Reference: Formatting tables
-
----
-# Kable options for tables
-
-- The `kable()` function, part of the `knitr` package, is a quick way to format tables.
-
-
-```r
-library(knitr)
-```
-
-- Three useful options:
-  - `digits = #` sets the number of digits to the right of the decimal
-  - `format.args = list(big.mark = ',')` inserts commas
-  - `col.names =` renames the columns
-  - `caption =` provides a table title
-
----
-# Kable example
-
-&gt; **Add a heading "Kable Table"**
-
-&gt; **Start a new code chunk and name it kable. Add the following code.**
-
-
-```r
-gapminder52 %&gt;% 
-  select(country, pct_gdp) %&gt;% 
-  arrange(desc(pct_gdp)) %&gt;% 
-  slice_head(n=5) %&gt;% 
-  kable(digits = 1,
-        col.names = c('Country', 'Percent of Global GDP'),
-        caption = 'Largest Economies in 1952')
-```
-
-&gt; **Knit to HTML to see difference in table format**
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>

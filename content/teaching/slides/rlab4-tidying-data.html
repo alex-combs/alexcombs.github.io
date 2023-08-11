@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab4-tidying-data_files/header-attrs-2.19/header-attrs.js"></script>
+    <script src="rlab4-tidying-data_files/header-attrs-2.23/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # PADP 7120 Data Applications in PA
 ]
 .subtitle[
-## RLab 4: Tidying Data
+## RLab 4: Data Wrangling Part 2
 ]
 .author[
 ### Alex Combs
@@ -24,388 +24,303 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: January 30, 2023
+### Last updated: August 11, 2023
 ]
 
 ---
 
-# Objectives
-
-- Pivot wide data to long
-- Pivot long data to wide
-- Separate a variable into multiple variables
+# Outline
 
 
+
+- More wrangling
+  - combine functions using the pipe operator `%&gt;%`
+  - provide descriptive statistics using `summarize` and `group_by`
 
 ---
 # Set up
 
-&gt; **Create a new project named "rlab4" and start new R Markdown document.**
-  
-&gt; **Change YAML:**
+&gt; **Open your RLab 3 project file**
+
+&gt; **From the files pane, open your RLab 3 Rmd file**
+
+&gt; **Move cursor to bottom of file and use "Run" menu to run all code chunks above**
+
+---
+# Review
+
+- In last R Lab, we learned:
+  - Keep/remove rows using `filter`
+  - Keep/remove columns using `select`
+  - Create new or change existing variables using `mutate`
+  - Reorder rows based on ascending or descending values of a variable using `arrange`
+  - Print a sample of our data using `slice_head` or `slice_tail`
+
+---
+class: inverse, middle, center
+
+# Combining Wrangle Verbs
+
+---
+# Pipe operator %&gt;%
+
+- Allows us to run multiple commands, sequentially feeding the result of the previous line of code to the next
+
+- Makes code easier to read and write
+
+- Keyboard shortcut is `Cmd+Shift+M` or `Ctrl+Shift+M`
+
+.pull-left[
+
+Prints the result
 
 
 ```r
----
-title: "RLab4: Tidying Data"
-author: "Your Name"
-output:
-  html_document:
-    df_print: paged
----
+dataset %&gt;% 
+  filter(___) %&gt;% 
+  select(___) %&gt;% 
+  mutate(___) %&gt;% 
+  arrange(___)
 ```
+]
 
-&gt; **Keep setup code chunk at the top. Change the global option to `echo=FALSE, message=FALSE, warning=FALSE`**
+.pull-right[
 
-&gt; **Delete rest of the template.**
-
----
-# Setup: Packages
-
-&gt; **In the setup code chunk, load the following packages:**
+Saves the result
 
 
 ```r
-library(tidyverse)
+dataset &lt;- dataset %&gt;% 
+  filter(___) %&gt;% 
+  select(___) %&gt;% 
+  mutate(___) %&gt;% 
+  arrange(___)
+```
+]
+
+---
+# Pipe example
+
+Suppose I want to print a table of the top five countries with respect to percent of global GDP in 2007. **Without using %&gt;%:**
+
+
+```r
+#Filter gapminder
+gapminder07 &lt;- filter(gapminder, year == 2007)
+
+#Add variables to gapminder07
+gapminder07 &lt;- mutate(gapminder07, 
+                     gdp = gdpPercap*pop,
+                     global_gdp = sum(gdp),
+                     pct_gdp = (gdp/global_gdp)*100)
+
+#Create dataset according to desired table
+gdp_table &lt;- select(gapminder07, country, pct_gdp)
+gdp_table &lt;- arrange(gdp_table, desc(pct_gdp))
+
+#Print table
+slice_head(gdp_table, n = 5)
 ```
 
 ---
-# Setup: Data
+# Pipe example
 
-&gt; **Download the "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv" files from eLC and add to your project folder**
-
-&gt; **In the setup code chunk, import "state_finance_2016_wrangled.csv" and "ky_private_school_enrollment.csv". You do not need to use any import options. Name the objects in your environment the same as the file names.**
+To print same table with `%&gt;%`:
 
 
+```r
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+  mutate(gdp = gdpPercap*pop,
+         global_gdp = sum(gdp),
+         pct_gdp = (gdp/global_gdp)*100) %&gt;% 
+  select(country, pct_gdp) %&gt;% 
+  arrange(desc(pct_gdp)) %&gt;% 
+  slice_head(n=5)
+```
+
+- Don't specify the data inside each verb because that is being piped from the first line
+
+- Don't have to save the result each step of the way; no `gapminder07` or `gdp_table` needed.
 
 ---
-# Tidy data
+# Pipe operator practice
 
-Tidy data satisfy three rules:
+&gt; **Add a heading "Pipe Operator"**
 
-- Each variable has its own column
-- Each observation (unit of analysis) has its own row
-- Each value (datum) has its own cell
-
-![](labs_files/tidy.png)
-
----
-# Tidy data
-
-&gt; **Insert a heading "Raw State Finance Data"**
+&gt; **Start a new code chunk and name it pipe.**
 
 --
 
-&gt; **In a new code chunk, provide the first 4 rows of `state_finance_2016_wrangled`.**
-
-
-
----
-# Untidy Data
-
-
-| id|state   | year|finance_source    | amount_1000|
-|--:|:-------|----:|:-----------------|-----------:|
-|  1|Alabama | 2016|Total Revenue     |    30133184|
-|  1|Alabama | 2016|Total Expenditure |    30211453|
-|  2|Alaska  | 2016|Total Revenue     |     8071732|
-|  2|Alaska  | 2016|Total Expenditure |    12436184|
-
-- Is this state finance data tidy?
-
----
-# Long vs. Wide Data
-
-- Most tidying issues involve data that is too long or too wide
-  - Long if too many rows relative to unit of analysis
-  - Wide if too many columns
---
-
-- Is this state finance data too long or wide?
-
-
-| id|state   | year|finance_source    | amount_1000|
-|--:|:-------|----:|:-----------------|-----------:|
-|  1|Alabama | 2016|Total Revenue     |    30133184|
-|  1|Alabama | 2016|Total Expenditure |    30211453|
-|  2|Alaska  | 2016|Total Revenue     |     8071732|
-|  2|Alaska  | 2016|Total Expenditure |    12436184|
-
----
-# Long vs. Wide Data
-
-- Here is another common data organization
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop1997 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop2002 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop2007 &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; United States &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 272911760 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 287675526 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 301139947 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-- Are these data tidy?
+&gt; **Use the pipe operator to save a new dataset `gapminder52` that contains only 1952 observations and add the GDP variables we created earlier (consider copy-and-paste)**
 
 --
 
-- Are these data too long or wide?
-
----
-# Tidy State Finance Data
-
-- Our goal is to tidy `state_finance_2016_wrangled`
-
-- It is too long, needs to be wider
+&gt; **On a new line, use pipe operator to print a table of `gapminder52` that includes only `country` and `pct_gdp`, arranged in descending order and only the first 5 countries.**
 
 --
 
-- To widen data, we can use the `pivot_wider` function
+&gt; **Knit to HTML**
 
-- General syntax:
+---
+class: inverse, middle, center
+
+# Summarize &amp; Group By
+
+---
+# Summarize
+
+![](labs_files/summarize.png)
+
+- Generic syntax
 
 
 ```r
-new_data &lt;- current_data %&gt;% 
-  pivot_wider(names_from = column-containing-variable-names,
-              values_from = column-containing-values)
+summarize(data_set, "Name of column" = function(variable),
+          "Name of column" = function(variable),...)
 ```
 
+- Where `function` is one of many possible summary functions
+
+- Useful for reporting a few summary stats
+
 ---
-# Tidy State Finance Data
+# Summarize example
 
-
-| id|state   | year|finance_source    | amount_1000|
-|--:|:-------|----:|:-----------------|-----------:|
-|  1|Alabama | 2016|Total Revenue     |    30133184|
-|  1|Alabama | 2016|Total Expenditure |    30211453|
-
-&gt; **Insert a heading "Tidy State Finance Data"**
-
-&gt; **Start a code chunk. Add the following code that begins to save a new dataset**
+Suppose I want to report median life expectancy and GDP per capita in 2007
 
 
 ```r
-state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;% 
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+  summarize("Median Life Expectancy" = median(lifeExp),
+            "Median GDP per Capita" = median(gdpPercap))
 ```
 
+
+| Median Life Expectancy| Median GDP per Capita|
+|----------------------:|---------------------:|
+|                     72|                 6,124|
+
 ---
-# Tidy State Finance Data
+# Summarize practice
 
+&gt; **Add a heading "Summarize"**
 
-| id|state   | year|finance_source    | amount_1000|
-|--:|:-------|----:|:-----------------|-----------:|
-|  1|Alabama | 2016|Total Revenue     |    30133184|
-|  1|Alabama | 2016|Total Expenditure |    30211453|
+&gt; **Start a new code chunk and name it summarize**
+
+&gt; **Use `gapminder52` to print a table with the `min`imum, `median`, and `max`imum for `pct_gdp` in 1952. Name columns accordingly.**
+
+---
+# Group By
+
+![](labs_files/group_by.png)
+
+- General syntax
 
 
 ```r
-state_finance_2016_tidy &lt;- state_finance_2016_wrangled %&gt;% 
-  pivot_wider(names_from = column-containing-variable-names,
-              values_from = column-containing-values)
+data_set %&gt;% 
+  group_by(grouping_variable) %&gt;% 
+  summarize(name = function(variable))
 ```
 
-- Which column contains the names of the new variables we want?
-- Which column contains the values for the new variables?
-&gt; **Add `pivot_wider` to your code chunk according to answers. Run your code and examine the new data.**
-
-
+- Year and categorical variables are common grouping variables
 
 ---
-# Tidy State Finance Data
+# Group by example
 
-&gt; **Provide the reader with top 4 rows of the new dataset.**
-
-
-| id|state    | year| Total Revenue| Total Expenditure|
-|--:|:--------|----:|-------------:|-----------------:|
-|  1|Alabama  | 2016|      30133184|          30211453|
-|  2|Alaska   | 2016|       8071732|          12436184|
-|  4|Arizona  | 2016|      38232376|          42085094|
-|  5|Arkansas | 2016|      21439227|          22910901|
-
----
-# Wide to Long
-
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop1997 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop2002 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop2007 &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; United States &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 272911760 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 287675526 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 301139947 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-- The variable names contain two variables: `pop` and `year`
-- The values for `year` are *in* the variable name
-- The values measure `pop`
-- To tidy wide data to long format, we can use `pivot_longer`
-
-- General code:
+Median life expectancy and GDP per capita in 2007 **by continent**
 
 
 ```r
-new_data &lt;- current_data %&gt;% 
-  pivot_longer(cols = columns_you_want_to_pivot,
-               names_to = 'name_of_new_var_from_column',
-               names_prefix = 'where_to_split_column',
-               values_to = 'name_for_var_with_values')
+gapminder %&gt;% 
+  filter(year == 2007) %&gt;% 
+* group_by(continent) %&gt;%
+  summarize('Median Life Expectancy' = median(lifeExp),
+            'Median GDP per Capita' = median(gdpPercap))
 ```
 
----
-# Wide to long
 
-&lt;table&gt;
- &lt;thead&gt;
-  &lt;tr&gt;
-   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop1997 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop2002 &lt;/th&gt;
-   &lt;th style="text-align:right;"&gt; pop2007 &lt;/th&gt;
-  &lt;/tr&gt;
- &lt;/thead&gt;
-&lt;tbody&gt;
-  &lt;tr&gt;
-   &lt;td style="text-align:left;"&gt; United States &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 272911760 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 287675526 &lt;/td&gt;
-   &lt;td style="text-align:right;"&gt; 301139947 &lt;/td&gt;
-  &lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
+|continent | Median Life Expectancy| Median GDP per Capita|
+|:---------|----------------------:|---------------------:|
+|Africa    |                     53|                 1,452|
+|Americas  |                     73|                 8,948|
+|Asia      |                     72|                 4,471|
+|Europe    |                     79|                28,054|
+|Oceania   |                     81|                29,810|
+
+---
+# Group by practice
+
+&gt; **Add a heading "Group By"**
+
+&gt; **Start a new code chunk and name it groupby.**
+
+&gt; **Copy and paste your code that made the summary table**
+
+&gt; **Change the table so it reports these summary statistics by each year**
+
+&gt; **Knit**
+
+---
+# Upload Rmd
+
+&gt; **Upload your .Rmd to eLC**
+
+---
+class: inverse, middle, center
+
+# Optional Reference: Formatting tables
+
+---
+# Kable options for tables
+
+- The `kable()` function, part of the `knitr` package, is a quick way to format tables.
 
 
 ```r
-uspop_tidy &lt;- uspop %&gt;% 
-  pivot_longer(cols = pop1997:pop2007,
-               names_to = 'year',
-               names_prefix = 'pop',
-               values_to = 'population')
+library(knitr)
 ```
 
-
-|country       |year | population|
-|:-------------|:----|----------:|
-|United States |1997 |  272911760|
-|United States |2002 |  287675526|
-|United States |2007 |  301139947|
-
----
-# Wide to Long Example
-
-Preview of `ky_private_school_enrollment`
-
-
-|ncesid  |state    |city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
-|:-------|:--------|:--------------------|----------:|----------:|----------:|----------:|----------:|----------:|
-|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |        153|        146|        170|        184|        156|        119|
-|1649825 |KENTUCKY |LOUISVILLE JEFFERSON |        130|        121|        125|         NA|         NA|         NA|
-|1649836 |KENTUCKY |LOUISVILLE JEFFERSON |         NA|         16|         NA|         NA|         NA|         NA|
-
-- Years span from 2000 to 2010 for even years
+- Three useful options:
+  - `digits = #` sets the number of digits to the right of the decimal
+  - `format.args = list(big.mark = ',')` inserts commas
+  - `col.names =` renames the columns
+  - `caption =` provides a table title
 
 ---
-# Untidy Enrollment Data
+# Kable example
 
-&gt; **Provide your reader the first 3 rows of the `ky_private_school_enrollment`**
+&gt; **Add a heading "Kable Table"**
 
-
-|ncesid  |state    |city_county          | enroll2000| enroll2002| enroll2004| enroll2006| enroll2008| enroll2010|
-|:-------|:--------|:--------------------|----------:|----------:|----------:|----------:|----------:|----------:|
-|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |        153|        146|        170|        184|        156|        119|
-|1649825 |KENTUCKY |LOUISVILLE JEFFERSON |        130|        121|        125|         NA|         NA|         NA|
-|1649836 |KENTUCKY |LOUISVILLE JEFFERSON |         NA|         16|         NA|         NA|         NA|         NA|
-
----
-# Untidy Enrollment Data
-
-- We need to take the `enroll####` columns and name them to a new variable `year` and send the values to a variable we will name `enrollment`
-
-- Recall how this was done for the `uspop` data
+&gt; **Start a new code chunk and name it kable. Add the following code.**
 
 
 ```r
-uspop_tidy &lt;- uspop %&gt;% 
-  pivot_longer(cols = pop1997:pop2007,
-               names_to = 'year',
-               names_prefix = 'pop',
-               values_to = 'population')
+gapminder52 %&gt;% 
+  select(country, pct_gdp) %&gt;% 
+  arrange(desc(pct_gdp)) %&gt;% 
+  slice_head(n=5) %&gt;% 
+  kable(digits = 1,
+        col.names = c('Country', 'Percent of Global GDP'),
+        caption = 'Largest Economies in 1952')
 ```
 
-&gt; **Create a new dataset called `ky_private_enroll_long` that pivots `ky_private_school_enrollment` to long format**
-
-
+&gt; **Knit to HTML to see difference in table format**
 
 ---
-# Enrollment Data
+# Upload
 
-
-|ncesid  |state    |city_county          |year | enrollment|
-|:-------|:--------|:--------------------|:----|----------:|
-|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |2000 |        153|
-|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |2002 |        146|
-|1613912 |KENTUCKY |LOUISVILLE JEFFERSON |2004 |        170|
-
-- Are these data tidy?
-
----
-# Separating variables
-
-![](labs_files/separate.png)
-
----
-# Tidy Enrollment Data
-
-&gt; **Create a new dataset `ky_priv_enroll_tidy` that separates `city_county` in `ky_private_enroll_long.`**
-
-&gt; **Provide the reader the first 6 rows of these tidy data**
-
---
-
-
-|ncesid  |state    |city       |county    |year | enrollment|
-|:-------|:--------|:----------|:---------|:----|----------:|
-|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2000 |        153|
-|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2002 |        146|
-|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2004 |        170|
-|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2006 |        184|
-|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2008 |        156|
-|1613912 |KENTUCKY |LOUISVILLE |JEFFERSON |2010 |        119|
-
----
-# Upload Lab
-
-&gt; **Knit to HTML and check that the output looks correct**
-
-&gt; **Upload your .Rmd file to eLC**
+&gt; **Upload Rmd document to eLC**
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
 <script src="macros.js"></script>
 <script>var slideshow = remark.create({
 "highlightStyle": "github",
-"countIncrementalSlides": false,
-"highlightlines": true
+"highlightLines": true,
+"countIncrementalSlides": false
 });
 if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
   window.dispatchEvent(new Event('resize'));
@@ -484,7 +399,24 @@ if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
       links[i].target = '_blank';
     }
   }
-})();</script>
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
 
 <script>
 slideshow._releaseMath = function(el) {
