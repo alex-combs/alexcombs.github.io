@@ -115,7 +115,7 @@ kable(generic, format = 'html')
 ---
 class: inverse, middle, center
 
-# Suppose we want to study those who are unhoused in Athens-Clarke County (potential causes or correlates, demographics, government performance metrics, etc.). We need to collect data.
+# Suppose we want to study homelessness in Athens-Clarke County (potential causes or correlates, demographics, government performance metrics, etc.). We need to collect data.
 
 ---
 class: inverse, middle, center
