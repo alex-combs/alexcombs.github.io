@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: August 22, 2023
+### Last updated: August 23, 2023
 ]
 
 ---
@@ -297,19 +297,11 @@ class: inverse, middle, center
 
 &gt; **Find the code chunk that prints the `gap_preview` table**
 
---
-
 &gt; **Add the code chunk option that suppresses the code AND results**
-
---
 
 &gt; **Find the code chunk that prints the first four rows of `hc`**
 
---
-
 &gt; **Add the code chunk option that suppresses ONLY the code**
-
---
 
 &gt; **Knit to HTML**
 
@@ -331,13 +323,9 @@ class: inverse, middle, center
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
---
-
 - This sets `echo=TRUE` for all code chunks by default
 
 - If you change to `echo=FALSE`, all code chunks will be suppressed by default when you knit.
-
---
 
 - You can also add `message=FALSE` and `warning=FALSE` to suppress the background information RStudio prints but should not be included in the export
 
@@ -353,13 +341,9 @@ class: inverse, middle, center
 
 - Provides the opportunity to use code to import many similar files quickly
 
---
-
 - Messy data files present a choice in our workflow
   - Clean the data some as part of the import, or
   - Import data as is and clean later
-
---
 
 - Avoid changing the data files in something like Excel before importing it because you or others can't replicate that
 
@@ -394,11 +378,15 @@ anyname &lt;- read_excel("filename.xlsx")
 ---
 # Preserve or Clean on Import
 
-- The previous two slides provide all the code needed to import the two most common public data file formats without cleaning the data. 
+- The previous two slides cover all the code needed to import the two most common public data file formats.
 
-- If we want to clean the data on import, the best approach for new users is the import window/wizard RStudio provides.
+- If the data you want to import looks relatively clean, additional code is not neeeded.
 
-- We will now cover some cleaning we can do with this second option
+--
+
+- If data are messy, and we want to clean the data on import, the easiest approach for new users is the import window/wizard RStudio provides.
+
+- Let's cover some data cleaning we can do with this second option
 
 ---
 # Importing data
@@ -411,14 +399,10 @@ anyname &lt;- read_excel("filename.xlsx")
   - Variable names are in the top row
   - Variable names are short
 
-- This dataset doesn't need changes
+- This dataset doesn't need changes but let's explore what changes we could make
 
 ---
 # Importing data
-
-- Let's review some of the options we can use through this import window
-
---
 
 - Can click on a variable to change how R stores it, or exclude it from the import
 
@@ -431,28 +415,24 @@ anyname &lt;- read_excel("filename.xlsx")
 ---
 # Importing data
 
-- The RStudio import window in the bottom-right provides the code needed to import the data based on the options we chose
+- The RStudio import window in the bottom-right provides the code needed to import the data based on the options we choose
 
 - **Important:** You must paste this code in your Rmd or else it won't knit if you use code that requires the data
 
 --
 
-&gt; **Copy the code. Hit Cancel. Paste code in the setup code chunk**
+&gt; **Copy the code. Click Cancel. Paste code in the setup code chunk of your Rmd**
 
 ---
 # Importing data
 
-&gt; **Change the import code based on the following:**
+&gt; **Change the import code you just added based on the following:**
 
---
+&gt; **Delete the part of the file path unique to your computer and include only the file name.**
 
-&gt; **Delete loading of packages since we already loaded `tidyverse`, which includes the function to import CSV.**
+- This is important for sharing documents. Others will encounter an error when trying to run code that contains a file path unique to your computer.
 
-&gt; **Delete the file path and include only the file name.**
-
-&gt; **Delete the last line containing `View` because it often causes an error when knit**
-
---
+&gt; **Delete the last line containing `View` because it often causes an error when knitting an Rmd**
 
 &gt; **Run the code to import the data**
 
@@ -463,22 +443,22 @@ anyname &lt;- read_excel("filename.xlsx")
 
 - Can get you started for any kind of data file
 
-- Has some limitations
+- Some limitations
   - Can't rename variables
-  - Can't inspect bottom rows of a large dataset
+  - Can't inspect bottom rows of a large dataset where there may be data or footnotes you do not want to import
 
 ---
 # Importing data
+
+- Let's try to import a messier example with the Georgia school data
+
+- Can help to first open messy data in spreasheet software (Excel) to understand what needs to be done
 
 - The "ga_schdist_raw.xlsx" data has some undesirable qualities
   - At least first 6 rows should be skipped
   - Variable names are very long
   - Row 231 and below contain information we don't want to import
-
---
-
-- If we opened with spreadsheet software, we would see that the data we want to import "ga_schdist_raw.xlsx" runs from cell A7 to cell I230
-- Or A8 to I230 if we want to skip the long variable names
+  - the data we want to import runs from cells A7 to I230
 
 ---
 # Importing data
@@ -523,44 +503,56 @@ ga_schdist_raw &lt;- read_excel("ga_schdist_raw.xlsx",
 
 - Variable names are long but this dataset is ready to use
 
+- Do not *have* to rename variables but typing long variables can be inconvenient
+
+- What if we wanted to rename these variables to make it easier to work with
+
+- Recommend renaming variables if they contain a blank space (e.g. "free lunch") because you will always need to use quotation marks for R to recognize it as a single variable
+
 ---
 # Renaming variables
 
-- May not *have* to rename variables; typing long variables can be inconvenient but R's auto complete feature saves time
-
-- Recommend renaming variables if they contain a blank space (e.g. "free lunch")
-
---
+Generic syntax
 
 
 ```r
-dataset &lt;- rename(dataset, new_name=old_name, new_name=old_name,...)
+dataset &lt;- rename(dataset, new_name=current_name, new_name="current name",...)
+```
+
+- If a current variable has a space, need to use quotes
+
+- Example above *overwrites* the dataset. Alternatively, could save a new dataset with new variable names
+
+
+```r
+new_dataset &lt;- rename(dataset, new_name=current_name,...)
 ```
 
 ---
-# Renaming variables
+# Process for renaming many variables
 
-Step 1: Get a list of current variables you can copy-paste to code chunk
+Step 1: Get a list of current variable names you can copy-paste to code chunk
 
 
 ```r
 names(dataset)
 ```
 
-&gt; **Add `names(ga_schdist_raw)` to the _bottom of setup code chunk_ and run**
+- For example, I could add `names(ga_schdist_raw)` to the bottom of setup code chunk and run to get list of current variable names
 
-&gt; **Copy-paste output to the same code chunk**
+- Then copy-paste output to the same code chunk**
 
 ---
-# Renaming variables
+# Process for renaming many variables
 
-Step 2: Add the necessary `rename()` code around the list of current variable names
+Step 2: Wrap the necessary `rename()` code around the list of current variable names
 
-&gt; **Add following code**
+- For example, I could add the following code
 
 
 ```r
-ga_schdist_raw &lt;- rename(ga_schdist_raw, list_of_current_variables)
+ga_schdist_clean &lt;- rename(ga_schdist_raw, 
+                         list_of_variables_from_step1)
 ```
 
 --
@@ -568,11 +560,11 @@ ga_schdist_raw &lt;- rename(ga_schdist_raw, list_of_current_variables)
 Step 3: Rename each variable within the `rename()` function
 
 ---
-# Renaming variables
+# Process for renaming many variables
 
 
 ```r
-ga_schdist_raw &lt;- rename(ga_schdist_raw,
+ga_schdist_clean &lt;- rename(ga_schdist_raw,
       district= "Agency Name",
       state="State Name [District] Latest available year",
       charter="Agency Charter Status [District] 2015-16",
@@ -583,6 +575,8 @@ ga_schdist_raw &lt;- rename(ga_schdist_raw,
       white="White Students [District] 2015-16",
       expenditures="Total Expenditures (TOTALEXP) [District Finance] 2015-16")
 ```
+
+- **Paste this code to the bottom of the setup code chunk and run it**
 
 - Potentially high cost up front
 
@@ -600,12 +594,12 @@ class: inverse, center, middle
 
 - Good way to get all text, graphs, and tables in a final Word document
 
-- Will likely need to change some style and formatting
+- Can then change style and formatting
 
 ---
 # Knit to PDF
 
-- If you want to knit to PDF, you can install a light version of LaTeX within RStudio. 
+- To knit to PDF, you can install a light version of LaTeX within RStudio. 
 
 
 ```r
@@ -629,16 +623,16 @@ write_csv(name_of_object_in_environment, 'name_for_new_file.csv')
 
 --
 
-&gt; **Export the `ga_schdist_raw` object to a csv file. Name the file "ga_schdist_clean.csv"**
+&gt; **Export the `ga_schdist_clean` object to a csv file. Name the file "ga_schdist_clean.csv"**
 
 ---
 # Recap
 
-- We have now covered the basic workflow of most data application projects
+- We have now covered the basic workflow of most data projects using statistical programming software
 
-- Launch RStudio -&gt; load packages &amp; import data needed to do analysis -&gt; knit to document -&gt; save documents and data for later use
+- Launch application (RStudio) -&gt; load any packages &amp; import data needed for analysis -&gt; analysis -&gt; save/export any documents, graphs, tables, data, etc.
 
-- Now just need to add skills that take us from import to desired export
+- Now we can focus on the skills useful for actual analysis
 
 --
 
