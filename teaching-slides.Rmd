@@ -46,7 +46,7 @@ output: html_document
 
 ### [Data Wrangling Part 1](content/teaching/slides/rlab3_data_wrangling.html)
 
-### [Data Wrangling Part 2](content/teaching/slides/rlab4-tidying-data.html)
+### [Data Wrangling Part 2](content/teaching/slides/rlab4-wrangling_part2.html)
 
 ### [Basic Viz](content/teaching/slides/rlab5-visualizations.html)
 
