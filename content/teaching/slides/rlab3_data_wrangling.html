@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: August 11, 2023
+### Last updated: August 29, 2023
 ]
 
 ---
@@ -34,36 +34,31 @@ class: center, middle, inverse, title-slide
 
 
 - Wrangle verbs
+  - extract top or bottom rows using `slice_head` or `slice_tail`
   - extract rows using `filter`
   - extract columns using `select`
   - create new or change existing variables using `mutate`
   - reorder rows using `arrange`
-  - print top or bottom rows of data using `slice_head` and `slice_tail`
 
 ---
 # Why learn data wrangling
 
+- Learning statistics is not as useful if you can't prepare data
 
 - Change original data to help achieve our goal
 
 - Create a table we want to include in a report
 
-- Learning statistics is not as useful if you can't prepare data
-
 ---
 # Realistic Expectations
 
-- Cleaning data is not fun (to most ppl) and can involve many steps. 
+- Cleaning data is not fun (to most people) and can involve many steps
 
-- This lab covers a lot of information.
+- You do not need to memorize 
 
-- The expectation is not to memorize everything.
+- Our goal is to be able to start with real data and have an idea of the functions needed to get to the desired result
 
---
-
-- Our goal is to be able to start with original data have an idea of the functions needed to get to the desired result
-
-- If you understand the steps/functions, searching for examples or copying previous work is easy
+- If you understand the basic steps and available functions, searching for examples or copying previous work is easy
 
 ---
 # Set up
@@ -139,13 +134,13 @@ class: inverse, middle, center
 
 ![](labs_files/filter.png)
 
-- Keeps or removes rows based on criteria you specify
+- Keeps rows based on criteria you specify
 
 - General syntax:
 
 
 ```r
-filter(data_set, criteria) #prints the result
+filter(data_set, criteria) #prints the result when knit
 filtered_data_set &lt;- filter(data_set, criteria) #saves result
 filtered_data_set # prints the saved result in the above line
 ```
@@ -153,7 +148,7 @@ filtered_data_set # prints the saved result in the above line
 ---
 # Specifying criteria
 
-- We can tell R to keep rows that meet a criterion
+- We can tell R to keep rows that meet certain criteria
 
   - "If equal to" `==`
   - "If not equal to" `!=`
@@ -167,7 +162,7 @@ filtered_data_set # prints the saved result in the above line
 ---
 # Filter examples
 
-Print all observations where year equals 2007
+Print all observations if year equals 2007
 
 
 ```r
@@ -176,7 +171,7 @@ filter(gapminder, year == 2007)
 
 --
 
-Print all observations where continent equals Africa
+Print all observations if continent equals Africa
 
 
 ```r
@@ -205,7 +200,7 @@ filter(gapminder, is.na(lifeExp))
 
 --
 
-Save a new dataset with Oceania observations removed
+Save a new dataset containing observations where continent is not equal to Oceania (remove Oceania observations)
 
 
 ```r
@@ -234,11 +229,6 @@ no_oceania &lt;- filter(gapminder, continent != 'Oceania')
 --
 
 &gt; **On new line, use `filter` to save a new dataset named `oceania` containing only Oceania observations. Then print `oceania`.**
-
---
-
-&gt; **Knit to HTML and inspect the output.**
-
 
 ---
 # Filter examples (multiple criteria)
@@ -275,11 +265,7 @@ filter(gapminder, continent != 'Oceania' &amp; year &gt;= 1992)
 
 --
 
-&gt; **Print a table containing countries only in the Americas with a life expectancy lower than 65 in year 1952**
-
---
-
-&gt; **Knit to HTML.**
+&gt; **Print a table containing countries only in the "Americas" with a life expectancy lower than 65 in year 1952**
 
 ---
 # Select
@@ -341,7 +327,7 @@ select(gapminder, -pop)
 
 --
 
-&gt; **Knit to HTML.**
+&gt; **Let's knit our Rmd to check the output so far.**
 
 ---
 # Mutate

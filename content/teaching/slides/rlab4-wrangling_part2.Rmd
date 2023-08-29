@@ -246,18 +246,6 @@ gapminder %>%
 
 > **Change the table so it reports these summary statistics by each year**
 
-> **Knit**
-
----
-# Upload Rmd
-
-> **Upload your .Rmd to eLC**
-
----
-class: inverse, middle, center
-
-# Optional Reference: Formatting tables
-
 ---
 # Kable options for tables
 
@@ -276,7 +264,7 @@ library(knitr)
 ---
 # Kable example
 
-> **Add a heading "Kable Table"**
+> **Add a heading "Formatted Table"**
 
 > **Start a new code chunk and name it kable. Add the following code.**
 
@@ -290,9 +278,12 @@ gapminder52 %>%
         caption = 'Largest Economies in 1952')
 ```
 
-> **Knit to HTML to see difference in table format**
-
 ---
-# Upload
+# Upload Rmd
 
-> **Upload Rmd document to eLC**
+> **Let's knit our Rmd to inspect the output**
+
+> **Upload your Rmd to eLC**
+
+
+
