@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="measurement_files/header-attrs-2.19/header-attrs.js"></script>
+    <script src="measurement_files/header-attrs-2.23/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: January 24, 2023
+### Last updated: August 30, 2023
 ]
 
 ---
@@ -37,6 +37,8 @@ class: center, middle, inverse, title-slide
 - Measurement validity
 
 - Measurement reliability
+
+- Missing data
 
 ---
 # What does the data say?
@@ -74,13 +76,19 @@ class: center, middle, inverse, title-slide
 
 
 ---
-# More examples
+# Discussion
+
+- With some of your neighbors, discuss the following about one or more of the examples below:
+  - How might there be issues with measurement validity and/or reliability?
+  - What might be some consequences of poor measurement validity and/or reliability?
 
 - Property values
 
 - Crime rates
 
 - Test scores
+
+- Census data (e.g., population, race/ethnicity)
 
 ---
 # Why does this matter?
@@ -90,6 +98,136 @@ class: center, middle, inverse, title-slide
 - Can impact our ability to make comparisons between entities or over time that are often involved in decision-making.
 
 - One of many reminders not to be too certain. Much of statistics is about producing a *range* of values we trust will usually contain the truth.
+
+---
+class: inverse, middle, center
+
+# Missing data
+
+---
+# Missing Data
+
+- Two types
+  - Explicit
+  - Implicit
+  
+- Explicitly missing data are data that we can *see* are missing in the data; cells containing a value that denotes missing
+
+- Implicitly missing data are data that we would expect to be included based on data structure but are not; no obvious sign of missing
+
+---
+# Explicitly missing
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; NA &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Brazil &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 72.4 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 190010647 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9065.8 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Incorrect to say we have 3 countries with a mean life expectancy of 68.972
+
+---
+# Implicitly missing
+
+&lt;table&gt;
+ &lt;thead&gt;
+  &lt;tr&gt;
+   &lt;th style="text-align:left;"&gt; country &lt;/th&gt;
+   &lt;th style="text-align:left;"&gt; continent &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; year &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; lifeExp &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; pop &lt;/th&gt;
+   &lt;th style="text-align:right;"&gt; gdpPercap &lt;/th&gt;
+  &lt;/tr&gt;
+ &lt;/thead&gt;
+&lt;tbody&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 73.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 36203463 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 10967.3 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2002 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 74.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 38331121 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 8797.6 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Argentina &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 75.3 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 40301927 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 12779.4 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 1997 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 62.0 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 7693188 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3326.1 &lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+   &lt;td style="text-align:left;"&gt; Bolivia &lt;/td&gt;
+   &lt;td style="text-align:left;"&gt; Americas &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 2007 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 65.6 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 9119152 &lt;/td&gt;
+   &lt;td style="text-align:right;"&gt; 3822.1 &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+- Bolivia missing in 2002 may affect a statistic I want to compute from these data
+
+---
+# Remember
+
+- Don't assume data are missing at random
+
+- Missing data may be systematically different than observed data
+
+- Consider the group the data is supposed to contain and whether missing data require us to limit the scope/generalizability of conclusions
+
 
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>

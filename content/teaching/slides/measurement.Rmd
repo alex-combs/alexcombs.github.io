@@ -25,6 +25,8 @@ library(knitr)
 
 - Measurement reliability
 
+- Missing data
+
 ---
 # What does the data say?
 
@@ -61,13 +63,19 @@ library(knitr)
 
 
 ---
-# More examples
+# Discussion
+
+- With some of your neighbors, discuss the following about one or more of the examples below:
+  - How might there be issues with measurement validity and/or reliability?
+  - What might be some consequences of poor measurement validity and/or reliability?
 
 - Property values
 
 - Crime rates
 
 - Test scores
+
+- Census data (e.g., population, race/ethnicity)
 
 ---
 # Why does this matter?
@@ -77,4 +85,59 @@ library(knitr)
 - Can impact our ability to make comparisons between entities or over time that are often involved in decision-making.
 
 - One of many reminders not to be too certain. Much of statistics is about producing a *range* of values we trust will usually contain the truth.
+
+---
+class: inverse, middle, center
+
+# Missing data
+
+---
+# Missing Data
+
+- Two types
+  - Explicit
+  - Implicit
+  
+- Explicitly missing data are data that we can *see* are missing in the data; cells containing a value that denotes missing
+
+- Implicitly missing data are data that we would expect to be included based on data structure but are not; no obvious sign of missing
+
+---
+# Explicitly missing
+
+```{r, echo=FALSE, message=FALSE}
+crossgap <- gapminder %>% 
+  filter(year == 2007 & continent == 'Americas') %>% 
+  head(n=3)
+
+crossgap[1,4] <- NA
+crossgap[2,6] <- NA
+
+kable(crossgap, format = 'html', digits = 1)
+```
+
+- Incorrect to say we have 3 countries with a mean life expectancy of `r mean(crossgap$lifeExp, na.rm=TRUE)`
+
+---
+# Implicitly missing
+
+```{r, echo=FALSE}
+gapminder %>% 
+  filter(continent == 'Americas', year >= 1997) %>% 
+  head(n=6) %>%
+  filter(country!='Bolivia' | year!=2002) %>% 
+  kable(format = 'html', digits = 1)
+```
+
+- Bolivia missing in 2002 may affect a statistic I want to compute from these data
+
+---
+# Remember
+
+- Don't assume data are missing at random
+
+- Missing data may be systematically different than observed data
+
+- Consider the group the data is supposed to contain and whether missing data require us to limit the scope/generalizability of conclusions
+
 
