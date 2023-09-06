@@ -35,14 +35,13 @@ library(knitr)
 
 > **From the files pane, open your RLab 3 Rmd file**
 
-> **Move cursor to bottom of file and use "Run" menu to run all code chunks above**
-
-> **Load one additional package**
+> **Load one additional package in the setup code chunk**
 
 ```{r, eval=FALSE}
 library(knitr)
 ```
 
+> **Use "Run" menu to run all code chunks**
 
 ---
 # Review
