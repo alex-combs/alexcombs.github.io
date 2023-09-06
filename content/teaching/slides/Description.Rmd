@@ -54,14 +54,7 @@ library(fivethirtyeight)
 ---
 # Descriptive vs. inferential
 
-Suppose we survey UGA alumni 2 years after completing their MPA to examine employment and earnings outcomes.
-
-- Who *could* be the population for this survey?
-
----
-# Descriptive vs. inferential
-
-Suppose the population of our survey is all recent MPA graduates.
+- Suppose we want to learn more about employment and earnings outcomes among MPA graduates 2 years after graduation through a survey
 
 --
 
