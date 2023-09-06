@@ -25,6 +25,8 @@ library(knitr)
 - More wrangling
   - combine functions using the pipe operator `%>%`
   - provide descriptive statistics using `summarize` and `group_by`
+  
+- Make small improvements to the format of our tables
 
 ---
 # Set up
@@ -34,6 +36,13 @@ library(knitr)
 > **From the files pane, open your RLab 3 Rmd file**
 
 > **Move cursor to bottom of file and use "Run" menu to run all code chunks above**
+
+> **Load one additional package**
+
+```{r, eval=FALSE}
+library(knitr)
+```
+
 
 ---
 # Review
@@ -143,10 +152,6 @@ gapminder %>%
 
 > **On a new line, use pipe operator to print a table of `gapminder52` that includes only `country` and `pct_gdp`, arranged in descending order and only the first 5 countries.**
 
---
-
-> **Knit to HTML**
-
 ---
 class: inverse, middle, center
 
@@ -249,11 +254,7 @@ gapminder %>%
 ---
 # Kable options for tables
 
-- The `kable()` function, part of the `knitr` package, is a quick way to format tables.
-
-```{r, eval=FALSE}
-library(knitr)
-```
+- The `kable()` function, part of the `knitr` package, allows us to format tables.
 
 - Three useful options:
   - `digits = #` sets the number of digits to the right of the decimal
@@ -277,6 +278,13 @@ gapminder52 %>%
         col.names = c('Country', 'Percent of Global GDP'),
         caption = 'Largest Economies in 1952')
 ```
+
+---
+# One more practice table
+
+- Suppose we want to examine how life expectancy has changed over time
+
+> **Create the best table you can that shows a reader this information**
 
 ---
 # Upload Rmd

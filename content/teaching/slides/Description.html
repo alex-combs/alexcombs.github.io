@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 05, 2023
+### Last updated: September 06, 2023
 ]
 
 ---
@@ -447,9 +447,7 @@ class: inverse, middle, center
 ---
 # Standard deviation (SD)
 
-- Variance is important but makes no sense as a descriptive measure of spread
-
---
+- Variance makes no sense as a descriptive measure of spread
 
 
 ```r
@@ -460,11 +458,11 @@ var(ncbirths$weeks)
 ## [1] 7.583423
 ```
 
-- On average, weeks pregnant deviates from the average by 7.6 squared weeks. Huh?
+- On average, weeks pregnant deviates from the average by 7.6 squared weeks.
 
 --
 
-- Standard deviation is the square root of variance, returns us to the original variable
+- Standard deviation recovers the original variable
 
 
 ```r
@@ -494,7 +492,7 @@ quantile(ncbirths$weeks, c(.25, .5, .75))
 ##  38  39  40
 ```
 
-- What is the IQR for weeks pregnant?
+- The IQR for weeks pregnant is 2
 
 --
 
