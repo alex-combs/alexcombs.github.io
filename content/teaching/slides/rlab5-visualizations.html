@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab5-visualizations_files/header-attrs-2.20/header-attrs.js"></script>
+    <script src="rlab5-visualizations_files/header-attrs-2.23/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: February 04, 2023
+### Last updated: September 13, 2023
 ]
 
 ---
@@ -103,7 +103,7 @@ class: inverse, middle, center
 ---
 # Choosing graphs
 
-Which of the following is appropriate to graph a single categorical variable?
+Which of the following graphs is effective at visualizing the values of a single categorical variable?
 
 - Histogram
 - Bar chart
@@ -113,7 +113,7 @@ Which of the following is appropriate to graph a single categorical variable?
 ---
 # Choosing graphs
 
-Which of the following is appropriate to graph a single continuous variable?
+Which of the following graphs is effective at visualizing the values of a single continuous variable?
 
 - Histogram
 - Bar chart
@@ -123,7 +123,7 @@ Which of the following is appropriate to graph a single continuous variable?
 ---
 # Choosing graphs
 
-Which of the following is appropriate to graph two categorical variables?
+Which of the following graphs is effective at visualizing the relationship between values of two categorical variables?
 
 - Histogram
 - Bar chart
@@ -133,18 +133,7 @@ Which of the following is appropriate to graph two categorical variables?
 ---
 # Choosing graphs
 
-Which of the following is appropriate to graph two continuous variable?
-
-- Histogram
-- Bar chart
-- Boxplot
-- Scatterplot
-
-
----
-# Choosing graphs
-
-Which of the following is appropriate to graph a continuous variable by levels of a categorical variable?
+Which of the following graphs is effective at visualizing the relationship between values of a continuous variable and a categorical variable?
 
 - Pie chart
 - Bar chart
@@ -154,7 +143,101 @@ Which of the following is appropriate to graph a continuous variable by levels o
 ---
 # Choosing graphs
 
-Which graph is not recommended?
+Which of the following graphs is effective at visualizing the relationship between values of two continuous variable?
+
+- Histogram
+- Bar chart
+- Boxplot
+- Scatterplot
+
+---
+# Choosing graphs
+
+
+|country     |continent | year| lifeExp|      pop| gdpPercap|
+|:-----------|:---------|----:|-------:|--------:|---------:|
+|Paraguay    |Americas  | 1962|      64|  2009813|      2148|
+|Romania     |Europe    | 1962|      67| 18680721|      4735|
+|Finland     |Europe    | 1967|      70|  4605744|     10922|
+|Australia   |Oceania   | 1972|      72| 13177000|     16789|
+|Congo, Rep. |Africa    | 2002|      53|  3328795|      3484|
+
+Which graph could we use to show the distribution of life expectancy in these data?
+
+---
+# Choosing graphs
+
+
+|country           |continent | year| lifeExp|      pop| gdpPercap|
+|:-----------------|:---------|----:|-------:|--------:|---------:|
+|Syria             |Asia      | 2007|      74| 19314747|      4185|
+|Israel            |Asia      | 2007|      81|  6426679|     25523|
+|Zimbabwe          |Africa    | 2007|      43| 12311143|       470|
+|Somalia           |Africa    | 2007|      48|  9118773|       926|
+|Equatorial Guinea |Africa    | 2007|      52|   551201|     12154|
+
+Which graph could we use to show the distribution of life expectancy by continent?
+
+---
+# Choosing graphs
+
+
+|country          |continent | year| lifeExp|      pop| gdpPercap|
+|:----------------|:---------|----:|-------:|--------:|---------:|
+|Hong Kong, China |Asia      | 2007|      82|  6980412|     39725|
+|Netherlands      |Europe    | 2007|      80| 16570613|     36798|
+|Austria          |Europe    | 2007|      80|  8199783|     36126|
+|Canada           |Americas  | 2007|      81| 33390141|     36319|
+|Israel           |Asia      | 2007|      81|  6426679|     25523|
+
+Which graph could we use to show the average life expectancy in each continent?
+
+---
+# Choosing graphs
+
+
+|country            |continent | year| lifeExp|      pop| gdpPercap|
+|:------------------|:---------|----:|-------:|--------:|---------:|
+|Hong Kong, China   |Asia      | 2007|      82|  6980412|     39725|
+|Egypt              |Africa    | 2007|      71| 80264543|      5581|
+|West Bank and Gaza |Asia      | 2007|      73|  4018332|      3025|
+|Venezuela          |Americas  | 2007|      74| 26084662|     11416|
+|Serbia             |Europe    | 2007|      74| 10150265|      9787|
+
+Which graph could we use to show the relationship between life expectancy and GDP per capita?
+
+---
+# Choosing graphs
+
+
+|country     |continent | year| lifeExp|      pop| gdpPercap|
+|:-----------|:---------|----:|-------:|--------:|---------:|
+|Slovenia    |Europe    | 2007|      78|  2009245|     25768|
+|Senegal     |Africa    | 2007|      63| 12267493|      1712|
+|Germany     |Europe    | 2007|      79| 82400996|     32170|
+|Burundi     |Africa    | 2007|      50|  8390505|       430|
+|Netherlands |Europe    | 2007|      80| 16570613|     36798|
+
+Which graph could we use to show the number of countries in each continent?
+
+---
+# Choosing graphs
+
+
+|country     |continent | year| lifeExp|      pop| gdpPercap|
+|:-----------|:---------|----:|-------:|--------:|---------:|
+|Afghanistan |Asia      | 1952|      29|  8425333|       779|
+|Afghanistan |Asia      | 1957|      30|  9240934|       821|
+|Afghanistan |Asia      | 1962|      32| 10267083|       853|
+|Afghanistan |Asia      | 1967|      34| 11537966|       836|
+|Afghanistan |Asia      | 1972|      36| 13079460|       740|
+
+Which graph could we use to show the change in population over time?
+
+---
+# Choosing graphs
+
+Which graph is generally not recommended?
 
 ---
 class: inverse, middle, center
@@ -166,13 +249,11 @@ class: inverse, middle, center
 
 - Appropriate graph given variable types
 
-- Accessible; stand-alone
+- Accessible, should need minimal written explanation
 
 - Don't distort perception
 
-- Avoid uninformative decoration (aka chart junk)
-
-- Minimize "ink"
+- Avoid uninformative decoration (chart junk)
 
 ---
 # Example
@@ -205,23 +286,30 @@ class: inverse, middle, center
 ]
 
 ---
+# Decoding numerical visualization
+
+.center[
+![](lectures_files/encode1.png)
+]
+
+---
 # Example
 
 .center[
 ![:scale 70%](lectures_files/badstackbars.png)
 ]
 
-- Is D greater in 2011 or 2012?
+- Is type D greater in 2010 or 2011?
 
-- Is C greater in 2010 or 2011?
+- Is type C greater in 2010 or 2011?
 
-- Dodged/grouped bar chart usually better
+- Dodged bar chart usually better
 
 ---
-# Decoding numerical visualization
+# Decoding categorical visualization
 
 .center[
-![](lectures_files/encode1.png)
+![:scale 70%](lectures_files/encode2.png)
 ]
 
 ---
@@ -255,13 +343,6 @@ class: inverse, middle, center
 ]
 
 ---
-# Decoding categorical visualization
-
-.center[
-![:scale 70%](lectures_files/encode2.png)
-]
-
----
 class: inverse, middle, center
 
 # Creating Graphs
@@ -281,15 +362,32 @@ dataset %&gt;%
 - Replace `dataset` with the data in your environment
 - Add `aes`thetics based on the variables and type of graph intended
 - Replace `type` with the type of graph intended
+- After the `ggplot` portion, each additional element should be separated by a `+`
 
 ---
 # Grammar of graphics
 
-- **Many** options in ggplot
+- Many options with ggplot; virtually impossible to memorize
+
+- The autocomplete menu that pops up is very helpful
 
 - Can result in long chunks of code
 
-- Ability to reproduce graphs or copy code
+- But easy to reproduce graphs and copy code from previous graphs to use on different data
+
+---
+# Some common options
+
+
+```r
+dataset %&gt;% 
+  ggplot(aes(...)) +
+  geom_type(...) + # can add options specific to graph type
+  labs(...) + # alter axis and legend labels
+  scale_option(...) + # alter axis or color scales
+  theme_option() + # add a prepackaged style
+  theme(...) # alter any non-data component 
+```
 
 ---
 class: inverse, middle, center
@@ -299,11 +397,9 @@ class: inverse, middle, center
 ---
 # Gun use in the US
 
-- The `nhanes` data contains a variable `gun.use` with "Yes" or "No" indicating whether the respondent has ever used a firearm.
+- `nhanes` is survey data from over 9,000 respondents. It contains a variable `gun.use` with "Yes" or "No" indicating whether the respondent has ever used a firearm.
 
-- Suppose we want to graph the number  yes or no. Which graph should we use?
-
---
+- Suppose we want to graph the total number of yes and no responses. Which graph should we use?
 
 - Which `geom` function should we use? 
 
@@ -312,49 +408,46 @@ class: inverse, middle, center
 
 &gt; **Create the following graph**
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-7-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
 
 ---
 # Gun use in the US
 
-- Common to have `NA` in survey data. Sometimes okay to drop.
+- Common to have `NA` in survey data. Usually okay to drop these for graphs.
 
 &gt; **Insert `drop_na(gun.use)` prior to using the `ggplot` function**
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-8-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
 
 ---
-# Gun use in the US
+# Exporting graphs
 
-- **Save this graph as an object**
+- RStudio saves your most recent graph in its memory for exporting
 
-
-```r
-gun_use &lt;- nhanes %&gt;% 
-  drop_na(gun.use) %&gt;% 
-  ggplot(aes(x = gun.use)) +
-  geom_bar()
-```
-
-&gt; **Export this graph**
+- To export most recent graph
 
 
 ```r
-ggsave('gun_use.png')
+ggsave("filename.png") # or any image file extension like jpeg
 ```
+
+&gt; **Export the most recent graph you made as a PNG file**
 
 ---
-# Gun use in the US
+# Axis labels
 
-&gt; **Include axis labels using `labs()`**
+- You can add labels with the general code
 
 
 ```r
-gun_use +
-  labs(x = 'Gun use', y = 'Number of respondents')
+labs(x = "Whatever", y = "Whatever")
 ```
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-11-1.png)&lt;!-- --&gt;
+- should correspond with the parts in the `aes` function
+
+&gt; **Add axis labels to the gun use graph**
+
+
 
 ---
 # Gun use in the US
@@ -363,15 +456,18 @@ gun_use +
 
 
 ```r
-gun_use +
+nhanes %&gt;% 
+  drop_na(gun.use) %&gt;% 
+  ggplot(aes(x = gun.use)) +
+  geom_bar() +
   labs(x = 'Gun use', y = 'Number of respondents') +
-  theme_minimal()
+* theme_minimal()
 ```
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-12-1.png)&lt;!-- --&gt;
 
 ---
 # Gun use in the US
+
+- Can add color according to values of a variable using `fill=variable`
 
 - **Fill bars with different colors**
 
@@ -385,12 +481,12 @@ nhanes %&gt;%
   theme_minimal()
 ```
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-13-1.png)&lt;!-- --&gt;
-
 ---
 # Gun use in the US
 
-&gt; **Control colors**
+- Can manually control colors using `scale_fill_manual(...)`
+
+&gt; **Add following code to alter colors**
 
 
 ```r
@@ -403,19 +499,19 @@ nhanes %&gt;%
   theme_minimal()
 ```
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-14-1.png)&lt;!-- --&gt;
-
 ---
 # Gun use in the US
 
-&gt; **In an new code chunk, create another bar chart that displays percent**
+- Can alter data inside graph using `after_stat()` inside `aes`
+
+&gt; **In new code chunk, create another bar chart displaying percent**
 
 
 ```r
 nhanes %&gt;% 
   drop_na(gun.use) %&gt;% 
   ggplot(aes(x = gun.use, 
-*            y = 100*(..count..)/sum(..count..),
+*            y = after_stat(100*(count)/sum(count)),
              fill = gun.use)) +
   geom_bar() +
   scale_fill_manual(values = c('grey', 'steelblue'), guide = FALSE) +
@@ -426,7 +522,7 @@ nhanes %&gt;%
 ---
 # Skill check
 
-&gt; **Create a bar chart for the `sex` variable in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
+&gt; **Create another bar chart for the `sex` variable in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
 
 ---
 class: inverse, middle, center
@@ -447,9 +543,9 @@ class: inverse, middle, center
 ---
 # COD research funding
 
-&gt; **Try to create the following graph (colors need not match)**
+&gt; **Try to create the following graph (color need not match)**
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-16-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
 
 ---
 # Adjusting bins or binwidth
@@ -490,33 +586,33 @@ options(scipen = 999)
 ---
 # Dealing with large values
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-19-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
 
 ---
 # Dealing with large values
 
 - x-axis is overcrowded with unnecessary zeros
 
-- How can we get rid of these so it shows 5, 10, 15, and 20?
+- What can we do to the `funding` variable so the x-axis shows 5, 10, 15, and 20?
 
 &gt; **Change code accordingly**
 
 ---
 # Dealing with large values
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-20-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
 
 ---
 # COD research funding
 
 - What is another option for graphing the distribution of a single continuous variable that also shows certain descriptive statistics?
 
-&gt; **In a new code chunk, copy-and-paste the code you used to make the final histogram. Change the code to create this other graph.**
+&gt; **In a new code chunk, copy-and-paste the code you used to make the last histogram. Change the code to create this other graph.**
 
 ---
 # COD research funding
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-21-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
 
 ---
 class: inverse, middle, center
@@ -532,8 +628,8 @@ class: inverse, middle, center
 
 - One categorical, one numeric: 
   - Bar chart that displays total by category
-  - Bar chart or point chart displaying summary stat by category (later lab)
-  - Overlapping histograms by category (later lab)
+  - Bar chart or point chart displaying summary stat by category
+  - Overlapping histograms by category
   - Boxplots by category
 
 - Two numeric:
@@ -549,7 +645,7 @@ class: inverse, middle, center
 
 &gt; **Make this change**
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-22-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
 ---
 # Grouped/dodged bar chart
@@ -563,9 +659,9 @@ class: inverse, middle, center
 ---
 # Grouped/dodged bar chart
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-23-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
 
-- Note percentages add to 100 for all respondents, not within each sex (later lab)
+- Note percentages add to 100 across all respondents, not within each sex
 
 ---
 # Barchart by category
@@ -605,9 +701,9 @@ fbi_gun_deaths %&gt;%
 ---
 # Barchart by category
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-25-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
 
-- Can fill each bar with different color, add labels, and change ink just like before
+- Can fill each bar with different color, add labels, and change theme just like before
 
 ---
 # Barchart by category
@@ -621,7 +717,17 @@ fbi_gun_deaths %&gt;%
 ---
 # Barchart by category
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-26-1.png)&lt;!-- --&gt;
+
+```
+## Warning: The `guide` argument in `scale_*()` cannot be `FALSE`. This was deprecated in
+## ggplot2 3.3.4.
+## ℹ Please use "none" instead.
+## This warning is displayed once every 8 hours.
+## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
+## generated.
+```
+
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-33-1.png)&lt;!-- --&gt;
 
 ---
 # Boxplots by category
@@ -639,7 +745,7 @@ fbi_gun_deaths %&gt;%
 ---
 # Boxplots by category
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-27-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
 
 ---
 # Scatterplot
@@ -665,14 +771,14 @@ cod_research_funding %&gt;%
 ---
 # Scatterplot
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
 
 ---
 # Adding a regression line
 
 **Add `geom_smooth(method = "lm")` the your code and rerun**
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-30-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
 
 
 ---
@@ -691,7 +797,7 @@ cod_research_funding %&gt;%
 ---
 # Dealing with skewed variables
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-32-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
 
 ---
 # Line graph
@@ -712,14 +818,7 @@ guns_manufactured %&gt;%
   ___()
 ```
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
-
----
-# Line graph
-
-- Could use `linetype` instead of `color`
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-35-1.png)&lt;!-- --&gt;
+![](rlab5-visualizations_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
 
 
 ---

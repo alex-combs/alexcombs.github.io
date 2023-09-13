@@ -23,6 +23,7 @@ output:
 
 ```{r, include=FALSE}
 library(tidyverse)
+library(gapminder)
 library(knitr)
 ```
 
@@ -92,7 +93,7 @@ class: inverse, middle, center
 ---
 # Choosing graphs
 
-Which of the following is appropriate to graph a single categorical variable?
+Which of the following graphs is effective at visualizing the values of a single categorical variable?
 
 - Histogram
 - Bar chart
@@ -102,7 +103,7 @@ Which of the following is appropriate to graph a single categorical variable?
 ---
 # Choosing graphs
 
-Which of the following is appropriate to graph a single continuous variable?
+Which of the following graphs is effective at visualizing the values of a single continuous variable?
 
 - Histogram
 - Bar chart
@@ -112,7 +113,7 @@ Which of the following is appropriate to graph a single continuous variable?
 ---
 # Choosing graphs
 
-Which of the following is appropriate to graph two categorical variables?
+Which of the following graphs is effective at visualizing the relationship between values of two categorical variables?
 
 - Histogram
 - Bar chart
@@ -122,18 +123,7 @@ Which of the following is appropriate to graph two categorical variables?
 ---
 # Choosing graphs
 
-Which of the following is appropriate to graph two continuous variable?
-
-- Histogram
-- Bar chart
-- Boxplot
-- Scatterplot
-
-
----
-# Choosing graphs
-
-Which of the following is appropriate to graph a continuous variable by levels of a categorical variable?
+Which of the following graphs is effective at visualizing the relationship between values of a continuous variable and a categorical variable?
 
 - Pie chart
 - Bar chart
@@ -143,7 +133,85 @@ Which of the following is appropriate to graph a continuous variable by levels o
 ---
 # Choosing graphs
 
-Which graph is not recommended?
+Which of the following graphs is effective at visualizing the relationship between values of two continuous variable?
+
+- Histogram
+- Bar chart
+- Boxplot
+- Scatterplot
+
+---
+# Choosing graphs
+
+```{r, echo=FALSE}
+set.seed(144)
+gap07 <- filter(gapminder, year==2007)
+gapminder %>% 
+  slice_sample(n=5) %>% 
+  kable(digits = 0)
+```
+
+Which graph could we use to show the distribution of life expectancy in these data?
+
+---
+# Choosing graphs
+
+```{r, echo=FALSE}
+gap07 %>% 
+  slice_sample(n=5) %>% 
+  kable(digits = 0)
+```
+
+Which graph could we use to show the distribution of life expectancy by continent?
+
+---
+# Choosing graphs
+
+```{r, echo=FALSE}
+gap07 %>% 
+  slice_sample(n=5) %>% 
+  kable(digits = 0)
+```
+
+Which graph could we use to show the average life expectancy in each continent?
+
+---
+# Choosing graphs
+
+```{r, echo=FALSE}
+gap07 %>% 
+  slice_sample(n=5) %>% 
+  kable(digits = 0)
+```
+
+Which graph could we use to show the relationship between life expectancy and GDP per capita?
+
+---
+# Choosing graphs
+
+```{r, echo=FALSE}
+gap07 %>% 
+  slice_sample(n=5) %>% 
+  kable(digits = 0)
+```
+
+Which graph could we use to show the number of countries in each continent?
+
+---
+# Choosing graphs
+
+```{r, echo=FALSE}
+gapminder %>% 
+  slice_head(n=5) %>% 
+  kable(digits = 0)
+```
+
+Which graph could we use to show the change in population over time?
+
+---
+# Choosing graphs
+
+Which graph is generally not recommended?
 
 ---
 class: inverse, middle, center
@@ -155,13 +223,11 @@ class: inverse, middle, center
 
 - Appropriate graph given variable types
 
-- Accessible; stand-alone
+- Accessible, should need minimal written explanation
 
 - Don't distort perception
 
-- Avoid uninformative decoration (aka chart junk)
-
-- Minimize "ink"
+- Avoid uninformative decoration (chart junk)
 
 ---
 # Example
@@ -194,23 +260,30 @@ class: inverse, middle, center
 ]
 
 ---
+# Decoding numerical visualization
+
+.center[
+![](lectures_files/encode1.png)
+]
+
+---
 # Example
 
 .center[
 ![:scale 70%](lectures_files/badstackbars.png)
 ]
 
-- Is D greater in 2011 or 2012?
+- Is type D greater in 2010 or 2011?
 
-- Is C greater in 2010 or 2011?
+- Is type C greater in 2010 or 2011?
 
-- Dodged/grouped bar chart usually better
+- Dodged bar chart usually better
 
 ---
-# Decoding numerical visualization
+# Decoding categorical visualization
 
 .center[
-![](lectures_files/encode1.png)
+![:scale 70%](lectures_files/encode2.png)
 ]
 
 ---
@@ -244,13 +317,6 @@ class: inverse, middle, center
 ]
 
 ---
-# Decoding categorical visualization
-
-.center[
-![:scale 70%](lectures_files/encode2.png)
-]
-
----
 class: inverse, middle, center
 
 # Creating Graphs
@@ -269,15 +335,31 @@ dataset %>%
 - Replace `dataset` with the data in your environment
 - Add `aes`thetics based on the variables and type of graph intended
 - Replace `type` with the type of graph intended
+- After the `ggplot` portion, each additional element should be separated by a `+`
 
 ---
 # Grammar of graphics
 
-- **Many** options in ggplot
+- Many options with ggplot; virtually impossible to memorize
+
+- The autocomplete menu that pops up is very helpful
 
 - Can result in long chunks of code
 
-- Ability to reproduce graphs or copy code
+- But easy to reproduce graphs and copy code from previous graphs to use on different data
+
+---
+# Some common options
+
+```{r, eval=FALSE}
+dataset %>% 
+  ggplot(aes(...)) +
+  geom_type(...) + # can add options specific to graph type
+  labs(...) + # alter axis and legend labels
+  scale_option(...) + # alter axis or color scales
+  theme_option() + # add a prepackaged style
+  theme(...) # alter any non-data component 
+```
 
 ---
 class: inverse, middle, center
@@ -287,11 +369,9 @@ class: inverse, middle, center
 ---
 # Gun use in the US
 
-- The `nhanes` data contains a variable `gun.use` with "Yes" or "No" indicating whether the respondent has ever used a firearm.
+- `nhanes` is survey data from over 9,000 respondents. It contains a variable `gun.use` with "Yes" or "No" indicating whether the respondent has ever used a firearm.
 
-- Suppose we want to graph the number  yes or no. Which graph should we use?
-
---
+- Suppose we want to graph the total number of yes and no responses. Which graph should we use?
 
 - Which `geom` function should we use? 
 
@@ -309,7 +389,7 @@ nhanes %>%
 ---
 # Gun use in the US
 
-- Common to have `NA` in survey data. Sometimes okay to drop.
+- Common to have `NA` in survey data. Usually okay to drop these for graphs.
 
 > **Insert `drop_na(gun.use)` prior to using the `ggplot` function**
 
@@ -321,30 +401,36 @@ nhanes %>%
 ```
 
 ---
-# Gun use in the US
+# Exporting graphs
 
-- **Save this graph as an object**
+- RStudio saves your most recent graph in its memory for exporting
 
-```{r}
-gun_use <- nhanes %>% 
-  drop_na(gun.use) %>% 
-  ggplot(aes(x = gun.use)) +
-  geom_bar()
-```
-
-> **Export this graph**
+- To export most recent graph
 
 ```{r, eval=FALSE}
-ggsave('gun_use.png')
+ggsave("filename.png") # or any image file extension like jpeg
 ```
 
+> **Export the most recent graph you made as a PNG file**
+
 ---
-# Gun use in the US
+# Axis labels
 
-> **Include axis labels using `labs()`**
+- You can add labels with the general code
 
-```{r, fig.height=4}
-gun_use +
+```{r, eval=FALSE}
+labs(x = "Whatever", y = "Whatever")
+```
+
+- should correspond with the parts in the `aes` function
+
+> **Add axis labels to the gun use graph**
+
+```{r, include=FALSE}
+nhanes %>% 
+  drop_na(gun.use) %>% 
+  ggplot(aes(x = gun.use)) +
+  geom_bar() +
   labs(x = 'Gun use', y = 'Number of respondents')
 ```
 
@@ -353,18 +439,23 @@ gun_use +
 
 - **Change graph "ink" using `theme_...()` such as `theme_minimal()`**
 
-```{r, fig.height=4}
-gun_use +
+```{r, eval=FALSE}
+nhanes %>% 
+  drop_na(gun.use) %>% 
+  ggplot(aes(x = gun.use)) +
+  geom_bar() +
   labs(x = 'Gun use', y = 'Number of respondents') +
-  theme_minimal()
+  theme_minimal() #<<
 ```
 
 ---
 # Gun use in the US
 
+- Can add color according to values of a variable using `fill=variable`
+
 - **Fill bars with different colors**
 
-```{r, fig.height=3}
+```{r, eval=FALSE}
 nhanes %>% 
   drop_na(gun.use) %>% 
   ggplot(aes(x = gun.use, fill = gun.use)) + #<<
@@ -376,9 +467,11 @@ nhanes %>%
 ---
 # Gun use in the US
 
-> **Control colors**
+- Can manually control colors using `scale_fill_manual(...)`
 
-```{r, warning=FALSE, fig.height=3}
+> **Add following code to alter colors**
+
+```{r, warning=FALSE, eval=FALSE}
 nhanes %>% 
   drop_na(gun.use) %>% 
   ggplot(aes(x = gun.use, fill = gun.use)) +
@@ -391,13 +484,15 @@ nhanes %>%
 ---
 # Gun use in the US
 
-> **In an new code chunk, create another bar chart that displays percent**
+- Can alter data inside graph using `after_stat()` inside `aes`
+
+> **In new code chunk, create another bar chart displaying percent**
 
 ```{r, eval=FALSE}
 nhanes %>% 
   drop_na(gun.use) %>% 
   ggplot(aes(x = gun.use, 
-             y = 100*(..count..)/sum(..count..), #<<
+             y = after_stat(100*(count)/sum(count)), #<<
              fill = gun.use)) +
   geom_bar() +
   scale_fill_manual(values = c('grey', 'steelblue'), guide = FALSE) +
@@ -408,7 +503,7 @@ nhanes %>%
 ---
 # Skill check
 
-> **Create a bar chart for the `sex` variable in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
+> **Create another bar chart for the `sex` variable in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
 
 ---
 class: inverse, middle, center
@@ -429,7 +524,7 @@ class: inverse, middle, center
 ---
 # COD research funding
 
-> **Try to create the following graph (colors need not match)**
+> **Try to create the following graph (color need not match)**
 
 ```{r, echo=FALSE, message=FALSE, fig.height=4}
 cod_research_funding %>% 
@@ -490,7 +585,7 @@ cod_research_funding %>%
 
 - x-axis is overcrowded with unnecessary zeros
 
-- How can we get rid of these so it shows 5, 10, 15, and 20?
+- What can we do to the `funding` variable so the x-axis shows 5, 10, 15, and 20?
 
 > **Change code accordingly**
 
@@ -511,7 +606,7 @@ cod_research_funding %>%
 
 - What is another option for graphing the distribution of a single continuous variable that also shows certain descriptive statistics?
 
-> **In a new code chunk, copy-and-paste the code you used to make the final histogram. Change the code to create this other graph.**
+> **In a new code chunk, copy-and-paste the code you used to make the last histogram. Change the code to create this other graph.**
 
 ---
 # COD research funding
@@ -538,8 +633,8 @@ class: inverse, middle, center
 
 - One categorical, one numeric: 
   - Bar chart that displays total by category
-  - Bar chart or point chart displaying summary stat by category (later lab)
-  - Overlapping histograms by category (later lab)
+  - Bar chart or point chart displaying summary stat by category
+  - Overlapping histograms by category
   - Boxplots by category
 
 - Two numeric:
@@ -559,7 +654,7 @@ class: inverse, middle, center
 nhanes %>% 
   drop_na(gun.use) %>% 
   ggplot(aes(x = sex, 
-             y = 100*(..count..)/sum(..count..),
+             y = after_stat(100*(count)/sum(count)),
              fill = gun.use)) +
   geom_bar() +
   scale_fill_manual(values = c('grey', 'steelblue')) +
@@ -583,7 +678,7 @@ nhanes %>%
 nhanes %>% 
   drop_na(gun.use) %>% 
   ggplot(aes(x = sex, 
-             y = 100*(..count..)/sum(..count..),
+             y = after_stat(100*(count)/sum(count)),
              fill = gun.use)) +
   geom_bar(position = "dodge") +
   scale_fill_manual(values = c('grey', 'steelblue')) +
@@ -591,7 +686,7 @@ nhanes %>%
   theme_minimal()
 ```
 
-- Note percentages add to 100 for all respondents, not within each sex (later lab)
+- Note percentages add to 100 across all respondents, not within each sex
 
 ---
 # Barchart by category
@@ -637,7 +732,7 @@ fbi_gun_deaths %>%
   geom_col()
 ```
 
-- Can fill each bar with different color, add labels, and change ink just like before
+- Can fill each bar with different color, add labels, and change theme just like before
 
 ---
 # Barchart by category
@@ -773,17 +868,6 @@ guns_manufactured %>%
 ```{r, echo=FALSE, fig.height=4}
 guns_manufactured %>% 
   ggplot(aes(x = Year, y = num_guns, color = gun_type)) +
-  geom_line()
-```
-
----
-# Line graph
-
-- Could use `linetype` instead of `color`
-
-```{r, echo=FALSE, fig.height=4}
-guns_manufactured %>% 
-  ggplot(aes(x = Year, y = num_guns, linetype = gun_type)) +
   geom_line()
 ```
 
