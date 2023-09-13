@@ -752,7 +752,7 @@ fbi_gun_deaths %>%
   filter(year==2016) %>%
   ggplot(aes(x = number, y = reorder(weapons, number), fill = weapons)) +
   geom_col() +
-  scale_fill_discrete(guide=FALSE) +
+  scale_fill_discrete(guide="none") +
   labs(y = "Gun type", x = "Number of homicides, 2016") +
   theme_minimal()
 ```
