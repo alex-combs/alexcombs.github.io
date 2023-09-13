@@ -144,10 +144,9 @@ Which of the following graphs is effective at visualizing the relationship betwe
 # Choosing graphs
 
 ```{r, echo=FALSE}
-set.seed(144)
 gap07 <- filter(gapminder, year==2007)
 gapminder %>% 
-  slice_sample(n=5) %>% 
+  slice_head(n=5) %>% 
   kable(digits = 0)
 ```
 
@@ -158,7 +157,7 @@ Which graph could we use to show the distribution of life expectancy in these da
 
 ```{r, echo=FALSE}
 gap07 %>% 
-  slice_sample(n=5) %>% 
+  slice_head(n=5) %>% 
   kable(digits = 0)
 ```
 
@@ -169,7 +168,7 @@ Which graph could we use to show the distribution of life expectancy by continen
 
 ```{r, echo=FALSE}
 gap07 %>% 
-  slice_sample(n=5) %>% 
+  slice_head(n=5) %>% 
   kable(digits = 0)
 ```
 
@@ -180,7 +179,7 @@ Which graph could we use to show the average life expectancy in each continent?
 
 ```{r, echo=FALSE}
 gap07 %>% 
-  slice_sample(n=5) %>% 
+  slice_head(n=5) %>% 
   kable(digits = 0)
 ```
 
@@ -191,7 +190,7 @@ Which graph could we use to show the relationship between life expectancy and GD
 
 ```{r, echo=FALSE}
 gap07 %>% 
-  slice_sample(n=5) %>% 
+  slice_head(n=5) %>% 
   kable(digits = 0)
 ```
 
@@ -393,7 +392,9 @@ nhanes %>%
 
 > **Insert `drop_na(gun.use)` prior to using the `ggplot` function**
 
-```{r, echo=FALSE, fig.height=4}
+> **Re-run graph**
+
+```{r, eval=FALSE}
 nhanes %>% 
   drop_na(gun.use) %>% 
   ggplot(aes(x = gun.use)) +
@@ -426,7 +427,7 @@ labs(x = "Whatever", y = "Whatever")
 
 > **Add axis labels to the gun use graph**
 
-```{r, include=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 nhanes %>% 
   drop_na(gun.use) %>% 
   ggplot(aes(x = gun.use)) +
@@ -790,9 +791,6 @@ fbi_gun_deaths %>%
 
 - Suppose we wanted to explore the association between `mortality_rate_per_100k` and research `funding` in the `cod_research_funding` data
 
----
-# Scatterplot
-
 > **Add new code chunk and complete code**
 
 ```{r, eval=FALSE}
@@ -802,43 +800,9 @@ cod_research_funding %>%
 ```
 
 ---
-# Scatterplot
-
-```{r, echo=FALSE}
-cod_research_funding %>% 
-  ggplot(aes(x = mortality_rate_per_100k, y = funding)) +
-  geom_point()
-```
-
----
-# Adding a regression line
-
-**Add `geom_smooth(method = "lm")` the your code and rerun**
-
-```{r, echo=FALSE, message=FALSE}
-cod_research_funding %>% 
-  ggplot(aes(x = mortality_rate_per_100k, y = funding)) +
-  geom_point() +
-  geom_smooth(method = "lm")
-```
-
-
----
 # Dealing with skewed variables
 
 ```{r, eval=FALSE, message=FALSE}
-cod_research_funding %>% 
-  ggplot(aes(x = mortality_rate_per_100k, y = funding)) +
-  geom_point() +
-  geom_smooth(method = 'lm') +
-  scale_x_log10() + #<<
-  scale_y_log10() #<<
-```
-
----
-# Dealing with skewed variables
-
-```{r, echo=FALSE, message=FALSE}
 cod_research_funding %>% 
   ggplot(aes(x = mortality_rate_per_100k, y = funding)) +
   geom_point() +
@@ -854,9 +818,6 @@ cod_research_funding %>%
 
 - Suppose we want to graph `num_guns` manufactured over `Year`s by `gun_type` using the `guns_manufactured` data
 
----
-# Line graph
-
 > **In new code chunk, complete code below and run**
 
 ```{r, eval=FALSE}
@@ -865,12 +826,11 @@ guns_manufactured %>%
   ___()
 ```
 
-```{r, echo=FALSE, fig.height=4}
+```{r, eval=FALSE, echo=FALSE}
 guns_manufactured %>% 
   ggplot(aes(x = Year, y = num_guns, color = gun_type)) +
   geom_line()
 ```
-
 
 ---
 # Upload lab

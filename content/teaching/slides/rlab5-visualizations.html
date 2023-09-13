@@ -156,11 +156,11 @@ Which of the following graphs is effective at visualizing the relationship betwe
 
 |country     |continent | year| lifeExp|      pop| gdpPercap|
 |:-----------|:---------|----:|-------:|--------:|---------:|
-|Paraguay    |Americas  | 1962|      64|  2009813|      2148|
-|Romania     |Europe    | 1962|      67| 18680721|      4735|
-|Finland     |Europe    | 1967|      70|  4605744|     10922|
-|Australia   |Oceania   | 1972|      72| 13177000|     16789|
-|Congo, Rep. |Africa    | 2002|      53|  3328795|      3484|
+|Afghanistan |Asia      | 1952|      29|  8425333|       779|
+|Afghanistan |Asia      | 1957|      30|  9240934|       821|
+|Afghanistan |Asia      | 1962|      32| 10267083|       853|
+|Afghanistan |Asia      | 1967|      34| 11537966|       836|
+|Afghanistan |Asia      | 1972|      36| 13079460|       740|
 
 Which graph could we use to show the distribution of life expectancy in these data?
 
@@ -168,13 +168,13 @@ Which graph could we use to show the distribution of life expectancy in these da
 # Choosing graphs
 
 
-|country           |continent | year| lifeExp|      pop| gdpPercap|
-|:-----------------|:---------|----:|-------:|--------:|---------:|
-|Syria             |Asia      | 2007|      74| 19314747|      4185|
-|Israel            |Asia      | 2007|      81|  6426679|     25523|
-|Zimbabwe          |Africa    | 2007|      43| 12311143|       470|
-|Somalia           |Africa    | 2007|      48|  9118773|       926|
-|Equatorial Guinea |Africa    | 2007|      52|   551201|     12154|
+|country     |continent | year| lifeExp|      pop| gdpPercap|
+|:-----------|:---------|----:|-------:|--------:|---------:|
+|Afghanistan |Asia      | 2007|      44| 31889923|       975|
+|Albania     |Europe    | 2007|      76|  3600523|      5937|
+|Algeria     |Africa    | 2007|      72| 33333216|      6223|
+|Angola      |Africa    | 2007|      43| 12420476|      4797|
+|Argentina   |Americas  | 2007|      75| 40301927|     12779|
 
 Which graph could we use to show the distribution of life expectancy by continent?
 
@@ -182,13 +182,13 @@ Which graph could we use to show the distribution of life expectancy by continen
 # Choosing graphs
 
 
-|country          |continent | year| lifeExp|      pop| gdpPercap|
-|:----------------|:---------|----:|-------:|--------:|---------:|
-|Hong Kong, China |Asia      | 2007|      82|  6980412|     39725|
-|Netherlands      |Europe    | 2007|      80| 16570613|     36798|
-|Austria          |Europe    | 2007|      80|  8199783|     36126|
-|Canada           |Americas  | 2007|      81| 33390141|     36319|
-|Israel           |Asia      | 2007|      81|  6426679|     25523|
+|country     |continent | year| lifeExp|      pop| gdpPercap|
+|:-----------|:---------|----:|-------:|--------:|---------:|
+|Afghanistan |Asia      | 2007|      44| 31889923|       975|
+|Albania     |Europe    | 2007|      76|  3600523|      5937|
+|Algeria     |Africa    | 2007|      72| 33333216|      6223|
+|Angola      |Africa    | 2007|      43| 12420476|      4797|
+|Argentina   |Americas  | 2007|      75| 40301927|     12779|
 
 Which graph could we use to show the average life expectancy in each continent?
 
@@ -196,13 +196,13 @@ Which graph could we use to show the average life expectancy in each continent?
 # Choosing graphs
 
 
-|country            |continent | year| lifeExp|      pop| gdpPercap|
-|:------------------|:---------|----:|-------:|--------:|---------:|
-|Hong Kong, China   |Asia      | 2007|      82|  6980412|     39725|
-|Egypt              |Africa    | 2007|      71| 80264543|      5581|
-|West Bank and Gaza |Asia      | 2007|      73|  4018332|      3025|
-|Venezuela          |Americas  | 2007|      74| 26084662|     11416|
-|Serbia             |Europe    | 2007|      74| 10150265|      9787|
+|country     |continent | year| lifeExp|      pop| gdpPercap|
+|:-----------|:---------|----:|-------:|--------:|---------:|
+|Afghanistan |Asia      | 2007|      44| 31889923|       975|
+|Albania     |Europe    | 2007|      76|  3600523|      5937|
+|Algeria     |Africa    | 2007|      72| 33333216|      6223|
+|Angola      |Africa    | 2007|      43| 12420476|      4797|
+|Argentina   |Americas  | 2007|      75| 40301927|     12779|
 
 Which graph could we use to show the relationship between life expectancy and GDP per capita?
 
@@ -212,11 +212,11 @@ Which graph could we use to show the relationship between life expectancy and GD
 
 |country     |continent | year| lifeExp|      pop| gdpPercap|
 |:-----------|:---------|----:|-------:|--------:|---------:|
-|Slovenia    |Europe    | 2007|      78|  2009245|     25768|
-|Senegal     |Africa    | 2007|      63| 12267493|      1712|
-|Germany     |Europe    | 2007|      79| 82400996|     32170|
-|Burundi     |Africa    | 2007|      50|  8390505|       430|
-|Netherlands |Europe    | 2007|      80| 16570613|     36798|
+|Afghanistan |Asia      | 2007|      44| 31889923|       975|
+|Albania     |Europe    | 2007|      76|  3600523|      5937|
+|Algeria     |Africa    | 2007|      72| 33333216|      6223|
+|Angola      |Africa    | 2007|      43| 12420476|      4797|
+|Argentina   |Americas  | 2007|      75| 40301927|     12779|
 
 Which graph could we use to show the number of countries in each continent?
 
@@ -417,7 +417,15 @@ class: inverse, middle, center
 
 &gt; **Insert `drop_na(gun.use)` prior to using the `ggplot` function**
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-15-1.png)&lt;!-- --&gt;
+&gt; **Re-run graph**
+
+
+```r
+nhanes %&gt;% 
+  drop_na(gun.use) %&gt;% 
+  ggplot(aes(x = gun.use)) +
+  geom_bar()
+```
 
 ---
 # Exporting graphs
@@ -756,9 +764,6 @@ fbi_gun_deaths %&gt;%
 
 - Suppose we wanted to explore the association between `mortality_rate_per_100k` and research `funding` in the `cod_research_funding` data
 
----
-# Scatterplot
-
 &gt; **Add new code chunk and complete code**
 
 
@@ -767,19 +772,6 @@ cod_research_funding %&gt;%
   ___(___(___)) +
   ___()
 ```
-
----
-# Scatterplot
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-36-1.png)&lt;!-- --&gt;
-
----
-# Adding a regression line
-
-**Add `geom_smooth(method = "lm")` the your code and rerun**
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
-
 
 ---
 # Dealing with skewed variables
@@ -795,19 +787,11 @@ cod_research_funding %&gt;%
 ```
 
 ---
-# Dealing with skewed variables
-
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-39-1.png)&lt;!-- --&gt;
-
----
 # Line graph
 
 - Useful for plotting change in numeric variable over time
 
 - Suppose we want to graph `num_guns` manufactured over `Year`s by `gun_type` using the `guns_manufactured` data
-
----
-# Line graph
 
 &gt; **In new code chunk, complete code below and run**
 
@@ -818,7 +802,6 @@ guns_manufactured %&gt;%
   ___()
 ```
 
-![](rlab5-visualizations_files/figure-html/unnamed-chunk-41-1.png)&lt;!-- --&gt;
 
 
 ---
