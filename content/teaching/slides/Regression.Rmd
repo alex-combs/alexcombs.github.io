@@ -224,11 +224,6 @@ $$\hat{SATM} = 539 - 1.23 \times Percent$$
 ---
 class: inverse, middle, center
 
-# Make sure you understand the difference between a percent change and a percentage point change.
-
----
-class: inverse, middle, center
-
 # Running regressions in R
 
 ---
