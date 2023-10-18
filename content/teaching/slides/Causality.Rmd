@@ -42,8 +42,6 @@ options(scipen = 999)
 
   - The outcome that we would have observed had the event not happened
 
---
-
 - **Counterfactual:** The unobserved outcome from an alternate reality. 
 
 ---
@@ -55,14 +53,12 @@ options(scipen = 999)
 
   - We observe the outcome for those who did not receive the treatment
 
---
-
-- Can never observe the outcome among the treated had they not received it or the untreated as if they had
+- Cannot observe the outcome for the treated had they not received it or for the untreated as if they had
 
 ---
 # The challenge of counterfactual
 
-- All we can do is compare outcomes between observed groups. This can take several forms.
+- All we can do is compare outcomes between observed groups (treated and untreated). This can take several forms.
 
 --
 
@@ -70,11 +66,11 @@ options(scipen = 999)
 
 --
   
-- Use **quasi-experimental** methods that use a feature of the treatment that allows us to claim it is as good as randomized
+- **Quasi-experimental** methods that use a feature of the treatment that allows us to claim it is as good as randomized
 
 --
   
-- **Non-experimental:** Controlling for all the right variables to claim there is no spurious correlation
+- **Non-experimental:** Controlling for all the necessary variables to claim there is no relevant difference between treated and untreated (least credible)
 
 ---
 # Credible Analysis
@@ -95,7 +91,7 @@ include_graphics('lectures_files/credible.png')
 ---
 # Internal validity
 
-- A criminal justice analyst explores potential factors that affect the likelihood of recidivism 
+- A criminal justice nonprofit explores potential factors that affect the likelihood of recidivism 
 
 $$ReOffense = \beta_0 + \beta_1Age + \beta_2Sex + \epsilon$$
 
@@ -105,7 +101,7 @@ recidivism <- tibble("Variable" = c("Intercept", "Age", "Sex"), "Estimates" = c(
 kable(recidivism, digits = 3)
 ```
 
-- Internal validity concerns whether these estimates are accurate or biased. And if biased, does it limit our ability to make useful conclusions?
+- Internal validity concerns whether there is a credible theory why these factors would have an impact and if estimates are accurate or biased. If biased, to what extent does it limit our ability to make useful conclusions?
 
 ---
 # Criteria for causation
@@ -303,9 +299,9 @@ $$Y=\beta_0+\beta_1X+\beta_2Z+\beta_3K+\epsilon$$
 .pull-right[
 $$Y=\beta_0+\beta_1X+\beta_2K+\epsilon$$
 
-- Backdoor open; OVB
+- Backdoor now open; OVB
 
-- **Controlling for a collider opens the backdoor it closed**
+- Also known as **bad control**
 ]
 
 ---
@@ -535,11 +531,6 @@ include_graphics('lectures_files/dag14.png', dpi = 150)
 
 - There are quasi-experimental regression techniques that arguably achieve the same break from the error term as if random
   - Difference-in-differences, regression discontinuity, instrumental variables, synthetic control, propensity score matching
-
----
-class: inverse, center, middle
-
-# Let's practice using DAGs
 
 ---
 class: inverse, center, middle

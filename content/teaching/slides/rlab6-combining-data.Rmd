@@ -42,25 +42,24 @@ output:
 
 ```{r, eval=FALSE}
 library(tidyverse)
-library(data.table)
 ```
 
 ```{r, include=FALSE}
-library(data.table)
 library(tidyverse)
 ```
 
 ---
 # Download & Import Data
 
-> **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, `st_fin_2016.csv`, and `ga_county_pop.csv` files from eLC and add them to your project folder.**
+> **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, `st_fin_2016.csv`, `covid_ga_5.csv` and `ga_county_pop.csv` files from eLC and add them to your project folder.**
 
-> **In your setup code chunk, import the four data files.**
+> **In your setup code chunk, import the data files.**
 
 ```{r, eval=FALSE}
 st_fin_2014 <- 
 st_fin_2015 <- 
 st_fin_2016 <- 
+covid_ga_5 <- 
 ga_county_pop <- 
 ```
 
@@ -74,6 +73,8 @@ st_fin_16 <- read_csv("st_fin_2016.csv")
 st_fin_2014 <- read_csv("labs_files/st_fin_2014.csv")
 st_fin_2015 <- read_csv("labs_files/st_fin_2015.csv")
 st_fin_2016 <- read_csv("labs_files/st_fin_2016.csv")
+covid_ga_5 <- read_csv("labs_files/covid_ga_5.csv")
+ga_county_pop <- read_csv("labs_files/ga_county_pop.csv")
 ```
 
 ---
@@ -177,72 +178,20 @@ class: inverse, middle, center
 ---
 # County COVID Data
 
-- Let's explore the COVID [data](https://github.com/nytimes/covid-19-data) for every U.S. county provided by the New York Times
+- Let's view the `covid_ga_5` data
 
-- Raw data for most recent 30 days available [here](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-recent.csv)
+- These come from *New York Time's* daily COVID data [here](https://github.com/nytimes/covid-19-data)
+
+- *NYT* discontinued collecting local data on March 23, 2023 and now uses weekly CDC data
+
+- Our `covid_ga_5` data contain their last counts of cumulative COVID cases and deaths for 5 Georgia counties
+
+---
+# County comparison
 
 > **Insert a heading "Left Join"**
 
-> **In a new code chunk, add and run the following code which uses the url containing the raw data to import into R.**
-
-```{r}
-covid <- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-recent.csv')
-```
-
-- These data include **cumulative** counts (not daily) of COVID cases and deaths
-
----
-# Some Wrangling
-
-```{r, echo=FALSE}
-glimpse(covid)
-```
-
-- Let's focus on Georgia
-
-> **Create a new dataset called `covid_ga` that contains only counties in Georgia**
-
-```{r, include=FALSE}
-covid_ga <- covid %>% 
-  filter(state == 'Georgia')
-```
-
----
-# Quick Summary
-
-> **Use `summary` to get a quick look at summary stats.**
-
-```{r, include=FALSE}
-summary(covid_ga)
-```
-
---
-
-- Most recent data is as of yesterday. Let's use filter to include only yesterday's data.
-
-> **Add to your existing code and re-run**
-
-```{r}
-covid_ga <- covid %>% 
-  filter(state == 'Georgia' & date=='2023-03-13')
-```
-
----
-# County comparison
-
-- Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
-
-> **Copy and paste below code to create a new data set that includes only these counties.**
-
-```{r}
-covid_ga_5 <- covid_ga %>% 
-  filter(county %in% c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke'))
-```
-
----
-# County comparison
-
-- Suppose we want to compare cumulative cases as of the most recent day in the data across these 5 counties.
+- Suppose we want to compare cumulative cases as of 3/23/2023 across these 5 counties.
 
 > **Generate a bar graph using the following code.**
 
@@ -398,11 +347,10 @@ glimpse(gap_pop_US)
 ---
 # Left Join Example
 
-- First step is to identify the key(s) for `gapminder97_07` and `gap_pop_US`?
-
---
+- First step is to identify the key(s) for `gapminder97_07` and `gap_pop_US`
 
 - `country` AND `year`
+
 - They are named the same across both datasets as well, so...
 
 --
@@ -421,16 +369,14 @@ glimpse(gap_pop_97_07)
 
 - These data include total county population for 2019 from the US Census
 
-```{r, include=FALSE}
-ga_county_pop <- read_csv('labs_files/ga_county_pop.csv')
-```
-
 ---
-# Left Join Practice: What is the key
+# Left Join Practice
+
+- Which variable(s) is(are) the key for joining the two datasets?
 
 ```{r}
 glimpse(ga_county_pop)
-glimpse(covid_ga)
+glimpse(covid_ga_5)
 ```
 
 ---
@@ -442,72 +388,61 @@ glimpse(covid_ga)
 
 --
 
-- For example, if `county` was stored as a factor variable in `covid_ga` and as a character variable in `ga_county_pop`, we could change county to factor in `ga_county_pop` like so.
+- For example, if `county` was stored as a factor variable in `covid_ga_5` and as a character variable in `ga_county_pop`, we could change county to factor in `ga_county_pop` like so.
 
 ```{r, eval=FALSE}
 ga_county_pop$county <- as.factor(ga_county_pop$county)
 ```
 
 ---
-# Where to add code
-
-> **Find where you created `covid_ga`.** 
-
-> **Add a new code chunk immediately below the code chunk that created `covid_ga`**
-
----
 # Left Join Practice
 
-> **Left join `ga_county_pop` to `covid_ga`. Overwrite `covid_ga`.**
+- Which data set makes the most sense as our "left" dataset? 
+
+> **Left join the two datasets, overwriting `covid_ga_5`.**
 
 ```{r, include=FALSE}
-covid_ga <- covid_ga %>% 
+covid_ga_5 <- covid_ga_5 %>% 
   left_join(ga_county_pop, by = 'county')
 ```
 
 ```{r, eval=FALSE}
-covid_ga <- covid_ga %>% 
+covid_ga_5 <- covid_ga_5 %>% 
   ___(___, ___ = '___')
 ```
+
+---
+# Left Join Practice
 
 > **Use `glimpse` on our updated data**
 
 ```{r}
-glimpse(covid_ga)
+glimpse(covid_ga_5)
 ```
 
 ---
 # Adjusting for Population
 
-> **Insert a new code chunk below the left join that added population to `covid_ga`. Add three new variables: `pop100K`, `cases_rate`, and `deaths_rate`.**
+> **Insert a new code chunk below the left join that added population to `covid_ga_5`. Add three new variables: `pop100K`, `cases_rate`, and `deaths_rate`.**
 
 ```{r, eval=FALSE}
-covid_ga <- covid_ga %>% 
+covid_ga_5 <- covid_ga_5 %>% 
   ___(pop100K = ___,
-         cases_rate = ___, 
-         deaths_rate = ___)
+      cases_rate = ___, 
+      deaths_rate = ___)
 ```
 
 ```{r, include=FALSE}
-covid_ga <- covid_ga %>% 
+covid_ga_5 <- covid_ga_5 %>% 
   mutate(pop100K = population/100000,
          cases_rate = cases/pop100K, 
          deaths_rate = deaths/pop100K)
 ```
 
-
-
 ---
 # Update bar graphs
 
-> **Finally re-run the code that created the `covid_ga_5`**
-
-```{r, include=FALSE}
-covid_ga_5 <- covid_ga %>% 
-  filter(county %in% c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke'))
-```
-
-> **Next, add a new code chunk below the bar graphs you made. Copy-and-paste bar graph code. Modify the code to include new variables.**
+> **Add a new code chunk. Copy-and-paste bar graph code. Modify the code to include new variables.**
 
 ---
 # Updated bar graphs

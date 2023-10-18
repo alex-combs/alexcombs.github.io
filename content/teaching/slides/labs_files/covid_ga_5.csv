@@ -1,0 +1,6 @@
+date,county,state,fips,cases,deaths
+2023-03-23,Clarke,Georgia,13059,35440,265
+2023-03-23,Cobb,Georgia,13067,217466,2106
+2023-03-23,DeKalb,Georgia,13089,193938,1985
+2023-03-23,Fulton,Georgia,13121,277539,2671
+2023-03-23,Gwinnett,Georgia,13135,258304,2127

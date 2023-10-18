@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab6-combining-data_files/header-attrs-2.20/header-attrs.js"></script>
+    <script src="rlab6-combining-data_files/header-attrs-2.23/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: March 14, 2023
+### Last updated: October 18, 2023
 ]
 
 ---
@@ -60,7 +60,6 @@ output:
 
 ```r
 library(tidyverse)
-library(data.table)
 ```
 
 
@@ -68,15 +67,16 @@ library(data.table)
 ---
 # Download &amp; Import Data
 
-&gt; **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, `st_fin_2016.csv`, and `ga_county_pop.csv` files from eLC and add them to your project folder.**
+&gt; **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, `st_fin_2016.csv`, `covid_ga_5.csv` and `ga_county_pop.csv` files from eLC and add them to your project folder.**
 
-&gt; **In your setup code chunk, import the four data files.**
+&gt; **In your setup code chunk, import the data files.**
 
 
 ```r
 st_fin_2014 &lt;- 
 st_fin_2015 &lt;- 
 st_fin_2016 &lt;- 
+covid_ga_5 &lt;- 
 ga_county_pop &lt;- 
 ```
 
@@ -209,78 +209,20 @@ class: inverse, middle, center
 ---
 # County COVID Data
 
-- Let's explore the COVID [data](https://github.com/nytimes/covid-19-data) for every U.S. county provided by the New York Times
+- Let's view the `covid_ga_5` data
 
-- Raw data for most recent 30 days available [here](https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-recent.csv)
+- These come from *New York Time's* daily COVID data [here](https://github.com/nytimes/covid-19-data)
+
+- *NYT* discontinued collecting local data on March 23, 2023 and now uses weekly CDC data
+
+- Our `covid_ga_5` data contain their last counts of cumulative COVID cases and deaths for 5 Georgia counties
+
+---
+# County comparison
 
 &gt; **Insert a heading "Left Join"**
 
-&gt; **In a new code chunk, add and run the following code which uses the url containing the raw data to import into R.**
-
-
-```r
-covid &lt;- fread('https://raw.githubusercontent.com/nytimes/covid-19-data/master/us-counties-recent.csv')
-```
-
-- These data include **cumulative** counts (not daily) of COVID cases and deaths
-
----
-# Some Wrangling
-
-
-```
-## Rows: 97,709
-## Columns: 6
-## $ date   &lt;IDate&gt; 2023-02-12, 2023-02-12, 2023-02-12, 2023-02-12, 2023-02-12, 2…
-## $ county &lt;chr&gt; "Autauga", "Baldwin", "Barbour", "Bibb", "Blount", "Bullock", "…
-## $ state  &lt;chr&gt; "Alabama", "Alabama", "Alabama", "Alabama", "Alabama", "Alabama…
-## $ fips   &lt;int&gt; 1001, 1003, 1005, 1007, 1009, 1011, 1013, 1015, 1017, 1019, 102…
-## $ cases  &lt;int&gt; 19630, 69344, 7387, 8012, 18488, 3002, 6478, 40979, 10746, 6701…
-## $ deaths &lt;int&gt; 230, 723, 112, 109, 261, 54, 132, 674, 176, 134, 225, 63, 114, …
-```
-
-- Let's focus on Georgia
-
-&gt; **Create a new dataset called `covid_ga` that contains only counties in Georgia**
-
-
-
----
-# Quick Summary
-
-&gt; **Use `summary` to get a quick look at summary stats.**
-
-
-
---
-
-- Most recent data is as of yesterday. Let's use filter to include only yesterday's data.
-
-&gt; **Add to your existing code and re-run**
-
-
-```r
-covid_ga &lt;- covid %&gt;% 
-  filter(state == 'Georgia' &amp; date=='2023-03-13')
-```
-
----
-# County comparison
-
-- Suppose we want to focus on five counties: Fulton, Cobb, DeKalb, Gwinnett, and Clarke.
-
-&gt; **Copy and paste below code to create a new data set that includes only these counties.**
-
-
-```r
-covid_ga_5 &lt;- covid_ga %&gt;% 
-  filter(county %in% c('Fulton', 'Cobb', 'DeKalb', 'Gwinnett', 'Clarke'))
-```
-
----
-# County comparison
-
-- Suppose we want to compare cumulative cases as of the most recent day in the data across these 5 counties.
+- Suppose we want to compare cumulative cases as of 3/23/2023 across these 5 counties.
 
 &gt; **Generate a bar graph using the following code.**
 
@@ -298,14 +240,14 @@ covid_ga_5 %&gt;%
 
 - Cases
 
-&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-15-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # County comparison
 
 - Deaths
 
-&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # County comparison
@@ -448,11 +390,10 @@ glimpse(gap_pop_US)
 ---
 # Left Join Example
 
-- First step is to identify the key(s) for `gapminder97_07` and `gap_pop_US`?
-
---
+- First step is to identify the key(s) for `gapminder97_07` and `gap_pop_US`
 
 - `country` AND `year`
+
 - They are named the same across both datasets as well, so...
 
 --
@@ -481,10 +422,10 @@ glimpse(gap_pop_97_07)
 
 - These data include total county population for 2019 from the US Census
 
-
-
 ---
-# Left Join Practice: What is the key
+# Left Join Practice
+
+- Which variable(s) is(are) the key for joining the two datasets?
 
 
 ```r
@@ -499,18 +440,18 @@ glimpse(ga_county_pop)
 ```
 
 ```r
-glimpse(covid_ga)
+glimpse(covid_ga_5)
 ```
 
 ```
-## Rows: 160
+## Rows: 5
 ## Columns: 6
-## $ date   &lt;IDate&gt; 2023-03-13, 2023-03-13, 2023-03-13, 2023-03-13, 2023-03-13, 2…
-## $ county &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks", "B…
-## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Georgia…
-## $ fips   &lt;int&gt; 13001, 13003, 13005, 13007, 13009, 13011, 13013, 13015, 13017, …
-## $ cases  &lt;int&gt; 5278, 2453, 4104, 654, 11214, 4625, 26075, 35543, 5023, 5881, 4…
-## $ deaths &lt;int&gt; 136, 58, 82, 15, 262, 101, 291, 488, 125, 96, 836, 111, 116, 10…
+## $ date   &lt;date&gt; 2023-03-23, 2023-03-23, 2023-03-23, 2023-03-23, 2023-03-23
+## $ county &lt;chr&gt; "Clarke", "Cobb", "DeKalb", "Fulton", "Gwinnett"
+## $ state  &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia"
+## $ fips   &lt;dbl&gt; 13059, 13067, 13089, 13121, 13135
+## $ cases  &lt;dbl&gt; 35440, 217466, 193938, 277539, 258304
+## $ deaths &lt;dbl&gt; 265, 2106, 1985, 2671, 2127
 ```
 
 ---
@@ -522,7 +463,7 @@ glimpse(covid_ga)
 
 --
 
-- For example, if `county` was stored as a factor variable in `covid_ga` and as a character variable in `ga_county_pop`, we could change county to factor in `ga_county_pop` like so.
+- For example, if `county` was stored as a factor variable in `covid_ga_5` and as a character variable in `ga_county_pop`, we could change county to factor in `ga_county_pop` like so.
 
 
 ```r
@@ -530,79 +471,71 @@ ga_county_pop$county &lt;- as.factor(ga_county_pop$county)
 ```
 
 ---
-# Where to add code
-
-&gt; **Find where you created `covid_ga`.** 
-
-&gt; **Add a new code chunk immediately below the code chunk that created `covid_ga`**
-
----
 # Left Join Practice
 
-&gt; **Left join `ga_county_pop` to `covid_ga`. Overwrite `covid_ga`.**
+- Which data set makes the most sense as our "left" dataset? 
+
+&gt; **Left join the two datasets, overwriting `covid_ga_5`.**
 
 
 
 
 ```r
-covid_ga &lt;- covid_ga %&gt;% 
+covid_ga_5 &lt;- covid_ga_5 %&gt;% 
   ___(___, ___ = '___')
 ```
+
+---
+# Left Join Practice
 
 &gt; **Use `glimpse` on our updated data**
 
 
 ```r
-glimpse(covid_ga)
+glimpse(covid_ga_5)
 ```
 
 ```
-## Rows: 160
+## Rows: 5
 ## Columns: 7
-## $ date       &lt;IDate&gt; 2023-03-13, 2023-03-13, 2023-03-13, 2023-03-13, 2023-03-1…
-## $ county     &lt;chr&gt; "Appling", "Atkinson", "Bacon", "Baker", "Baldwin", "Banks"…
-## $ state      &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia", "Geo…
-## $ fips       &lt;int&gt; 13001, 13003, 13005, 13007, 13009, 13011, 13013, 13015, 130…
-## $ cases      &lt;int&gt; 5278, 2453, 4104, 654, 11214, 4625, 26075, 35543, 5023, 588…
-## $ deaths     &lt;int&gt; 136, 58, 82, 15, 262, 101, 291, 488, 125, 96, 836, 111, 116…
-## $ population &lt;dbl&gt; 18386, 8165, 11164, 3038, 44890, 19234, 83240, 107738, 1670…
+## $ date       &lt;date&gt; 2023-03-23, 2023-03-23, 2023-03-23, 2023-03-23, 2023-03-23
+## $ county     &lt;chr&gt; "Clarke", "Cobb", "DeKalb", "Fulton", "Gwinnett"
+## $ state      &lt;chr&gt; "Georgia", "Georgia", "Georgia", "Georgia", "Georgia"
+## $ fips       &lt;dbl&gt; 13059, 13067, 13089, 13121, 13135
+## $ cases      &lt;dbl&gt; 35440, 217466, 193938, 277539, 258304
+## $ deaths     &lt;dbl&gt; 265, 2106, 1985, 2671, 2127
+## $ population &lt;dbl&gt; 128331, 760141, 759297, 1063937, 936250
 ```
 
 ---
 # Adjusting for Population
 
-&gt; **Insert a new code chunk below the left join that added population to `covid_ga`. Add three new variables: `pop100K`, `cases_rate`, and `deaths_rate`.**
+&gt; **Insert a new code chunk below the left join that added population to `covid_ga_5`. Add three new variables: `pop100K`, `cases_rate`, and `deaths_rate`.**
 
 
 ```r
-covid_ga &lt;- covid_ga %&gt;% 
+covid_ga_5 &lt;- covid_ga_5 %&gt;% 
   ___(pop100K = ___,
-         cases_rate = ___, 
-         deaths_rate = ___)
+      cases_rate = ___, 
+      deaths_rate = ___)
 ```
-
-
 
 
 
 ---
 # Update bar graphs
 
-&gt; **Finally re-run the code that created the `covid_ga_5`**
-
-
-
-&gt; **Next, add a new code chunk below the bar graphs you made. Copy-and-paste bar graph code. Modify the code to include new variables.**
+&gt; **Add a new code chunk. Copy-and-paste bar graph code. Modify the code to include new variables.**
 
 ---
 # Updated bar graphs
 
-&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-41-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Updated bar graphs
 
-&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-42-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab6-combining-data_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Upload
