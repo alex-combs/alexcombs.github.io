@@ -312,11 +312,6 @@ $$\hat{Wage}=-22.7+1.25*Educ+1.35*Age-0.013*Age^2$$
 ---
 class: inverse, center, middle
 
-# Let's practice using another example involving a quadratic variable
-
----
-class: inverse, center, middle
-
 # Log Transformations
 
 ---
@@ -347,7 +342,7 @@ ggplot(gapminder, aes(x = gdpPercap)) +
 ```{r, fig.align='center', fig.height=5.5}
 ggplot(gapminder, aes(x = gdpPercap)) +
   geom_histogram(bins = 50, fill = 'steelblue', color = 'white') +
-  scale_x_log10(labels = scales::dollar) + #<<
+  scale_x_log10(labels = scales::dollar)
   theme_minimal()
 ```
 
@@ -369,7 +364,7 @@ gapminder %>%
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp)) +
   geom_point(color = 'steelblue', alpha = 0.4) +
-  scale_x_log10(labels = scales::dollar) + #<<
+  scale_x_log10(labels = scales::dollar)
   labs(x = 'Log GDP per capita', y = 'Life expectancy') +
   theme_minimal()
 ```
@@ -631,8 +626,3 @@ get_regression_table(log_lev) %>%
 - Converting goodness of fit measures to be comparable is beyond scope of this course.
 
 - Instead, use scatter plots and your best judgment to decide between $ln(y)=\dots$ and $y=\dots$
-
----
-class: inverse, center, middle
-
-# Let's practice interpreting regression models using logs
