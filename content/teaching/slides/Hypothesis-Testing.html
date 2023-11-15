@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Hypothesis-Testing_files/header-attrs-2.20/header-attrs.js"></script>
+    <script src="Hypothesis-Testing_files/header-attrs-2.23/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: April 11, 2023
+### Last updated: November 15, 2023
 ]
 
 ---
@@ -64,7 +64,7 @@ class: inverse, center, middle
 
 **Hypothesis test** asks the following question: "Is my result so unlikely that I can conclude with a sufficient level of confidence that there is evidence in support of my hypothesis?"
 
-**p-value:** the probability of obtaining my result or more extreme in a world where the **null hypothesis** is actually true.
+**p-value:** the probability of obtaining my result or more extreme in a world where the **null hypothesis**, which states a variable has no relationship (effect) with (on) the outcome, is actually true.
 
 - The p-value enables us to answer the hypothesis test
 
@@ -74,19 +74,23 @@ class: inverse, center, middle
 - Alternative hypothesis `\(H_A\)`
 
   - Claims there is evidence for the phenomenon you are interested in testing.
+  
+  - For example: `\(\beta_k \neq 0\)`
 
 --
 
 - Null hypothesis `\(H_0\)`
 
-  - Claims there is no evidence; the opposite of the alternative
+  - Claims there is no relationship or effect; the opposite of the alternative
+  
+  - For example: `\(\beta_k = 0\)`
 
 ---
 # Example
 
 &lt;img src="Hypothesis-Testing_files/figure-html/unnamed-chunk-4-1.png" style="display: block; margin: auto;" /&gt;
 
-&gt; **Run the all code chunks down to and including `promo-estimates`**
+&gt; **Run all code chunks down to and including `promo-estimates`**
 
 ---
 # Example
@@ -107,17 +111,14 @@ class: inverse, center, middle
 ---
 # Example
 
-What are our null and alternative hypotheses for this analysis?
+- Following this case of promotions by gender, the difference in rates of promotion between males and females, `\(P_M-P_F\)`, is either 0 or something other than 0 
 
-`\(H_A\)`:  
+- What are our null and alternative hypotheses for this analysis?
 
+  - `\(H_A\)`:  
+  - `\(H_0\)`:
 
-`\(H_0\)`: 
-
----
-# Hypothesis test conclusion
-
-- What are the possible conclusions of a hypothesis test?
+- What are the possible conclusions of this and all hypothesis tests?
 
 ---
 # Example
@@ -125,13 +126,13 @@ What are our null and alternative hypotheses for this analysis?
 1. If results reject the null, then
 
   - We found statistically significant evidence that `\(P_M-P_F \neq 0\)`
-  - Means the result of 0.3 is too improbable to be due to random noise
+  - Means the result of 0.3 is too improbable to be only due to random chance
 
 --
 
 2. If results fail to reject the null
   - We did not find statistically significant evidence that `\(P_M-P_F \neq 0\)`
-  - Means result of 0.3 is not improbable enough
+  - Means result of 0.3 is not improbable enough to rule out random chance
   - `\(P_M-P_F\lesseqqgtr0\)` ; we don't know which
   
 --
@@ -218,14 +219,18 @@ class: inverse, center, middle
 
 - Let's use R to simulate a world where the null is true.
 
-&gt; **Run all code chunks down to and including `null-estimate`**
+&gt; **Run all code chunks from `one-shuffle` down to and including `null-estimate`**
+
+- Our null estimate is the difference in promotion rates between males and females if promotions were truly random with respect to gender based on one sample
+
+- This simulates a world where the null is true
 
 ---
 # Example
 
 - Let's repeat this random shuffling 1,000 times, calculating the difference in promotions between males and females each time.
 
-- Then we could plot the 1,000 values as a histogram, giving us a distribution of differences between males and females in a world where promotions are random with respect to gender
+- Then we could plot the 1,000 values as a histogram, giving us a distribution of differences between males and females based on 1,000 samples in a world where promotions are random with respect to gender
 
 &gt; **Run `null-distribution` code chunk**
 
