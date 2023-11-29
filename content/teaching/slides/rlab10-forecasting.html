@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab10-forecasting_files/header-attrs-2.20/header-attrs.js"></script>
+    <script src="rlab10-forecasting_files/header-attrs-2.23/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # PADP 7120 Data Applications in PA
 ]
 .subtitle[
-## RLab 9: Forecasting
+## RLab 8: Forecasting
 ]
 .author[
 ### Alex Combs
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: April 24, 2023
+### Last updated: November 29, 2023
 ]
 
 ---
@@ -40,7 +40,7 @@ class: center, middle, inverse, title-slide
 
 ```r
 ---
-title: "RLab 9: Forecasting"
+title: "RLab 8: Forecasting"
 author: "Your Name"
 output: 
   html_document:
@@ -52,27 +52,26 @@ output:
 ---
 # Packages
 
-&gt; **In setup code chunk, load following packages**
+&gt; **In setup code chunk, load following packages and add the option that stops R from using scientific notation for large values**
 
 
 ```r
 library(tidyverse)
 library(forecast)
 library(fpp2)
+options(scipen = 999)
 ```
 
 ---
 # Set-up
 
-&gt; **Download `acc_select_tax_rev`, `us_house_data`, and `start_forecast_data` from eLC and import. You can copy paste the below code in your setup code chunk.**
+&gt; **Download `acc_select_tax_rev` from eLC and import. You can copy and paste the below code in your setup code chunk.**
 
 
 
 
 ```r
 acc_taxrev &lt;- read_csv("acc_select_tax_rev.csv")
-house_data &lt;- read_csv("us_house_data.csv")
-starts_fc &lt;- read_csv("starts_forecast_data.csv")
 ```
 
 ---
@@ -80,10 +79,9 @@ starts_fc &lt;- read_csv("starts_forecast_data.csv")
 
 - Convert a dataset to a time series dataset in R
 - Explore time series for patterns
-- Understand simple forecasting models like naive, average, and trend
-- Use exponential smoothing
-- Use regression-adjusted forecast
-- Evaluate and choose between forecast models
+- Use simple forecasting models like naive, average, and trend
+- Use exponential smoothing forecast
+- Assess goodness-of-fit between forecast models
 
 ---
 # Steps of forecasting
@@ -95,30 +93,43 @@ starts_fc &lt;- read_csv("starts_forecast_data.csv")
 ---
 # Creating a time series (TS) object
 
-- First, need to tell R that data is a time series
+- First, need to tell R that data is time series
 
 - Generic syntax:
 
 
 ```r
-ts_name &lt;- ts(data_set_name[,-1], # tells R which column measures time
+ts_name &lt;- ts(data_set_name[,-1],
               start = year_of_first_observation,
               end = year_of_last_observation, 
               frequency = number_of_observations_between_years)
 ```
+
+- The `-1` in the bracket tells R which column in the data contains the time variable
+
+- In this case the time variable is the first column in the data
 
 ---
 # TS object examples
 
 - annual time series
 
-&lt;img src="labs_files/tsobjannual.png" width="1277" style="display: block; margin: auto;" /&gt;
+
+
+
+| year| revenue|
+|----:|-------:|
+| 2016|      55|
+| 2017|      75|
+| 2018|      38|
+| 2019|      37|
+| 2020|      53|
 
 
 ```r
 ts_data &lt;- ts(data[,-1], 
-              start = 2012,
-              end = 2016,
+              start = 2016,
+              end = 2020,
               frequency = 1)
 ```
 
@@ -130,17 +141,17 @@ ts_data &lt;- ts(data[,-1],
 - quarterly data (head &amp; tail shown)
 
 
-| year| quarter| value|
-|----:|-------:|-----:|
-| 2016|       1|    35|
-| 2016|       2|    34|
+| year| quarter| revenue|
+|----:|-------:|-------:|
+| 2016|       1|      38|
+| 2016|       2|      58|
 
 
 
-| year| quarter| value|
-|----:|-------:|-----:|
-| 2020|       3|    55|
-| 2020|       4|    71|
+| year| quarter| revenue|
+|----:|-------:|-------:|
+| 2020|       3|      48|
+| 2020|       4|      64|
 
 
 ```r
@@ -157,17 +168,17 @@ ts_quarterly &lt;- ts(quarterly[,-1],
 
 
 
-| year| month| value|
-|----:|-----:|-----:|
-| 2016|     1|    32|
-| 2016|     2|    63|
+| year| month| revenue|
+|----:|-----:|-------:|
+| 2016|     1|      42|
+| 2016|     2|      57|
 
 
 
-| year| month| value|
-|----:|-----:|-----:|
-| 2020|    11|    42|
-| 2020|    12|    40|
+| year| month| revenue|
+|----:|-----:|-------:|
+| 2020|    11|      44|
+| 2020|    12|      71|
 
 
 ```r
@@ -184,17 +195,17 @@ ts_monthly &lt;- ts(monthly[,-1],
 
 
 
-| year| value|
-|----:|-----:|
-| 2000|    31|
-| 2002|    37|
+| year| revenue|
+|----:|-------:|
+| 2000|      45|
+| 2002|      30|
 
 
 
-| year| value|
-|----:|-----:|
-| 2018|    45|
-| 2020|    64|
+| year| revenue|
+|----:|-------:|
+| 2018|      63|
+| 2020|      52|
 
 
 ```r
@@ -220,28 +231,13 @@ ts_biennial &lt;- ts(biennial[,-1],
 ---
 # Creating TS object
 
-- `us_house_data` contains median home sale price, housing starts (in thousands), and gdp (in billions)
+- `acc_taxrev` contains annual property tax and sales tax revenues for Athens-Clarke County from 1992-2022
 
-&gt; **Set `us_house_data` as a TS object named `ts_house`**
-
-
-```r
-ts_house &lt;- ts(house_data[,-1], start = 1990, end = 2021, 
-                frequency = 4)
-```
-
-
-
----
-# Creating TS object
-
-- `acc_taxrev` contains select tax revenues for Athens-Clarke County
-
-&gt; **Set `acc_taxrev` as a TS object.**
+&gt; **In a new code chunk, set `acc_taxrev` as a TS object.**
 
 
 ```r
-ts_taxrev &lt;- ts(acc_taxrev[,-1], start = 1992, end = 2020, 
+ts_taxrev &lt;- ts(acc_taxrev[,-1], start = 1992, end = 2022, 
                frequency = 1)
 ```
 
@@ -259,18 +255,22 @@ ts_taxrev &lt;- ts(acc_taxrev[,-1], start = 1992, end = 2020,
 ---
 # Types of patterns
 
-1. Trend - A long-term increase or decrease in the data
+1. Trend - A long-term increase or decrease in the variable
 
 2. Seasonal - A periodic pattern that follows the calendar (e.g. quarter, month, day of the week)
 
-3. Cyclic - Data rises and falls not according to a fixed period (e.g. recessions)
+3. Cyclic - Variable rises and falls not according to a fixed calendar (e.g. recessions)
 
 - Time series can exhibit any combination of the above patterns
+
+- Time series must be more frequent than annual to have seasonality
   
 ---
 # Patterns
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
+
+- Trend with seasonality
 
 ---
 # Patterns
@@ -282,19 +282,19 @@ ts_taxrev &lt;- ts(acc_taxrev[,-1], start = 1992, end = 2020,
 
 - If R knows data is time series, we can use `autoplot` to quickly generate some useful graphs.
 
-&gt; **Add and run following code**
+&gt; **In a new code chunk, add and run each line of the following code**
 
-
-```r
-autoplot(ts_house)
-```
-
-```r
-autoplot(ts_house[,2]) # specifies variable based on column
-```
 
 ```r
 autoplot(ts_taxrev)
+```
+
+```r
+autoplot(ts_taxrev[,1])
+```
+
+```r
+autoplot(ts_taxrev[,2])
 ```
 
 
@@ -306,36 +306,31 @@ class: inverse, center, middle
 ---
 # Sources of information
 
-- When choosing a forecast model, there are two sources of information for making future predictions
+- There are two sources of information for making future predictions
 
   - Past values of the outcome
-  - Explanatory variables of the outcome
+  - Variables that explain and/or predict the outcome
   
 --
 
-- Models that use past values
+- Models that use only past values of outcome
 
-  - Simple: naive, mean, trend
+  - Simple models: naive, mean, trend
   - Exponential smoothing (common; we will cover this)
   - ARIMA (common; we will not cover)
 
 --
 
-- Regression-adjusted models incorporate explanatory variables
+- Regression models that use past outcome and explanatory variables (not covered)
 
-  - Useful for forecasts based on scenarios
-  - Example: predicted housing starts if median price increases 2% each year
+  - Useful for forecasts based on scenarios where explanatory variables change
 
 ---
 # Autocorrelation
 
 - Recall the correlation coefficient measures the linear association between two variables
 
---
-
 - Models using past values rely on **autocorrelation**: the linear association between a variable and past values of the *same* variable
-
---
 
 - If past values are correlated with future values, then the past informs the future
 
@@ -343,25 +338,28 @@ class: inverse, center, middle
   - The 3rd lag for annual time series value in 2020 is 2017
 
 ---
+# Autocorrelation
+
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-25-1.png" style="display: block; margin: auto;" /&gt;
+
+- Clear trend; we should expect presence of autocorrelation
+
+---
 # Autocorrelation Plot
 
-.pull-left[
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
+- Can test for autocorrelation using `ggAcf()` 
 
 
 ```r
-ggAcf(usmelec)
+ggAcf(ts_taxrev[,1])
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-27-1.png" style="display: block; margin: auto;" /&gt;
-]
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-26-1.png" style="display: block; margin: auto;" /&gt;
 
-.pull-right[
 
-- Blue dashed line delineates statistically significant autocorrelation
+- Blue dashed line distinguishes statistically significant autocorrelation
 
-- Past electricity production significantly correlates with production at a particular time
-]
+- Past property tax revenue significantly correlates with future
 
 ---
 # White noise
@@ -370,24 +368,12 @@ ggAcf(usmelec)
 
 - The time series is random and past values do not correlate with future values
 
----
-# Autocorrelation Plot
-
-- Can use `ggAcf` to generate an autocorrelation plot of home price
-
-
-```r
-ggAcf(ts_house[,2]) # applied to first column, price
-```
-
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
-
-- Home price is definitely not white noise
+- Athens property tax revenue does not exhibit white noise
 
 ---
 # Autocorrelation Plot
 
-&gt; **Use `ggAcf` to generate an autocorrelation plot for `sales_use_tax` in the `ts_taxrev` dataset**
+&gt; **Use `ggAcf` to generate an autocorrelation plot for sales_use_tax in the `ts_taxrev` dataset**
 
 
 
@@ -443,24 +429,23 @@ snaive()
 ```
 
 - Default for `h`orizon is 10 periods
-- Corresponds to frequency; h = 4 in quarterly is one year
+- Corresponds to frequency of the data; h = 4 in quarterly data is one year
 
 ---
 # In R
 
-- Running `meanf`, `naive`, and `snaive` on `house_starts` in the `ts_house` data
+- Running `meanf`, `naive`, and `rwf` on property tax revenue in the `ts_taxrev` data to forecast the next 4 years
 
 
 ```r
-starts_meanf &lt;- meanf(ts_house[,2], h = 12)
-starts_naive &lt;- naive(ts_house[,2], h = 12)
-starts_drift &lt;- rwf(ts_house[,2], drift = TRUE, h = 12)
-starts_snaive &lt;- snaive(ts_house[,2], h = 12)
+proprev_meanf &lt;- meanf(ts_taxrev[,1], h = 4)
+proprev_naive &lt;- naive(ts_taxrev[,1], h = 4)
+proprev_drift &lt;- rwf(ts_taxrev[,1], drift = TRUE, h = 4)
 ```
 
 - These new objects are like the regression results we have saved many times
 
-- We can use functions on these to view our results
+- We can use functions on these new objects to view our results
 
 ---
 # Viewing forecasts in R
@@ -469,42 +454,32 @@ starts_snaive &lt;- snaive(ts_house[,2], h = 12)
 
 
 ```r
-autoplot(starts_meanf)
+autoplot(proprev_meanf)
+```
+
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+
+- Mean forecast will be the worst model for strong trend data
+
+---
+# Viewing forecasts in R
+
+
+```r
+autoplot(proprev_naive)
+```
+
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# Viewing forecasts in R
+
+
+```r
+autoplot(proprev_drift)
 ```
 
 &lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Viewing forecasts in R
-
-- Can use `autoplot` on the saved model to visualize forecast.
-
-
-```r
-autoplot(starts_drift)
-```
-
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-36-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Viewing forecasts in R
-
-
-```r
-autoplot(starts_naive)
-```
-
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-37-1.png" style="display: block; margin: auto;" /&gt;
-
----
-# Viewing forecasts in R
-
-
-```r
-autoplot(starts_snaive)
-```
-
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-38-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Reporting plausible ranges
@@ -513,47 +488,29 @@ autoplot(starts_snaive)
 
 
 ```r
-summary(starts_naive)
+summary(proprev_drift)
 ```
 
 
 
 
-|        | Point Forecast|    Lo 80|    Hi 80|    Lo 95|    Hi 95|
-|:-------|--------------:|--------:|--------:|--------:|--------:|
-|2021 Q2 |           3467| 3185.950| 3748.050| 3037.171| 3896.829|
-|2021 Q3 |           3467| 3069.535| 3864.465| 2859.130| 4074.870|
-|2021 Q4 |           3467| 2980.207| 3953.793| 2722.514| 4211.486|
-|2022 Q1 |           3467| 2904.899| 4029.101| 2607.341| 4326.659|
-|2022 Q2 |           3467| 2838.552| 4095.448| 2505.872| 4428.128|
-|2022 Q3 |           3467| 2778.570| 4155.430| 2414.138| 4519.862|
-|2022 Q4 |           3467| 2723.411| 4210.589| 2329.779| 4604.221|
-|2023 Q1 |           3467| 2672.070| 4261.930| 2251.259| 4682.741|
-|2023 Q2 |           3467| 2623.849| 4310.151| 2177.512| 4756.488|
-|2023 Q3 |           3467| 2578.241| 4355.759| 2107.760| 4826.240|
-|2023 Q4 |           3467| 2534.862| 4399.138| 2041.417| 4892.583|
-|2024 Q1 |           3467| 2493.413| 4440.587| 1978.028| 4955.972|
+|     | Point Forecast|    Lo 80|    Hi 80|    Lo 95|    Hi 95|
+|:----|--------------:|--------:|--------:|--------:|--------:|
+|2023 |       76485236| 74356555| 78613917| 73229699| 79740773|
+|2024 |       78291986| 75233407| 81350565| 73614293| 82969679|
+|2025 |       80098736| 76294676| 83902796| 74280929| 85916543|
+|2026 |       81905486| 77446879| 86364093| 75086635| 88724337|
 
 ---
 # Practice
 
-&gt; **Use mean and drift forecasts on sales tax for next 3 years**
+&gt; **In a new code chunk, use the drift forecast on sales tax for next 3 years**
 
 
-```r
-salestax_mean &lt;- meanf(ts_taxrev[,2], h = 3)
-salestax_drift &lt;- rwf(ts_taxrev[,2], drift = TRUE, h = 3)
-```
 
 &gt; **Produce the graph and the numerical results**
 
 
-```r
-autoplot(salestax_mean)
-summary(salestax_mean)
-autoplot(salestax_drift)
-summary(salestax_drift)
-```
 
 ---
 class: inverse, center, middle
@@ -590,12 +547,12 @@ class: inverse, center, middle
 
 - Seasonal: `N`one, `A`dditive, `M`ultiplicative
 
-- 18 possible combinations for exponential smoothing models
+- 18 possible combinations of exponential smoothing models
 
 ---
 # Exponential smoothing in R
 
-- The `ets` (error, trend, seasonal) function tests the 18 competing models and chooses the best one
+- The `ets` (error, trend, seasonal) function tests the 18 possible models and chooses the best one
 
 - Generic syntax
 
@@ -609,47 +566,38 @@ ets(ts_data) %&gt;%
 ---
 # Exponential smoothing in R
 
-.pull-left[
+
 
 ```r
-ets(ts_house[,1]) %&gt;%
-  forecast(h=12) %&gt;% 
+ets(ts_taxrev[,1]) %&gt;%
+  forecast(h=4) %&gt;% 
   autoplot()
 ```
 
-&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-48-1.png" style="display: block; margin: auto;" /&gt;
-]
+&lt;img src="rlab10-forecasting_files/figure-html/unnamed-chunk-45-1.png" style="display: block; margin: auto;" /&gt;
 
-.pull-right[
-- `ets` has fit a model with `M`ultiplicative error, `Ad`amped trend, and `A`dditive seasonality
-]
+
+- Chose `M`ultiplicative error, `Additive` trend, and `N`o seasonality
+
 ---
 # Exponential smoothing in R
 
 
 ```r
-ets(ts_house[,1]) %&gt;%
-  forecast(h=12) %&gt;% 
+ets(ts_taxrev[,1]) %&gt;%
+  forecast(h=4) %&gt;% 
   summary()
 ```
 
 
 
 
-|        | Point Forecast|    Lo 80|    Hi 80|    Lo 95|    Hi 95|
-|:-------|--------------:|--------:|--------:|--------:|--------:|
-|2021 Q2 |       372944.1| 359573.3| 386314.9| 352495.2| 393393.0|
-|2021 Q3 |       381448.1| 365202.0| 397694.2| 356601.9| 406294.4|
-|2021 Q4 |       393619.2| 372978.6| 414259.7| 362052.2| 425186.1|
-|2022 Q1 |       400921.5| 375083.9| 426759.1| 361406.3| 440436.7|
-|2022 Q2 |       407096.5| 375545.4| 438647.6| 358843.2| 455349.7|
-|2022 Q3 |       410179.4| 372669.1| 447689.8| 352812.3| 467546.6|
-|2022 Q4 |       417789.9| 374128.7| 461451.1| 351015.8| 484564.0|
-|2023 Q1 |       421255.5| 371445.9| 471065.2| 345078.2| 497432.9|
-|2023 Q2 |       424202.9| 368263.5| 480142.2| 338651.0| 509754.7|
-|2023 Q3 |       424570.5| 362580.7| 486560.3| 329765.3| 519375.7|
-|2023 Q4 |       429896.6| 361904.2| 497889.0| 325911.2| 533882.1|
-|2024 Q1 |       431440.6| 357574.7| 505306.4| 318472.5| 544408.6|
+|     | Point Forecast|    Lo 80|     Hi 80|    Lo 95|     Hi 95|
+|:----|--------------:|--------:|---------:|--------:|---------:|
+|2023 |       78804125| 75158599|  82449652| 73228774|  84379477|
+|2024 |       82929945| 76541329|  89318562| 73159399|  92700492|
+|2025 |       87055766| 77656647|  96454884| 72681055| 101430477|
+|2026 |       91181586| 78445166| 103918005| 71702913| 110660259|
 
 ---
 # Practice
@@ -657,111 +605,40 @@ ets(ts_house[,1]) %&gt;%
 &gt; **Use the `ets` function on sales tax for the next 3 years to produce a graph and table.**
 
 
-```r
-ets(ts_taxrev[,2]) %&gt;% 
-  forecast(h=3) %&gt;% 
-  autoplot()
-```
 
 
-```r
-ets(ts_taxrev[,2]) %&gt;% 
-  forecast(h=3) %&gt;% 
-  summary()
-```
 
 ---
 class: inverse, center, middle
 
-# Evaluating forecast models
-
----
-# Evaluating forecasts
-
-- We can compare our point forecast to each observed year of the outcome
-
-- The difference between the observed value and our point forecast is the residual
-
---
-
-- To have a valid forecast:
-  - The residuals are white noise
-  - The residuals have a mean equal to 0
-  - If not, we haven't extracted all the useful information from the past
-
---
-
-- Among valid models, we prefer the model with the best fit
-  
----
-# Evaluating forecasts
-
-- Can use `checkresiduals` to test validity of forecast
-
-- Also produces the p-value for a hypothesis test (e.g., Ljung-Box) of overall fit
-
-- Null hypothesis is that the model is valid
-
----
-# Evaluating forecasts
-
-
-
-```r
-ets(ts_house[,2]) %&gt;% 
-* checkresiduals()
-```
-
-![](rlab10-forecasting_files/figure-html/unnamed-chunk-54-1.png)&lt;!-- --&gt;
-
-```
-## 
-## 	Ljung-Box test
-## 
-## data:  Residuals from ETS(A,N,N)
-## Q* = 15.689, df = 6, p-value = 0.01552
-## 
-## Model df: 2.   Total lags used: 8
-```
-
----
-# Evaluating forecasts
-
-&gt; **Use `checkresiduals` on the drift and ets forecasts for sales tax**
-
-
-```r
-checkresiduals(salestax_drift)
-ets(ts_taxrev[,2]) %&gt;% checkresiduals()
-```
-
-- Does the information provided help us choose a preferred model?
+# Assessing goodness-of-fit
 
 ---
 # Goodness of fit
 
-- Can use `accuracy` to compare the fit of competing models
+- Can use `accuracy()` to compare the fit of competing models
 
 
 ```r
-accuracy(starts_drift)
+accuracy(proprev_drift)
 ```
 
 ```
-##                         ME     RMSE      MAE        MPE     MAPE     MASE
-## Training set -7.449238e-14 219.2919 163.3715 -0.3608953 6.035225 0.438771
-##                   ACF1
-## Training set 0.1412264
+##              ME    RMSE     MAE        MPE     MAPE      MASE      ACF1
+## Training set  0 1606544 1157909 -0.7642346 2.878888 0.5846304 0.4373541
 ```
 
 ```r
-ets(ts_house[,2]) %&gt;% accuracy()
+ets(ts_taxrev[,1]) %&gt;% 
+  accuracy()
 ```
 
 ```
-##                    ME     RMSE      MAE        MPE     MAPE      MASE      ACF1
-## Training set 2.349534 218.4288 162.3733 -0.2677624 5.998425 0.4360902 0.1415495
+##                    ME    RMSE     MAE       MPE    MAPE     MASE       ACF1
+## Training set 244500.5 1434558 1128638 0.4201145 2.85475 0.569851 0.07795879
 ```
+
+- ets model has a lower RMSE: better fit
 
 ---
 # Goodness of fit
@@ -769,93 +646,10 @@ ets(ts_house[,2]) %&gt;% accuracy()
 &gt; **Use `accuracy` to compare drift and ets models for sales tax**
 
 
-```r
-accuracy(salestax_drift)
-ets(ts_taxrev[,2]) %&gt;% accuracy()
-```
 
 - Which model fits the data better? How far off is it, on average?
 
----
-class: inverse, center, middle
-
-# Regression-adjusted forecast models
-
----
-# Time series regression forecasts
-
-- Including explanatory factors can improve our forecasts
-
-- We can incorporate trend and seasonality in regression while controlling for other explanatory factors
-
-`$$y_t=\beta_0+\beta_1x_t + \beta_3t + \beta_4s_t + \epsilon_t$$`
-
-- `\(t\)` controls for each period, like year, to add trend
-- `\(s\)` controls for seasons, like quarters, to add seasonality
-
----
-# In R
-
-- Let's forecast housing starts incorporating price and GDP as explanatory variables
-
-&gt; **Add and run below time series linear model**
-
-
-```r
-reg_starts &lt;- tslm(house_starts ~ median_homeprice + gdp + trend + season, 
-                   data = ts_house)
-```
-
-- Does this forecast fit better than `ets` forecast?
-
-
-```r
-summary(reg_starts)
-```
-
----
-# Using a regression on new data
-
-- When we save regression results, we can feed new data into the `forecast` function to make predictions
-
-- Generic syntax
-
-
-```r
-new_object &lt;- forecast(saved_regression_results, 
-                       newdata = name_of_new_dataset)
-```
-
----
-# In R
-
-- Now we can forecast starts in response to changes in explanatory variables using the `starts_fc` data we downloaded from eLC
-
-- These data assume a 2% annual increase in housing prices and GDP over the next 12 quarters
-
----
-# In R
-
-&gt; **Add and run below code**
-
-
-```r
-reg_starts_forecast &lt;- forecast(reg_starts, 
-                          newdata = starts_fc)
-```
-
-- Now we can report these results same as before. 
-
-&gt; **Add and run below code**
-
-
-```r
-autoplot(reg_starts_forecast)
-```
-
-```r
-summary(reg_starts_forecast)
-```
+&gt; **Upload your Rmd to eLC**
 
 
     </textarea>
