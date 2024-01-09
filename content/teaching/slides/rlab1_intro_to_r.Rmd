@@ -53,21 +53,21 @@ summary(cars)
 
 - Helps to have the slides open on your computer
 
-- If you need to see something I did previously in RStudio, wait until I switch back to RStudio before asking unless you feel yourself getting lost. 
+- If you need to see something I did previously in RStudio, maybe wait until I switch back to RStudio before asking unless you feel yourself getting lost. 
 
 ---
 # RLab Process
 
-- Highly likely that you will encounter errors. This is normal.
+- Highly likely that you will encounter errors. This is normal. This lab will deliberately cause a few errors.
 
   - If so and you cannot figure out how to fix, let me know
-  - Troubleshooting can help you and others learn
+  - Troubleshooting can help you learn
 
-- First few weeks may involve frequent stopping as I help students 
+- First few weeks may involve frequent stopping as I assist students.
 
-- If you are waiting while I help students, resist working ahead.
+- If you are waiting while I assist others, your patience is appreciated. Try to resist working ahead. Maybe help a neighbor.
 
-- Possible I won't know why something isn't working on your computer during class and need to resolve outside of class
+- Possible I can't solve an issue during class and need to resolve after class.
 
 ---
 # Starting RStudio
@@ -86,18 +86,16 @@ summary(cars)
 
 > **Type `getwd()` into the console (bottom-left pane) and hit Enter**
 
-- R should return a file path, such as "/Users/alexcombs/Documents/"
+- R should return a file path, such as "/Home/Documents/"
 
-- When you tell R to look for or save a file, this is the location R uses
-
-- I recommend using a separate folder for each assignment that contains all necessary data and documents
+- When you tell R to look for or save a file, this is the location R is using
 
 ---
 # RStudio Projects
 
 - RStudio Projects are a good way to organize your work
 
-- Creates a folder for RStudio to work from
+- Creates a folder for RStudio and sets it as the working directory
 
 - Places a `.Rproj` in the folder you can open to return to your project
 
@@ -147,19 +145,15 @@ library(tidyverse)
 
 - You must have a package installed in your version of RStudio in order to load it
 
---
-
 - If RStudio failed to load tidyverse, likely due to not having it installed (or some other package it requires). Error message will tell you a package "does not exist"
 
---
-
 - The following code will install a package
+
+- Make sure you include quotes around the name
 
 ```{r, eval=FALSE}
 install.packages("name_of_package")
 ```
-
-- Make sure you include quotes around the name
 
 ---
 # Loading vs. Installing packages
@@ -186,7 +180,7 @@ states1 <- read_csv("states1.csv")
 - You must use quotes anytime you tell R to load or save a file
 
 ---
-# Our first error (hopefully)
+# A common error
 
 - Should now see an error message like the one below
 
@@ -196,7 +190,7 @@ Calls: <Anonymous> ... withCallingHandlers -> withVisible -> eval -> eval -> loa
 Execution halted
 ```
 
-- R tries to tell you what went wrong in the error message
+- R tries to tell you what went wrong in the error message. This says file (object) cannot be found.
 
 ---
 # Moving a file to our project
@@ -231,9 +225,9 @@ Execution halted
 
 --
 
-> **Start an R Markdown (.Rmd) document. When the dialog box appears, just hit OK.**
+> **Start an R Markdown (.Rmd) document. When the dialog box appears, click OK.**
 
-- By default, an Rmd loads as a template. The template information is informative for beginners.
+- By default, an Rmd loads with a template. The template information is informative for beginners.
 
 ---
 # Knit
@@ -242,7 +236,7 @@ Execution halted
 
 - Should see a knit button at the top of the editor pane. Clicking it will knit your document.
 
-- Every time you knit, R saves your document
+- Every time you knit, R saves your Rmd file
   
 --
 
@@ -272,13 +266,11 @@ output: html_document
 
 - To add a code chunk, you can use point-and-click or the keyboard shortcut `Cmd+Opt+I` on Mac, `Ctrl+Alt+I` on Windows
 
-- I will now demonstrate inserting a code chunk and typing some arbitrary arithmetic
-
 --
 
-> **At the bottom of your Rmd, insert a code chunk and add some arbitrary arithmetic inside it.**
+> **At the bottom of your Rmd, insert a code chunk and add some arbitrary math inside it.**
 
-> **Click `Enter` a few times and type another line of arithmetic below the first**
+> **Click `Enter` a few times and type another line of math inside the same code chunk**
 
 ---
 # Running Code Chunks
@@ -289,10 +281,10 @@ output: html_document
 
 - To run a single line of code, place your cursor on that line and click `Cmd+Enter` on Mac or `Ctrl+Enter` on Windows
 
-- To run multiple code chunks, use the Run menu at the top of the editor pane
+- To run multiple code chunks, use the "Run" menu at the top of the editor pane
 
 ---
-# Creating an object the environment pane
+# Creating an object in environment pane
 
 - Anytime you use the **assignment operator,** `<-`, the result will be saved in your environment pane. You already saved `states1` in your environment using `<-`.
 
@@ -308,27 +300,25 @@ states2 <- select(states1, state, pop_1990)
 
 --
 
-> **Knit your Rmd again. (this should cause an intentional error)**
+> **Knit your Rmd again. (this should cause an error)**
 
 ---
-# Our second error
+# Another error
 
-- R cannot find function `select`. But it worked when we ran the line of code.
+- R cannot find function `select` when knitting Rmd. But it worked when we ran the single line of code.
 
 --
 
 - When you knit, R runs the code in your Rmd from beginning-to-end and ignores anything you did in the console to load a package or import data. Your Rmd needs to be self-contained.
 
---
-
-- If a code chunk in your document depends on something you did in the console, it won't knit unless we include that code
+- If a code chunk in your document depends on something you did in the console, it won't knit unless we add that code to the Rmd and in the correct order.
 
 --
 
 > **In the first code chunk of your Rmd, add a new line of code: `library(tidyverse)`. Try to knit again.**
 
 ---
-# Our third error
+# Another error
 
 - R can't find object `states1`, but `states1` is in our environment.
 
@@ -336,7 +326,7 @@ states2 <- select(states1, state, pop_1990)
 
 - We imported `states1` using the console. It is in our environment. We can use it.
 
-- But there is no code in our Rmd document that imports `states1`. When we knit, it is as if we do not have `states1` imported
+- But there is no code in our Rmd document that imports `states1`. When we knit, we do not have `states1` imported
 
 --
 
@@ -347,7 +337,7 @@ states2 <- select(states1, state, pop_1990)
 
 > **Since you just knitted, everything is saved. Close RStudio.**
 
-> **To re-open your project, find the .Rproj file on your computers file manager and open it.** 
+> **To re-open your project, find the .Rproj file in your file manager and open it.** 
 
 ---
 class: inverse, middle, center
@@ -357,7 +347,7 @@ class: inverse, middle, center
 ---
 # Set-up
 
-> **Download the file "rlab1_profile" from eLC and add to your "rlab1" project folder**
+> **Download the file "rlab1_profile" from eLC and add to your project folder**
 
 --
 
