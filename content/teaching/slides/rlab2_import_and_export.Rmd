@@ -48,7 +48,7 @@ library(fivethirtyeight)
 
 > **Change the title in the YAML to "RLab2: Import & Export"**
 
-> **Keep the setup code chunk at the top but delete the rest of the template.**
+> **Keep the setup code chunk at the top of the template but delete the rest of the template.**
 
 ---
 # Set-up: packages
@@ -89,7 +89,7 @@ class: inverse, middle, center
 ---
 # Data in R Packages
 
-> **In a _new code chunk_, add and run the following**
+> **In a new code chunk, add and run the following code**
 
 ```{r, eval=FALSE}
 slice_head(gapminder, n=4)
@@ -183,10 +183,10 @@ slice_head(hc, n=4) # prints result without saving anything
 ```{r, eval=FALSE}
 ---
 title: "RLab2: Import & Export"
-author: "Alex Combs"
+author: "Your Name"
 output:
-  html_document:
-    df_print: kable
+  html_document: #<<
+    df_print: kable #<<
 ---
 ```
 
@@ -197,7 +197,7 @@ output:
 ---
 # Printing tables
 
-> **Change `df_print` option in YAML according to highlighted line:**
+> **Change `df_print` option in YAML to paged like highlighted below:**
 
 ```{r, eval=FALSE}
 ---
@@ -216,7 +216,7 @@ output:
 ---
 # YAML themes
 
-> **Add the highlighted lines to your YAML, then knit to HTML**
+This is not required, but you can change the theme of your document (similar to themed templates in Microsoft Office) like below.
 
 ```{r, eval=FALSE}
 ---
@@ -225,7 +225,7 @@ author: "Alex Combs"
 output:
   html_document:
     df_print: paged
-    theme: slate #<<
+    theme: readable #<<
 ---
 ```
 
@@ -299,9 +299,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - This sets `echo=TRUE` for all code chunks by default
 
-- If you change to `echo=FALSE`, all code chunks will be suppressed by default when you knit.
+> **Change to `echo=FALSE`, to suppress all code when knit.**
 
-- You can also add `message=FALSE` and `warning=FALSE` to suppress the background information RStudio prints but should not be included in the export
+> **Add `message=FALSE` and `warning=FALSE` to suppress the background information RStudio sometimes prints but should not be included in most reports**
 
 ---
 class: inverse, middle, center
@@ -315,11 +315,11 @@ class: inverse, middle, center
 
 - Provides the opportunity to use code to import many similar files quickly
 
-- Messy data files present a choice in our workflow
+- Messy data files present a choice in workflow
   - Clean the data some as part of the import, or
   - Import data as is and clean later
 
-- Avoid changing the data files in something like Excel before importing it because you or others can't replicate that
+- Avoid changing the data files in something like Excel before importing it because you or others can't replicate that as easily
 
 ---
 # Importing CSV
@@ -335,6 +335,8 @@ any_name <- read_csv("filename.csv")
 - Remember:
   - Quotes around the file
   - Include the file extension .csv
+  
+> **In the setup code chunk, import ncbirths.csv naming the saved data as ncbirths.**
 
 ---
 # Importing Excel
@@ -347,6 +349,8 @@ anyname <- read_excel("filename.xlsx")
 
 - Works with both .xls or .xlsx file extensions
 
+> **In the setup code chunk, import ga_schdist_raw.xlsx naming the saved data as ga_schdist_raw**
+
 ---
 # Preserve or Clean on Import
 
@@ -354,33 +358,52 @@ anyname <- read_excel("filename.xlsx")
 
 - If the data you want to import looks relatively clean, additional code is not neeeded.
 
---
+- If data are messy, we may want to clean the data at the same time as importing it.
 
-- If data are messy, and we want to clean the data on import, the easiest approach for new users is the import window/wizard RStudio provides.
-
-- Let's cover some data cleaning we can do with this second option
+> **Click on the two data sets you just saved to the environment. Let's examine whether data look correct.**
 
 ---
 # Importing data
 
-> **In file pane, click on "ncbirths.csv", then "Import Dataset..."**
+- Starting with `ncbirths`
 
---
-
-- Some notable features of this dataset:
+- Some desirable features of this dataset:
   - Variable names are in the top row
   - Variable names are short
 
-- This dataset doesn't need changes but let's explore what changes we could make
+- This dataset doesn't need changes
 
 ---
 # Importing data
 
+- Now viewing `ga_schdist_raw`, the data did not import as we want
+
+- Can help to first open messy data in spreasheet software like Excel to understand what needs to be done
+
+- Data has some undesirable qualities
+  - At least first 6 rows should be skipped
+  - Variable names are very long
+  - Row 231 and below contain information we don't want to import
+  - Note that the data we want to import runs from cells A7 to I230
+
+---
+# Importing data
+
+- Common cleaning tasks to combine with importing:
+
+  - Specifying which rows and columns to import if the raw file has non-data information in it
+  - Changing how R will store a variable
+
+- We can handle these tasks using RStudio's import function
+
+---
+# Importing data
+
+> **In file pane, click on "ga_schdist_raw.xlsx", then "Import Dataset..."**
+
 - Can click on a variable to change how R stores it, or exclude it from the import
 
-- Can change the name of the object R will save. Same name as file by default.
-
-- Can skip some specified number of the top rows
+- Can skip some specified number of the top rows, or specify a range of cells
 
 - Can specify whether the top row includes variable names
 
@@ -389,55 +412,10 @@ anyname <- read_excel("filename.xlsx")
 
 - The RStudio import window in the bottom-right provides the code needed to import the data based on the options we choose
 
-- **Important:** You must paste this code in your Rmd or else it won't knit if you use code that requires the data
-
---
-
-> **Copy the code. Click Cancel. Paste code in the setup code chunk of your Rmd**
+- **Important:** You must paste this code in your Rmd or else the data won't import when you knit
 
 ---
 # Importing data
-
-> **Change the import code you just added based on the following:**
-
-> **Delete the part of the file path unique to your computer and include only the file name.**
-
-- This is important for sharing documents. Others will encounter an error when trying to run code that contains a file path unique to your computer.
-
-> **Delete the last line containing `View` because it often causes an error when knitting an Rmd**
-
-> **Run the code to import the data**
-
----
-# Importing data
-
-- This point-and-click method is convenient if you don't know the packages and code needed to import, especially if options are needed.
-
-- Can get you started for any kind of data file
-
-- Some limitations
-  - Can't rename variables
-  - Can't inspect bottom rows of a large dataset where there may be data or footnotes you do not want to import
-
----
-# Importing data
-
-- Let's try to import a messier example with the Georgia school data
-
-- Can help to first open messy data in spreasheet software (Excel) to understand what needs to be done
-
-- The "ga_schdist_raw.xlsx" data has some undesirable qualities
-  - At least first 6 rows should be skipped
-  - Variable names are very long
-  - Row 231 and below contain information we don't want to import
-  - the data we want to import runs from cells A7 to I230
-
----
-# Importing data
-
-> **In RStudio, click on "ga_schdist_raw.xlsx" in the file pane, then "Import Dataset..."**
-
---
 
 > **Notice there is a "Range" option in the bottom left. Enter `A7:I230`.**
 
@@ -452,25 +430,18 @@ anyname <- read_excel("filename.xlsx")
 ---
 # Importing data
 
-> **Delete the code we don't want like before (package load, full file path, and View).**
+- We need to change the code we just pasted in a few ways:
 
---
+> **Delete the part of the file path unique to your computer and include only the file name.**
 
-- Should look like below
+- This is important for sharing documents. Others will encounter an error when trying to run code that contains a file path unique to your computer.
 
-```{r, eval=FALSE}
-ga_schdist_raw <- read_excel("ga_schdist_raw.xlsx", 
-                             range = "A7:I230", 
-                             col_names = TRUE, 
-                             col_types = c("text", "text", "text", "numeric", "numeric", "numeric", "numeric", "numeric", "numeric"))
-```
+> **Delete the last line containing View because it often causes an error when knit**
 
 > **Run this code to complete import.**
 
 ---
 # Importing data
-
-- You should have a new object `ga_schdist_raw` in your environment that you can click on to view
 
 - Variable names are long but this dataset is ready to use
 
@@ -478,75 +449,25 @@ ga_schdist_raw <- read_excel("ga_schdist_raw.xlsx",
 
 - What if we wanted to rename these variables to make it easier to work with
 
-- Recommend renaming variables if they contain a blank space (e.g. "free lunch") because you will always need to use quotation marks for R to recognize it as a single variable
-
 ---
 # Renaming variables
 
 Generic syntax
 
 ```{r, eval=FALSE}
-dataset <- rename(dataset, new_name=current_name, new_name="current name",...)
+dataset <- rename(dataset, new_name = current_name, new_name = "current name",...)
 ```
 
-- If a current variable has a space, need to use quotes
-
-- Example above *overwrites* the dataset. Alternatively, could save a new dataset with new variable names
-
-```{r, eval=FALSE}
-new_dataset <- rename(dataset, new_name=current_name,...)
-```
+- If a current variable name has a space, need to use quotes
 
 ---
-# Process for renaming many variables
+# Renaming variables
 
-Step 1: Get a list of current variable names you can copy-paste to code chunk
+- Let's rename one variable in `ga_schdist_raw`
 
-```{r, eval=FALSE}
-names(dataset)
-```
+> Refer to the example code on previous slide to rename the first variable, "Agency Name", to district. Add this code to your setup code chunk.
 
-- For example, I could add `names(ga_schdist_raw)` to the bottom of setup code chunk and run to get list of current variable names
-
-- Then copy-paste output to the same code chunk**
-
----
-# Process for renaming many variables
-
-Step 2: Wrap the necessary `rename()` code around the list of current variable names
-
-- For example, I could add the following code
-
-```{r, eval=FALSE}
-ga_schdist_clean <- rename(ga_schdist_raw, 
-                         list_of_variables_from_step1)
-```
-
---
-
-Step 3: Rename each variable within the `rename()` function
-
----
-# Process for renaming many variables
-
-```{r, eval=FALSE}
-ga_schdist_clean <- rename(ga_schdist_raw,
-      district= "Agency Name",
-      state="State Name [District] Latest available year",
-      charter="Agency Charter Status [District] 2015-16",
-      enroll="Total Students, All Grades (Excludes AE) [District] 2015-16",
-      lep="Limited English Proficient (LEP) / English Language Learners (ELL) [District] 2015-16",
-      iep="Individualized Education Program Students [District] 2015-16",
-      frpl="Free and Reduced Lunch Students [Public School] 2015-16",
-      white="White Students [District] 2015-16",
-      expenditures="Total Expenditures (TOTALEXP) [District Finance] 2015-16")
-```
-
-- **Paste this code to the bottom of the setup code chunk and run it**
-
-- Potentially high cost up front
-
-- But now this code can be used for every identical or similar dataset
+> Run this code to check whether it works
 
 ---
 class: inverse, center, middle
@@ -587,7 +508,7 @@ write_csv(name_of_object_in_environment, 'name_for_new_file.csv')
 
 --
 
-> **Export the `ga_schdist_clean` object to a csv file. Name the file "ga_schdist_clean.csv"**
+> **Export the `ga_schdist_raw` object to a csv file. Name the file "ga_schdist_clean.csv"**
 
 ---
 # Recap
