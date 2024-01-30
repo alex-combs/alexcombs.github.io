@@ -28,7 +28,7 @@ library(fivethirtyeight)
 ```
 
 ---
-# Two types of statistics
+# Two categories of statistics
 
 .center[
 ![](lectures_files/stats_types.png)
@@ -54,7 +54,7 @@ library(fivethirtyeight)
 ---
 # Descriptive vs. inferential
 
-- Suppose we want to learn more about employment and earnings outcomes among MPA graduates 2 years after graduation through a survey
+- Suppose we want to learn more about employment and earning outcomes among MPA graduates through a survey
 
 --
 
@@ -72,8 +72,8 @@ library(fivethirtyeight)
 .pull-right[
 **Inferential Questions**
 
-- What is the average income for MPA grads 2 years after graduation?
-- Does an MPA increase employment over a Bachelor's?
+- What is the average income for MPA graduates?
+- Does an MPA increase employment?
 - Does an MPA increase income?
 ]
 
@@ -92,7 +92,7 @@ library(fivethirtyeight)
 ---
 # Back to Survey Example
 
-Suppose our survey finds that the median income of UGA MPA alumni 2 years following graduation is $75,000
+Suppose our survey receives 100 responses and finds that the median income of UGA MPA alumni is $75,000
 
 - Is this a sample statistic or a population parameter?
 
@@ -140,14 +140,13 @@ class: inverse, middle, center
 
 - A distribution shows the (possible) values for a variable and how often they occur.
 
-- Weeks of pregnancy for births in North Carolina.
-
 ```{r, echo=FALSE, fig.align='center', fig.height=5}
 ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
-  labs(title = 'Weeks of pregnancy for births in North Carolina') +
+  labs(title = 'Weeks of pregnancy for births in North Carolina',
+       y = 'Count of individuals') +
   theme_light() +
-  theme(axis.text=element_text(size=16))
+  theme(text=element_text(size=16))
 ```
 
 ---
@@ -276,7 +275,7 @@ ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
   labs(title = 'Weeks of pregnancy in North Carolina') +
   theme_light() +
-  theme(axis.text=element_text(size=16))
+  theme(text=element_text(size=16))
 ```
 ]
 
@@ -400,7 +399,7 @@ ggplot(ncbirths, aes(x = weeks)) +
   geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
   labs(title = 'Weeks of pregnancy in North Carolina') +
   theme_light() +
-  theme(axis.text=element_text(size=16))
+  theme(text=element_text(size=16))
 ```
 ]
 
@@ -424,7 +423,7 @@ gapminder %>%
   geom_histogram(fill = 'steelblue', color = 'white') +
   labs(title = 'GDP Per Capita') +
   theme_light() +
-  theme(axis.text=element_text(size=16))
+  theme(text=element_text(size=16))
 ```
 ]
 
@@ -455,6 +454,36 @@ range(gapminder$gdpPercap)
 ]
 
 ---
+# Choosing measures
+
+.pull-left[
+```{r, echo=FALSE}
+ggplot(ncbirths, aes(x = weeks)) +
+  geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
+  labs(title = 'Weeks of pregnancy in North Carolina') +
+  theme_light() +
+  theme(axis.text=element_text(size=16),
+        axis.title = element_text(size = 16),
+        text = element_text(size = 16))
+```
+]
+
+.pull-right[
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+library(gapminder)
+gapminder %>% 
+  filter(year==2007) %>% 
+  ggplot(aes(x = gdpPercap)) +
+  geom_histogram(fill = 'steelblue', color = 'white') +
+  labs(title = 'GDP Per Capita') +
+  theme_light() +
+  theme(text=element_text(size=16))
+```
+]
+
+- Which measures of center and spread should we use or not use to describe the above distributions?
+
+---
 class: inverse, middle, center
 
 # Measures of Association
@@ -467,10 +496,10 @@ class: inverse, middle, center
 ```{r, echo=FALSE, fig.align='center'}
 ggplot(ncbirths, aes(x = weeks, fill = habit)) +
   geom_density(alpha = 0.4, bw = 0.6) +
-  labs(title = 'Weeks of pregnancy in North Carolina', 
+  labs(title = 'Weeks of pregnancy', 
        fill = 'Smoker') +
   theme_minimal() +
-  theme(axis.text=element_text(size=16))
+  theme(text=element_text(size=16))
 ```
 
 ---
@@ -586,7 +615,7 @@ ggplot(data = state_trump,
 cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
 ```
 
-- What is the interpretation?
+- What is the interpretation of this correlation coefficient?
 
 ---
 # Correlation
@@ -604,112 +633,6 @@ cor(state_trump$share_vote_trump, state_trump$share_white)
 
 
 Which correlation is stronger?
-
----
-# Limitations of correlation
-
-- Measures only linear association
-
-- Sensitive to extreme values
-
-- Is necessary but not sufficient to claim causation
-
----
-class: inverse, middle, center
-
-# Review Questions
-
----
-# Affected measures
-
-A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
-
---
-
-Suppose the student who will score the highest in the public school transfers to the private school.
-
---
-
-What effect does this transfer have on the measures of center and spread for the public school's distribution of test scores?
-
----
-# Affected measures
-
-A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
-
---
-
-After hiring better teachers, the public school is able to raise the test scores of each of its students by 5 points.
-
---
-
-What effect does this have on the measures of center and spread for the public school's distribution of test scores?
-
----
-# Affected measures
-
-A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
-
---
-
-After hiring better teachers, the public school is able to raise the test scores of each of its students by 5%.
-
---
-
-What effect does this have on the measures of center and spread for the public school's distribution of test scores?
-
----
-# Shapes of distributions
-
-.pull-left[
-- Private school
-  - Mean: 80
-  - Median: 80
-  - Standard deviation: 5
-  - Min: 65
-  - Max: 100
-]
-
-.pull-right[
-- Public school
-  - Mean: 70
-  - Median: 80
-  - Standard deviation: 12
-  - Min: 25
-  - Max: 100
-]
-
-- What do these numbers tell us about test scores between the two schools? What don't they tell us?
-
----
-# Choosing measures
-
-.pull-left[
-```{r, echo=FALSE}
-ggplot(ncbirths, aes(x = weeks)) +
-  geom_histogram(fill = 'steelblue', color = 'white', binwidth = 1) +
-  labs(title = 'Weeks of pregnancy in North Carolina') +
-  theme_light() +
-  theme(axis.text=element_text(size=16),
-        axis.title = element_text(size = 16),
-        text = element_text(size = 16))
-```
-]
-
-.pull-right[
-```{r, echo=FALSE, message=FALSE, fig.align='center'}
-library(gapminder)
-gapminder %>% 
-  filter(year==2007) %>% 
-  ggplot(aes(x = gdpPercap)) +
-  geom_histogram(fill = 'steelblue', color = 'white') +
-  labs(title = 'GDP Per Capita') +
-  theme_light() +
-  theme(text=element_text(size=16))
-```
-]
-
-- Which measures of center and spread should we use or not use for the above distributions?
 
 ---
 # Correlation
@@ -749,19 +672,20 @@ cor(state_trump$median_house_inc, state_trump$share_vote_trump)
 What is the interpretation?
 
 ---
+# Limitations of correlation
+
+- Measures only linear association
+
+- Sensitive to extreme values
+
+- Is necessary but not sufficient to claim causation
+
+---
 # Recap
 
 - Difference between descriptive and inferential statistics; sample and population
 
---
-
 - When presented with descriptive statistics, consider what they say and don't say about the underlying distribution.
-
---
-
-- When presented with changes in descriptive statistics, consider the different ways the distribution could have changed.
-
---
 
 - Correlation is a building block of how we explain or predict phenomena in our world using statistics.
 

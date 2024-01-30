@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 06, 2023
+### Last updated: January 30, 2024
 ]
 
 ---
@@ -40,7 +40,7 @@ class: center, middle, inverse, title-slide
 
 
 ---
-# Two types of statistics
+# Two categories of statistics
 
 .center[
 ![](lectures_files/stats_types.png)
@@ -66,7 +66,7 @@ class: center, middle, inverse, title-slide
 ---
 # Descriptive vs. inferential
 
-- Suppose we want to learn more about employment and earnings outcomes among MPA graduates 2 years after graduation through a survey
+- Suppose we want to learn more about employment and earning outcomes among MPA graduates through a survey
 
 --
 
@@ -84,8 +84,8 @@ class: center, middle, inverse, title-slide
 .pull-right[
 **Inferential Questions**
 
-- What is the average income for MPA grads 2 years after graduation?
-- Does an MPA increase employment over a Bachelor's?
+- What is the average income for MPA graduates?
+- Does an MPA increase employment?
 - Does an MPA increase income?
 ]
 
@@ -104,7 +104,7 @@ class: center, middle, inverse, title-slide
 ---
 # Back to Survey Example
 
-Suppose our survey finds that the median income of UGA MPA alumni 2 years following graduation is $75,000
+Suppose our survey receives 100 responses and finds that the median income of UGA MPA alumni is $75,000
 
 - Is this a sample statistic or a population parameter?
 
@@ -151,8 +151,6 @@ class: inverse, middle, center
 # Distribution
 
 - A distribution shows the (possible) values for a variable and how often they occur.
-
-- Weeks of pregnancy for births in North Carolina.
 
 &lt;img src="Description_files/figure-html/unnamed-chunk-2-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -665,6 +663,19 @@ range(gapminder$gdpPercap)
 ]
 
 ---
+# Choosing measures
+
+.pull-left[
+![](Description_files/figure-html/unnamed-chunk-28-1.png)&lt;!-- --&gt;
+]
+
+.pull-right[
+&lt;img src="Description_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
+]
+
+- Which measures of center and spread should we use or not use to describe the above distributions?
+
+---
 class: inverse, middle, center
 
 # Measures of Association
@@ -674,7 +685,7 @@ class: inverse, middle, center
 
 - Distribution of a variable *given* another variable's values
 
-&lt;img src="Description_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Description_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Measures of association
@@ -721,7 +732,7 @@ Suppose we want to investigate the association between the percent of a state po
 ]
 
 .pull-right[
-&lt;img src="Description_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Description_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
@@ -729,7 +740,7 @@ Suppose we want to investigate the association between the percent of a state po
 
 - Or percent of white population in poverty
 
-&lt;img src="Description_files/figure-html/unnamed-chunk-32-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Description_files/figure-html/unnamed-chunk-34-1.png" style="display: block; margin: auto;" /&gt;
 
 - Units with higher values along the x-axis tend to have higher or lower values along the Y axis. Or no tendency.
 
@@ -770,7 +781,7 @@ Suppose we want to investigate the association between the percent of a state po
 
 ---
 # Correlation coefficient
-&lt;img src="Description_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Description_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
 
 
 ```r
@@ -781,7 +792,7 @@ cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
 ## [1] 0.4872326
 ```
 
-- What is the interpretation?
+- What is the interpretation of this correlation coefficient?
 
 ---
 # Correlation
@@ -811,95 +822,6 @@ cor(state_trump$share_vote_trump, state_trump$share_white)
 Which correlation is stronger?
 
 ---
-# Limitations of correlation
-
-- Measures only linear association
-
-- Sensitive to extreme values
-
-- Is necessary but not sufficient to claim causation
-
----
-class: inverse, middle, center
-
-# Review Questions
-
----
-# Affected measures
-
-A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
-
---
-
-Suppose the student who will score the highest in the public school transfers to the private school.
-
---
-
-What effect does this transfer have on the measures of center and spread for the public school's distribution of test scores?
-
----
-# Affected measures
-
-A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
-
---
-
-After hiring better teachers, the public school is able to raise the test scores of each of its students by 5 points.
-
---
-
-What effect does this have on the measures of center and spread for the public school's distribution of test scores?
-
----
-# Affected measures
-
-A city has a private high school and a public high school. Each year, all students take a state standardized test. Student scores can range between 0-100.
-
---
-
-After hiring better teachers, the public school is able to raise the test scores of each of its students by 5%.
-
---
-
-What effect does this have on the measures of center and spread for the public school's distribution of test scores?
-
----
-# Shapes of distributions
-
-.pull-left[
-- Private school
-  - Mean: 80
-  - Median: 80
-  - Standard deviation: 5
-  - Min: 65
-  - Max: 100
-]
-
-.pull-right[
-- Public school
-  - Mean: 70
-  - Median: 80
-  - Standard deviation: 12
-  - Min: 25
-  - Max: 100
-]
-
-- What do these numbers tell us about test scores between the two schools? What don't they tell us?
-
----
-# Choosing measures
-
-.pull-left[
-![](Description_files/figure-html/unnamed-chunk-37-1.png)&lt;!-- --&gt;
-]
-
-.pull-right[
-&lt;img src="Description_files/figure-html/unnamed-chunk-38-1.png" style="display: block; margin: auto;" /&gt;
-]
-
-- Which measures of center and spread should we use or not use for the above distributions?
-
----
 # Correlation
 
 &lt;img src="Description_files/figure-html/unnamed-chunk-39-1.png" style="display: block; margin: auto;" /&gt;
@@ -924,19 +846,20 @@ cor(state_trump$median_house_inc, state_trump$share_vote_trump)
 What is the interpretation?
 
 ---
+# Limitations of correlation
+
+- Measures only linear association
+
+- Sensitive to extreme values
+
+- Is necessary but not sufficient to claim causation
+
+---
 # Recap
 
 - Difference between descriptive and inferential statistics; sample and population
 
---
-
 - When presented with descriptive statistics, consider what they say and don't say about the underlying distribution.
-
---
-
-- When presented with changes in descriptive statistics, consider the different ways the distribution could have changed.
-
---
 
 - Correlation is a building block of how we explain or predict phenomena in our world using statistics.
 

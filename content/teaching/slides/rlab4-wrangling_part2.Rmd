@@ -99,7 +99,7 @@ dataset <- dataset %>%
 Suppose I want to print a table of the top five countries with respect to percent of global GDP in 2007. **Without using %>%:**
 
 ```{r, eval=FALSE}
-#Filter gapminder
+#Filter gapminder to get 2007
 gapminder07 <- filter(gapminder, year == 2007)
 
 #Add variables to gapminder07
@@ -141,9 +141,7 @@ gapminder %>%
 
 > **Add a heading "Pipe Operator"**
 
-> **Start a new code chunk and name it pipe.**
-
---
+> **Start a new code chunk.**
 
 > **Use the pipe operator to save a new dataset `gapminder52` that contains only 1952 observations and add the GDP variables we created earlier (consider copy-and-paste)**
 
@@ -236,7 +234,7 @@ gapminder %>%
   group_by(continent) %>% #<<
   summarize('Median Life Expectancy' = median(lifeExp),
             'Median GDP per Capita' = median(gdpPercap)) %>% 
-  kable(digits = 0, format.args = list(big.mark = ','))
+  kable(col.names = c('Continent','Median Life Expectancy','Median GDP per Capita'), digits = 0, format.args = list(big.mark = ','))
 ```
 
 ---
@@ -253,13 +251,13 @@ gapminder %>%
 ---
 # Kable options for tables
 
-- The `kable()` function, part of the `knitr` package, allows us to format tables.
+- The `kable()` function, part of the `knitr` package, helps with formatting tables.
 
-- Three useful options:
+- A few useful options:
   - `digits = #` sets the number of digits to the right of the decimal
   - `format.args = list(big.mark = ',')` inserts commas
-  - `col.names =` renames the columns
-  - `caption =` provides a table title
+  - `col.names = c("name","name")` renames the columns
+  - `caption = "Title"` provides a table title
 
 ---
 # Kable example
