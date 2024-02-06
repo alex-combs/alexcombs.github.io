@@ -93,52 +93,13 @@ class: inverse, middle, center
 ---
 # Choosing graphs
 
-Which of the following graphs is effective at visualizing the values of a single categorical variable?
+Among common types of graphs, which are appropriate for visualizing the following scenarios?
 
-- Histogram
-- Bar chart
-- Boxplot
-- Scatterplot
-
----
-# Choosing graphs
-
-Which of the following graphs is effective at visualizing the values of a single continuous variable?
-
-- Histogram
-- Bar chart
-- Boxplot
-- Scatterplot
-
----
-# Choosing graphs
-
-Which of the following graphs is effective at visualizing the relationship between values of two categorical variables?
-
-- Histogram
-- Bar chart
-- Boxplot
-- Scatterplot
-
----
-# Choosing graphs
-
-Which of the following graphs is effective at visualizing the relationship between values of a continuous variable and a categorical variable?
-
-- Pie chart
-- Bar chart
-- Boxplot
-- Scatterplot
-
----
-# Choosing graphs
-
-Which of the following graphs is effective at visualizing the relationship between values of two continuous variable?
-
-- Histogram
-- Bar chart
-- Boxplot
-- Scatterplot
+- values for a categorical variable
+- values of a single continuous variable
+- relationship between values of two categorical variables
+- relationship between values of a continuous variable and a categorical variable
+- relationship between values of two continuous variable?
 
 ---
 # Choosing graphs
