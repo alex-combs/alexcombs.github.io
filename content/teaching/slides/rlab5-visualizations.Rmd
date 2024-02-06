@@ -208,11 +208,6 @@ gapminder %>%
 Which graph could we use to show the change in population over time?
 
 ---
-# Choosing graphs
-
-Which graph is generally not recommended?
-
----
 class: inverse, middle, center
 
 # Basic Guidelines of Good Graphs
@@ -477,7 +472,7 @@ nhanes %>%
   drop_na(gun.use) %>% 
   ggplot(aes(x = gun.use, fill = gun.use)) +
   geom_bar() +
-  scale_fill_manual(values = c('grey', 'steelblue'), guide = FALSE) + #<<
+  scale_fill_manual(values = c('grey', 'steelblue'), guide = "none") + #<<
   labs(x = 'Gun use', y = 'Number of respondents') +
   theme_minimal()
 ```
@@ -496,7 +491,7 @@ nhanes %>%
              y = after_stat(100*(count)/sum(count)), #<<
              fill = gun.use)) +
   geom_bar() +
-  scale_fill_manual(values = c('grey', 'steelblue'), guide = FALSE) +
+  scale_fill_manual(values = c('grey', 'steelblue'), guide = "none") +
   labs(x = 'Gun use', y = 'Percent of respondents') +
   theme_minimal()
 ```
@@ -504,7 +499,7 @@ nhanes %>%
 ---
 # Skill check
 
-> **Create another bar chart for the `sex` variable in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
+> **Create another bar chart for respondent's `sex` in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
 
 ---
 class: inverse, middle, center
@@ -647,9 +642,7 @@ class: inverse, middle, center
 
 > **In a new code chunk, copy-and-paste code that created the bar chart displaying gun use percentages**
 
-- How might we change the code to make the following graph?
-
-> **Make this change**
+> **Try changing the code to produce a graph with respondent's sex along the x axis**
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4}
 nhanes %>% 
@@ -777,7 +770,7 @@ fbi_gun_deaths %>%
 fbi_gun_deaths %>% 
   ggplot(aes(x = number, y = reorder(weapons, number), fill = weapons)) +
   geom_boxplot() +
-  scale_fill_discrete(guide=FALSE) +
+  scale_fill_discrete(guide="none") +
   labs(y = "Gun type", x = "Annual homicides, 2012-2016") +
   theme_minimal()
 ```

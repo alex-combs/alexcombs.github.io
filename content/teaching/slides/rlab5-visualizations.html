@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 13, 2023
+### Last updated: February 06, 2024
 ]
 
 ---
@@ -233,11 +233,6 @@ Which graph could we use to show the number of countries in each continent?
 |Afghanistan |Asia      | 1972|      36| 13079460|       740|
 
 Which graph could we use to show the change in population over time?
-
----
-# Choosing graphs
-
-Which graph is generally not recommended?
 
 ---
 class: inverse, middle, center
@@ -502,7 +497,7 @@ nhanes %&gt;%
   drop_na(gun.use) %&gt;% 
   ggplot(aes(x = gun.use, fill = gun.use)) +
   geom_bar() +
-* scale_fill_manual(values = c('grey', 'steelblue'), guide = FALSE) +
+* scale_fill_manual(values = c('grey', 'steelblue'), guide = "none") +
   labs(x = 'Gun use', y = 'Number of respondents') +
   theme_minimal()
 ```
@@ -522,7 +517,7 @@ nhanes %&gt;%
 *            y = after_stat(100*(count)/sum(count)),
              fill = gun.use)) +
   geom_bar() +
-  scale_fill_manual(values = c('grey', 'steelblue'), guide = FALSE) +
+  scale_fill_manual(values = c('grey', 'steelblue'), guide = "none") +
   labs(x = 'Gun use', y = 'Percent of respondents') +
   theme_minimal()
 ```
@@ -530,7 +525,7 @@ nhanes %&gt;%
 ---
 # Skill check
 
-&gt; **Create another bar chart for the `sex` variable in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
+&gt; **Create another bar chart for respondent's `sex` in the `nhanes` data. Make the bars different colors and display percentages rather than counts.**
 
 ---
 class: inverse, middle, center
@@ -649,9 +644,7 @@ class: inverse, middle, center
 
 &gt; **In a new code chunk, copy-and-paste code that created the bar chart displaying gun use percentages**
 
-- How might we change the code to make the following graph?
-
-&gt; **Make this change**
+&gt; **Try changing the code to produce a graph with respondent's sex along the x axis**
 
 ![](rlab5-visualizations_files/figure-html/unnamed-chunk-29-1.png)&lt;!-- --&gt;
 
@@ -742,16 +735,6 @@ fbi_gun_deaths %&gt;%
 
 ---
 # Boxplots by category
-
-
-```
-## Warning: The `guide` argument in `scale_*()` cannot be `FALSE`. This was deprecated in
-## ggplot2 3.3.4.
-## ℹ Please use "none" instead.
-## This warning is displayed once every 8 hours.
-## Call `lifecycle::last_lifecycle_warnings()` to see where this warning was
-## generated.
-```
 
 ![](rlab5-visualizations_files/figure-html/unnamed-chunk-34-1.png)&lt;!-- --&gt;
 
