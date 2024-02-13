@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: September 20, 2023
+### Last updated: February 13, 2024
 ]
 
 ---
@@ -91,10 +91,10 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 ]
 
 .pull-right[
-- Regression gives us direction, strength, and magnitude of association
-- Draws the line of **best fit** through a set of paired x-y data points
-- The slope of the line tells us the **average, predicted change in y given a change in x**, or
-- At any value along x-axis, regression line gives us the **predicted value of y**
+- Measures direction, strength, and magnitude of association
+- Draws line of **best fit** through paired x-y data points
+- Slope of line tells us the **average, predicted change in y given a change in x**
+- Or, at any value of x, the **predicted value of y**
 ]
 
 ---
@@ -134,7 +134,7 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 - If `\(x\)` increases from 2 to 5, by how much does `\(y\)` change?
 
 ---
-# Simple linear regression model
+# Simple regression model (population)
 
 `$$y=\beta_0+\beta_1x+\epsilon$$`
 
@@ -144,7 +144,7 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 - Which represents statistical noise?
 
 ---
-# Simple linear regression model
+# Simple regression model (sample)
 
 `$$\hat{y}=b_0+b_1x$$`
 
@@ -152,7 +152,7 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 - Which represents the estimates?
 
 ---
-# Example: Population to sample models
+# Applied example
 
 - Suppose we want to model average SAT math scores, `SATM`, in a state as a function of its spending on public education in **$1000s per student**, `dollars`
 
@@ -195,6 +195,8 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 &lt;/table&gt;
 
 --
+
+- Replacing parameters with estimates
 
 `$$\hat{SATM} = 560 - 12.17 \times Dollars$$`
 
@@ -398,6 +400,19 @@ class: inverse, center, middle
 
 
 &lt;img src="Regression_files/figure-html/unnamed-chunk-16-1.png" style="display: block; margin: auto;" /&gt;
+
+---
+# The residual
+
+- What might be contained within the error term and residual?
+
+  - Measurement error (bad)
+  - Mistakes in how we model `\(y\)` as a function of `\(x\)` (bad)
+  - Violations of the assumptions that enable credible regression (bad)
+  - Other variables that associate with or impact the outcome (sometimes OK)
+  - Randomness of social phenomena (OK)
+  
+- Severity of the problem can depend on the purpose of the regression.
 
 ---
 # Residuals
@@ -630,7 +645,7 @@ sum(satm_mod1_points$sq_resid)
 ---
 # Goodness-of-fit
 
-- When we ask how good is our best regression line, one way to answer is the **percent of total variation/variance in the outcome that is explained by our model**
+- When we ask how good is our best regression line, one way to answer is the **percent of total variation in the outcome that is explained by our model**
 
 --
 
@@ -702,7 +717,7 @@ get_regression_summaries(satm_mod2)
 
 --
 
-- Model 2 has the higher `\(R^2\)`. It is *statistically* superior.
+- Model 2 has the higher `\(R^2\)`. It is *statistically* better at explaining math scores.
 
 ---
 # Goodness of fit
@@ -715,7 +730,7 @@ get_regression_summaries(satm_mod2)
 &lt;img src="Regression_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
-- Note that the data points in model 2 (right) are closer to the regression line -&gt; less unexplained variance in `SATM` -&gt; higher `\(R^2\)`
+- Note that the data points in model 2 (right) are closer to the regression line -&gt; more explained variance in `SATM` -&gt; higher `\(R^2\)`
 
 ---
 # Goodness of fit
@@ -785,7 +800,7 @@ Model 2 using percent
 
 .pull-right[
 - Model 2 predictions are off by about 18 points, on average.
-- Model 2 is the *statistically* superior model.
+- Model 2 is *statistically* better at predicting math.
 ]
 
 ---
@@ -815,20 +830,16 @@ class: inverse, center, middle
 
 - The two previous regressions each controlled for one variable we might theorize affects average state SAT math scores
 
---
-
 - There is any number of additional variables contained in the error term `\(\epsilon\)`
 
---
+- If we can, we should include those additional variables in the same regression model
 
-- Typically, if we can, we should include those additional variables in the same regression model
-
-- Especially if those variables affect the explanatory variables currently in our model
+- Especially if those variables might affect the explanatory variable currently in our model
 
 ---
 # Making sense of our results
 
-- We found states spending more on public education tend to have lower SAT math scores. We also found states with a higher percent of graduates taking the SAT tend to have lower SAT math scores. What may be going on?
+- We found states spending more on education tend to have lower SAT math scores, and states with a higher percent of graduates taking the SAT tend to have lower SAT math scores. What may be going on?
 
 .pull-left[
 &lt;img src="Regression_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
@@ -840,6 +851,8 @@ class: inverse, center, middle
 
 ---
 # Making sense of our results
+
+- Relationship between spending and SAT participation
 
 &lt;img src="Regression_files/figure-html/unnamed-chunk-33-1.png" style="display: block; margin: auto;" /&gt;
 
@@ -1076,15 +1089,17 @@ get_regression_table(satm_mod4)
 ---
 # Policy Decision
 
-- A $1,000 increase in spending per student:
+- Our first model found $1,000 increase in spending is associated with -12.2 points in SAT math.
+
+--
+
+- In the multiple regression model, a $1,000 increase in spending per student:
   
   - Directly increases average SAT math scores 6.4 points
   
   - Directly increases participation 12.4 percentage points
   
-  - Increase of 12.4 p.p. reduces average SAT math scores 18.6 points
-  
-- The total effect of a $1,000 increase on average SAT math scores is about -12.2 points. Same as first model.
+  - Increase of 12.4 p.p. in participation reduces average SAT math scores 18.6 points
 
 --
 
