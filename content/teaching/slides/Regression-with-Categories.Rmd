@@ -38,8 +38,6 @@ options(scipen = 999)
 
 - Any number of explanatory variables could be categorical
 
-  - Represents a sort of treatment variable
-
 - The outcome could be categorical as well
 
 ---
@@ -109,41 +107,43 @@ ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
 ```{r, echo=FALSE, fig.width=8, fig.align='center'}
 ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
   geom_point(size = 4, alpha = 0.5) +
-  geom_abline(slope = 747, intercept = 92357, color = 'red', size = 2) +
-  geom_abline(slope = 747, intercept = 101429, color = 'blue', size = 2) +
+  geom_abline(slope = 747, intercept = 92357, color = 'red', linewidth = 2) +
+  geom_abline(slope = 747, intercept = 101429, color = 'blue', linewidth = 2) +
   theme_minimal() +
   theme(text = element_text(size = 20))
 ```
 
 ---
-# Parallel Slopes Model Implications
+# Parallel Slopes Model Implication
 
 $$y = \beta_0 + \beta_1x + \beta_2 d + \epsilon$$
 $$\hat{y} = b_0 + b_1x + b_2 d$$
-- where $x$ is continuous and $d$ is a dummy variable = 0/1
+- where $x$ is continuous and $d$ is a dummy variable = 0 or 1
+
+- $d$ allows the intercept to differ between groups, but assumes affect of $x$ is the same for both
 
 ---
-# Parallel Slopes Model Implications
+# Parallel Slopes Model Equations
 
 $$\hat{y} = b_0 + b_1x + b_2 d$$
 
-- Change in $y$ due to a one-unit change in $x$ is still $b_1$
+- Change in $y$ due to a one-unit increase in $x$ is still $b_1$ for any scenario
 
 --
 
-- In cases where $d=0$, then
+- In cases where $d=0$
 
 $$\hat{y} = b_0 + b_1x$$
 
 --
 
-- In cases where $d=1$, then
+- In cases where $d=1$
 
+$$\hat{y} = b_0 + b_1x + b_2$$
 $$\hat{y} = (b_0 + b_2) + b_1x$$
-
 --
 
-- Regression line for $d=1$ group will be above or below $d=0$ group by $b2$ units
+- $b_2$ shifts the intercept. Regression line for $d=1$ group will be above or below $d=0$ group by $b_2$ units.
 
 ---
 # Example: Parallel Slopes
@@ -173,18 +173,18 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
 --
 
-- What is the standard interpretation for the `Sex` coefficient? Recall that Sex=1 for Male and 0 for Female.
+- What is the standard interpretation of the coefficient for `Sex`? Recall that Sex=1 for Male and 0 for Female.
 
 ---
 # Interpreting results
 
 $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
-- What is the predicted change in salary for a male professor three years later?
+- What is the predicted change in salary for a male professor following three additional years of employment?
 
 --
 
-- For a female professor three years later?
+- For a female professor?
 
 --
 
@@ -208,7 +208,7 @@ $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 ---
 class: inverse, middle, center
 
-# We aren't required to force the slopes to be parallel. Could allow the effect of years employed to differ between male and female professors.
+# We aren't required to model the slopes to be parallel. Could allow the effect of years employed to differ between male and female professors.
 
 ---
 # Visualizing Interaction Model
@@ -216,11 +216,15 @@ class: inverse, middle, center
 .pull-left[
 ```{r, eval=FALSE}
 ggplot(Salaries, 
-       aes(x = yrs.service, 
-           y = salary, 
-           color = sex)) + #<<
-  geom_point(alpha = 0.6, size = 5) +
-  geom_smooth(method = 'lm', se = FALSE, size = 2) + #<<
+  aes(x = yrs.service, 
+  y = salary, 
+  color = sex)) + #<<
+  geom_point(alpha = 0.6, 
+             size = 5) +
+  geom_smooth(method = 'lm', 
+              se = FALSE, 
+              linewidth = 2) + #<<
+  theme_minimal() +
   theme(text = element_text(size = 20))
 ```
 ]
@@ -229,17 +233,23 @@ ggplot(Salaries,
 ```{r, echo=FALSE, message=FALSE, out.width='99%'}
 ggplot(Salaries, aes(x = yrs.service, y = salary, color = sex)) +
   geom_point(alpha = 0.6, size = 5) +
-  geom_smooth(method = 'lm', se = FALSE, size = 2) +
+  geom_smooth(method = 'lm', se = FALSE, linewidth = 2) +
+  theme_minimal() +
   theme(text = element_text(size = 20))
 ```
 ]
 
 ---
-# Interaction model implications
+# Interaction model implication
 
 $$y = \beta_0 + \beta_1x + \beta_2d + \beta_3 xd + \epsilon$$
 $$\hat{y} = b_0 + b_1x + b_2d + b_3 xd$$
+- Now $x$ and $d$ are interacted (multiplied together), allowing the effect of $x$ to differ between groups of $d$
 
+---
+# Interaction model equations
+
+$$\hat{y} = b_0 + b_1x + b_2d + b_3 xd$$
 --
 
 - For the $d=0$ group:
@@ -250,9 +260,13 @@ $$\hat{y} = b_0 + b_1x$$
 
 - For the $d=1$ group:
 
+$$\hat{y} = b_0 + b_1x + b_2 + b_3x$$
+
 $$\hat{y} = (b_0 + b_2) + (b_1+b_3)x$$
 
 - Intercept *and* slope *can* differ between groups
+
+- Intercept differs by $b_2$ and slope (affect of $x$) differs by $b_3$
 
 
 ---
@@ -292,10 +306,9 @@ $$\hat{Sal}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$
 # Interpreting an interaction model
 
 $$\hat{Sal}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$
+- Recall that `Sex` = 1 for male, 0 for female
 
 - What is the predicted change in salary for a male professor given one more year of employment?
-
---
 
 - What is the predicted change in salary for a female professor given one more year of employment?
 
@@ -306,14 +319,7 @@ $$\hat{Sal}=82069+1637*YrsEmp+20129*Sex - 932*YrsEmp*Sex$$
 
 - What is the predicted salary for a female professor employed for 10 years?
 
---
-
 - What is the predicted salary for a male professor employed for 10 years?
-
----
-class: inverse, middle, center
-
-# Let's practice using another example on eLC
 
 ---
 class: inverse, middle, center
@@ -323,9 +329,11 @@ class: inverse, middle, center
 ---
 # LPM
 
-- Regression model with a two-level (dummy) categorical variable for the response
+- Regression model with a two-level (binary, dummy) categorical variable for the response
 
-- For a binary outcome (did occur/did not occur), an LPM estimates the effect of our explanatory variables on the probability that the outcome occurs
+- Typically, `y=1` if an outcome did occur, `y=0` if it did not occur
+
+- An LPM estimates the effect of our explanatory variables on the probability that the outcome occurs
 
 $$Pr(y=1)=\beta_0+\beta_1x+\dots+\beta_kx_k+\epsilon$$
 
@@ -344,20 +352,24 @@ head(divorce, n=5) %>%
 
 - Suppose we want to know how these variables might affect the probability of divorce among married or previously married individuals (Income is in $1,000s)
 
+- Divorce = 1 if individual is divorced
+
+- Income in $1,000s
+
 ---
 # Running an LPM
 
 ```{r}
-div_mod <- lm(Divorce ~ Age25to29 + Income + Children,
+divorce_mod <- lm(Divorce ~ Age25to29 + Income + Children,
               data = divorce)
 ```
 
 ```{r, eval=FALSE}
-get_regression_table(div_mod)
+get_regression_table(divorce_mod)
 ```
 
 ```{r, echo=FALSE}
-get_regression_table(div_mod) %>% 
+get_regression_table(divorce_mod) %>% 
   kable(format = 'html')
 ```
 
@@ -372,13 +384,6 @@ $$\hat{Pr(y=1)}=0.38+0.4*Age+0.001*Income-0.18*Children$$
 
 --
 
-- Probability is expressed units of percent. Remember that a unit change in percent probability is a **percentage point** change.
-
---
+- Probability is expressed in units of percent. Remember that a unit change in percent probability is a **percentage point** change.
 
 - What is the probability of divorce for someone 27 years old making 50,000 and has 0 children?
-
----
-class: inverse, middle, center
-
-# Let's practice another example with using an LPM
