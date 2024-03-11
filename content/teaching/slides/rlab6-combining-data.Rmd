@@ -53,20 +53,14 @@ library(tidyverse)
 
 > **Download the `st_fin_2014.csv`, `st_fin_2015.csv`, `st_fin_2016.csv`, `covid_ga_5.csv` and `ga_county_pop.csv` files from eLC and add them to your project folder.**
 
-> **In your setup code chunk, import the data files.**
+> **In your setup code chunk, import the data files using the following code.**
 
 ```{r, eval=FALSE}
-st_fin_2014 <- 
-st_fin_2015 <- 
-st_fin_2016 <- 
-covid_ga_5 <- 
-ga_county_pop <- 
-```
-
-```{r, eval=FALSE, include=FALSE}
-st_fin_14 <- read_csv("st_fin_2014.csv")
-st_fin_15 <- read_csv("st_fin_2015.csv")
-st_fin_16 <- read_csv("st_fin_2016.csv")
+st_fin_2014 <- read_csv("st_fin_2014.csv")
+st_fin_2015 <- read_csv("st_fin_2015.csv")
+st_fin_2016 <- read_csv("st_fin_2016.csv")
+covid_ga_5 <- read_csv("covid_ga_5.csv")
+ga_county_pop <- read_csv("ga_county_pop.csv")
 ```
 
 ```{r, include=FALSE}
@@ -80,7 +74,7 @@ ga_county_pop <- read_csv("labs_files/ga_county_pop.csv")
 ---
 # Append
 
-- Stacking observations among two or more datasets with **identical** layout. 
+- Stacking observations of two or more datasets that have common variables with exactly the same name. 
 
 - Example: Adding multiple time periods together of the same data that is released annually.
 

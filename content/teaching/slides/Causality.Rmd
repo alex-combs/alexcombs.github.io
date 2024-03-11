@@ -40,9 +40,7 @@ options(scipen = 999)
 
   - The outcome that we observe in the presence of the event
 
-  - The outcome that we would have observed had the event not happened
-
-- **Counterfactual:** The unobserved outcome from an alternate reality. 
+  - **Counterfactual:** The outcome we would have observed had the event not happened
 
 ---
 # Potential outcomes
@@ -53,7 +51,9 @@ options(scipen = 999)
 
   - We observe the outcome for those who did not receive the treatment
 
-- Cannot observe the outcome for the treated had they not received it or for the untreated as if they had
+- Cannot observe the outcome for the treated as if they had NOT been treated 
+
+- Cannot observe the outcome for the untreated as if they HAD been treated
 
 ---
 # The challenge of counterfactual
@@ -115,7 +115,7 @@ kable(recidivism, digits = 3)
 ---
 # Correlation between X and Y
 
-- If you run a regression and the estimate is statistically significant (we haven't covered significance yet), you have established correlation that is unlikely due to random variation
+- If you run a hypothesis test and the estimate is statistically significant (we haven't covered this yet), you have established credible non-random correlation 
 
 - But many things correlate that share no causal relationship
 
@@ -124,9 +124,7 @@ kable(recidivism, digits = 3)
 
 - Cause must occur before its effect
 
---
-
-- Easiest to claim for discrete events with a pre and post
+- Easiest to claim for discrete events with a clear pre and post
   - Marijuana legalization on health outcomes
   - Child tax credit expansion on child poverty
 
@@ -473,7 +471,7 @@ include_graphics('lectures_files/dag11.png', dpi = 150)
 
 - Controlling for $PE$ closes 6
 
-- Currently no way to close 5; our causal hopes are dashed
+- Currently no way to close 5; omitted variable bias
 ]
 
 ---
@@ -504,7 +502,7 @@ include_graphics('lectures_files/dag_ovbdirect.png', dpi = 150)
 ---
 # External validity
 
-- **External validity (generalizability):** can results be applied beyond the groups or context that were studied?
+- **External validity (generalizability):** can results be applied beyond the subjects or context included in the analysis?
 
 --
 
