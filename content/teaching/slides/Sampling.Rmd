@@ -143,22 +143,19 @@ $$E(\hat{\theta}) = \theta  ?$$
 
 > **Run the `set-up` and `functions` code chunks**
 
---
-
 > **Run the `coin-flips` code chunk**
 
---
+---
+# Law of Large Numbers (LLN)
 
-> **Run the `head-count` code chunk. Make note of the percent of flips resulting in heads.**
+> **Run the `head-count` code chunk. Notice the percent of flips resulting in heads.**
 
---
-
-> **Change the number of flips from 10 to 100 and run again. Make note of the percent of flips resulting in heads.**
+> **Change the number of flips from 10 to 100 and run again. Notice the percent of flips resulting in heads. Is it relatively closer to 50%?**
 
 ---
 class: inverse, center, middle
 
-# As sample size increases, accuracy tends to increase (assuming no bias)
+# As sample size increases, accuracy tends to increase (assuming no bias in the sample or methodology)
 
 ---
 # Sampling distribution
@@ -167,17 +164,14 @@ class: inverse, center, middle
 
 - Highly unlikely that our estimate *equals* the parameter, so we need to construct a **range of plausible values** that will capture the parameter
 
---
+- What if we collected all of the estimates we got from each of our samples and plotted their distribution? 
 
-- What if we collected all of the estimates we got from each of our samples and plotted their distribution? That would give us the **sampling distribution** for our estimate.
+- That would give us the **sampling distribution** for our estimate.
 
---
+---
+# Sampling distribution
 
 > **Replace values in the `class-sampling-distribution` code chunk then run.**
-
---
-
-> **We need more estimates to make a proper histogram. Let's obtain two more estimates each and add to histogram.**
 
 ---
 # Sampling distribution
@@ -214,7 +208,7 @@ class: inverse, center, middle
 
 - We need to know the **standard deviation of our sampling distribution**. Then we can compute a range of plausible values for our parameter.
 
-- **Standard error** is the special name we give to the standard deviation of a sampling distribution.
+- **Standard error** is the specific name we give to the standard deviation of a sampling distribution.
 
 > **Run the `standard-error` code chunk to compute the standard error of our sampling distribution.**
 
@@ -225,22 +219,25 @@ class: inverse, center, middle
 
 - Common to use a 95% confidence interval: 1.96 standard errors below and above our estimate.
 
---
+> **Run the `confidence-interval`, `lower_ci`, and `upper_ci` code chunks**
 
-> **Run the `confidence-interval` code chunk**
+- Does our confidence interval contain the true parameter of 50%? 
 
 ---
 # Confidence intervals & sample size
 
-- Each of the next three code chunks uses a different sample size of coin flips (10,100,1000), counts the number of heads, then replicates this 100 times to provide you 100 *estimates* for percent heads.
+- Each of the next three code chunks: 
+  - Uses a different sample size of coin flips (10,100,1000), 
+  - Counts the number of heads, 
+  - Replicates this 100 times to provide 100 estimates for percent heads,
+  - Plots the 100 estimates on a histogram.
 
---
+> **Run the three `sampling-distribution` code chunks**
 
-> **Run the `sampling-distribution` code chunks**
+- How do the three sampling distributions compare?
 
-- Should notice the spread of the sampling distribution decreasing as sample size increases
-
---
+---
+# Confidence intervals & sample size
 
 > **Run the `se` code chunks**
 
@@ -267,31 +264,32 @@ class: inverse, center, middle
 ---
 # Sample and estimate
 
-> **Once you've been given your sample size (n), run the `sample` and `salary-estimate` code chunks.**
+> **Once you've been given your sample size (n), run the `sample` code chunk.**
+
+- We now have a random sample of MPA graduates drawn from the population
 
 --
 
-- You now have a sample of MPA graduates drawn from the population
+> **Run the `salary-estimate` code chunk**
 
---
+- You now have an estimate of average salary for the population
+
+---
+# Sample and estimate
 
 - This time, we won't compile our estimates to make a sampling distribution.
 
-- Instead, we assume our estimate is a single draw from a sampling distribution that is approximately normal even though we never observe the sampling distribution
+- Instead, we assume our estimate is a single draw from a sampling distribution that is approximately normal even though we do not observe the sampling distribution
 
---
-
-- But we still need the standard error of the sampling distribution to construct confidence intervals...
+- But we still need the standard error of the sampling distribution to construct confidence intervals.
 
 ---
 # Standard error
 
-- Our estimate is a sample mean. The (assumed) standard error for a sample mean is:
+- Our estimate is a sample mean. The formula for the standard error of a sample mean is:
 
 $$SE_{\bar{x}}=\frac{s}{\sqrt{n}}$$
-- Where $s$ is the standard deviation of $x$ in our sample and $n$ is the size of our sample.
-
---
+- Where $s$ is the standard deviation of our variable ($x$) in the sample and $n$ is the size of the sample.
 
 > **Run the `salary-standard-error` code chunk**
 
@@ -302,8 +300,6 @@ $$SE_{\bar{x}}=\frac{s}{\sqrt{n}}$$
 
 > **Run the `salary-ci` and `precision` code chunks**
 
---
-
 - Those with larger sample sizes should have more precise confidence intervals
 
 - Does your confidence interval contain the population parameter?
@@ -311,15 +307,13 @@ $$SE_{\bar{x}}=\frac{s}{\sqrt{n}}$$
 ---
 # Confidence interval
 
-A 95% confidence interval **does not** mean there is a 95% probability that it captures the parameter.
+- A 95% confidence interval **does not** mean there is a 95% probability that it contains the parameter.
 
---
+- Rather, if we were to do this "study" 100 times, our method of constructing the 95% CI is *expected* to produce 95 successful CIs and 5 unsuccessful CIs, on average.
 
-Rather, if we were to do this "study" 100 times, our method of constructing the 95% CI is *expected* to produce 95 successful CIs and 5 unsuccessful CIs. 
+- We can determine whether our one CI was successful because we knew the parameter. 
 
---
-
-We saw that our one CI was successful because we knew the parameter. In reality, our CI could be one of the unsuccessful ones. But we accept this knowing that our method is expected to fail only 5 out of 100 times.
+- In reality, our CI could be one of the unsuccessful ones. But we accept this knowing that our method is expected to fail only 5 out of 100 times.
 
 ---
 # A look at 100 CIs
@@ -364,23 +358,19 @@ ggplot(sal_dist_means, aes(x=as.factor(replicate))) +
 ---
 # Point estimate vs. CI
 
-- Suppose our estimate for average salary was $81,053. This is what often gets reported. This is for brevity and convenience.
+- Suppose our estimate for average salary was $80,000. This is often the only information that is reported. This is for brevity and convenience.
 
---
-
-- The point estimate **does not** represent the most likely value for the parameter within the CI. No value within the CI is more or less likely to represent the parameter.
+- But the point estimate **does not** represent the most likely value for the parameter within the CI. No value within the CI is more or less likely to represent the parameter.
 
 --
 
 - Assuming we have a successful CI, the parameter could fall **anywhere** within it, including the lower and upper bounds.
 
---
-
 - Depending on the context of our study and the width of the CI, only reporting the point estimate could be very misleading.
 
 --
 
-- What if the 95% CI for average salary was [20,000 - 140,000]?
+- What if the 95% CI for average salary was [20,000, 140,000]?
 
 ---
 # Back to regression table
@@ -429,7 +419,7 @@ get_regression_table(inc_mod) %>%
 ```
 
 ```{r}
-# not equal due to rounding
+# not exactly equal due to slight differences in underlying math
 1993 - 1.96*262
 1993 + 1.96*262
 ```
@@ -476,16 +466,10 @@ get_regression_table(inc_mod) %>%
 ---
 # Recap
 
-- Beware a point estimate without a confidence interval
-
---
-
 - Sample size improves the accuracy of the estimate settling on parameter
-
---
 
 - Sample size improves the precision of the CI
 
---
+- Do not ignore the confidence interval for a point estimate
 
 - The worse our regression fits the data (i.e. lower $R^2$ or higher RMSE), the larger the standard error and thus less precise our CI
