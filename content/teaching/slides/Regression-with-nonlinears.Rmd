@@ -51,7 +51,7 @@ gapminder %>%
 
 - Quadratic model
 
-- Logarithmic model
+- Logarithmic transformations
   - Log-log
   - Log-level
   - Level-log
@@ -65,7 +65,9 @@ $$y=\beta_0+\beta_1x_1+\beta_2x_1^2+\beta_3x_2+...+\beta_kx_k+\epsilon$$
 
 - The regression model includes a linear term, $x_1$, and a quadratic term, $x_1^2$
 
-- Any variable in the regression model could be modeled quadratic, not just $x_1$
+- Any variable in the regression model could be modeled quadratic
+
+$$y=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_2^2+...+\beta_kx_k+\epsilon$$
 
 ---
 # Quadratic model
@@ -85,86 +87,22 @@ If relationship between $x$ and $y$ is initially positive then eventually negati
 ]
 
 ---
-# Quadratic directions
-
-$$y= 100 + 10x - 1x^2$$
-
-```{r, include=FALSE}
-quad.dir <- tibble(
-  'x' = c(0,2,4,6,8,10,12),
-  'b1' = c(10,10,10,10,10,10,10),
-  'x*b1' = c(0,20,40,60,80,100,120),
-  'x^2' = c(0,4,16,36,64,100,144),
-  'b2' = c(-1,-1,-1,-1,-1,-1,-1),
-  'x^2*b2' = c(0,-4,-16,-36,-64,-100,-144),
-  'y' = c(100,116,124,124,116,100,76)
-)
-```
-
-.pull-left[
-```{r, echo=FALSE}
-kable(quad.dir)
-```
-]
-
-.pull-right[
-```{r, echo=FALSE, message=FALSE}
-ggplot(quad.dir, aes(x, y)) +
-  geom_point()+
-  geom_path()+
-  scale_x_continuous(breaks = c(0,2,4,6,8,10,12)) +
-  theme_minimal() +
-  theme(axis.text = element_text(size=14),
-        axis.title = element_text(size = 12))
-```
-]
-
-As $x$ increases, the squared term will eventually exceed the linear term
-
----
-# Quadratic regression
-
-.pull-left[
-- When relationship is linear, the change in $y$ given a unit-change in $x$ is constant.
-
-- Now the change in $y$ given a unit-change in $x$ depends on the starting point for $x$.
-]
-
-.pull-right[
-```{r, echo=FALSE, message=FALSE}
-ggplot(quad.dir, aes(x, y)) +
-  geom_point()+
-  geom_path()+
-  scale_x_continuous(breaks = c(0,2,4,6,8,10,12)) +
-  theme_minimal() +
-  theme(axis.text = element_text(size=14),
-        axis.title = element_text(size = 12))
-```
-]
-
----
 # Quadratic regression
 
 - **Population model:**
 
 $$y=\beta_0+\beta_1x_1+\beta_2x_1^2+\epsilon$$
 
---
-
 - We run the regression model and obtain some estimates for our sample model
 
 $$\hat{y}=b_0+b_1x_1+b_2x_1^2$$
 
---
-
-- Can then answer the same two questions in regression:
+- Can then answer the same two questions:
   - Predicted change in $y$ given a unit-change in $x$?
   - Predicted value of $y$ given a value of $x$?
-  
---
 
 - Third question unique to quadratic relationship:
-  - At what value of $x$ is $y$ at its maximum or minimum?
+  - At what value of $x$ is $y$ at its predicted maximum or minimum?
 
 ---
 # Linear vs. Quadratic unit change
@@ -177,7 +115,10 @@ $$\hat{y}=b_0+b_1x_1$$
 
 $$\Delta \hat{y} = b_1$$
 
---
+- Unit change is constant. Does not depend on value of $x$ that is changing
+
+---
+# Linear vs. Quadratic unit change
 
 **Quadratic**
 
@@ -198,18 +139,24 @@ $$\hat{y}=b_0+b_1x_1+b_2x_1^2$$
 
 $$x = \frac{-b_1}{2b_2}$$
 
+- Remember, any variable in the model could be quadratic.
+
+$$\hat{y}=b_0+b_1x_1+b_2x_2+b_3x_2^2$$
+
+$$x = \frac{-b_2}{2b_3}$$
+
 ---
 # Quadratic regression
 
 $$y= 100 + 10x - 1x^2$$
 
-- What is the **marginal effect** of $x$ at $x=3$?
+- What is the marginal effect $x$ at $x=3$?
   - Marginal effect another term for change in $y$ given a small change in $x$
   - Note we need a starting value for $x$ to answer this question
 
 --
 $$\Delta \hat{y} = b_1+2b_2x_1$$
-$$10+2\times (-1) \times 3=10-6=4$$
+$$\Delta \hat{y}=10+2\times -1 \times 3=10-6=4$$
 
 - At $x=3$, $y$ is predicted to increase 4 units given a one-unit increase in $x$, on average.
 
@@ -225,31 +172,6 @@ $$x = \frac{-b_1}{2b_2}$$
 $$\frac{-10}{2(-1)}=5$$
 
 - On average, $y$ is predicted to be at its maximum when $x=5$.
-
----
-# Quadratic regression
-
-.pull-left[
-- At $x=3$ we predicted an increase of 4 if $x$ increases by 1
-
-$$120 = 100 + 10(3) - 1(3^2)$$
-$$124 = 100 + 10(4) - 1(4^2)$$
-
-- And $y$ reaches its maximum at $x=5$
-
-]
-
-.pull-right[
-```{r, echo=FALSE, message=FALSE}
-ggplot(quad.dir, aes(x, y)) +
-  geom_point()+
-  geom_path()+
-  scale_x_continuous(breaks = c(0,2,4,6,8,10,12)) +
-  theme_minimal() +
-  theme(axis.text = element_text(size=14),
-        axis.title = element_text(size = 12))
-```
-]
 
 ---
 class: inverse, center, middle
@@ -317,62 +239,39 @@ class: inverse, center, middle
 ---
 # Why use log transformation
 
-- Transform skewed data to be more normally distributed
+- Transform skewed data so regression line fits better
 
 - Express change in percentages instead of units
 
---
-
-- Reflect our theoretical claim for the relationship between two variables
-  - Based on scatterplot, or
-  - We believe the relationship between $x$ and $y$ is not constant, but is always either positive or negative (not quadratic)
+- Reflect our hypotheses regarding the relationship between two variables
+  - The relationship between $x$ and $y$ is not constant, but is always either positive or negative (not quadratic)
 
 ---
 # Transform skewed data
 
-```{r, fig.align='center', fig.height=6}
-ggplot(gapminder, aes(x = gdpPercap)) +
-  geom_histogram(bins = 50, fill = 'steelblue', color = 'white') +
-  theme_minimal()
-```
-
----
-# Transform skewed data
-
-```{r, fig.align='center', fig.height=5.5}
-ggplot(gapminder, aes(x = gdpPercap)) +
-  geom_histogram(bins = 50, fill = 'steelblue', color = 'white') +
-  scale_x_log10(labels = scales::dollar)
-  theme_minimal()
-```
-
----
-# Transform skewed data
-
-```{r, message=FALSE, fig.align='center', fig.height=5}
+```{r, message=FALSE, fig.align='center', fig.height=7, echo=FALSE}
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp)) +
   geom_point(color = 'steelblue', alpha = 0.4) +
   labs(x = 'GDP per capita', y = 'Life expectancy') +
-  theme_minimal()
+  theme_minimal() + 
+  theme(axis.text = element_text(size = 16), 
+        axis.title = element_text(size = 16))
 ```
 
 ---
 # Transform skewed data
 
-```{r, message=FALSE, fig.align='center', fig.height=4.5}
+```{r, message=FALSE, fig.align='center', fig.height=7, echo=FALSE}
 gapminder %>% 
   ggplot(aes(x = gdpPercap, y = lifeExp)) +
   geom_point(color = 'steelblue', alpha = 0.4) +
-  scale_x_log10(labels = scales::dollar)
+  scale_x_log10(labels = scales::dollar) +
   labs(x = 'Log GDP per capita', y = 'Life expectancy') +
-  theme_minimal()
+  theme_minimal() + 
+  theme(axis.text = element_text(size = 16),
+        axis.title = element_text(size = 16))
 ```
-
----
-class: inverse, center, middle
-
-# Log models, interpretation, and use in R
 
 ---
 # Log-log Model
@@ -382,14 +281,9 @@ $$ln(\hat{y})=b_0+b_1ln(x_1)+...+b_kx_k$$
 
 - Might use this if relationship between $x$ and $y$ begins to plateau as $x$ increases
 
----
-# Interpreting Log-log Model
-
-$$ln(\hat{y})=b_0+b_1ln(x_1)+...+b_kx_k$$
-
 - As $x_1$ increases 1%, y changes $b_1$%
 
-- This is how **elasticities** are estimated
+- Estimates an **elasticity:** percent change in $y$ given a percent change in $x$
 
 ---
 # Log-log model in R
@@ -421,28 +315,6 @@ get_regression_table(log_log) %>%
 
 - How do we interpret `log(gdpPercap)` coefficient?
 
-]
-
----
-# Log-log model in R
-
-```{r, eval=FALSE}
-get_regression_table(log_log) %>% 
-  select(term, estimate)
-```
-
-.pull-left[
-```{r, echo=FALSE}
-get_regression_table(log_log) %>% 
-  select(term, estimate) %>% 
-  kable(digits = 3)
-```
-]
-
-.pull-right[
-
-- How do we interpret `log(gdpPercap)` coefficient?
-
 - On average, life expectancy is predicted to increase 0.11% with each 1% increase in GDP per capita, all else equal.
 
 ]
@@ -453,9 +325,7 @@ get_regression_table(log_log) %>%
 $$y=\beta_0+\beta_1ln(x_1)+...+\beta_kx_k+\epsilon$$
 $$\hat{y}=b_0+b_1ln(x_1)+...+b_kx_k$$
 
-- Might use this if only $x$ is skewed
-
-- Very similar to log-log, where the relationship between $x$ and $y$ begins to plateau as $x$ increases
+- Might use this if only $x$ is skewed.
 
 ---
 # Interpreting Level-log Model
@@ -500,28 +370,6 @@ get_regression_table(lev_log) %>%
 
 - How do we interpret `log(gdpPercap)` coefficient?
 
-]
-
----
-# Level-log Model in R
-
-```{r, eval=FALSE}
-get_regression_table(lev_log) %>% 
-  select(term, estimate)
-```
-
-.pull-left[
-```{r, echo=FALSE}
-get_regression_table(lev_log) %>% 
-  select(term, estimate) %>% 
-  kable(digits = 3)
-```
-]
-
-.pull-right[
-
-- How do we interpret `log(gdpPercap)` coefficient?
-
 - On average, as GDP per capita increases 1%, life expectancy is predicted to increase $\frac{6.42}{100}=0.0642$ years, all else equal.
 
 - Or a doubling of GDP per capita results in a 6.42 year increase in life expectancy 
@@ -536,12 +384,7 @@ $$ln(\hat{y})=b_0+b_1x_1+...+b_kx_k$$
 
 - Might use this if only $y$ is skewed
 
-- Or we believe the effect of $x$ on $y$ *grows* as $x$ increases. Opposite of log-log or level-log.
-
----
-# Interpreting Log-level Model
-
-$$ln(\hat{y})=b_0+b_1x_1+...+b_kx_k$$
+- Or we believe the effect of $x$ on $y$ grows as $x$ increases.
 
 - As $x_1$ increases 1 unit, y changes ( $b_1 \times 100$ ) percent
 
@@ -556,27 +399,6 @@ $$ln(LifeExp)=\beta_0+\beta_1GDPperCap+\beta_2Continent+\epsilon$$
 log_lev <- lm(log(lifeExp) ~ gdpPercap + continent, 
                data = gapminder)
 ```
-
----
-# Log-level Model in R
-
-```{r, eval=FALSE}
-get_regression_table(log_lev)
-```
-
-.pull-left[
-```{r, echo=FALSE}
-get_regression_table(log_lev) %>% 
-  select(term, estimate) %>% 
-  kable(digits = 7)
-```
-]
-
-.pull-right[
-
-- Rounds to 0 in the table. The estimate equals 0.0004. How do we interpret `gdpPercap`?
-
-]
 
 ---
 # Log-level Model in R
@@ -603,6 +425,18 @@ get_regression_table(log_lev) %>%
 ]
 
 ---
+# Choosing the best model
+
+- Can't compare models that use $ln(y)=\dots$ to models that use $y=\dots$ based on $R^2$ or $RMSE$.
+
+  - Can compare log-log and log-level
+  - Can compare level-level and level-log
+
+- Converting goodness of fit measures to be comparable is beyond scope of this course.
+
+- Instead, use scatter plots and your best judgment to decide between $ln(y)=\dots$ and $y=\dots$
+
+---
 # Recap
 
 - **Quadratic**: $b+2bx$ unit change in $y$ given a 1-unit increase in $x$
@@ -615,14 +449,3 @@ get_regression_table(log_lev) %>%
 
 - **Log-level**: $\frac{b}{100}$ percent change in $y$ given a 1-unit increase in $x$
 
----
-# Choosing the best model
-
-- Can't compare models that use $ln(y)=\dots$ to models that use $y=\dots$ based on $R^2$ or $RMSE$.
-
-  - Can compare log-log and log-level
-  - Can compare level-level and level-log
-
-- Converting goodness of fit measures to be comparable is beyond scope of this course.
-
-- Instead, use scatter plots and your best judgment to decide between $ln(y)=\dots$ and $y=\dots$
