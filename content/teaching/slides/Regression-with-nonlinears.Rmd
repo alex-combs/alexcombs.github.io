@@ -445,7 +445,7 @@ get_regression_table(log_lev) %>%
 
 - **Log-log**: $b$ percent change in $y$ given a 1% increase in $x$ 
 
-- **Level-log**: $b \times 100$ unit change in $y$ given a 1% increase in $x$
+- **Level-log**: $\frac{b}{100}$ percent change in $y$ given a 1-unit increase in $x$
 
-- **Log-level**: $\frac{b}{100}$ percent change in $y$ given a 1-unit increase in $x$
+- **Log-level**: $b \times 100$ unit change in $y$ given a 1% increase in $x$
 
