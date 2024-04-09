@@ -353,7 +353,7 @@ class: inverse, center, middle
 
 ---
 
-# Practical significance from PS3
+# Practical significance from PS2
 
 ```{r, include=FALSE}
 sum.ps3 <- arsenal::tableby( ~ health_expenditures + treatment, data = hisp_data)
