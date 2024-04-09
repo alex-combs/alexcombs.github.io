@@ -15,7 +15,7 @@ output:
 ---
 # Outline
 
-- Report regression results using tables and graphs in a more realistic and professional way
+- Report regression results using tables and graphs in a more common way
 
 - This lab involves a lot of copying-and-pasting of code. You want to have these slides open on your computer. 
 
@@ -82,7 +82,7 @@ state_data <- hate_crimes %>%
 ```
 
 ---
-# Revisiting PS3 Regression
+# Regression Model
 
 $$MedInc = \beta_0 + \beta_1 \%HS + \beta_2Urbanization + \beta_3Unemp + \epsilon$$
 
@@ -95,7 +95,7 @@ inc_mod <- lm(median_house_inc ~ share_pop_hs + urbanization + share_unemp_seas,
 ---
 # Reporting Results
 
-- We have learned how to produce a standard table of results using `get_regression_table`
+- We have covered how to produce a standard table of results using `get_regression_table`
 
 ```{r, echo=FALSE}
 get_regression_table(inc_mod) %>% 
@@ -216,7 +216,7 @@ ggplot(state_data,
 ---
 # Visualizing Regression Line
 
-- `ggplot` can visualize regression models that include:
+- `ggplot` cannot easily visualize regression models that include:
 
   - **ONE** numerical explanatory variable
   - **ONE** categorical explanatory variable (with or without interaction)
