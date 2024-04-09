@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # PADP 7120 Data Applications in PA
 ]
 .subtitle[
-## RLab 8: Reporting Regression Results
+## RLab 7: Reporting Regression Results
 ]
 .author[
 ### Alex Combs
@@ -24,14 +24,14 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: April 08, 2024
+### Last updated: April 09, 2024
 ]
 
 ---
 
 # Outline
 
-- Report regression results using tables and graphs in a more common way
+- Report regression results using more common tables and graphs
 
 - This lab involves a lot of copying-and-pasting of code. You want to have these slides open on your computer. 
 
@@ -47,7 +47,7 @@ class: center, middle, inverse, title-slide
 
 ```r
 ---
-title: "RLab 8: Reporting Regression Results"
+title: "RLab 7: Reporting Regression"
 author: "Your Name"
 output: 
   html_document:
@@ -112,15 +112,15 @@ state_data &lt;- hate_crimes %&gt;%
 |urbanization: low |  -6845.794|  1834.261|    -3.732|   0.001|  -10537.969|  -3153.619|
 |share_unemp_seas  |  -1017.102|  1105.597|    -0.920|   0.362|   -3242.552|   1208.349|
 
-- This table is fine but not typically how results are presented
+- This table is okay but not typically how results are reported
 
 ---
 # Regression Tables
 
 - Regression results tables usually include:
   - estimate
-  - standard error or t-statistic; rarely both
-  - stars to indicate statistical significance based on p-value
+  - standard error
+  - asterisks (stars) for statistical significance based on p-value
   - clear variable names
   - number of observations
 
@@ -236,14 +236,16 @@ ggplot(state_data,
 
 
 ```r
-effect_plot(inc_mod, pred = share_pop_hs, plot.points = TRUE, data = state_data,
-            y.label = "Median household income", x.label = "% High School or Above")
+effect_plot(inc_mod, # Saved reg results
+            pred = share_pop_hs, # an explanatory variable
+            plot.points = TRUE, # show points or not
+            data = state_data, # data used for regression
+            y.label = "Median household income", 
+            x.label = "% High School or Above")
 ```
 
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-12-1.png" style="display: block; margin: auto;" /&gt;
-
 ---
-# Visualizing Regression
+# Visualizing Regression (interact_plot)
 
 - To include urbanization, can use `interact_plot` from `interactions` package 
 
@@ -251,11 +253,13 @@ effect_plot(inc_mod, pred = share_pop_hs, plot.points = TRUE, data = state_data,
 
 
 ```r
-interact_plot(inc_mod, pred = share_pop_hs, modx = urbanization, plot.points = TRUE, data = state_data,
+interact_plot(inc_mod, 
+              pred = share_pop_hs, 
+              modx = urbanization, # the interaction variable
+              plot.points = TRUE, 
+              data = state_data,
             y.label = "Median household income", x.label = "% High School or Above")
 ```
-
-&lt;img src="rlab8-reporting-reg_files/figure-html/unnamed-chunk-13-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Visualizing Coefficients
