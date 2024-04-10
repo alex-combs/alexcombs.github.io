@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Reg_Diagnostics_files/header-attrs-2.20/header-attrs.js"></script>
+    <script src="Reg_Diagnostics_files/header-attrs-2.23/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -15,7 +15,7 @@ class: center, middle, inverse, title-slide
 # PADP 7120 Data Applications in PA
 ]
 .subtitle[
-## Regression Diagnostics
+## RLab 8: Regression Diagnostics
 ]
 .author[
 ### Alex Combs
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: April 17, 2023
+### Last updated: April 10, 2024
 ]
 
 ---
@@ -33,22 +33,59 @@ class: center, middle, inverse, title-slide
 
 
 
-- Are my regression results statistically valid?
+- Are regression results statistically valid?
   - Classic assumptions of regression (LINE)
-  - Multicollinearity
+  - Multi-collinearity
   - Outliers, high-leverage, and high-influence
+  
+---
+# Setup
 
-- Goal is to have sufficient knowledge to ask good questions and explain consequences if an analyst did not check assumptions
+&gt; **Start a new project and Rmd**
+
+&gt; **Change YAML.**
+
+
+```r
+---
+title: "RLab 7: Reporting Regression"
+author: "Your Name"
+output: 
+  html_document:
+    theme: spacelab
+    df_print: paged
+---
+```
 
 ---
-class: inverse, center, middle
+# Setup
 
-# Classical assumptions of linear regression
+&gt; **Download `trump_vote` data on eLC and import**
+
+&gt; **Load the following packages**
+
+
+```r
+library(tidyverse)
+library(moderndive)
+library(carData)
+library(car)
+library(gvlma)
+```
 
 ---
-# Regression table
+# Data Summary
 
-`$$TrumpVote = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$` 
+&gt; **Use the `summary()` function to obtain a simple display of summary statistics**
+
+---
+# Regression
+
+&gt; **Run the following regression and produce tables of results and goodness-of-fit**
+
+`$$TrumpVoteShare = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$` 
+---
+# Regression
 
 
 
@@ -61,14 +98,15 @@ class: inverse, center, middle
 
 - We now understand all the information in this table. 
 
---
-
 - But the information could be wrong if regression assumptions are violated.
 
 ---
-# Concerns
+class: inverse, center, middle
 
-- Our data or regression model choices may cause **LLN** or **CLT** to fail.
+# Classical assumptions of linear regression
+
+---
+# Concerns
 
 - Biased estimates
   - Systematically higher/lower estimates than the parameter
@@ -76,20 +114,19 @@ class: inverse, center, middle
 - Invalid hypothesis test
   - Inflated chance of false positives or false negatives
 
-- Wider confidence intervals than necessary (i.e., less precision)
-  - Undesirable but tolerable
+- Wider confidence intervals (less precision) than necessary
 
 ---
-# Assumptions Depend on Residuals
+# Assumptions Focus on Residuals
 
 
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-5-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
 
 ---
 # Classical regression assumptions
 
-- LINE
+- **L.I.N.E.**
 
 - **L**inear relationship between `\(x\)` and `\(y\)` 
 
@@ -97,13 +134,13 @@ class: inverse, center, middle
 
 --
 
-- **I**ndependent residuals (independent observations; random sampling)
+- **I**ndependent residuals
+
+  - Requires independent observations; data of one observation shares no correlation with other observations
 
 --
 
 - **N**ormality of residuals
-
---
 
 - **E**qual variance in residuals
 
@@ -111,11 +148,11 @@ class: inverse, center, middle
 # Residual vs. Fitted Plot (RVF)
 
 .pull-left[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-6-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-8-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-7-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-9-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 - Assumptions **L**, **N**, and **E** can be inspected using an RVF plot (on right).
@@ -178,16 +215,18 @@ class: inverse, center, middle
 
 - Cannot directly observe violation of **I**
 
-- If there are signs that **L** or **N** have been violated, could be violation of **I**
+- Requires an understanding of how observations in the data are related to each other
 
---
-
-- Evaluating **I** requires an understanding of how observations in the data are related to each other
-
-- Independence is hard to achieve unless sample is random
+- Examples of possible dependencies:
+  - Schools in the same district
+  - People in the same household
+  - Counties treated by the same state policy
+  - Past periods related to current, future periods
+  
+- If **L** or **N** are violated, could be due to violation of **I**
 
 ---
-# Consequences
+# Potential Consequences
 
 - Violation of **L** or **N** or **I**
   - Biased estimates
@@ -197,126 +236,49 @@ class: inverse, center, middle
   - Invalid hypothesis testing
 
 ---
-# Solutions
+# Checking Assumptions
 
-- Violation of **L** or **N**
-  - Include quadratic or log transformations
+- The `gvlma(saved_results)` function from the gvlma package will perform a test of assumptions
 
-- Violation of **E**
-  - Log transform the outcome variable
-  - Statistical correction outside scope of class (robust standard errors)
+  - GVLMA:  Global Validation of Linear Model Assumptions
 
-- Violation of **I**
-  - Control for the variables that capture how observations are related to each other
-  - Statistical correction outside scope of class (clustered standard errors)
+&gt; **Run `gvlma()` on your saved results**
 
 ---
-class: inverse, center, middle
+# GVLMA
 
-# Multicollinearity
 
----
-# Multicollinearity
 
-- When two explanatory variables are strongly correlated with each other
+&lt;img src="lectures_files/gvlma1.png" width="1064" style="display: block; margin: auto;" /&gt;
 
-- Since regression computes the association between an `\(x\)` and `\(y\)`, **controlling for all other `\(x\)`s**, multicollinearity can mask statistically significant associations between an `\(x\)` and `\(y\)`.
-
---
-
-- In other words, multicollinearity can cause false negatives
+- Global Stat: Holistic test of assumptions
+- Skewness: Primary test of **N**; secondary test for influence
+- Kurtosis: Primary test for influence; secondary test of **N**
+- Link Function: Test of **L**
+- Heteroskedasticity: Test of **E**
 
 ---
-# Multicollinearity
+# Checking Assumptions
 
-- Detection
-  - If two variables have a correlation stronger than +/- 0.8, multicollinearity might be a problem
-  - Variance Inflation Factor (VIF) is another method
-    - A VIF greater than 10 indicates multicollinearity may be a problem
+- The `plot(saved_regression_results)` function will produce a series of diagnostic plots
 
-- Solutions
-  - Combine the variables into a single index variable
-  - If one variable is really important to the analysis, exclude the variables correlated to it. Be careful not to introduce omitted variable bias.
+- Each plot targets a specific assumption or issue and will identify rows in the data **potentially** causing a problem
 
----
-class: inverse, center, middle
-
-# Unusual and influential data
-
----
-# Unusual and influential data
-
-- Regression outlier
-  - An observation with a large residual
-
---
-
-- High-leverage
-  - An observation with a large deviation from the explanatory variable's mean
-
---
-
-- High-influence
-  - A regression outlier with high leverage
-
---
-
-- An influential observation is an observation that, if removed, meaningfully changes regression results
-
----
-class: inverse, center, middle
-
-# Regression diagnostics in R
-
----
-# Revisiting Trump Support
-
-`$$TrumpVote = \beta_0 + \beta_1PctWhite + \beta_2 PctWhitePov + \epsilon$$` 
-
-
-|term      | estimate| std_error| statistic| p_value| lower_ci| upper_ci|
-|:---------|--------:|---------:|---------:|-------:|--------:|--------:|
-|intercept |   10.933|     6.526|     1.675|   0.100|   -2.189|   24.054|
-|white     |    0.264|     0.081|     3.239|   0.002|    0.100|    0.428|
-|white_pov |    2.181|     0.543|     4.014|   0.000|    1.089|    3.274|
-
-- We got our initial results. 
-
-- Now we should check assumptions.
-
----
-# In R
-
-- After saving a regression model...
-
-
-```r
-trump_mod &lt;- lm(share_vote_trump ~ white + white_pov,
-                data = state_trump)
-```
-
-- Run the following, which generates four diagnostic plots
-
-
-```r
-plot(trump_mod)
-```
-
-- Each plot targets a specific assumption or issue
+&gt; **Use `plot()` on your regression results**
 
 ---
 # RVF Plot
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-18-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
 
-- We want to see no obvious pattern and a relatively straight red line along 0
+- We want to see no obvious pattern and a relatively straight line along 0
 
 - Especially useful for evaluating **L**
 
 ---
 # Normal Q-Q
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-19-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see points fall approximately along the dotted line
 
@@ -325,7 +287,7 @@ plot(trump_mod)
 ---
 # Scale-Location
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-20-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
 
 - We want to see a straight red line
 
@@ -334,92 +296,74 @@ plot(trump_mod)
 ---
 # Residuals vs. Leverage
 
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-21-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-22-1.png" style="display: block; margin: auto;" /&gt;
 
 - Useful for identifying high-influence observations
 
 - Observations that cross the dotted Cook's distance may be a problem
 
 ---
-# Cook's distance
+# Unusual and influential data
 
-- Cook's distance is a common measure for identifying high-influence observations
+- Regression outlier
+  - An observation with a large residual
 
-- One rule of thumb is that an observation has high influence if Cook's distance exceeds...
+- High-leverage
+  - An observation with a large deviation from the explanatory variable's mean
 
-`$$4/(n-p-1)$$`
+- High-influence
+  - A regression outlier with high leverage
 
-- Where `\(n\)` is the number of observations and `\(p\)` the number of explanatory variables in our model
+- An influential observation is an observation that, if removed, meaningfully changes regression results
 
-- Even if an observation does not meet this threshold, it is worth considering whether an observation is somehow different from other observations
+---
+# Summary of our Diagnostics
+
+- Our model fails to meet assumptions, driven by **L**
+
+- Is there one or more observations identified in the diagnostic plots that seem most problematic?
+
+- What can or should we do?
+
+---
+# Potential Corrections
+
+- Violation of **L** or **N**
+  - Include quadratic or log transformations
+  - Remove influential observation that could be cause
+
+- Violation of **E**
+  - Log transform the outcome variable
+  - Specify **robust** standard errors (outside scope of class)
+  - Remove influential observation that could be cause
+
+- Violation of **I**
+  - Control for variables that capture how observations are related to each other
+  - Specify **clustered** standard errors (outside scope of class)
 
 ---
 # Influencer?
 
-- Model has 51 observations and 2 explanatory variables. 
+- Visualizing the data can also provide an intuitive check for high influence
 
-- Threshold is:
+&gt; **Generate a plot for the relationship between white poverty and Trump vote**
 
 
-```r
-4/(51-2-1)
-```
 
-```
-## [1] 0.08333333
-```
+- What is the pattern of plot points doing to our attempt to fit a line to them?
+
+- Which state is this problematic point?
 
 ---
-# Cook's distance
+# Excluding DC
 
 
-```r
-plot(trump_mod, 4)
-```
-
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-23-1.png" style="display: block; margin: auto;" /&gt;
-
-- Observations 9, 18, 20, and 46 may be worth investigating
 
 
----
-# Identifying an observation
 
-- Which observations are rows 9, 18, 20, and 46? Can use subsetting.
+&gt; **Save a new dataset that excludes DC**
 
-
-```r
-state_trump[c(9,18,20,46), ]
-```
-
-
-|state                | med_inc|   hs| white| white_pov| share_vote_trump|urban |
-|:--------------------|-------:|----:|-----:|---------:|----------------:|:-----|
-|District of Columbia |   68277| 87.1|    37|         4|                4|high  |
-|Kentucky             |   42786| 81.7|    85|        17|               63|low   |
-|Maine                |   51710| 90.2|    91|        12|               45|low   |
-|Vermont              |   60708| 91.0|    94|        10|               33|low   |
-
-- D.C. probably warrants exclusion.
-
----
-# Influencer?
-
-- Can create a new dataset that excludes DC, then run the regression using the new dataset
-
-
-```r
-state_trump_nodc &lt;- state_trump %&gt;%
-  filter(state != "District of Columbia")
-
-trump_mod_nodc &lt;- lm(share_vote_trump ~ white + white_pov,
-                data = state_trump_nodc)
-```
-
-
-```r
-get_regression_table(trump_mod_nodc)
-```
+&gt; **Re-run regression and produce table of results**
 
 ---
 # Comparing results
@@ -458,61 +402,62 @@ get_regression_table(trump_mod_nodc)
 # Comparing regression lines
 
 .pull-left[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-30-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-28-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-31-1.png" style="display: block; margin: auto;" /&gt;
+&lt;img src="Reg_Diagnostics_files/figure-html/unnamed-chunk-29-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 - D.C. (on left) pulls the left of regression line down; causing slope to be steeper
 
 ---
-# Statistical test on assumptions
+# Checking Assumptions
 
+&gt; **Use gvlma() on this second set of results**
 
-```r
-library(gvlma)
-gvlma(trump_mod)
-```
+- Did excluding DC improve the diagnostic results?
 
-&lt;img src="lectures_files/gvlma1.png" width="1064" style="display: block; margin: auto;" /&gt;
+- What could we do to fix the remaining violation? Refer to slide 31.
 
-- Global Stat: Holistic test of assumptions
-- Skewness: Primary test of **N**; secondary test for influence
-- Kurtosis: Primary test for influence; secondary test of **N**
-- Link Function: Test of **L**
-- Heteroskedasticity: Test of **E**
+&gt; **Run another model with that correction and check assumptions again**
 
 ---
-# Statistical test on assumptions
+class: inverse, center, middle
 
+# Multicollinearity
 
-```r
-gvlma(trump_mod_nodc)
-```
-&lt;img src="lectures_files/gvlma2.png" width="1056" style="display: block; margin: auto;" /&gt;
+---
+# Multicollinearity
 
-- Exclusion of DC makes a difference
+- When two explanatory variables are strongly correlated with each other
+
+- Since regression computes the association between an `\(x\)` and `\(y\)`, **controlling for all other `\(x\)`s**, multicollinearity can mask statistically significant associations between an `\(x\)` and `\(y\)`.
+
+- In other words, multicollinearity can cause false negatives
+
+---
+# Multicollinearity
+
+- Detection
+  - If two variables have a correlation stronger than +/- 0.8, multicollinearity might be a problem
+  - Variance Inflation Factor (VIF) is another method
+    - A VIF greater than 10 indicates multicollinearity may be a problem
+
+- Solutions
+  - Combine the variables into a single index variable
+  - If one variable is really important to the analysis, exclude the variables correlated to it. Be careful not to introduce omitted variable bias.
 
 ---
 # Checking multicollinearity
 
+- Can use `vif(saved_results)` from car package to check multicollinearity
 
-```r
-library(car)
-```
 
-```r
-vif(trump_mod_nodc)
-```
 
-```
-##     white white_pov 
-##  1.043766  1.043766
-```
+&gt; **Run `vif()` on our preferred results**
 
-- Nothing greater than 10; multicollinearity not a problem
+- Is multicollinearity a problem?
     </textarea>
 <style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
 <script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
