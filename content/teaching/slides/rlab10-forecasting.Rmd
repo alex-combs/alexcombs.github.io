@@ -1,6 +1,6 @@
 ---
 title: "PADP 7120 Data Applications in PA"
-subtitle: "RLab 8: Forecasting"
+subtitle: "RLab 9: Forecasting"
 author: "Alex Combs"
 institute: "UGA | SPIA | PADP"
 date: "Last updated: `r format(Sys.time(), '%B %d, %Y')`"
@@ -29,7 +29,7 @@ options(scipen = 999)
 
 ```{r, eval=FALSE}
 ---
-title: "RLab 8: Forecasting"
+title: "RLab 9: Forecasting"
 author: "Your Name"
 output: 
   html_document:
@@ -128,7 +128,7 @@ quarterly <- tibble::tibble(year = rep(2016:2020, 4), quarter = rep(1:4, 5), rev
 quarterly <- arrange(quarterly, year, quarter)
 ```
 
-- quarterly data (head & tail shown)
+- quarterly data (top & bottom rows shown)
 
 ```{r, echo=FALSE}
 head(quarterly, n = 2) %>% kable()
@@ -144,7 +144,7 @@ ts_quarterly <- ts(quarterly[,-1],
 ---
 # TS object examples
 
-- monthly data (head & tail shown)
+- monthly data (top & bottom rows shown)
 
 ```{r, include=FALSE}
 monthly <- tibble::tibble(year = rep(2016:2020, 12), month = rep(1:12, 5), revenue = round(rnorm(60, 50, 10),0))
@@ -166,7 +166,7 @@ ts_monthly <- ts(monthly[,-1],
 ---
 # TS object examples
 
-- biennial data (head & tail shown)
+- biennial data (top & bottom rows shown)
 
 ```{r, include=FALSE}
 biennial <- tibble::tibble(year = seq(2000, 2020, 2), revenue = round(rnorm(11, 50, 10),0))
@@ -501,7 +501,7 @@ include_graphics('labs_files/expsmooth-trend.png')
 ---
 # Exponential smoothing
 
-- Can also incorporate additive or multiplicative seasonality
+- Can also incorporate seasonality that is additive (constant over time) or multiplicative (increases over time)
 
 ```{r, echo=FALSE, fig.align='center'}
 include_graphics('labs_files/expsmooth-season.png')
