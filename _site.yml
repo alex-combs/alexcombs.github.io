@@ -9,7 +9,7 @@ navbar:
   left:
     - text: "About"
       href: index.html
-    - text: "Writing"
+    - text: "Research"
       href: papers.html
     - text: "Teaching"
       menu:
@@ -19,6 +19,8 @@ navbar:
           href: teaching-slides.html
     - text: "Speaking"
       href: conferences.html
+    - text: "CV"
+      href: CV_Combs.pdf
   right:
     - icon: fa-envelope fa-lg
       href: contact.html
