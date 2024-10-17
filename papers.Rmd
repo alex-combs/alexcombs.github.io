@@ -1,23 +1,25 @@
 ---
-title: "Writing"
+title: "Research"
 ---
 ***
 <br>
 
 ## Refereed Publications
 
-> Afonso, W., Combs, A., Buerger, C. (2024). Plugging the Tax Leak: An Analysis of North
-Carolina’s Local Sales Tax Redistribution Policy. State and Local Government Review, 56(1),
+> Combs, A., & Afonso, W. Dollars, Desks, and Development: The Impact of Local Sales
+Tax Revenue Redistribution on Recipient Programs in North Carolina. *National Tax Journal*, forthcoming.
+
+> Afonso, W., Combs, A., & Buerger, C. (2024). Plugging the Tax Leak: An Analysis of North
+Carolina’s Local Sales Tax Redistribution Policy. *State and Local Government Review*, 56(1),
 76-90. https://doi.org/10.1177/0160323X231215057
 
 > Combs, A. (2023). High School Student Achievement and College Enrollment in the
-Absence of School Improvement Interventions: Evidence from Kentucky. Public Finance
-and Management, 22(1). https://doi.org/37.808/pfm.22.1.4
+Absence of School Improvement Interventions: Evidence from Kentucky. *Public Finance and Management*, 22(1). https://doi.org/37.808/pfm.22.1.4
 
-> Combs, A., & Foster, J. (2021). The effects of homestead exemptions for seniors and disabled people on school districts. Rural Education Finance and Policy, special issue of AERA Open.
+> Combs, A., & Foster, J. (2021). The Effects of Homestead Exemptions for Seniors and Disabled People on School Districts. *AERA Open* in special issue on Rural Education Finance and Policy.
 https://doi.org/10.1177%2F2332858420988712
 
-> Combs, A., Foster, J., & Toma E.F. (2018). Local response to school finance equalization:  Wealth or place? Public Finance and Management, 18(3). https://doi.org/10.1177/152397211801800301
+> Combs, A., Foster, J., & Toma E.F. (2018). Local Response to School Finance Equalization:  Wealth or Place? *Public Finance and Management*, 18(3). https://doi.org/10.1177/152397211801800301
 
 <br>
 
@@ -25,9 +27,6 @@ https://doi.org/10.1177%2F2332858420988712
 
 > Troland, E., Combs, A., & Foster, J. The Role of Property Assessment Oversight in School
 Finance Inequality.*Revise & Resubmit at National Tax Journal*
-
-> Combs, A., & Afonso, W. Dollars, Desks, and Development: The Impact of Local Sales
-Tax Revenue Redistribution on Recipient Programs in North Carolina. *Revise & Resubmit at National Tax Journal*
 
 > Combs, A., & Kim, S. Constraints and Contributions: The Effects of Tax Limits on
 Education-Supporting Nonprofit Revenue. *Under Review*
@@ -41,8 +40,7 @@ Attending In-State Public Institutions. *Under Review*
 > Combs, A. Fiscal Illusion Under the Cover of Property Tax Limits: School District Rev-
 enue Responses to a Reordering of Tax Levy Options.
 
-> Afonso, W., & Combs, A. “You keep using that word. I do not think it means what you
-think it means”: Equity in Local Option Tax Policy.
+> Afonso, W., & Combs, A. Equity in Local Option Tax Policy: Rethinking What is Fair.
 
 > Combs, A. Does Money Source Matter? The Impact of Sales Tax Revenue Redistribution
 on School Spending and Student Achievement.
