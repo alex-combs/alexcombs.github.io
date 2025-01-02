@@ -231,6 +231,6 @@ output:
 ---
 # Attendance & Office Hours
 
-- Attendance not required; no explanation needed unless pertains to missing a due date
+- Attendance not required; no explanation needed unless pertains to missing an assignment deadline
 
 - Link to schedule office hours is on eLC.
