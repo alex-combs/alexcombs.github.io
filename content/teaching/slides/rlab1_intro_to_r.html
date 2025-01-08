@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab1_intro_to_r_files/header-attrs-2.23/header-attrs.js"></script>
+    <script src="rlab1_intro_to_r_files/header-attrs-2.29/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: January 09, 2024
+### Last updated: January 07, 2025
 ]
 
 ---
@@ -54,7 +54,7 @@ class: inverse, middle, center
 - Example R code is in blocks like below
 
 
-```r
+``` r
 summary(cars)
 ```
 
@@ -147,7 +147,7 @@ summary(cars)
 - The following code loads a package
 
 
-```r
+``` r
 library(name_of_package)
 ```
 
@@ -156,7 +156,7 @@ library(name_of_package)
 &gt; **Run the following code in your console**
 
 
-```r
+``` r
 library(tidyverse)
 ```
 
@@ -172,7 +172,7 @@ library(tidyverse)
 - Make sure you include quotes around the name
 
 
-```r
+``` r
 install.packages("name_of_package")
 ```
 
@@ -195,7 +195,7 @@ install.packages("name_of_package")
 &gt; **Provided tidyverse loaded successfully, run the following code in your console:**
 
 
-```r
+``` r
 states1 &lt;- read_csv("states1.csv")
 ```
 
@@ -207,7 +207,7 @@ states1 &lt;- read_csv("states1.csv")
 - Should now see an error message like the one below
 
 
-```r
+``` r
 Error in load(states1.RData) : object 'states1.csv' not found
 Calls: &lt;Anonymous&gt; ... withCallingHandlers -&gt; withVisible -&gt; eval -&gt; eval -&gt; load
 Execution halted
@@ -273,7 +273,7 @@ Execution halted
 &gt; **Change the YAML to the following:**
 
 
-```r
+``` r
 ---
 title:  'Test'
 author: 'Your Name'
@@ -317,7 +317,7 @@ output: html_document
 &gt; **Insert another code chunk. Add and run the following code:**
 
 
-```r
+``` r
 states2 &lt;- select(states1, state, pop_1990)
 ```
 
@@ -421,7 +421,7 @@ class: inverse, middle, center
 &gt; **Add another code chunk and add the following code**
 
 
-```r
+``` r
 states1
 ```
 
