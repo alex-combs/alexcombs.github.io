@@ -336,7 +336,9 @@ any_name <- read_csv("filename.csv")
   - Quotes around the file
   - Include the file extension .csv
   
-> **In the setup code chunk, import ncbirths.csv naming the saved data as ncbirths.**
+> **In the setup code chunk, import ncbirths.csv** 
+
+> **Name the saved data as ncbirths.**
 
 ---
 # Importing Excel
@@ -349,7 +351,9 @@ anyname <- read_excel("filename.xlsx")
 
 - Works with both .xls or .xlsx file extensions
 
-> **In the setup code chunk, import ga_schdist_raw.xlsx naming the saved data as ga_schdist_raw**
+> **In the setup code chunk, import ga_schdist_raw.xlsx** 
+
+> **Name the saved data as ga_schdist_raw**
 
 ---
 # Preserve or Clean on Import
@@ -360,7 +364,9 @@ anyname <- read_excel("filename.xlsx")
 
 - If data are messy, we may want to clean the data at the same time as importing it.
 
-> **Click on the two data sets you just saved to the environment. Let's examine whether data look correct.**
+> **Click on the two data sets you just saved to the environment.**
+
+> **Let's examine whether data look correct.**
 
 ---
 # Importing data
@@ -410,7 +416,7 @@ anyname <- read_excel("filename.xlsx")
 ---
 # Importing data
 
-- The RStudio import window in the bottom-right provides the code needed to import the data based on the options we choose
+- The RStudio import window in the bottom-right provides the code needed to import the data based on the changes we make
 
 - **Important:** You must paste this code in your Rmd or else the data won't import when you knit
 
@@ -436,7 +442,7 @@ anyname <- read_excel("filename.xlsx")
 
 - This is important for sharing documents. Others will encounter an error when trying to run code that contains a file path unique to your computer.
 
-> **Delete the last line containing View because it often causes an error when knit**
+> **Delete the last line containing `View()` because it often causes an error when knit**
 
 > **Run this code to complete import.**
 
@@ -455,19 +461,25 @@ anyname <- read_excel("filename.xlsx")
 Generic syntax
 
 ```{r, eval=FALSE}
-dataset <- rename(dataset, new_name = current_name, new_name = "current name",...)
+dataset <- rename(dataset, new_name = current_name,...)
 ```
 
-- If a current variable name has a space, need to use quotes
+- This list of renaming variables can be extended as much as needed
+
+- Or, if a current variable name has a space, need to use quotes
+
+```{r, eval=FALSE}
+dataset <- rename(dataset, new_name = "current name",...)
+```
 
 ---
 # Renaming variables
 
 - Let's rename one variable in `ga_schdist_raw`
 
-> Refer to the example code on previous slide to rename the first variable, "Agency Name", to district. Add this code to your setup code chunk.
+> **Refer to the example code on previous slide to rename the first variable, `Agency Name`, to `district`.** 
 
-> Run this code to check whether it works
+> **Add this code to your setup code chunk and run to check whether it works**
 
 ---
 class: inverse, center, middle
@@ -486,13 +498,13 @@ class: inverse, center, middle
 ---
 # Knit to PDF
 
-- To knit to PDF, you can install a light version of LaTeX within RStudio. 
+- To knit to PDF, you can install a light version of a program called LaTeX 
 
 ```{r, eval=FALSE}
-# In the console pane, type
-install.packages('tinytex') # hit Enter
-# Next, in the console pane, type
-tinytex::install_tinytex() # hit Enter
+# In the console pane, run
+install.packages('tinytex')
+# Next, in the console pane, run
+tinytex::install_tinytex()
 ```
 
 ---
@@ -515,10 +527,8 @@ write_csv(name_of_object_in_environment, 'name_for_new_file.csv')
 
 - We have now covered the basic workflow of most data projects using statistical programming software
 
-- Launch application (RStudio) -> load any packages & import data needed for analysis -> analysis -> save/export any documents, graphs, tables, data, etc.
+- Load any packages & import data needed for analysis -> analysis -> save/export any documents, graphs, tables, data, etc.
 
-- Now we can focus on the skills useful for actual analysis
-
---
+- Now we can begin to focus on the skills related to the analysis step
 
 > **Upload your Rmd to the RLab assignment dropbox on eLC.**

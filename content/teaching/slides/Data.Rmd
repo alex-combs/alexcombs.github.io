@@ -20,19 +20,17 @@ output:
 
 - Identify types of data structures
 
-- Review of R Chapter
-
 ---
 # Rectangular data
 
-- Rectangular data consists
+- Rectangular data consists of
 
   - Observations of a unit of analysis
   - Variables
 
 --
 
-- **Unit of analysis**:  The subject/entity generating the data. Each row contains an observation of a member within the unit of analysis.
+- **Unit of analysis**:  The subject/entity generating the data. Each row contains an observation of a member of the unit of analysis.
 
 --
 
@@ -59,10 +57,6 @@ kable(generic, format = 'html')
 
 ---
 # Identify the unit of analysis
-
-- The unit of analysis is the variable or set of variables that uniquely identifies each row in a data set.
-
---
 
 - What is the likely unit of analysis based on the variable names?
 
@@ -102,15 +96,9 @@ kable(generic, format = 'html')
 
 - Important to know what level is observed or measured. For example, individuals vs. an aggregation of individuals within a city, county, state, etc.
 
---
+- Spreadsheets will sometimes combine units of analysis. For example, state totals calculated from multiple county totals.
 
-- Spreadsheets will often combine units of analysis. For example, state totals calculated from multiple county totals. This is fine for spreadheets.
-
---
-
-- A raw dataset we wish to use in software like RStudio should contain one unit of analysis. For example, state totals should be separate from county totals.
-
-- Understanding the unit of analysis will help us identify rows or columns that do not belong together.
+- Be careful not to accidentally include a unit analysis that does not belong in the data
 
 ---
 class: inverse, middle, center
@@ -199,11 +187,17 @@ class:  inverse, center, middle
 library(gapminder)
 gapminder %>% 
   filter(year == 2007 & continent == 'Americas') %>% 
+  select(-pop, -gdpPercap) %>% 
   head(n=3) %>% 
   kable(format = 'html')
 ```
 
 - A snapshot in time
+
+--
+
+- One way to identify the unit of analysis is finding the variable or set of variables that uniquely identifies each row in a dataset.
+
 - What is the unit of analysis?
 
 ---
@@ -212,12 +206,14 @@ gapminder %>%
 ```{r, echo=FALSE}
 gapminder %>% 
   filter((year == 2007 & continent == 'Americas') | (year==2002 & continent=='Africa')) %>% 
+  select(-pop, -gdpPercap) %>% 
   head(n=7) %>% 
   kable(format = 'html')
 ```
 
 - Multiple cross-sections combined
 - Different subjects observed in each cross-section
+- What is the unit of analysis?
 
 ---
 # Time Series
@@ -225,22 +221,25 @@ gapminder %>%
 ```{r, echo=FALSE}
 gapminder %>% 
   filter(country == 'Argentina') %>% 
+  select(-pop, -gdpPercap) %>% 
   tail(n=7) %>% 
   kable(format = 'html')
 ```
 
 - One subject across time
-- Unit of analysis?
+- What is the unit of analysis?
 
 ---
-# Panel/longitudinal data
+# Panel or longitudinal data
 
 ```{r, echo=FALSE}
 gapminder %>% 
-  filter(continent == 'Americas', year >= 1997) %>% 
+  filter(continent == 'Americas', year >= 1997) %>%
+  select(-pop, -gdpPercap) %>% 
   head(n=6) %>% 
   kable(format = 'html')
 ```
 
 - Same subjects observed across time
-- Unit of analysis?
+- Combination of cross-sectional and time series data
+- What is the unit of analysis?

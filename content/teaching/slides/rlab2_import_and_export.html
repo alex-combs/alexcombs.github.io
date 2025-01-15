@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab2_import_and_export_files/header-attrs-2.23/header-attrs.js"></script>
+    <script src="rlab2_import_and_export_files/header-attrs-2.29/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: January 16, 2024
+### Last updated: January 15, 2025
 ]
 
 ---
@@ -66,7 +66,7 @@ class: center, middle, inverse, title-slide
 &gt; **In the setup code chunk at the top, add the below code. Run this code to load packages.**
 
 
-```r
+``` r
 library(tidyverse) #includes function for importing CSV
 library(readxl) #for importing Excel files
 library(gapminder) #contains data we need to use
@@ -103,7 +103,7 @@ class: inverse, middle, center
 &gt; **In a new code chunk, add and run the following code**
 
 
-```r
+``` r
 slice_head(gapminder, n=4)
 # slice_head() prints row(s) from the top of a dataset
 # n=4 tells it to print the top 4 rows
@@ -125,7 +125,7 @@ slice_head(gapminder, n=4)
 &gt; **Change the code so it saves as an object named `gap_preview` like so and run again**
 
 
-```r
+``` r
 gap_preview &lt;- slice_head(gapminder, n=4)
 ```
 
@@ -143,7 +143,7 @@ gap_preview &lt;- slice_head(gapminder, n=4)
 &gt; **Type `gap_preview` on a separate line so the table prints when knit**
 
 
-```r
+``` r
 gap_preview &lt;- slice_head(gapminder, n=4)
 
 *gap_preview
@@ -159,7 +159,7 @@ gap_preview &lt;- slice_head(gapminder, n=4)
 &gt; **Insert a _new code chunk_ and add the following code**
 
 
-```r
+``` r
 hc &lt;- hate_crimes
 ```
 
@@ -185,7 +185,7 @@ class: inverse, middle, center
 - We have made two tables that will print when we knit using the code:
 
 
-```r
+``` r
 gap_preview # prints saved object in environment
 slice_head(hc, n=4) # prints result without saving anything
 ```
@@ -200,7 +200,7 @@ slice_head(hc, n=4) # prints result without saving anything
 &gt; **Change the YAML to the example below. Make sure you indent correctly.**
 
 
-```r
+``` r
 ---
 title: "RLab2: Import &amp; Export"
 author: "Your Name"
@@ -220,7 +220,7 @@ output:
 &gt; **Change `df_print` option in YAML to paged like highlighted below:**
 
 
-```r
+``` r
 ---
 title: "RLab2: Import &amp; Export"
 author: "Alex Combs"
@@ -240,7 +240,7 @@ output:
 This is not required, but you can change the theme of your document (similar to themed templates in Microsoft Office) like below.
 
 
-```r
+``` r
 ---
 title: "RLab2: Import &amp; Export"
 author: "Alex Combs"
@@ -268,7 +268,7 @@ class: inverse, middle, center
 - Include options by adding a comma after the `r`, followed by a space
 
 
-```r
+``` r
 {r, options_go_here}
 ```
 
@@ -278,7 +278,7 @@ class: inverse, middle, center
   - Suppresses the code from the output but shows results
   
 
-```r
+``` r
 {r, echo=FALSE}
 ```
 
@@ -288,7 +288,7 @@ class: inverse, middle, center
   - Suppress the code AND all results from the output
 
 
-```r
+``` r
 {r, include=FALSE}
 ```
 
@@ -318,7 +318,7 @@ class: inverse, middle, center
 - When you start a new Rmd template, it contains a code chunk near the top named "setup" that contains
 
 
-```r
+``` r
 {r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -353,7 +353,7 @@ class: inverse, middle, center
 - Generic syntax:
 
 
-```r
+``` r
 any_name &lt;- read_csv("filename.csv")
 ```
 
@@ -363,7 +363,9 @@ any_name &lt;- read_csv("filename.csv")
   - Quotes around the file
   - Include the file extension .csv
   
-&gt; **In the setup code chunk, import ncbirths.csv naming the saved data as ncbirths.**
+&gt; **In the setup code chunk, import ncbirths.csv** 
+
+&gt; **Name the saved data as ncbirths.**
 
 ---
 # Importing Excel
@@ -371,13 +373,15 @@ any_name &lt;- read_csv("filename.csv")
 - Generic syntax:
 
 
-```r
+``` r
 anyname &lt;- read_excel("filename.xlsx")
 ```
 
 - Works with both .xls or .xlsx file extensions
 
-&gt; **In the setup code chunk, import ga_schdist_raw.xlsx naming the saved data as ga_schdist_raw**
+&gt; **In the setup code chunk, import ga_schdist_raw.xlsx** 
+
+&gt; **Name the saved data as ga_schdist_raw**
 
 ---
 # Preserve or Clean on Import
@@ -388,7 +392,9 @@ anyname &lt;- read_excel("filename.xlsx")
 
 - If data are messy, we may want to clean the data at the same time as importing it.
 
-&gt; **Click on the two data sets you just saved to the environment. Let's examine whether data look correct.**
+&gt; **Click on the two data sets you just saved to the environment.**
+
+&gt; **Let's examine whether data look correct.**
 
 ---
 # Importing data
@@ -438,7 +444,7 @@ anyname &lt;- read_excel("filename.xlsx")
 ---
 # Importing data
 
-- The RStudio import window in the bottom-right provides the code needed to import the data based on the options we choose
+- The RStudio import window in the bottom-right provides the code needed to import the data based on the changes we make
 
 - **Important:** You must paste this code in your Rmd or else the data won't import when you knit
 
@@ -464,7 +470,7 @@ anyname &lt;- read_excel("filename.xlsx")
 
 - This is important for sharing documents. Others will encounter an error when trying to run code that contains a file path unique to your computer.
 
-&gt; **Delete the last line containing View because it often causes an error when knit**
+&gt; **Delete the last line containing `View()` because it often causes an error when knit**
 
 &gt; **Run this code to complete import.**
 
@@ -483,20 +489,27 @@ anyname &lt;- read_excel("filename.xlsx")
 Generic syntax
 
 
-```r
-dataset &lt;- rename(dataset, new_name = current_name, new_name = "current name",...)
+``` r
+dataset &lt;- rename(dataset, new_name = current_name,...)
 ```
 
-- If a current variable name has a space, need to use quotes
+- This list of renaming variables can be extended as much as needed
+
+- Or, if a current variable name has a space, need to use quotes
+
+
+``` r
+dataset &lt;- rename(dataset, new_name = "current name",...)
+```
 
 ---
 # Renaming variables
 
 - Let's rename one variable in `ga_schdist_raw`
 
-&gt; Refer to the example code on previous slide to rename the first variable, "Agency Name", to district. Add this code to your setup code chunk.
+&gt; **Refer to the example code on previous slide to rename the first variable, `Agency Name`, to `district`.** 
 
-&gt; Run this code to check whether it works
+&gt; **Add this code to your setup code chunk and run to check whether it works**
 
 ---
 class: inverse, center, middle
@@ -515,14 +528,14 @@ class: inverse, center, middle
 ---
 # Knit to PDF
 
-- To knit to PDF, you can install a light version of LaTeX within RStudio. 
+- To knit to PDF, you can install a light version of a program called LaTeX 
 
 
-```r
-# In the console pane, type
-install.packages('tinytex') # hit Enter
-# Next, in the console pane, type
-tinytex::install_tinytex() # hit Enter
+``` r
+# In the console pane, run
+install.packages('tinytex')
+# Next, in the console pane, run
+tinytex::install_tinytex()
 ```
 
 ---
@@ -533,7 +546,7 @@ tinytex::install_tinytex() # hit Enter
 - Generic syntax for exporting data to CSV:
 
 
-```r
+``` r
 write_csv(name_of_object_in_environment, 'name_for_new_file.csv')
 ```
 
@@ -546,11 +559,9 @@ write_csv(name_of_object_in_environment, 'name_for_new_file.csv')
 
 - We have now covered the basic workflow of most data projects using statistical programming software
 
-- Launch application (RStudio) -&gt; load any packages &amp; import data needed for analysis -&gt; analysis -&gt; save/export any documents, graphs, tables, data, etc.
+- Load any packages &amp; import data needed for analysis -&gt; analysis -&gt; save/export any documents, graphs, tables, data, etc.
 
-- Now we can focus on the skills useful for actual analysis
-
---
+- Now we can begin to focus on the skills related to the analysis step
 
 &gt; **Upload your Rmd to the RLab assignment dropbox on eLC.**
     </textarea>
