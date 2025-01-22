@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab3_data_wrangling_files/header-attrs-2.23/header-attrs.js"></script>
+    <script src="rlab3_data_wrangling_files/header-attrs-2.29/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: January 23, 2024
+### Last updated: January 21, 2025
 ]
 
 ---
@@ -68,7 +68,7 @@ class: center, middle, inverse, title-slide
 &gt; **Change YAML:**
 
 
-```r
+``` r
 ---
 title: "RLab3: Data Wrangling"
 author: "Your Name"
@@ -88,7 +88,7 @@ output:
 &gt; **In the setup code chunk, load the following packages:**
 
 
-```r
+``` r
 library(tidyverse) # handles virtually all wrangling tasks
 library(gapminder) # for data we will use
 ```
@@ -138,7 +138,7 @@ class: inverse, middle, center
 - General syntax:
 
 
-```r
+``` r
 filter(data_set, criteria) #prints the result when knit
 filtered_data_set &lt;- filter(data_set, criteria) #saves result
 filtered_data_set # prints the saved result in the above line
@@ -164,7 +164,7 @@ filtered_data_set # prints the saved result in the above line
 Print all observations if year equals 2007
 
 
-```r
+``` r
 filter(gapminder, year == 2007)
 ```
 
@@ -173,7 +173,7 @@ filter(gapminder, year == 2007)
 Print all observations if continent equals Africa
 
 
-```r
+``` r
 filter(gapminder, continent == 'Africa')
 ```
 
@@ -182,7 +182,7 @@ filter(gapminder, continent == 'Africa')
 Save a new dataset containing only observations where life expectancy is greater than 75 years, then print the saved result.
 
 
-```r
+``` r
 long_life &lt;- filter(gapminder, lifeExp &gt; 75)
 long_life
 ```
@@ -193,7 +193,7 @@ long_life
 Print observations missing values for life expectancy
 
 
-```r
+``` r
 filter(gapminder, is.na(lifeExp))
 ```
 
@@ -202,7 +202,7 @@ filter(gapminder, is.na(lifeExp))
 Save a new dataset containing observations where continent is not equal to Oceania (remove Oceania observations)
 
 
-```r
+``` r
 no_oceania &lt;- filter(gapminder, continent != 'Oceania')
 ```
 
@@ -235,7 +235,7 @@ no_oceania &lt;- filter(gapminder, continent != 'Oceania')
 Print all Africa observations for 2007
 
 
-```r
+``` r
 filter(gapminder, continent == 'Africa' &amp; year == 2007)
 ```
 
@@ -244,7 +244,7 @@ filter(gapminder, continent == 'Africa' &amp; year == 2007)
 Print all Africa and Oceania observations
 
 
-```r
+``` r
 filter(gapminder, continent == 'Africa' | continent == 'Oceania')
 ```
 
@@ -253,7 +253,7 @@ filter(gapminder, continent == 'Africa' | continent == 'Oceania')
 Print non-Oceania observations for 1992 or later
 
 
-```r
+``` r
 filter(gapminder, continent != 'Oceania' &amp; year &gt;= 1992)
 ```
 
@@ -274,7 +274,7 @@ filter(gapminder, continent != 'Oceania' &amp; year &gt;= 1992)
 - General syntax
 
 
-```r
+``` r
 new_dataset &lt;- select(old_dataset, var1, var2, var3, ...)
 # where var is the name of the variable you want to keep
 ```
@@ -282,7 +282,7 @@ new_dataset &lt;- select(old_dataset, var1, var2, var3, ...)
 - Or to drop variables
 
 
-```r
+``` r
 new_dataset &lt;- select(old_dataset, -var1, -var2, ...)
 ```
 
@@ -294,7 +294,7 @@ new_dataset &lt;- select(old_dataset, -var1, -var2, ...)
 Print only country, year, and life expectancy
 
 
-```r
+``` r
 select(gapminder, country, year, lifeExp)
 ```
 
@@ -303,7 +303,7 @@ select(gapminder, country, year, lifeExp)
 Remove population and print the rest
 
 
-```r
+``` r
 select(gapminder, -pop)
 ```
 
@@ -336,7 +336,7 @@ select(gapminder, -pop)
 - Generic syntax
 
 
-```r
+``` r
 dataset &lt;- mutate(dataset, var_name = any_formula)
 ```
 
@@ -352,7 +352,7 @@ dataset &lt;- mutate(dataset, var_name = any_formula)
 Replace `pop`ulation rescaled from ones to millions
 
 
-```r
+``` r
 gapminder &lt;- mutate(gapminder, pop = pop/1000000)
 ```
 
@@ -361,7 +361,7 @@ gapminder &lt;- mutate(gapminder, pop = pop/1000000)
 Add a new variable `pop_millions` that rescales `pop` to millions
 
 
-```r
+``` r
 gapminder &lt;- mutate(gapminder, pop_millions = pop/1000000)
 ```
 
@@ -370,7 +370,7 @@ gapminder &lt;- mutate(gapminder, pop_millions = pop/1000000)
 Save new dataset with a variable equal to average life expectancy among all observations
 
 
-```r
+``` r
 gapminder2 &lt;- mutate(gapminder, avg_lifeExp = mean(lifeExp))
 ```
 
@@ -380,7 +380,7 @@ gapminder2 &lt;- mutate(gapminder, avg_lifeExp = mean(lifeExp))
 Can create multiple variables at a time separated by commas
 
 
-```r
+``` r
 gapminder3 &lt;- mutate(gapminder,
                      pop_millions = pop/1000000,
                      avg_lifeExp = mean(lifeExp))
@@ -420,7 +420,7 @@ gapminder3 &lt;- mutate(gapminder,
 ![](labs_files/arrange.png)
 
 
-```r
+``` r
 arrange(data_set, var)
 # Where var is the variable by which you want to arrange
 # Arranges in ascending order by default
@@ -437,7 +437,7 @@ arrange(data_set, desc(var))
 Print countries arranged in ascending order of life expectancy (low-to-high)
 
 
-```r
+``` r
 arrange(gapminder, lifeExp)
 ```
 
@@ -446,7 +446,7 @@ arrange(gapminder, lifeExp)
 Print countries arranged in descending order of life expectancy (high-to-low)
 
 
-```r
+``` r
 arrange(gapminder, desc(lifeExp))
 ```
 
@@ -455,7 +455,7 @@ arrange(gapminder, desc(lifeExp))
 Rearrange and replace existing data
 
 
-```r
+``` r
 gapminder &lt;- (gapminder, lifeExp)
 ```
 
