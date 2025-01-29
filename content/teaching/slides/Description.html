@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Description_files/header-attrs-2.23/header-attrs.js"></script>
+    <script src="Description_files/header-attrs-2.29/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: January 30, 2024
+### Last updated: January 29, 2025
 ]
 
 ---
@@ -123,7 +123,7 @@ Suppose we set out to confirm the average salary in Georgia for ourselves. We su
 ---
 # Descriptive vs. inferential
 
-Suppose we want to know the percent of Clarke County residents who have a valid ID for the upcoming election.
+Suppose we want to know the percent of Clarke County residents who have a valid ID for an upcoming election.
 
 --
 
@@ -178,7 +178,7 @@ class: inverse, middle, center
 - Add values and divide by the count of values
 
 
-```r
+``` r
 (2 + 4 + 6 + 8 + 10)/5
 ```
 
@@ -223,7 +223,7 @@ class: inverse, middle, center
 
 .pull-right[
 
-```r
+``` r
 mean(x$variable)
 ```
 
@@ -234,7 +234,7 @@ mean(x$variable)
 &lt;img src="lectures_files/mean.png" width="1105" /&gt;
 
 
-```r
+``` r
 mean(ncbirths$weeks)
 ```
 
@@ -286,7 +286,7 @@ mean(ncbirths$weeks)
 
 .pull-right[
 
-```r
+``` r
 median(x$variable)
 ```
 
@@ -297,7 +297,7 @@ median(x$variable)
 ![](lectures_files/median.png)
 
 
-```r
+``` r
 median(ncbirths$weeks)
 ```
 
@@ -381,7 +381,7 @@ median(ncbirths$weeks)
 
 .pull-right[
 
-```r
+``` r
 mean(ncbirths$weeks)
 ```
 
@@ -389,7 +389,7 @@ mean(ncbirths$weeks)
 ## [1] 38.4675
 ```
 
-```r
+``` r
 median(ncbirths$weeks)
 ```
 
@@ -409,7 +409,7 @@ median(ncbirths$weeks)
 
 .pull-right[
 
-```r
+``` r
 mean(gapminder$gdpPercap)
 ```
 
@@ -417,7 +417,7 @@ mean(gapminder$gdpPercap)
 ## [1] 7215.327
 ```
 
-```r
+``` r
 median(gapminder$gdpPercap)
 ```
 
@@ -448,7 +448,7 @@ class: inverse, middle, center
 - Variance makes no sense as a descriptive measure of spread
 
 
-```r
+``` r
 var(ncbirths$weeks)
 ```
 
@@ -463,7 +463,7 @@ var(ncbirths$weeks)
 - Standard deviation recovers the original variable
 
 
-```r
+``` r
 sd(ncbirths$weeks)
 ```
 
@@ -481,7 +481,7 @@ sd(ncbirths$weeks)
 - IQR is the difference between 25th and 75th percentiles
 
 
-```r
+``` r
 quantile(ncbirths$weeks, c(.25, .5, .75))
 ```
 
@@ -495,7 +495,7 @@ quantile(ncbirths$weeks, c(.25, .5, .75))
 --
 
 
-```r
+``` r
 IQR(ncbirths$weeks)
 ```
 
@@ -547,7 +547,7 @@ IQR(ncbirths$weeks)
 
 .pull-right[
 
-```r
+``` r
 sd(xextreme$variable)
 ```
 
@@ -555,7 +555,7 @@ sd(xextreme$variable)
 ## [1] 42.54409
 ```
 
-```r
+``` r
 IQR(xextreme$variable)
 ```
 
@@ -573,7 +573,7 @@ IQR(xextreme$variable)
 
 .pull-right[
 
-```r
+``` r
 var(ncbirths$weeks)
 ```
 
@@ -581,7 +581,7 @@ var(ncbirths$weeks)
 ## [1] 7.583423
 ```
 
-```r
+``` r
 sd(ncbirths$weeks)
 ```
 
@@ -589,7 +589,7 @@ sd(ncbirths$weeks)
 ## [1] 2.753802
 ```
 
-```r
+``` r
 IQR(ncbirths$weeks)
 ```
 
@@ -607,7 +607,7 @@ IQR(ncbirths$weeks)
 
 .pull-right[
 
-```r
+``` r
 var(gapminder$gdpPercap)
 ```
 
@@ -615,7 +615,7 @@ var(gapminder$gdpPercap)
 ## [1] 97169410
 ```
 
-```r
+``` r
 sd(gapminder$gdpPercap)
 ```
 
@@ -623,7 +623,7 @@ sd(gapminder$gdpPercap)
 ## [1] 9857.455
 ```
 
-```r
+``` r
 IQR(gapminder$gdpPercap)
 ```
 
@@ -645,7 +645,7 @@ IQR(gapminder$gdpPercap)
 
 .pull-right[
 
-```r
+``` r
 range(ncbirths$weeks)
 ```
 
@@ -653,7 +653,7 @@ range(ncbirths$weeks)
 ## [1] 20 45
 ```
 
-```r
+``` r
 range(gapminder$gdpPercap)
 ```
 
@@ -784,7 +784,7 @@ Suppose we want to investigate the association between the percent of a state po
 &lt;img src="Description_files/figure-html/unnamed-chunk-35-1.png" style="display: block; margin: auto;" /&gt;
 
 
-```r
+``` r
 cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
 ```
 
@@ -799,7 +799,7 @@ cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
 
 Percent white population in poverty
 
-```r
+``` r
 cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
 ```
 
@@ -810,7 +810,7 @@ cor(state_trump$share_vote_trump, state_trump$share_white_poverty)
 
 Percent population that is white
 
-```r
+``` r
 cor(state_trump$share_vote_trump, state_trump$share_white)
 ```
 
@@ -835,7 +835,7 @@ Is the correlation positive or negative?
 &lt;img src="Description_files/figure-html/unnamed-chunk-40-1.png" style="display: block; margin: auto;" /&gt;
 
 
-```r
+``` r
 cor(state_trump$median_house_inc, state_trump$share_vote_trump)
 ```
 

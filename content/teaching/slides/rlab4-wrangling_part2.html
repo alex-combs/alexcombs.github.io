@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab4-wrangling_part2_files/header-attrs-2.23/header-attrs.js"></script>
+    <script src="rlab4-wrangling_part2_files/header-attrs-2.29/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: January 30, 2024
+### Last updated: January 29, 2025
 ]
 
 ---
@@ -49,7 +49,7 @@ class: center, middle, inverse, title-slide
 &gt; **Load one additional package in the setup code chunk**
 
 
-```r
+``` r
 library(knitr)
 ```
 
@@ -84,7 +84,7 @@ class: inverse, middle, center
 Prints the result
 
 
-```r
+``` r
 dataset %&gt;% 
   filter(___) %&gt;% 
   select(___) %&gt;% 
@@ -98,7 +98,7 @@ dataset %&gt;%
 Saves the result
 
 
-```r
+``` r
 dataset &lt;- dataset %&gt;% 
   filter(___) %&gt;% 
   select(___) %&gt;% 
@@ -113,7 +113,7 @@ dataset &lt;- dataset %&gt;%
 Suppose I want to print a table of the top five countries with respect to percent of global GDP in 2007. **Without using %&gt;%:**
 
 
-```r
+``` r
 #Filter gapminder to get 2007
 gapminder07 &lt;- filter(gapminder, year == 2007)
 
@@ -137,7 +137,7 @@ slice_head(gdp_table, n = 5)
 To print same table with `%&gt;%`:
 
 
-```r
+``` r
 gapminder %&gt;% 
   filter(year == 2007) %&gt;% 
   mutate(gdp = gdpPercap*pop,
@@ -178,7 +178,7 @@ class: inverse, middle, center
 - Generic syntax
 
 
-```r
+``` r
 summarize(data_set, "Name of column" = function(variable),
           "Name of column" = function(variable),...)
 ```
@@ -193,7 +193,7 @@ summarize(data_set, "Name of column" = function(variable),
 Suppose I want to report median life expectancy and GDP per capita in 2007
 
 
-```r
+``` r
 gapminder %&gt;% 
   filter(year == 2007) %&gt;% 
   summarize("Median Life Expectancy" = median(lifeExp),
@@ -222,7 +222,7 @@ gapminder %&gt;%
 - General syntax
 
 
-```r
+``` r
 data_set %&gt;% 
   group_by(grouping_variable) %&gt;% 
   summarize(name = function(variable))
@@ -236,7 +236,7 @@ data_set %&gt;%
 Median life expectancy and GDP per capita in 2007 **by continent**
 
 
-```r
+``` r
 gapminder %&gt;% 
   filter(year == 2007) %&gt;% 
 * group_by(continent) %&gt;%
@@ -283,7 +283,7 @@ gapminder %&gt;%
 &gt; **Start a new code chunk and name it kable. Add the following code.**
 
 
-```r
+``` r
 gapminder52 %&gt;% 
   select(country, pct_gdp) %&gt;% 
   arrange(desc(pct_gdp)) %&gt;% 

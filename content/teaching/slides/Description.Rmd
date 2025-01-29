@@ -111,7 +111,7 @@ Suppose we set out to confirm the average salary in Georgia for ourselves. We su
 ---
 # Descriptive vs. inferential
 
-Suppose we want to know the percent of Clarke County residents who have a valid ID for the upcoming election.
+Suppose we want to know the percent of Clarke County residents who have a valid ID for an upcoming election.
 
 --
 
