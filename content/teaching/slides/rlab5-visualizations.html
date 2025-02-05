@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="rlab5-visualizations_files/header-attrs-2.23/header-attrs.js"></script>
+    <script src="rlab5-visualizations_files/header-attrs-2.29/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: February 06, 2024
+### Last updated: February 05, 2025
 ]
 
 ---
@@ -36,62 +36,6 @@ class: center, middle, inverse, title-slide
 - Basic guidelines of good visualization
 
 - Create graphs and make simple improvements
-
-
-
----
-# Set up
-
-&gt; **Create a new project named "rlab5" and start new R Markdown document Change YAML and global options. Delete template.**
-
-
-```r
----
-title: "RLab5: Data Viz"
-author: "Your Name"
-output:
-  html_document:
-    theme: spacelab
-    df_print: paged
-    fig_width: 6.5
-    fig_height: 4.5
-    fig_align: "center"
----
-```
-
----
-# Setup: Packages
-
-&gt; **In the setup code chunk, load the following packages:**
-
-
-```r
-library(tidyverse)
-```
-
----
-# Setup: Data
-
-&gt; **Download the four CSV files on eLC and add to project folder:**
-
-&gt; **`cod_research_funding.csv`**
-
-&gt; **`fbi_gun_deaths.csv`**
-
-&gt; **`guns_manufatured.csv`**
-
-&gt; **`nhanes_2012.csv`**
-
-&gt; **Import data**
-
-
-
-```r
-cod_research_funding &lt;-
-fbi_gun_deaths &lt;-
-guns_manufactured &lt;- 
-nhanes &lt;- 
-```
 
 
 
@@ -304,12 +248,63 @@ class: inverse, middle, center
 # Creating Graphs
 
 ---
+
+# Set up
+
+&gt; **Create a new project named "rlab5" and start new R Markdown document Change YAML and global options. Delete template.**
+
+
+``` r
+---
+title: "RLab5: Data Viz"
+author: "Your Name"
+output:
+  html_document:
+    theme: spacelab
+    df_print: paged
+    fig_width: 6.5
+    fig_height: 4.5
+    fig_align: "center"
+---
+```
+
+---
+# Setup: Packages
+
+&gt; **In the setup code chunk, load the following packages:**
+
+
+``` r
+library(tidyverse)
+```
+
+---
+# Setup: Data
+
+&gt; **Download the four CSV files on eLC and add to project folder:**
+
+&gt; **`cod_research_funding.csv` `fbi_gun_deaths.csv` `guns_manufatured.csv` `nhanes_2012.csv`**
+
+&gt; **Import data**
+
+
+
+``` r
+cod_research_funding &lt;- read_csv("cod_research_funding.csv")
+fbi_gun_deaths &lt;- read_csv("fbi_gun_deaths.csv")
+guns_manufactured &lt;- read_csv("guns_manufatured.csv")
+nhanes &lt;- read_csv("nhanes_2012.csv")
+```
+
+
+
+---
 # Grammar of graphics
 
 - General syntax for all default graphs
 
 
-```r
+``` r
 dataset %&gt;% 
   ggplot(aes(...)) +
     geom_type()
@@ -335,7 +330,7 @@ dataset %&gt;%
 # Some common options
 
 
-```r
+``` r
 dataset %&gt;% 
   ggplot(aes(...)) +
   geom_type(...) + # can add options specific to graph type
@@ -376,12 +371,6 @@ class: inverse, middle, center
 &gt; **Re-run graph**
 
 
-```r
-nhanes %&gt;% 
-  drop_na(gun.use) %&gt;% 
-  ggplot(aes(x = gun.use)) +
-  geom_bar()
-```
 
 ---
 # Exporting graphs
@@ -391,7 +380,7 @@ nhanes %&gt;%
 - To export most recent graph
 
 
-```r
+``` r
 ggsave("filename.png") # or any image file extension like jpeg
 ```
 
@@ -403,7 +392,7 @@ ggsave("filename.png") # or any image file extension like jpeg
 - You can add labels with the general code
 
 
-```r
+``` r
 labs(x = "Whatever", y = "Whatever")
 ```
 
@@ -419,7 +408,7 @@ labs(x = "Whatever", y = "Whatever")
 - **Change graph "ink" using `theme_...()` such as `theme_minimal()`**
 
 
-```r
+``` r
 nhanes %&gt;% 
   drop_na(gun.use) %&gt;% 
   ggplot(aes(x = gun.use)) +
@@ -436,7 +425,7 @@ nhanes %&gt;%
 - **Fill bars with different colors**
 
 
-```r
+``` r
 nhanes %&gt;% 
   drop_na(gun.use) %&gt;% 
 * ggplot(aes(x = gun.use, fill = gun.use)) +
@@ -453,7 +442,7 @@ nhanes %&gt;%
 &gt; **Add following code to alter colors**
 
 
-```r
+``` r
 nhanes %&gt;% 
   drop_na(gun.use) %&gt;% 
   ggplot(aes(x = gun.use, fill = gun.use)) +
@@ -471,7 +460,7 @@ nhanes %&gt;%
 &gt; **In new code chunk, create another bar chart displaying percent**
 
 
-```r
+``` r
 nhanes %&gt;% 
   drop_na(gun.use) %&gt;% 
   ggplot(aes(x = gun.use, 
@@ -524,7 +513,7 @@ class: inverse, middle, center
 # Adjusting bins or binwidth
 
 
-```r
+``` r
 cod_research_funding %&gt;% 
   ggplot(aes(x = funding)) +
 * geom_histogram(bins = 10,
@@ -543,7 +532,7 @@ cod_research_funding %&gt;%
 &gt; **Add the following to your setup code chunk and run it. Then, rerun your histogram.**
 
 
-```r
+``` r
 options(scipen = 999)
 ```
 
@@ -635,7 +624,7 @@ class: inverse, middle, center
 &gt; **Start a new code chunk**
 
 
-```r
+``` r
 fbi_gun_deaths %&gt;% 
   ___(___) %&gt;%    #&lt;&lt; what goes here?
   ggplot(aes(___)) +
@@ -711,7 +700,7 @@ fbi_gun_deaths %&gt;%
 &gt; **Add new code chunk and complete code**
 
 
-```r
+``` r
 cod_research_funding %&gt;% 
   ___(___(___)) +
   ___()
@@ -721,7 +710,7 @@ cod_research_funding %&gt;%
 # Dealing with skewed variables
 
 
-```r
+``` r
 cod_research_funding %&gt;% 
   ggplot(aes(x = mortality_rate_per_100k, y = funding)) +
   geom_point() +
@@ -740,7 +729,7 @@ cod_research_funding %&gt;%
 &gt; **In new code chunk, complete code below and run**
 
 
-```r
+``` r
 guns_manufactured %&gt;% 
   ___(___(___)) +
   ___()

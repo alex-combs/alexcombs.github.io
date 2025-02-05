@@ -28,64 +28,6 @@ library(knitr)
 ```
 
 ---
-# Set up
-
-> **Create a new project named "rlab5" and start new R Markdown document Change YAML and global options. Delete template.**
-
-```{r, eval=FALSE}
----
-title: "RLab5: Data Viz"
-author: "Your Name"
-output:
-  html_document:
-    theme: spacelab
-    df_print: paged
-    fig_width: 6.5
-    fig_height: 4.5
-    fig_align: "center"
----
-```
-
----
-# Setup: Packages
-
-> **In the setup code chunk, load the following packages:**
-
-```{r, eval=FALSE}
-library(tidyverse)
-```
-
----
-# Setup: Data
-
-> **Download the four CSV files on eLC and add to project folder:**
-
-> **`cod_research_funding.csv`**
-
-> **`fbi_gun_deaths.csv`**
-
-> **`guns_manufatured.csv`**
-
-> **`nhanes_2012.csv`**
-
-> **Import data**
-
-
-```{r, eval=FALSE}
-cod_research_funding <-
-fbi_gun_deaths <-
-guns_manufactured <- 
-nhanes <- 
-```
-
-```{r, include=FALSE}
-cod_research_funding <- read_csv('/Users/alexcombs/web-work/content/teaching/slides/labs_files/cod_research_funding.csv')
-fbi_gun_deaths <- read_csv('/Users/alexcombs/web-work/content/teaching/slides/labs_files/fbi_gun_deaths.csv')
-guns_manufactured <- read_csv('/Users/alexcombs/web-work/content/teaching/slides/labs_files/guns_manufactured.csv')
-nhanes <- read_csv('/Users/alexcombs/web-work/content/teaching/slides/labs_files/nhanes_2012.csv')
-```
-
----
 class: inverse, middle, center
 
 # Choosing Graphs
@@ -277,6 +219,59 @@ class: inverse, middle, center
 # Creating Graphs
 
 ---
+
+# Set up
+
+> **Create a new project named "rlab5" and start new R Markdown document Change YAML and global options. Delete template.**
+
+```{r, eval=FALSE}
+---
+title: "RLab5: Data Viz"
+author: "Your Name"
+output:
+  html_document:
+    theme: spacelab
+    df_print: paged
+    fig_width: 6.5
+    fig_height: 4.5
+    fig_align: "center"
+---
+```
+
+---
+# Setup: Packages
+
+> **In the setup code chunk, load the following packages:**
+
+```{r, eval=FALSE}
+library(tidyverse)
+```
+
+---
+# Setup: Data
+
+> **Download the four CSV files on eLC and add to project folder:**
+
+> **`cod_research_funding.csv` `fbi_gun_deaths.csv` `guns_manufatured.csv` `nhanes_2012.csv`**
+
+> **Import data**
+
+
+```{r, eval=FALSE}
+cod_research_funding <- read_csv("cod_research_funding.csv")
+fbi_gun_deaths <- read_csv("fbi_gun_deaths.csv")
+guns_manufactured <- read_csv("guns_manufatured.csv")
+nhanes <- read_csv("nhanes_2012.csv")
+```
+
+```{r, include=FALSE}
+cod_research_funding <- read_csv('/Users/alexcombs/web-work/content/teaching/slides/labs_files/cod_research_funding.csv')
+fbi_gun_deaths <- read_csv('/Users/alexcombs/web-work/content/teaching/slides/labs_files/fbi_gun_deaths.csv')
+guns_manufactured <- read_csv('/Users/alexcombs/web-work/content/teaching/slides/labs_files/guns_manufactured.csv')
+nhanes <- read_csv('/Users/alexcombs/web-work/content/teaching/slides/labs_files/nhanes_2012.csv')
+```
+
+---
 # Grammar of graphics
 
 - General syntax for all default graphs
@@ -350,7 +345,7 @@ nhanes %>%
 
 > **Re-run graph**
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, echo=FALSE}
 nhanes %>% 
   drop_na(gun.use) %>% 
   ggplot(aes(x = gun.use)) +
