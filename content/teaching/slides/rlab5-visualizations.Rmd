@@ -252,7 +252,7 @@ library(tidyverse)
 
 > **Download the four CSV files on eLC and add to project folder:**
 
-> **`cod_research_funding.csv` `fbi_gun_deaths.csv` `guns_manufatured.csv` `nhanes_2012.csv`**
+> **`cod_research_funding.csv` `fbi_gun_deaths.csv` `guns_manufactured.csv` `nhanes_2012.csv`**
 
 > **Import data**
 
@@ -260,7 +260,7 @@ library(tidyverse)
 ```{r, eval=FALSE}
 cod_research_funding <- read_csv("cod_research_funding.csv")
 fbi_gun_deaths <- read_csv("fbi_gun_deaths.csv")
-guns_manufactured <- read_csv("guns_manufatured.csv")
+guns_manufactured <- read_csv("guns_manufactured.csv")
 nhanes <- read_csv("nhanes_2012.csv")
 ```
 
