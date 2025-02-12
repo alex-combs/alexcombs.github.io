@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Regression_files/header-attrs-2.23/header-attrs.js"></script>
+    <script src="Regression_files/header-attrs-2.29/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: February 13, 2024
+### Last updated: February 11, 2025
 ]
 
 ---
@@ -45,7 +45,7 @@ class: center, middle, inverse, title-slide
 # Correlation coefficients
 
 
-```r
+``` r
 select(States, -region) %&gt;% 
   cor()
 ```
@@ -64,7 +64,7 @@ select(States, -region) %&gt;%
 # Visualizing correlation
 
 
-```r
+``` r
 ggplot(States, aes(x = dollars, y = SATM)) +
   geom_point() +
   labs(x = 'Public ed spending in $1000s per student',
@@ -108,7 +108,7 @@ ggplot(States, aes(x = dollars, y = SATM)) +
 # Adding a regression line
 
 
-```r
+``` r
 ggplot(States, aes(x = dollars, y = SATM)) +
   geom_point() +
 * geom_smooth(method = 'lm', se = FALSE) +
@@ -303,7 +303,7 @@ class: inverse, middle, center
 - Explore data
 
 
-```r
+``` r
 glimpse(States)
 ```
 
@@ -323,7 +323,7 @@ glimpse(States)
 # Running regression
 
 
-```r
+``` r
 summary(States)
 ```
 
@@ -350,13 +350,13 @@ summary(States)
 # Running regression
 
 
-```r
+``` r
 satm_mod1 &lt;- lm(SATM ~ dollars, data = States)
 satm_mod2 &lt;- lm(SATM ~ percent, data = States)
 ```
 
 
-```r
+``` r
 library(moderndive)
 get_regression_table(satm_mod1)
 ```
@@ -431,7 +431,7 @@ class: inverse, center, middle
 # Examining residuals
 
 
-```r
+``` r
 get_regression_points(satm_mod1)
 ```
 
@@ -630,7 +630,7 @@ class: inverse, center, middle
 &lt;/table&gt;
 
 
-```r
+``` r
 sum(satm_mod1_points$sq_resid)
 ```
 
@@ -659,7 +659,7 @@ sum(satm_mod1_points$sq_resid)
 - Model 1 using `dollars`
 
 
-```r
+``` r
 get_regression_summaries(satm_mod1)
 ```
 
@@ -690,7 +690,7 @@ The regression using dollars explains 24% of total variation in average SAT math
 - Model 2 using `percent`
 
 
-```r
+``` r
 get_regression_summaries(satm_mod2)
 ```
 
@@ -862,11 +862,11 @@ class: inverse, center, middle
 `$$SATM=\beta_0+\beta_1Dollars+\beta_2Percent+\epsilon$$`
 
 
-```r
+``` r
 satm_mod3 &lt;- lm(SATM ~ dollars + percent, data = States)
 ```
 
-```r
+``` r
 get_regression_table(satm_mod3)
 ```
 &lt;table&gt;
@@ -1041,12 +1041,12 @@ class: inverse, middle, center
 # Spending and SAT participation
 
 
-```r
+``` r
 satm_mod4 &lt;- lm(percent ~ dollars, data = States)
 ```
 
 
-```r
+``` r
 get_regression_table(satm_mod4)
 ```
 
