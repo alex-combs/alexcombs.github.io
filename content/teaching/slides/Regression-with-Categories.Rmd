@@ -122,6 +122,8 @@ $$\hat{y} = b_0 + b_1x + b_2 d$$
 
 - $d$ allows the intercept to differ between groups, but assumes affect of $x$ is the same for both
 
+- $d$ = 0 is the reference group to which $d$ = 1 is compared
+
 ---
 # Parallel Slopes Model Equations
 
@@ -162,7 +164,7 @@ get_regression_table(sal_mod) %>%
 
 $$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$
 
-- Note that for the way these data are coded, Sex = 1 for Male and 0 for Female
+- Note that Female is the reference group, Sex = 1 for Male and 0 for Female
 
 ---
 # Interpreting results
@@ -223,7 +225,7 @@ ggplot(Salaries,
              size = 5) +
   geom_smooth(method = 'lm', 
               se = FALSE, 
-              linewidth = 2) + #<<
+              linewidth = 2) +
   theme_minimal() +
   theme(text = element_text(size = 20))
 ```

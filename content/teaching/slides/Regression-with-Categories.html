@@ -4,7 +4,7 @@
     <title>PADP 7120 Data Applications in PA</title>
     <meta charset="utf-8" />
     <meta name="author" content="Alex Combs" />
-    <script src="Regression-with-Categories_files/header-attrs-2.23/header-attrs.js"></script>
+    <script src="Regression-with-Categories_files/header-attrs-2.29/header-attrs.js"></script>
     <link rel="stylesheet" href="mypres.css" type="text/css" />
   </head>
   <body>
@@ -24,7 +24,7 @@ class: center, middle, inverse, title-slide
 ### UGA | SPIA | PADP
 ]
 .date[
-### Last updated: February 20, 2024
+### Last updated: February 19, 2025
 ]
 
 ---
@@ -56,7 +56,7 @@ class: center, middle, inverse, title-slide
 - Suppose HR wants to examine if male professors are paid differently than female professors
 
 
-```r
+``` r
 glimpse(Salaries)
 ```
 
@@ -78,7 +78,7 @@ glimpse(Salaries)
 
 .pull-left[
 
-```r
+``` r
 ggplot(Salaries, 
        aes(x = yrs.service, 
            y = salary)) +
@@ -98,7 +98,7 @@ ggplot(Salaries,
 
 .pull-left[
 
-```r
+``` r
 ggplot(Salaries, 
        aes(x = yrs.service, 
            y = salary, 
@@ -128,6 +128,8 @@ ggplot(Salaries,
 
 - `\(d\)` allows the intercept to differ between groups, but assumes affect of `\(x\)` is the same for both
 
+- `\(d\)` = 0 is the reference group to which `\(d\)` = 1 is compared
+
 ---
 # Parallel Slopes Model Equations
 
@@ -156,11 +158,11 @@ ggplot(Salaries,
 
 `$$Salary=\beta_0+\beta_1YrsEmployed+\beta_2Sex + \epsilon$$`
 
-```r
+``` r
 sal_mod &lt;- lm(salary ~ yrs.service + sex, data = Salaries)
 ```
 
-```r
+``` r
 get_regression_table(sal_mod)
 ```
 &lt;table&gt;
@@ -208,7 +210,7 @@ get_regression_table(sal_mod)
 
 `$$\hat{Salary}=92357+748 \times YrsEmployed+9072 \times Sex$$`
 
-- Note that for the way these data are coded, Sex = 1 for Male and 0 for Female
+- Note that Female is the reference group, Sex = 1 for Male and 0 for Female
 
 ---
 # Interpreting results
@@ -261,7 +263,7 @@ class: inverse, middle, center
 
 .pull-left[
 
-```r
+``` r
 ggplot(Salaries, 
   aes(x = yrs.service, 
   y = salary, 
@@ -270,7 +272,7 @@ ggplot(Salaries,
              size = 5) +
   geom_smooth(method = 'lm', 
               se = FALSE, 
-*             linewidth = 2) +
+              linewidth = 2) +
   theme_minimal() +
   theme(text = element_text(size = 20))
 ```
@@ -329,13 +331,13 @@ ggplot(Salaries,
 # Running an interaction model
 
 
-```r
+``` r
 sal_mod2 &lt;- lm(salary ~ yrs.service + sex + 
 *                yrs.service*sex,
                data = Salaries)
 ```
 
-```r
+``` r
 get_regression_table(sal_mod2)
 ```
 &lt;table&gt;
@@ -485,13 +487,13 @@ class: inverse, middle, center
 # Running an LPM
 
 
-```r
+``` r
 divorce_mod &lt;- lm(Divorce ~ Age25to29 + Income + Children,
               data = divorce)
 ```
 
 
-```r
+``` r
 get_regression_table(divorce_mod)
 ```
 
